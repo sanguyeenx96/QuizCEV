@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ViewModels.Question.Response
+namespace ViewModels.Question.Request
 {
-    public class QuestionVm
+    public class QuestionUpdateRequest
     {
-        public int Id { get; set; }
         public string Text { get; set; }
         public string QA { get; set; }
         public string QB { get; set; }
