@@ -1,5 +1,8 @@
 
 using Application.Category;
+using Application.ExamResult;
+using Application.LogExam;
+using Application.Question;
 using Application.User;
 using Data.EF;
 
@@ -13,6 +16,9 @@ builder.Services.AddDbContext<TracNghiemCEVDbContext>(options =>
 // Add services to the container.
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<ICategoryService, CategoryService>();
+builder.Services.AddTransient<IQuestionService, QuestionService>();
+builder.Services.AddTransient<IExamResultService, ExamResultService >();
+builder.Services.AddTransient<ILogExamService, LogExamService>();
 
 builder.Services.AddControllers();
 

@@ -4,17 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ViewModels.Question.Response
+namespace ViewModels.LogExam.Response
 {
-    public class QuestionVm
+    public class LogExamVm
     {
         public int Id { get; set; }
-        public string Text { get; set; }
+        public int ExamResultId { get; set; }
+        public string Cauhoi { get; set; }
         public string QA { get; set; }
         public string QB { get; set; }
         public string QC { get; set; }
         public string QD { get; set; }
-        public string QCorrectAns { get; set; }
-        public int CategoryId { get; set; }
+        public string Cautraloi { get; set; }
+        public string Dapandung { get; set; }
     }
 }
