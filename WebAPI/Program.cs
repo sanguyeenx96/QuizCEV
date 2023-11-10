@@ -7,11 +7,12 @@ using Application.User;
 using Data.EF;
 
 using Microsoft.EntityFrameworkCore;
+using Utilities.Constants;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<TracNghiemCEVDbContext>(options =>
-               options.UseSqlServer(builder.Configuration.GetConnectionString("tracnghiemDb")));
+               options.UseSqlServer(builder.Configuration.GetConnectionString(SystemConstants.MainConnectionString)));
 
 // Add services to the container.
 builder.Services.AddTransient<IUserService, UserService>();

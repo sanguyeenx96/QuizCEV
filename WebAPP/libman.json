@@ -5,6 +5,10 @@
     {
       "library": "feather-icons@4.29.1",
       "destination": "wwwroot/feather-icons/"
+    },
+    {
+      "library": "sweetalert2@11.9.0",
+      "destination": "wwwroot/sweetalert2/"
     }
   ]
 }
