@@ -26,7 +26,7 @@ namespace Application.Category
         {
             var checkDuplicateName = await _context.Categories.Where(x => x.Name == request.Name).FirstOrDefaultAsync();
             if (checkDuplicateName != null)
-                return new ApiErrorResult<int>("Tài khoản đã tồn tại");
+                return new ApiErrorResult<int>("Chủ đề này đã tồn tại");
             var newCategory = new Data.Entities.Category()
             {
                 Name = request.Name,

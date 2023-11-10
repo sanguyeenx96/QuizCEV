@@ -1,7 +1,15 @@
-var builder = WebApplication.CreateBuilder(args);
 
+using WebAPP.Services;
+
+var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddHttpClient();
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddTransient<ICategoryApiClient, CategoryApiClient>();
+
+
 
 var app = builder.Build();
 

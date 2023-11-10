@@ -1,0 +1,37 @@
+﻿@model IEnumerable<ViewModels.Category.Response.CategoryVm>
+
+@{
+    ViewData["Active"] = "pageChuDePhongThi";
+    ViewData["ActiveChild"] = "pageDongMoPhongThi";
+}
+
+
+<table class="table" style="text-align:center; vertical-align:middle">
+    <thead>
+        <tr>
+            <th>
+                Tên
+            </th>         
+            <th>
+                Trạng thái
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                    <btn class="btn btn-primary btn-sm">Đổi trạng thái</btn>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

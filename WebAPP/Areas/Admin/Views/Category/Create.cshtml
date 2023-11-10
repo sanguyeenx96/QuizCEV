@@ -1,0 +1,59 @@
+﻿@{
+    ViewData["Active"] = "pageChuDePhongThi";
+    ViewData["ActiveChild"] = "pageThemChuDePhongThi";
+}
+
+<form id="myForm">
+    <div class="row g-2">
+        <div class="col-12">
+            <label for="address" class="form-label">Tên chủ đề (Phòng thi)</label>
+            <input type="text" class="form-control" id="name" placeholder="Nhập tên tại đây" required="@true">
+        </div>
+        <div class="col-12">
+            <button type="button" id="btnXacNhan" class="btn btn-primary btn-sm">
+                Xác nhận
+            </button>
+        </div>
+    </div>
+</form>
+
+<script>
+    $(document).ready(function () {
+        $("#btnXacNhan").click(function (e) {
+            var form = $("#myForm")[0];
+            if (form.checkValidity()) {
+                // Nếu form hợp lệ, thực hiện Ajax request
+                e.preventDefault();
+                var name = $("#name").val();
+                var data = {
+                    name: name
+                };
+                $.ajax({
+                    url: "Create",
+                    type: "POST",
+                    data: data,
+                    success: function (data) {
+                        if (data.success) {
+                            Swal.fire({
+                                icon: "success",
+                                title: "Tạo mới thành công",
+                                showConfirmButton: false,
+                                timer: 1500
+                            }).then(function () {
+                                window.location.reload();
+                            });
+                        } else {
+                            Swal.fire("Thất bại!", data.message, "error");
+                        }
+                    },
+                    error: function (xhr, t, error) {
+                        Swal.fire("Thất bại!", "Lỗi máy chủ", "error");
+                    },
+                });
+            } else {
+                // Nếu form không hợp lệ, hiển thị validation
+                form.reportValidity();
+            }
+        });
+    });
+</script>
