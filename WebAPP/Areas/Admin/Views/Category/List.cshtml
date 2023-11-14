@@ -16,6 +16,9 @@
                 Ngày tạo
             </th>
             <th>
+                Cập nhật gần nhất
+            </th>
+            <th>
                 Trạng thái
             </th>
             <th></th>
@@ -32,11 +35,26 @@
                     @Html.DisplayFor(modelItem => item.DateCreate)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Status)
+                    @Html.DisplayFor(modelItem => item.LastUpdate)
                 </td>
                 <td>
-                    <btn class="btn btn-warning btn-sm btnSua" data-id="@item.Id">Đổi tên</btn>
-                    <btn class="btn btn-danger btn-sm btnXoa" data-name="@item.Name">Xoá</btn>
+                   @if(item.Status == true){
+                        <div><i class="fa fa-toggle-on fa-fw" style="color:green"></i> Online</div>
+                   }else{
+                        <div><i class="fa fa-toggle-off fa-fw" style="color:red"></i> Offline</div>
+                   }
+                </td>
+                <td>
+                    <div class="btn-group" style=" white-space:nowrap">
+                        <btn  class="btn btn-outline-primary btn-sm btnSua" data-id="@item.Id">
+                            <i class="fa fa-pencil fa-fw"> </i>
+                            Đổi tên
+                        </btn>
+                        <btn class="btn btn-outline-danger btn-sm btnXoa" data-id="@item.Id" data-name="@item.Name">
+                            <i class="fa fa-trash-can fa-fw"> </i>
+                            Xoá
+                        </btn>
+                    </div>
                 </td>
             </tr>
         }
@@ -61,7 +79,7 @@
                 data: data,
                 success: function (data) {
                     if (data.success) {
-                        handleSuccess(data);
+                        handleSuccess(data, id);
                     } else {
                         Swal.fire("Thất bại!", data.message, "error");
                     }
@@ -72,7 +90,7 @@
             });
         });
 
-        async function handleSuccess(data) {
+        async function handleSuccess(data, id) {
             if (data.success) {
                 const { value: newName } = await swalWithBootstrapButtons.fire({
                     title: "Đổi tên chủ đề & phòng thi",
@@ -84,7 +102,32 @@
                     cancelButtonText: "Huỷ bỏ"
                 });
                 if (newName) {
-                    Swal.fire(`Entered email: ${newName}`);
+                    $.ajax({
+                        url: "UpdateName",
+                        type: "POST",
+                        data: {
+                            id: id,
+                            Name: newName
+                        },
+                        success: function (data) {
+                            if (data.success) {
+                                Swal.fire(
+                                    "Thành công!",
+                                    "Chủ đề/ Phòng thi đã được đổi tên thành công",
+                                    "success"
+                                ).then(function () {
+                                    window.location.reload();
+                                });
+                            } else {
+                                Swal.fire(
+                                    "Không thành công!",
+                                    data.message,
+                                    "error"
+                                );
+                            }
+                        },
+                    });
+
                 }
             } else {
                 Swal.fire("Thất bại!", data.message, "error");
@@ -92,6 +135,7 @@
         }
 
         $(".btnXoa").click(function (e) {
+            var id = $(this).data("id");
             var name = $(this).data("name");
 
             swalWithBootstrapButtons
@@ -106,18 +150,16 @@
                 .then((result) => {
                     if (result.isConfirmed) {
                         $.ajax({
-                            url: "/Dathang/Delete",
+                            url: "Delete",
                             type: "POST",
                             data: {
-                                id: id,
-                                tenlinhkien: tenlinhkien,
-                                tenmodel: tenmodel
+                                id: id
                             },
                             success: function (data) {
                                 if (data.success) {
                                     Swal.fire(
                                         "Thành công!",
-                                        "Đơn đặt hàng đã được xoá",
+                                        "Chủ dề/ Phòng thi đã được xoá",
                                         "success"
                                     ).then(function () {
                                         window.location.reload();

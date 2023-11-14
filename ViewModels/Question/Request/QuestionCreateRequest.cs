@@ -9,11 +9,11 @@ namespace ViewModels.Question.Request
     public class QuestionCreateRequest
     {
         public string Text { get; set; }
-        public string QA { get; set; }
-        public string QB { get; set; }
-        public string QC { get; set; }
-        public string QD { get; set; }
-        public string QCorrectAns { get; set; }
+        public string? QA { get; set; }
+        public string? QB { get; set; }
+        public string? QC { get; set; }
+        public string? QD { get; set; }
+        public string? QCorrectAns { get; set; }
         public int CategoryId { get; set; }
     }
 }

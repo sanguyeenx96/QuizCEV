@@ -51,9 +51,9 @@ namespace WebAPI.Controllers
         }
 
         [HttpPatch("updatestatus/{id}")]
-        public async Task<IActionResult> UpdateStatus(int id, CategoryUpdateStatusRequest request)
+        public async Task<IActionResult> UpdateStatus(int id)
         {
-            var result = await _categoryService.UpdateStatus(id, request);
+            var result = await _categoryService.UpdateStatus(id);
             return Ok(result);
         }
     }

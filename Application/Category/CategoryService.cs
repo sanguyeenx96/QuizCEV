@@ -30,7 +30,9 @@ namespace Application.Category
             var newCategory = new Data.Entities.Category()
             {
                 Name = request.Name,
-                DateCreate = DateTime.Now
+                DateCreate = DateTime.Now,
+                LastUpdate = DateTime.Now
+
             };
             _context.Categories.Add(newCategory);
             await _context.SaveChangesAsync();
@@ -54,6 +56,7 @@ namespace Application.Category
                 Id = x.Id,
                 Name = x.Name,
                 DateCreate = x.DateCreate,
+                LastUpdate = x.LastUpdate,
                 Status = x.Status
             }).ToListAsync();
             return new ApiSuccessResult<List<CategoryVm>>(result);
@@ -69,6 +72,7 @@ namespace Application.Category
                 Id = category.Id,
                 Name = category.Name,
                 DateCreate = category.DateCreate,
+                LastUpdate = category.LastUpdate,
                 Status = category.Status
             };
             return new ApiSuccessResult<CategoryVm>(result);
@@ -79,21 +83,22 @@ namespace Application.Category
             var category = await _context.Categories.FindAsync(id);
             if (category == null)
                 return new ApiErrorResult<int>("Không tìm thấy dữ liệu Category");
-            category.Name = request.Name;     
+            category.Name = request.Name;
+            category.LastUpdate = DateTime.Now;
             _context.Update(category);
             await _context.SaveChangesAsync();
             return new ApiSuccessResult<int> { Id = category.Id };
         }
 
-        public async Task<ApiResult<int>> UpdateStatus(int id, CategoryUpdateStatusRequest request)
+        public async Task<ApiResult<bool>> UpdateStatus(int id)
         {
             var category = await _context.Categories.FindAsync(id);
             if (category == null)
-                return new ApiErrorResult<int>("Không tìm thấy dữ liệu Category");
-            category.Status = request.Status;
+                return new ApiErrorResult<bool>("Không tìm thấy dữ liệu Category");
+            category.Status = !category.Status;
             _context.Update(category);
             await _context.SaveChangesAsync();
-            return new ApiSuccessResult<int> { Id = category.Id };
+            return new ApiSuccessResult<bool>();
         }
     }
 }

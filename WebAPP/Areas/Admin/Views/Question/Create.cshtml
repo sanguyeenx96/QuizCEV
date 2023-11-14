@@ -1,0 +1,152 @@
+﻿@model ViewModels.Question.Request.QuestionCreateRequest
+@{
+    ViewData["Active"] = "pageQuanLyCauHoi";
+    ViewData["ActiveChild"] = "pageThemcauhoi";
+}
+
+<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+    <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-themthucong" type="button" role="tab" aria-controls="pills-themthucong" aria-selected="true">
+            <i class="fa-regular fa-file"></i>
+            Thêm thủ công
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-themtuexcel" type="button" role="tab" aria-controls="pills-themtuexcel" aria-selected="false">
+            <i class="fa-regular fa-file-excel"></i>
+            Nhập từ file Excel
+        </button>
+    </li>
+</ul>
+<div class="tab-content" id="pills-tabContent">
+    <div class="tab-pane fade show active" id="pills-themthucong" role="tabpanel" aria-labelledby="pills-home-tab">
+        <div class="row">
+            <div class="col-md-12">
+                <form id="myForm">
+                    <div class="form-group mb-3">
+                        <label class="form-label">Chọn chủ đề & Phòng thi</label>
+                        <select class="form-control" id="categoryId" name="categoryId">
+                            @foreach (var item in ViewBag.listcat)
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label class="form-label"> Nhập nội dung câu hỏi</label>
+                        <textarea id="Text" class="form-control" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label"> Nhập nội dung câu trả lời</label>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">A.</span>
+                            <input id="QA" type="text" class="form-control" placeholder="Nhập câu trả lời">
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">B.</span>
+                            <input id="QB" type="text" class="form-control" placeholder="Nhập câu trả lời">
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">C.</span>
+                            <input id="QC" type="text" class="form-control" placeholder="Nhập câu trả lời">
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">D.</span>
+                            <input id="QD" type="text" class="form-control" placeholder="Nhập câu trả lời">
+                        </div>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label class="form-label"> Chọn đáp án đúng</label>
+                        <select name="QCorrectAns" class="form-control">
+                            <option value="a">A</option>
+                            <option value="b">B</option>
+                            <option value="c">C</option>
+                            <option value="d">D</option>
+                        </select>
+                    </div>
+                    <div class="col-12" style="text-align:center">
+                        <button id="btnXacNhanThemThuCong" class="btn btn-outline-success" style="width:200px">
+                            <i class="fa fa-circle-check fa-fw"> </i>Xác nhận
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane fade" id="pills-themtuexcel" role="tabpanel" aria-labelledby="pills-profile-tab">
+        <div class="form-group mb-3">
+            <label class="form-label">Chọn chủ đề & Phòng thi</label>
+            <select class="form-control" id="categoryId" name="categoryId">
+                @foreach (var item in ViewBag.listcat)
+                {
+                    <option value="@item.Value">@item.Text</option>
+                }
+            </select>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Chọn file Excel để upload</label>
+            <input class="form-control" type="file" id="formFile">
+        </div>
+        <div class="col-12" style="text-align:center">
+            <button id="btnXacNhanThemTuExcel" class="btn btn-outline-success" style="width:200px">
+                <i class="fa fa-circle-check fa-fw"> </i>Xác nhận
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#btnXacNhanThemThuCong").click(function (e) {
+            var form = $("#myForm")[0];
+            if (form.checkValidity()) {
+                e.preventDefault();
+                var text = $("#Text").val();
+                var qa = $("#QA").val() ?? null;
+                var qb = $("#QB").val() ?? null;
+                var qc = $("#QC").val() ?? null;
+                var qd = $("#QD").val() ?? null;
+                var qcorrectans = $("select[name='QCorrectAns']").val();
+                var categoryId = $("select[name='categoryId']").val();
+
+                var catid = parseInt(categoryId);
+
+                var data = {
+                    CategoryId: catid,
+                    Text: text,
+                    QA: qa,
+                    QB: qb,
+                    QC: qc,
+                    QD: qd,
+                    QCorrectAns: qcorrectans
+                };
+                console.log(data)
+                $.ajax({
+                    url: "CreateManual",
+                    type: "POST",
+                    data: data,
+                    success: function (data) {
+                        if (data.success) {
+                            Swal.fire(
+                                "Thành công!",
+                                "Bạn vừa thêm linh kiện mới thành công",
+                                "success"
+                            ).then(function () {
+                                window.location.reload();
+                            });
+                        } else {
+                            Swal.fire("Không thành công!", data.message, "error");
+                        }
+                    },
+                    error: function () {
+                        Swal.fire("Lỗi máy chủ!", "Không thành công", "error");
+                    },
+                });
+            } else {
+                form.reportValidity();
+            }
+                        
+        });
+
+    })
+</script>

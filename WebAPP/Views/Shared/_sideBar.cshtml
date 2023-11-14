@@ -2,35 +2,34 @@
     <div class="position-sticky pt-3">
         <ul class="nav flex-column">
             <li class="nav-item">
-                <a id="pageTrangChu" class="nav-link" aria-current="page" 
-                                            <a class="nav-link" asp-action="index" asp-controller="home">
-                    <span data-feather="home"></span>
+                <a id="pageTrangChu" class="nav-link" asp-action="index" asp-controller="home">
+                    <i class="fa fa-home fa-fw"> </i>
                     Trang chủ
                 </a>
             </li>
             <li class="nav-item">
                 <a id="pageChuDePhongThi" class="nav-link" href="#"
                    data-bs-toggle="collapse" data-bs-target="#quanlychude-collapse" aria-expanded="false">
-                    <span data-feather="briefcase"></span>
+                    <i class="fa-solid fa-graduation-cap fa-fw"></i>
                     Chủ đề & Phòng thi
                 </a>
                 <div class="collapse show" id="quanlychude-collapse" style="">
                     <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
                         <li class="nav-item">
                             <a id="pageDanhSachChuDePhongThi" class="nav-link" asp-action="list" asp-controller="category">
-                                <span data-feather="chevron-right"></span>
+                                <i class="fa fa-chevron-right fa-fw"></i>
                                 Danh sách chủ đề & Phòng thi
                             </a>
                         </li>
                         <li class="nav-item">
                             <a id="pageThemChuDePhongThi" class="nav-link" asp-action="create" asp-controller="category">
-                                <span data-feather="chevron-right"></span>
+                                <i class="fa fa-chevron-right fa-fw"></i>
                                 Thêm chủ để & Phòng thi
                             </a>
                         </li>
                         <li class="nav-item">
                             <a id="pageDongMoPhongThi" class="nav-link" asp-action="changestatus" asp-controller="category">
-                                <span data-feather="chevron-right"></span>
+                                <i class="fa fa-chevron-right fa-fw"></i>
                                 Đóng / Mở phòng thi
                             </a>
                         </li>
@@ -38,58 +37,49 @@
                 </div>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#"
+                <a id="pageQuanLyCauHoi" class="nav-link" href="#"
                    data-bs-toggle="collapse" data-bs-target="#quanlycauhoi-collapse" aria-expanded="false">
-                    <span data-feather="clipboard"></span>
+                    <i class="fa-solid fa-file-circle-question fa-fw"></i>
                     Quản lý câu hỏi
                 </a>
                 <div class="collapse show" id="quanlycauhoi-collapse" style="">
                     <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <span data-feather="chevron-right"></span>
+                            <a id="pageDanhsachcauhoi" class="nav-link" asp-action="list" asp-controller="question">
+                                <i class="fa fa-chevron-right fa-fw"></i>
                                 Danh sách câu hỏi
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <span data-feather="chevron-right"></span>
-                                Thêm câu hỏi 
+                            <a id="pageThemcauhoi" class="nav-link" asp-action="create" asp-controller="question">
+                                <i class="fa fa-chevron-right fa-fw"></i>                               
+                                Thêm câu hỏi
                             </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <span data-feather="chevron-right"></span>
-                                Nhập từ file Excel
-                            </a>
-                        </li>
+                        </li>                     
                     </ul>
                 </div>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#"
                    data-bs-toggle="collapse" data-bs-target="#quanlytaikhoan-collapse" aria-expanded="false">
-                    <span data-feather="users"></span>
+                    <i class="fa fa-users fa-fw"></i>
                     Quản lý tài khoản
                 </a>
                 <div class="collapse show" id="quanlytaikhoan-collapse" style="">
                     <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
                         <li class="nav-item">
                             <a class="nav-link" href="#">
-                                <span data-feather="chevron-right"></span>
-                                Danh sách tài khoản
+                                <i class="fa fa-chevron-right fa-fw"></i>                                Danh sách tài khoản
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">
-                                <span data-feather="chevron-right"></span>
-                                Thêm tài khoản mới
+                                <i class="fa fa-chevron-right fa-fw"></i>                                Thêm tài khoản mới
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">
-                                <span data-feather="chevron-right"></span>
-                                Nhập từ file Excel
+                                <i class="fa fa-chevron-right fa-fw"></i>                                Nhập từ file Excel
                             </a>
                         </li>
                     </ul>
@@ -97,11 +87,11 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#">
-                    <span data-feather="file-text"></span>
+                    <i class="fa fa-newspaper fa-fw"></i>
                     Điểm số & Thống kê
                 </a>
-            </li>           
-        </ul>       
+            </li>
+        </ul>
     </div>
 </nav>
 

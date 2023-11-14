@@ -1,4 +1,3 @@
-
 using WebAPP.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,8 +7,7 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddTransient<ICategoryApiClient, CategoryApiClient>();
-
-
+builder.Services.AddTransient<IQuestionApiClient, QuestionApiClient>();
 
 var app = builder.Build();
 

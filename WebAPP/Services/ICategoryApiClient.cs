@@ -7,10 +7,15 @@ namespace WebAPP.Services
     public interface ICategoryApiClient
     {
         Task<ApiResult<List<CategoryVm>>> GetAll();
+
         Task<ApiResult<CategoryVm>> GetById(int id);
+
         Task<ApiResult<int>> Create(CategoryCreateRequest request);
+
         Task<ApiResult<bool>> Delete(int id);
+
         Task<ApiResult<int>> UpdateName(int id, CategoryUpdateNameRequest request);
-        Task<ApiResult<int>> UpdateStatus(int id, CategoryUpdateStatusRequest request);
+
+        Task<ApiResult<bool>> UpdateStatus(int id);
     }
 }
