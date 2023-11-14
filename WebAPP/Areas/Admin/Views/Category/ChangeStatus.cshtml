@@ -5,13 +5,12 @@
     ViewData["ActiveChild"] = "pageDongMoPhongThi";
 }
 
-
 <table class="table" style="text-align:center; vertical-align:middle">
     <thead>
         <tr>
             <th>
                 Tên
-            </th>         
+            </th>
             <th>
                 Trạng thái
             </th>
@@ -26,12 +25,61 @@
                     @Html.DisplayFor(modelItem => item.Name)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Status)
+                    @if (item.Status == true)
+                    {
+                        <div><i class="fa fa-toggle-on fa-fw" style="color:green"></i> Online</div>
+                    }
+                    else
+                    {
+                        <div><i class="fa fa-toggle-off fa-fw" style="color:red"></i> Offline</div>
+                    }
                 </td>
                 <td>
-                    <btn class="btn btn-primary btn-sm">Đổi trạng thái</btn>
+                    <btn class="btn btn-outline-primary btn-sm btnChangeStatus" data-id="@item.Id">
+                        <i class="fa fa-retweet fa-fw"> </i>
+                        Đổi trạng thái
+                    </btn>
                 </td>
             </tr>
         }
     </tbody>
 </table>
+
+<script>
+    $(document).ready(function () {
+        $(".btnChangeStatus").click(function (e) {
+            var id = $(this).data("id");
+            $.ajax({
+                url: "UpdateStatus",
+                type: "POST",
+                data: { id: id },
+                success: function (data) {
+                    if (data.success) {
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: "top-end",
+                            showConfirmButton: false,
+                            timer: 800,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.onmouseenter = Swal.stopTimer;
+                                toast.onmouseleave = Swal.resumeTimer;
+                            }
+                        });
+                        Toast.fire({
+                            icon: "success",
+                            title: "Đang xử lý..."
+                        }).then(function () {
+                            window.location.reload();
+                        });
+                    } else {
+                        Swal.fire("Thất bại!", data.message, "error");
+                    }
+                },
+                error: function (xhr, t, error) {
+                    Swal.fire("Thất bại!", "Lỗi máy chủ", "error");
+                },
+            });
+        });
+    });
+</script>

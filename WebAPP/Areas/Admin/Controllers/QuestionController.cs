@@ -1,0 +1,50 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using ViewModels.Question.Request;
+using WebAPP.Services;
+
+namespace WebAPP.Areas.Admin.Controllers
+{
+    public class QuestionController : Controller
+    {
+        private readonly ICategoryApiClient _categoryApiClient;
+        private readonly IQuestionApiClient _questionApiClient;
+
+        public QuestionController(ICategoryApiClient categoryApiClient, IQuestionApiClient questionApiClient)
+        {
+            _categoryApiClient = categoryApiClient;
+            _questionApiClient = questionApiClient;
+        }
+
+        public async Task<IActionResult> List()
+        {
+            ViewBag.thisPage = "Danh sách câu hỏi";
+            var result = await _questionApiClient.GetAll();
+            return View(result.ResultObj);
+        }
+
+        public async Task<IActionResult> Create()
+        {
+            ViewBag.thisPage = "Thêm câu hỏi";
+            var listcategory = await _categoryApiClient.GetAll();
+            ViewBag.listcat = listcategory.ResultObj.Select(x => new SelectListItem()
+            {
+                Text = x.Name,
+                Value = x.Id.ToString()
+            });
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateManual( QuestionCreateRequest request)
+        {
+            var result = await _questionApiClient.Create(request);
+            if (!result.IsSuccessed)
+            {
+                return Json(new { success = false, message = result.Message });
+            }
+            return Json(new { success = true, message = result.Message });
+        }
+
+    }
+}

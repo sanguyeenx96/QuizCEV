@@ -11,17 +11,20 @@ namespace WebAPP.Areas.Admin.Controllers
         {
             _categoryApiClient = categoryApiClient;
         }
+
         public async Task<IActionResult> List()
         {
             ViewBag.thisPage = "Danh sách chủ đề & Phòng thi";
             var result = await _categoryApiClient.GetAll();
             return View(result.ResultObj);
         }
+
         public IActionResult Create()
         {
             ViewBag.thisPage = "Thêm chủ đề & Phòng thi";
             return View();
         }
+
         public async Task<IActionResult> ChangeStatus()
         {
             ViewBag.thisPage = "Đóng / Mở phòng thi";
@@ -53,6 +56,39 @@ namespace WebAPP.Areas.Admin.Controllers
                 return Json(new { success = false, message = result.Message });
             }
             return Json(new { success = true, message = result.Message ,data=result.ResultObj});
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var result = await _categoryApiClient.Delete(id);
+            if (!result.IsSuccessed)
+            {
+                return Json(new { success = false, message = result.Message });
+            }
+            return Json(new { success = true});
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateName(int id,CategoryUpdateNameRequest request)
+        {
+            var result = await _categoryApiClient.UpdateName(id,request);
+            if (!result.IsSuccessed)
+            {
+                return Json(new { success = false, message = result.Message });
+            }
+            return Json(new { success = true });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateStatus(int id)
+        {
+            var result = await _categoryApiClient.UpdateStatus(id);
+            if (!result.IsSuccessed)
+            {
+                return Json(new { success = false, message = result.Message });
+            }
+            return Json(new { success = true });
         }
     }
 }

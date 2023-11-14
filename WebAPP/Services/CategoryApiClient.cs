@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.AspNetCore.Components.Web;
+using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 using System.Net.Http;
 using System.Text;
 using ViewModels.Category.Request;
@@ -32,9 +34,17 @@ namespace WebAPP.Services
             return JsonConvert.DeserializeObject<ApiErrorResult<int>>(result);
         }
 
-        public Task<ApiResult<bool>> Delete(int id)
+        public async Task<ApiResult<bool>> Delete(int id)
         {
-            throw new NotImplementedException();
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAdress"]);
+            var response = await client.DeleteAsync($"/api/category/{id}");
+            var result = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
+            }
+            return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
         }
 
         public async Task<ApiResult<List<CategoryVm>>> GetAll()
@@ -60,17 +70,36 @@ namespace WebAPP.Services
             {
                 return JsonConvert.DeserializeObject<ApiSuccessResult<CategoryVm>>(result);
             }
-            return JsonConvert.DeserializeObject<ApiErrorResult<CategoryVmS>>(result);
+            return JsonConvert.DeserializeObject<ApiErrorResult<CategoryVm>>(result);
         }
 
-        public Task<ApiResult<int>> UpdateName(int id, CategoryUpdateNameRequest request)
+        public async Task<ApiResult<int>> UpdateName(int id, CategoryUpdateNameRequest request)
         {
-            throw new NotImplementedException();
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAdress"]);
+            var json = JsonConvert.SerializeObject(request);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+            var response = await client.PatchAsync($"/api/category/updatename/{id}",httpContent);
+            var result = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                return JsonConvert.DeserializeObject<ApiSuccessResult<int>>(result);
+            }
+            return JsonConvert.DeserializeObject<ApiErrorResult<int>>(result);
         }
 
-        public Task<ApiResult<int>> UpdateStatus(int id, CategoryUpdateStatusRequest request)
+        public async Task<ApiResult<bool>> UpdateStatus(int id)
         {
-            throw new NotImplementedException();
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAdress"]);
+            var httpContent = new StringContent("", Encoding.UTF8, "application/json");
+            var response = await client.PatchAsync($"/api/category/updatestatus/{id}",httpContent);
+            var result = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
+            }
+            return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
         }
     }
 }

@@ -14,6 +14,7 @@ namespace Data.Entities
         public string Name { get; set; }
 
         public DateTime DateCreate { get; set; }
+        public DateTime LastUpdate { get; set; }
 
         public bool Status { get; set; }
 
