@@ -19,5 +19,8 @@ namespace WebAPP.Services
         Task<ApiResult<bool>> Delete(int id);
 
         Task<ApiResult<int>> Update(int id, QuestionUpdateRequest request);
+
+        Task<ApiResult<ImportExcelResult>> ImportExcel(Stream file, int categoryId);
+
     }
 }

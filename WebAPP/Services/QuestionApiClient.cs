@@ -1,8 +1,12 @@
 ﻿using Newtonsoft.Json;
+using System.IO;
+using System.Reflection;
 using System.Text;
 using ViewModels.Common;
 using ViewModels.Question.Request;
 using ViewModels.Question.Response;
+using System.Net.Http.Headers;
+
 
 namespace WebAPP.Services
 {
@@ -81,6 +85,31 @@ namespace WebAPP.Services
                 return JsonConvert.DeserializeObject<ApiSuccessResult<QuestionVm>>(result);
             }
             return JsonConvert.DeserializeObject<ApiErrorResult<QuestionVm>>(result);
+        }
+
+        public async Task<ApiResult<ImportExcelResult>> ImportExcel(Stream file, int categoryId)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAdress"]);
+            var requestContent = new MultipartFormDataContent();
+            // Tạo ByteArrayContent từ Stream
+            var fileBytes = new byte[file.Length];
+            await file.ReadAsync(fileBytes, 0, (int)file.Length);
+            var fileContent = new ByteArrayContent(fileBytes);
+            fileContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
+            {
+                Name = "file",
+                FileName = "excelfile.xlsx" 
+            };
+            requestContent.Add(fileContent);
+         
+            var response = await client.PostAsync($"/api/question/importexcel/{categoryId}", requestContent);
+            var result = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                return JsonConvert.DeserializeObject<ApiSuccessResult<ImportExcelResult>>(result);
+            }
+            return JsonConvert.DeserializeObject<ApiErrorResult<ImportExcelResult>>(result);
         }
 
         public async Task<ApiResult<int>> Update(int id, QuestionUpdateRequest request)

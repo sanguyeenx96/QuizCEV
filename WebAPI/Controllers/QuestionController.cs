@@ -56,5 +56,35 @@ namespace WebAPI.Controllers
             var result = await _QuestionService.Delete(id);
             return Ok(result);
         }
+
+        [HttpPost("importexcel/{categoryId}")]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> ImportExcel([FromForm] IFormFile file, int categoryId)
+        {
+            try
+            {
+                if (file == null || file.Length == 0)
+                {
+                    return BadRequest("Tệp Excel không được gửi.");
+                }
+                using (var fileStream = file.OpenReadStream())
+                {
+                    var danhsachlinhkiens = await _QuestionService.ReadExcelFile(fileStream);
+                    var result = await _QuestionService.ImportExcelFile(danhsachlinhkiens, categoryId);
+                    if (result.IsSuccessed)
+                    {
+                        return Ok(result);
+                    }
+                    else
+                    {
+                        return BadRequest(result.Message);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Lỗi xử lý tệp Excel: " + ex.Message);
+            }
+        }
     }
 }

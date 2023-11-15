@@ -17,19 +17,19 @@
     </div>
 </form>
 
+
 <script>
     $(document).ready(function () {
         $("#btnXacNhan").click(function (e) {
             var form = $("#myForm")[0];
             if (form.checkValidity()) {
-                // Nếu form hợp lệ, thực hiện Ajax request
                 e.preventDefault();
                 var name = $("#name").val();
                 var data = {
                     name: name
                 };
                 $.ajax({
-                    url: "/Question/Create/",
+                    url: "Create",
                     type: "POST",
                     data: data,
                     success: function (data) {
@@ -51,7 +51,6 @@
                     },
                 });
             } else {
-                // Nếu form không hợp lệ, hiển thị validation
                 form.reportValidity();
             }
         });
