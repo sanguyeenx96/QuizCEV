@@ -46,7 +46,7 @@
                 </td>
                 <td>
                     <div class="btn-group" style=" white-space:nowrap">
-                        <btn  class="btn btn-outline-primary btn-sm btnSua" data-id="@item.Id">
+                        <btn class="btn btn-outline-secondary btn-sm btnSua" data-id="@item.Id">
                             <i class="fa fa-pencil fa-fw"> </i>
                             Đổi tên
                         </btn>
@@ -67,6 +67,18 @@
         const swalWithBootstrapButtons = Swal.mixin({
             buttonsStyling: true,
         });
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 800,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+        
 
         $(".btnSua").click(function (e) {
             var id = $(this).data("id");
@@ -111,11 +123,10 @@
                         },
                         success: function (data) {
                             if (data.success) {
-                                Swal.fire(
-                                    "Thành công!",
-                                    "Chủ đề/ Phòng thi đã được đổi tên thành công",
-                                    "success"
-                                ).then(function () {
+                                Toast.fire({
+                                    icon: "success",
+                                    title: "Đang xử lý..."
+                                }).then(function () {
                                     window.location.reload();
                                 });
                             } else {
@@ -157,11 +168,10 @@
                             },
                             success: function (data) {
                                 if (data.success) {
-                                    Swal.fire(
-                                        "Thành công!",
-                                        "Chủ dề/ Phòng thi đã được xoá",
-                                        "success"
-                                    ).then(function () {
+                                    Toast.fire({
+                                        icon: "success",
+                                        title: "Đang xử lý..."
+                                    }).then(function () {
                                         window.location.reload();
                                     });
                                 } else {

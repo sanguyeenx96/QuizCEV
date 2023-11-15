@@ -9,6 +9,22 @@
     {
       "library": "sweetalert2@11.9.0",
       "destination": "wwwroot/sweetalert2/"
+    },
+    {
+      "library": "datatables@1.10.21",
+      "destination": "wwwroot/datatables/"
+    },
+    {
+      "library": "datatables.net-responsive@2.5.0",
+      "destination": "wwwroot/datatables.net-responsive/"
+    },
+    {
+      "library": "datatables-buttons@2.4.2",
+      "destination": "wwwroot/datatables-buttons/"
+    },
+    {
+      "library": "datatables.net-buttons-bs4@2.4.2",
+      "destination": "wwwroot/datatables/datatables.net-buttons-bs4/"
     }
   ]
 }

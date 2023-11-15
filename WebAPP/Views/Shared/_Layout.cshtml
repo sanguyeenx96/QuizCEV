@@ -15,6 +15,24 @@
     <link href="~/fontawesome-free-6.4.2-web/css/fontawesome.css" rel="stylesheet" />
     <link href="~/fontawesome-free-6.4.2-web/css/brands.css" rel="stylesheet" />
     <link href="~/fontawesome-free-6.4.2-web/css/solid.css" rel="stylesheet" />
+
+    <link href="~/datatables-bs4/css/datatables.bootstrap4.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/datatables-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="~/datatables-responsive/css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" href="~/datatables-buttons/css/buttons.bootstrap4.min.css">
+
+    <script src="~/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="~/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="~/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+
+    <script src="~/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="~/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="~/datatables-buttons/js/buttons.colVis.min.js"></script>
+
+
 </head>
 <body>
     <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
@@ -28,10 +46,12 @@
             <main class="col-md-8 ms-sm-auto col-lg-9 px-md-4">
                 <partial name="_Header" />
                 @RenderBody()
+                <br />
             </main>
         </div>
     </div>
 
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    
 </body>
 </html>

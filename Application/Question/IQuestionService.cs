@@ -25,5 +25,10 @@ namespace Application.Question
 
         Task<ApiResult<int>> Update(int id, QuestionUpdateRequest request);
 
+        Task<List<QuestionImportExcelRequest>> ReadExcelFile(Stream fileStream);
+
+        Task<ApiResult<ImportExcelResult>> ImportExcelFile(List<QuestionImportExcelRequest> request, int categoryId);
+
+
     }
 }

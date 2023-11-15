@@ -17,5 +17,6 @@ namespace WebAPP.Services
         Task<ApiResult<int>> UpdateName(int id, CategoryUpdateNameRequest request);
 
         Task<ApiResult<bool>> UpdateStatus(int id);
+
     }
 }

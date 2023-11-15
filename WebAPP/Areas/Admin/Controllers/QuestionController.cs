@@ -19,6 +19,12 @@ namespace WebAPP.Areas.Admin.Controllers
         public async Task<IActionResult> List()
         {
             ViewBag.thisPage = "Danh sách câu hỏi";
+            var listcategory = await _categoryApiClient.GetAll();
+            ViewBag.listcat = listcategory.ResultObj.Select(x => new SelectListItem()
+            {
+                Text = x.Name,
+                Value = x.Id.ToString()
+            });
             var result = await _questionApiClient.GetAll();
             return View(result.ResultObj);
         }
@@ -44,6 +50,22 @@ namespace WebAPP.Areas.Admin.Controllers
                 return Json(new { success = false, message = result.Message });
             }
             return Json(new { success = true, message = result.Message });
+        }
+
+
+        [HttpPost]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> ImportExcel([FromForm] IFormFile file, int categoryId)
+        {
+            using (var fileStream = file.OpenReadStream())
+            {
+                var result = await _questionApiClient.ImportExcel(fileStream, categoryId);
+                if (result.IsSuccessed)
+                {                  
+                    return Json(new { success = true, data = result.ResultObj });
+                }
+                return Json(new { success = false, message = result.Message });
+            }
         }
 
     }
