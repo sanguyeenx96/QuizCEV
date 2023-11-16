@@ -86,5 +86,12 @@ namespace WebAPI.Controllers
                 return BadRequest("Lỗi xử lý tệp Excel: " + ex.Message);
             }
         }
+
+        [HttpGet("Count/{categoryId}")]
+        public async Task<IActionResult> Count(int categoryId)
+        {
+            var result = await _QuestionService.Count(categoryId);
+            return Ok(result);
+        }
     }
 }

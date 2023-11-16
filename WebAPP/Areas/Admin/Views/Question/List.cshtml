@@ -1,108 +1,49 @@
-﻿@model IEnumerable<ViewModels.Question.Response.QuestionVm>
-
-@{
+﻿@{
     ViewData["Active"] = "pageQuanLyCauHoi";
     ViewData["ActiveChild"] = "pageDanhsachcauhoi";
 }
 
-<style>
-    
-    table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control, table.dataTable.dtr-inline.collapsed > tbody > tr > th.dtr-control {
-        vertical-align: middle;
-    }
-</style>
 
-<div class="card border-secondary">
-    <div class="card-header">
-        <div class="form-group mb-3">
-            <label class="form-label">Chọn chủ đề & Phòng thi</label>
-            <select class="form-control" id="categoryId" name="categoryId">
-                @foreach (var item in ViewBag.listcat)
-                {
-                    <option value="@item.Value">@item.Text</option>
-                }
-            </select>
-        </div>
-    </div>
-    <div class="card-body">
-        <table id="table" class="table table-borderless">
-            <thead style="font-size:small;text-align:center;white-space:nowrap">
-                <tr>
-                    <th class="all">
-                        Câu hỏi
-                    </th>
-                    <th class="col-md-2">
-                    </th>
-                    <th class="none">
-                        Đáp án A
-                    </th>
-                    <th class="none">
-                        Đáp án B
-                    </th>
-                    <th class="none">
-                        Đáp án C
-                    </th>
-                    <th class="none">
-                        Đáp án D
-                    </th>
-                    <th class="none">
-                        Đáp án đúng
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Text)
-                        </td>
-                        <td style="text-align: end;">
-                            <div class="btn-group" style=" white-space:nowrap">
-                                <btn class="btn btn-outline-secondary btn-sm btnSua" data-id="@item.Id">
-                                    <i class="fa fa-pencil fa-fw"> </i>
-                                    Sửa
-                                </btn>
-                                <btn class="btn btn-outline-danger btn-sm btnXoa" data-id="@item.Id">
-                                    <i class="fa fa-trash-can fa-fw"> </i>
-                                    Xoá
-                                </btn>
-                            </div>
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.QA)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.QB)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.QC)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.QD)
-                        </td>
-                        <td>
-                            @(item.QCorrectAns?.ToString().ToUpper())
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
+<div class="form-group mb-3">
+    <label class="form-label">Chọn chủ đề & Phòng thi</label>
+    <select class="form-control" id="categoryId" name="categoryId" style="text-align:center">
+        @foreach (var item in ViewBag.listcat)
+        {
+            <option value="@item.Value">@item.Text</option>
+        }
+    </select>
 </div>
-
+<div id="listQuestion"></div>
 
 
 <script>
-    $(document).ready(function () {
-        $('#table').DataTable({
-            "paging": true,
-            "lengthChange": true,
-            "searching": true,
-            "ordering": true,
-            "info": true,
-            "autoWidth": false,
-            "responsive": true
+    $(document).ready(function(){
+        var firstselect = $("select[name='categoryId']").val();
+        $.ajax({
+            url: "GetAllByCategoryId",
+            type: "POST",
+            data: {
+                id: firstselect,
+            },
+            success: function (result) {
+                $("#listQuestion").html(result);
+            },
+        });
+
+        $('#categoryId').on('change',function(){
+            var id = $(this).val();
+            $.ajax({
+                url: "GetAllByCategoryId",
+                type: "POST",
+                data: {
+                    id: id,
+                },
+                success: function (result) {
+                    $("#listQuestion").html(result);
+                    $('#tree').bstreeview({ data: result });
+                },
+            });
         })
+       
     })
 </script>

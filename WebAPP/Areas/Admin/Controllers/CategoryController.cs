@@ -14,14 +14,14 @@ namespace WebAPP.Areas.Admin.Controllers
 
         public async Task<IActionResult> List()
         {
-            ViewBag.thisPage = "Danh sách chủ đề & Phòng thi";
+            ViewBag.thisPage = "Danh sách Chủ đề & Phòng thi";
             var result = await _categoryApiClient.GetAll();
             return View(result.ResultObj);
         }
 
         public IActionResult Create()
         {
-            ViewBag.thisPage = "Thêm chủ đề & Phòng thi";
+            ViewBag.thisPage = "Thêm mới Chủ đề & Phòng thi";
             return View();
         }
 

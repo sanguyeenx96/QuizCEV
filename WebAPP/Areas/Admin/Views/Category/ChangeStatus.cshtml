@@ -27,16 +27,16 @@
                 <td>
                     @if (item.Status == true)
                     {
-                        <div><i class="fa fa-toggle-on fa-fw" style="color:green"></i> Online</div>
+                        <div><i class="bi-toggle2-on" style="color:green"></i> Online</div>
                     }
                     else
                     {
-                        <div><i class="fa fa-toggle-off fa-fw" style="color:red"></i> Offline</div>
+                        <div><i class="bi-toggle2-off" style="color:red"></i> Offline</div>
                     }
                 </td>
                 <td>
-                    <btn class="btn btn-outline-primary btn-sm btnChangeStatus" data-id="@item.Id">
-                        <i class="fa fa-retweet fa-fw"> </i>
+                    <btn class="btn btn-outline-secondary btn-sm btnChangeStatus" data-id="@item.Id">
+                        <i class="bi-transparency"> </i>
                         Đổi trạng thái
                     </btn>
                 </td>
