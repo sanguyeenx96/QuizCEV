@@ -20,6 +20,19 @@ namespace WebAPP.Services
             _configuration = configuration;
         }
 
+        public async Task<ApiResult<int>> Count(int categoryId)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAdress"]);
+            var response = await client.GetAsync($"/api/question/Count/{categoryId}");
+            var result = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                return JsonConvert.DeserializeObject<ApiSuccessResult<int>>(result);
+            }
+            return JsonConvert.DeserializeObject<ApiErrorResult<int>>(result);
+        }
+
         public async Task<ApiResult<int>> Create(QuestionCreateRequest request)
         {
             var client = _httpClientFactory.CreateClient();

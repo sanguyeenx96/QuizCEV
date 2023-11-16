@@ -17,6 +17,8 @@ namespace Application.Question
 
         Task<ApiResult<List<QuestionVm>>> GetAllByCategory(int categoryId);
 
+        Task<ApiResult<int>> Count(int categoryId);
+
         Task<ApiResult<QuestionVm>> GetById(int id);
 
         Task<ApiResult<int>> Create(QuestionCreateRequest request);

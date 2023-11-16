@@ -156,6 +156,9 @@ namespace Data.Migrations
                     b.Property<string>("QD")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("Score")
+                        .HasColumnType("int");
+
                     b.Property<string>("Text")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");

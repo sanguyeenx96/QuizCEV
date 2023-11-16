@@ -39,19 +39,19 @@
                 </td>
                 <td>
                    @if(item.Status == true){
-                        <div><i class="fa fa-toggle-on fa-fw" style="color:green"></i> Online</div>
+                        <div><i class="bi-toggle2-on" style="color:green"></i> Online</div>
                    }else{
-                        <div><i class="fa fa-toggle-off fa-fw" style="color:red"></i> Offline</div>
+                        <div><i class="bi-toggle2-off" style="color:red"></i> Offline</div>
                    }
                 </td>
                 <td>
                     <div class="btn-group" style=" white-space:nowrap">
                         <btn class="btn btn-outline-secondary btn-sm btnSua" data-id="@item.Id">
-                            <i class="fa fa-pencil fa-fw"> </i>
+                            <i class="bi-pencil-fill"> </i>
                             Đổi tên
                         </btn>
                         <btn class="btn btn-outline-danger btn-sm btnXoa" data-id="@item.Id" data-name="@item.Name">
-                            <i class="fa fa-trash-can fa-fw"> </i>
+                            <i class="bi-trash"> </i>
                             Xoá
                         </btn>
                     </div>

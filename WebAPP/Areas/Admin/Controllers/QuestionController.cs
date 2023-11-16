@@ -29,9 +29,18 @@ namespace WebAPP.Areas.Admin.Controllers
             return View(result.ResultObj);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> GetAllByCategoryId(int id)
+        {
+            var count = await _questionApiClient.Count(id);
+            ViewBag.countTracNghiem = count.ResultObj;
+            var result = await _questionApiClient.GetAllByCategory(id);
+            return PartialView( "_questionList",result.ResultObj);
+        }
+
         public async Task<IActionResult> Create()
         {
-            ViewBag.thisPage = "Thêm câu hỏi";
+            ViewBag.thisPage = "Thêm mới câu hỏi";
             var listcategory = await _categoryApiClient.GetAll();
             ViewBag.listcat = listcategory.ResultObj.Select(x => new SelectListItem()
             {
@@ -67,6 +76,8 @@ namespace WebAPP.Areas.Admin.Controllers
                 return Json(new { success = false, message = result.Message });
             }
         }
+
+
 
     }
 }

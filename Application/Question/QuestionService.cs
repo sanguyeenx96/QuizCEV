@@ -70,6 +70,7 @@ namespace Application.Question
                 QC = x.QC,
                 QD = x.QD,
                 QCorrectAns = x.QCorrectAns,
+                Score = x.Score,
                 CategoryId = x.CategoryId
             }).ToListAsync();
             return new ApiSuccessResult<List<QuestionVm>>(result);
@@ -86,6 +87,7 @@ namespace Application.Question
                 QC = x.QC,
                 QD = x.QD,
                 QCorrectAns = x.QCorrectAns,
+                Score=x.Score,
                 CategoryId = x.CategoryId
             }).ToListAsync();
             return new ApiSuccessResult<List<QuestionVm>>(listquestions);
@@ -105,6 +107,7 @@ namespace Application.Question
                 QC = result.QC,
                 QD = result.QD,
                 QCorrectAns = result.QCorrectAns,
+                Score = result.Score,
                 CategoryId = result.CategoryId
             };
             return new ApiSuccessResult<QuestionVm>(question);
@@ -166,7 +169,7 @@ namespace Application.Question
                             QB = qb,
                             QC = qc,
                             QD = qd,
-                            QCorrectAns = qcans
+                            QCorrectAns = qcans                            
                         };
                         danhsachcauhois.Add(newquestion);
                     }
@@ -253,6 +256,13 @@ namespace Application.Question
             _context.Questions.Update(question);
             await _context.SaveChangesAsync();
             return new ApiSuccessResult<int> { Id = question.Id };
+
+        }
+
+        public async Task<ApiResult<int>> Count(int categoryId)
+        {
+            int total = await _context.Questions.Where(x => x.CategoryId == categoryId).CountAsync();
+            return new ApiSuccessResult<int> { ResultObj = total};
 
         }
     }

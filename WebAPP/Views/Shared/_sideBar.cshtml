@@ -1,35 +1,35 @@
-﻿<nav id="sidebarMenu" class="col-md-4 col-lg-3 d-md-block bg-light sidebar collapse">
+﻿<nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
     <div class="position-sticky pt-3">
         <ul class="nav flex-column">
             <li class="nav-item">
                 <a id="pageTrangChu" class="nav-link" asp-action="index" asp-controller="home">
-                    <i class="fa fa-home fa-fw"> </i>
+                    <i class="bi-house"></i>
                     Trang chủ
                 </a>
             </li>
             <li class="nav-item">
                 <a id="pageChuDePhongThi" class="nav-link" href="#"
-                   data-bs-toggle="collapse" data-bs-target="#quanlychude-collapse" aria-expanded="false">
-                    <i class="fa-solid fa-graduation-cap fa-fw"></i>
+                   data-bs-toggle="collapse" data-bs-target="#pageChuDePhongThi-collapse" aria-expanded="false">
+                    <i class="bi-tags"></i>
                     Chủ đề & Phòng thi
                 </a>
-                <div class="collapse show" id="quanlychude-collapse" style="">
+                <div class="collapse " id="pageChuDePhongThi-collapse" style="">
                     <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
                         <li class="nav-item">
                             <a id="pageDanhSachChuDePhongThi" class="nav-link" asp-action="list" asp-controller="category">
-                                <i class="fa fa-chevron-right fa-fw"></i>
-                                Danh sách chủ đề & Phòng thi
+                                <i class="bi-dot"></i>
+                                Danh sách
                             </a>
                         </li>
                         <li class="nav-item">
                             <a id="pageThemChuDePhongThi" class="nav-link" asp-action="create" asp-controller="category">
-                                <i class="fa fa-chevron-right fa-fw"></i>
-                                Thêm chủ để & Phòng thi
+                                <i class="bi-dot"></i>
+                                Thêm mới
                             </a>
                         </li>
                         <li class="nav-item">
                             <a id="pageDongMoPhongThi" class="nav-link" asp-action="changestatus" asp-controller="category">
-                                <i class="fa fa-chevron-right fa-fw"></i>
+                                <i class="bi-dot"></i>
                                 Đóng / Mở phòng thi
                             </a>
                         </li>
@@ -38,48 +38,45 @@
             </li>
             <li class="nav-item">
                 <a id="pageQuanLyCauHoi" class="nav-link" href="#"
-                   data-bs-toggle="collapse" data-bs-target="#quanlycauhoi-collapse" aria-expanded="false">
-                    <i class="fa-solid fa-file-circle-question fa-fw"></i>
+                   data-bs-toggle="collapse" data-bs-target="#pageQuanLyCauHoi-collapse" aria-expanded="false">
+                    <i class="bi-journals"></i>
                     Quản lý câu hỏi
                 </a>
-                <div class="collapse show" id="quanlycauhoi-collapse" style="">
+                <div class="collapse" id="pageQuanLyCauHoi-collapse" style="">
                     <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
                         <li class="nav-item">
                             <a id="pageDanhsachcauhoi" class="nav-link" asp-action="list" asp-controller="question">
-                                <i class="fa fa-chevron-right fa-fw"></i>
-                                Danh sách câu hỏi
+                                <i class="bi-dot"></i>
+                                Danh sách 
                             </a>
                         </li>
                         <li class="nav-item">
                             <a id="pageThemcauhoi" class="nav-link" asp-action="create" asp-controller="question">
-                                <i class="fa fa-chevron-right fa-fw"></i>                               
-                                Thêm câu hỏi
+                                <i class="bi-dot"></i>
+                                Thêm mới
                             </a>
-                        </li>                     
+                        </li>
                     </ul>
                 </div>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#"
                    data-bs-toggle="collapse" data-bs-target="#quanlytaikhoan-collapse" aria-expanded="false">
-                    <i class="fa fa-users fa-fw"></i>
+                    <i class="bi-people"></i>
                     Quản lý tài khoản
                 </a>
-                <div class="collapse show" id="quanlytaikhoan-collapse" style="">
+                <div class="collapse " id="quanlytaikhoan-collapse" style="">
                     <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
                         <li class="nav-item">
                             <a class="nav-link" href="#">
-                                <i class="fa fa-chevron-right fa-fw"></i>                                Danh sách tài khoản
+                                <i class="bi-dot"></i>
+                                Danh sách tài khoản
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">
-                                <i class="fa fa-chevron-right fa-fw"></i>                                Thêm tài khoản mới
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <i class="fa fa-chevron-right fa-fw"></i>                                Nhập từ file Excel
+                                <i class="bi-dot"></i>
+                                Thêm tài khoản mới
                             </a>
                         </li>
                     </ul>
@@ -87,7 +84,7 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#">
-                    <i class="fa fa-newspaper fa-fw"></i>
+                    <i class="bi-clipboard-data"></i>
                     Điểm số & Thống kê
                 </a>
             </li>
@@ -97,7 +94,13 @@
 
 @if (ViewData["Active"] != null)
 {
-    <script type="text/javascript">document.getElementById("@ViewData["Active"]").classList.add("active")</script>
+    string tenthe = ViewData["Active"].ToString();
+    string tenthecon = tenthe + "-collapse";
+
+    <script type="text/javascript">
+        document.getElementById("@tenthe").classList.add("active");
+        document.getElementById("@tenthecon").classList.add("show");
+    </script>
 }
 @if (ViewData["ActiveChild"] != null)
 {

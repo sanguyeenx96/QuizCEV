@@ -22,5 +22,8 @@ namespace WebAPP.Services
 
         Task<ApiResult<ImportExcelResult>> ImportExcel(Stream file, int categoryId);
 
+        Task<ApiResult<int>> Count(int categoryId);
+
+
     }
 }

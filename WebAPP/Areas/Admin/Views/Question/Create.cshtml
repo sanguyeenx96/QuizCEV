@@ -7,13 +7,13 @@
 <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
     <li class="nav-item" role="presentation">
         <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-themthucong" type="button" role="tab" aria-controls="pills-themthucong" aria-selected="true">
-            <i class="fa-regular fa-file"></i>
+            <i class="bi-file-plus"></i>
             Thêm thủ công
         </button>
     </li>
     <li class="nav-item" role="presentation">
         <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-themtuexcel" type="button" role="tab" aria-controls="pills-themtuexcel" aria-selected="false">
-            <i class="fa-regular fa-file-excel"></i>
+            <i class="bi-file-earmark-spreadsheet"></i>
             Nhập từ file Excel
         </button>
     </li>
@@ -25,7 +25,7 @@
                 <form id="myForm">
                     <div class="form-group mb-3">
                         <label class="form-label">Chọn chủ đề & Phòng thi</label>
-                        <select class="form-control" id="categoryId" name="categoryId">
+                        <select class="form-control" id="categoryId" name="categoryId" style="text-align:center">
                             @foreach (var item in ViewBag.listcat)
                             {
                                 <option value="@item.Value">@item.Text</option>
@@ -66,7 +66,7 @@
                     </div>
                     <div class="col-12" style="text-align:center">
                         <button id="btnXacNhanThemThuCong" class="btn btn-outline-success" style="width:200px">
-                            <i class="fa fa-circle-check fa-fw"> </i>Xác nhận
+                            <i class="bi-check-circle"> </i>Xác nhận
                         </button>
                     </div>
                 </form>
@@ -77,7 +77,7 @@
         <form id="excelUploadForm">
             <div class="form-group mb-3">
                 <label class="form-label">Chọn chủ đề & Phòng thi</label>
-                <select class="form-control" id="categoryId" name="categoryId">
+                <select class="form-control" id="categoryId" name="categoryId" style="text-align:center">
                     @foreach (var item in ViewBag.listcat)
                     {
                         <option value="@item.Value">@item.Text</option>
@@ -87,9 +87,10 @@
             <div class="mb-3">
                 <label class="form-label">Chọn file Excel để upload</label>
                 <input type="file" name="file" id="excelFile" class="form-control btn btn-outline-secondary btn-block" accept=".xlsx" required />
+            </div>
             <div class="col-12" style="text-align:center">
                 <button type="submit" id="btnXacNhanThemTuExcel" class="btn btn-outline-success" style="width:200px">
-                    <i class="fa fa-circle-check fa-fw"> </i>Xác nhận
+                    <i class="bi-check-circle"> </i>Xác nhận
                 </button>
             </div>
         </form>
@@ -159,23 +160,23 @@
                 contentType: false, // Không đặt kiểu dữ liệu
                 success: function (result) {
                     if (result.success) {
-                        if (result.data.sodongupdate == 0){
+                        if (result.data.sodongupdate == 0) {
                             Swal.fire({
                                 title: 'Nhập dữ liệu không thành công!',
                                 html: `<div class="col-12">
-                                                            <span class="badge bg-success animate__animated animate__fadeIn"> Thêm mới : ${result.data.sodongupdate} </span>
-                                                            <span class="badge bg-danger animate__animated animate__fadeIn"> Bị trùng : ${result.data.sodongtrung}</span>
-                                                            </div>`,
+                                    <span class="badge bg-success animate__animated animate__fadeIn"> Thêm mới : ${result.data.sodongupdate} </span>
+                                    <span class="badge bg-danger animate__animated animate__fadeIn"> Bị trùng : ${result.data.sodongtrung}</span>
+                                    </div>`,
                                 icon: 'error',
                                 showConfirmButton: false
                             })
-                        }else{
+                        } else {
                             Swal.fire({
                                 title: 'Nhập dữ liệu thành công!',
                                 html: `<div class="col-12">
-                                                            <span class="badge bg-success animate__animated animate__fadeIn"> Thêm mới : ${result.data.sodongupdate} </span>
-                                                            <span class="badge bg-danger animate__animated animate__fadeIn"> Bị trùng : ${result.data.sodongtrung}</span>
-                                                            </div>`,
+                                    <span class="badge bg-success animate__animated animate__fadeIn"> Thêm mới : ${result.data.sodongupdate} </span>
+                                    <span class="badge bg-danger animate__animated animate__fadeIn"> Bị trùng : ${result.data.sodongtrung}</span>
+                                    </div>`,
                                 icon: 'success',
                                 showConfirmButton: false
                             })
