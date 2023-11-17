@@ -16,6 +16,5 @@ namespace Data.Entities
         public Category Category { get; set; }
         public User User { get; set; }
         public List<LogExam> LogExams { get; set; }
-
     }
 }

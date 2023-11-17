@@ -27,6 +27,8 @@ namespace Data.EF
 
             modelBuilder.ApplyConfiguration(new QuestionConfiguration());
 
+            modelBuilder.ApplyConfiguration(new CauHoiTuLuanConfiguration());
+
             modelBuilder.ApplyConfiguration(new UserConfiguration());
 
             //base.OnModelCreating(modelBuilder);
@@ -36,6 +38,8 @@ namespace Data.EF
         public DbSet<ExamResult> ExamResults { get; set; }
         public DbSet<LogExam> LogExams { get; set; }
         public DbSet<Question> Questions { get; set; }
+        public DbSet<CauHoiTuLuan> CauHoiTuLuans { get; set; }
+
         public DbSet<User> Users { get; set; }
     }
 }

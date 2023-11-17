@@ -100,6 +100,19 @@ namespace WebAPP.Services
             return JsonConvert.DeserializeObject<ApiErrorResult<QuestionVm>>(result);
         }
 
+        public async Task<ApiResult<float>> GetTotalScore(int categoryId)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAdress"]);
+            var response = await client.GetAsync($"/api/question/GetTotalScore/{categoryId}");
+            var result = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                return JsonConvert.DeserializeObject<ApiSuccessResult<float>>(result);
+            }
+            return JsonConvert.DeserializeObject<ApiErrorResult<float>>(result);
+        }
+
         public async Task<ApiResult<ImportExcelResult>> ImportExcel(Stream file, int categoryId)
         {
             var client = _httpClientFactory.CreateClient();
@@ -132,6 +145,21 @@ namespace WebAPP.Services
             var json = JsonConvert.SerializeObject(request);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
             var response = await client.PutAsync($"/api/question/GetById/{id}",httpContent);
+            var result = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                return JsonConvert.DeserializeObject<ApiSuccessResult<int>>(result);
+            }
+            return JsonConvert.DeserializeObject<ApiErrorResult<int>>(result);
+        }
+
+        public async Task<ApiResult<int>> UpdateScore(int id, QuestionUpdateScoreRequest request)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAdress"]);
+            var json = JsonConvert.SerializeObject(request);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+            var response = await client.PutAsync($"/api/question/updatescore/{id}", httpContent);
             var result = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
             {

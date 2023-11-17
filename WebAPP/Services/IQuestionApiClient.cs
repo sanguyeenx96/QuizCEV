@@ -24,6 +24,8 @@ namespace WebAPP.Services
 
         Task<ApiResult<int>> Count(int categoryId);
 
+        Task<ApiResult<float>> GetTotalScore(int categoryId);
 
+        Task<ApiResult<int>> UpdateScore(int id, QuestionUpdateScoreRequest request);
     }
 }

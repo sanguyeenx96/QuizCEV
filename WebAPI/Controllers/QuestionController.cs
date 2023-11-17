@@ -93,5 +93,21 @@ namespace WebAPI.Controllers
             var result = await _QuestionService.Count(categoryId);
             return Ok(result);
         }
+
+        [HttpPut("updatescore/{id}")]
+        public async Task<IActionResult> UpdateScore(int id, QuestionUpdateScoreRequest request)
+        {
+            var result = await _QuestionService.UpdateScore(id, request);
+            return Ok(result);
+        }
+
+        [HttpGet("GetTotalScore/{categoryId}")]
+        public async Task<IActionResult> GetTotalScore(int categoryId)
+        {
+            var result = await _QuestionService.GetTotalScore(categoryId);
+            return Ok(result);
+        }
+
+
     }
 }

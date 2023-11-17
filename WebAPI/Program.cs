@@ -1,5 +1,6 @@
 
 using Application.Category;
+using Application.CauHoiTuLuan;
 using Application.ExamResult;
 using Application.LogExam;
 using Application.Question;
@@ -18,7 +19,9 @@ builder.Services.AddDbContext<TracNghiemCEVDbContext>(options =>
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<ICategoryService, CategoryService>();
 builder.Services.AddTransient<IQuestionService, QuestionService>();
-builder.Services.AddTransient<IExamResultService, ExamResultService >();
+builder.Services.AddTransient<ICauHoiTuLuanService, CauHoiTuLuanService>();
+
+builder.Services.AddTransient<IExamResultService, ExamResultService>();
 builder.Services.AddTransient<ILogExamService, LogExamService>();
 
 builder.Services.AddControllers();

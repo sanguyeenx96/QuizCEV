@@ -8,6 +8,8 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddTransient<ICategoryApiClient, CategoryApiClient>();
 builder.Services.AddTransient<IQuestionApiClient, QuestionApiClient>();
+builder.Services.AddTransient<ICauHoiTuLuanApiClient, CauHoiTuLuanApiClient>();
+
 
 var app = builder.Build();
 

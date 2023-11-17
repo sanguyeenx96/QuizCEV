@@ -14,6 +14,7 @@ namespace ViewModels.Common
 
         public T ResultObj { get; set; }
         public int? Id { get; set; }
+        public float? Score { get; set; }
 
     }
 }

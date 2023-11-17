@@ -50,6 +50,34 @@ namespace Data.Migrations
                     b.ToTable("Categories", (string)null);
                 });
 
+            modelBuilder.Entity("Data.Entities.CauHoiTuLuan", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("QCorrectAns")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<float?>("Score")
+                        .HasColumnType("real");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("CauHoiTuLuan", (string)null);
+                });
+
             modelBuilder.Entity("Data.Entities.ExamResult", b =>
                 {
                     b.Property<int>("Id")
@@ -102,20 +130,19 @@ namespace Data.Migrations
                     b.Property<int>("ExamResultId")
                         .HasColumnType("int");
 
+                    b.Property<int>("FinalScore")
+                        .HasColumnType("int");
+
                     b.Property<string>("QA")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("QB")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("QC")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("QD")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("UserId")
@@ -156,8 +183,8 @@ namespace Data.Migrations
                     b.Property<string>("QD")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("Score")
-                        .HasColumnType("int");
+                    b.Property<float?>("Score")
+                        .HasColumnType("real");
 
                     b.Property<string>("Text")
                         .IsRequired()
@@ -206,6 +233,17 @@ namespace Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users", (string)null);
+                });
+
+            modelBuilder.Entity("Data.Entities.CauHoiTuLuan", b =>
+                {
+                    b.HasOne("Data.Entities.Category", "Category")
+                        .WithMany("cauHoiTuLuans")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
                 });
 
             modelBuilder.Entity("Data.Entities.ExamResult", b =>
@@ -258,6 +296,8 @@ namespace Data.Migrations
                     b.Navigation("ExamResults");
 
                     b.Navigation("Questions");
+
+                    b.Navigation("cauHoiTuLuans");
                 });
 
             modelBuilder.Entity("Data.Entities.ExamResult", b =>
