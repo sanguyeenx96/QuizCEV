@@ -25,5 +25,11 @@ namespace ViewModels.Common
             IsSuccessed = true;
             Id = id;
         }
+
+        public ApiSuccessResult(float score)
+        {
+            IsSuccessed = true;
+            Score = score;
+        }
     }
 }

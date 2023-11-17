@@ -20,8 +20,6 @@ namespace Data.Configurations
 
             builder.Property(x => x.Id).UseIdentityColumn();
 
-            builder.Property(x => x.Score).HasDefaultValue(0);
-
             builder.HasOne(t => t.Category).WithMany(pc => pc.Questions)
             .HasForeignKey(pc => pc.CategoryId);
         }

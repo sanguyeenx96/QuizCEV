@@ -20,6 +20,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="wwwroot\flag-icons-main\.github\dependabot.yml" />
+    <None Include="wwwroot\flag-icons-main\.github\workflows\flags.yml" />
+    <None Include="wwwroot\flag-icons-main\.github\workflows\format.yml" />
+    <None Include="wwwroot\flag-icons-main\.github\workflows\npm-publish.yml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\ViewModels\ViewModels.csproj" />
   </ItemGroup>
 

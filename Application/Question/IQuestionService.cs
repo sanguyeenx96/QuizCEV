@@ -31,6 +31,9 @@ namespace Application.Question
 
         Task<ApiResult<ImportExcelResult>> ImportExcelFile(List<QuestionImportExcelRequest> request, int categoryId);
 
+        Task<ApiResult<int>> UpdateScore(int id, QuestionUpdateScoreRequest request);
+
+        Task<ApiResult<float>> GetTotalScore(int categoryId);
 
     }
 }

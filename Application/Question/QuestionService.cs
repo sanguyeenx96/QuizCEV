@@ -256,14 +256,42 @@ namespace Application.Question
             _context.Questions.Update(question);
             await _context.SaveChangesAsync();
             return new ApiSuccessResult<int> { Id = question.Id };
-
         }
 
         public async Task<ApiResult<int>> Count(int categoryId)
         {
             int total = await _context.Questions.Where(x => x.CategoryId == categoryId).CountAsync();
             return new ApiSuccessResult<int> { ResultObj = total};
+        }
 
+        public async Task<ApiResult<int>> UpdateScore(int id, QuestionUpdateScoreRequest request)
+        {
+            var question = await _context.Questions.FindAsync(id);
+            if (question == null)
+                return new ApiErrorResult<int> { Message = "Không tìm thấy câu hỏi" };
+
+            question.Score = request.Score;
+            _context.Questions.Update(question);
+            await _context.SaveChangesAsync();
+            return new ApiSuccessResult<int> { Id = question.Id };
+        }
+
+        public async Task<ApiResult<float>> GetTotalScore(int categoryId)
+        {
+            var result1 = await _context.Questions.Where(x => x.CategoryId == categoryId).ToListAsync();
+            var result2 = await _context.CauHoiTuLuans.Where(x => x.CategoryId == categoryId).ToListAsync();
+            float totalScore = 0;
+            foreach(var item in result1)
+            {
+                float score = item.Score ?? 0;
+                totalScore += score;
+            }
+            foreach (var item in result2)
+            {
+                float score = item.Score ?? 0;
+                totalScore += score;
+            }
+            return new ApiSuccessResult<float> { Score = totalScore };
         }
     }
 }

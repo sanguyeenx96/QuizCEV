@@ -1,228 +1,272 @@
 ﻿@model IEnumerable<ViewModels.Question.Response.QuestionVm>
+<div class="accordion">
+    @foreach (var item in Model)
+    {
+        string speId = "new" + item.Id;
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed btnTitle" type="button" data-bs-toggle="collapse" data-bs-target="#@speId" aria-expanded="false">
+                    <span style="min-width:80px; margin-right:10px" class="badge badge-sm rounded-pill bg-secondary ">
+                        @{
+                            if (item.Score >= 1)
+                            {
+                                <i style="color:yellow" class="bi-star"></i>
+                            }
+                        }
+                        @(item.Score ?? 0)<small> điểm</small>
+                    </span>
+                    @item.Text
+                </button>
+            </h2>
+            <div id="@speId" class="accordion-collapse collapse">
+                <div class="accordion-body">
+                    <table id="example" class="table table-dark table-hover table-sm" style="font-size:small;margin-bottom:auto">
+                        <tbody>
+                            <tr>
+                                <td class="col-sm-2" style="text-align:center">
+                                    A :
+                                </td>
+                                <td style="background:black">
+                                    @Html.DisplayFor(modelItem => item.QA)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="col-sm-2" style="text-align:center">
+                                    B :
+                                </td>
+                                <td style="background:black">
+                                    @Html.DisplayFor(modelItem => item.QB)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="col-sm-2" style="text-align:center">
+                                    C :
+                                </td>
+                                <td style="background:black">
+                                    @Html.DisplayFor(modelItem => item.QC)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="col-sm-2" style="text-align:center">
+                                    D :
+                                </td>
+                                <td style="background:black">
+                                    @Html.DisplayFor(modelItem => item.QD)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="col-sm-2" style="text-align:center">
+                                    Đáp án đúng :
+                                </td>
+                                <td style="background:black">
+                                    @(item.QCorrectAns.ToString().ToUpper())
+                                </td>
+                            </tr>
 
-
-
-<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-    <li class="nav-item" role="presentation">
-        <button class="nav-link active" id="pills-tracnghiem-tab" data-bs-toggle="pill" data-bs-target="#pills-tracnghiem" type="button" role="tab" aria-controls="pills-tracnghiem" aria-selected="true">
-            <i class="bi-folder2-open"></i>
-            Câu hỏi trắc nghiệm
-        </button>
-    </li>
-    <li class="nav-item" role="presentation">
-        <button class="nav-link" id="pills-tuluan-tab" data-bs-toggle="pill" data-bs-target="#pills-tuluan" type="button" role="tab" aria-controls="pills-tuluan" aria-selected="false">
-            <i class="bi-folder2-open"></i>
-            Câu hỏi tự luận
-        </button>
-    </li>
-
-</ul>
-<div class="tab-content" id="pills-tabContent">
-    <div class="tab-pane fade show active" id="pills-tracnghiem" role="tabpanel" aria-labelledby="pills-tracnghiem-tab" tabindex="0">
-        <div class="accordion">
-            @foreach (var item in Model)
-            {
-                string speId = "new" + item.Id;
-                <div class="accordion-item">
-                    <h2 class="accordion-header">
-                        <button class="accordion-button collapsed btnTitle" type="button" data-bs-toggle="collapse" data-bs-target="#@speId" aria-expanded="false">
-                            <span style="width:50px; margin-right:10px" class="badge badge-sm bg-secondary">@(item.Score ?? 0) </span>
-                            @item.Text
-                        </button>
-                    </h2>
-                    <div id="@speId" class="accordion-collapse collapse">
-                        <div class="accordion-body">
-                            <table id="example" class="table table-dark table-hover table-sm" style="font-size:small;margin-bottom:auto">
-                                <tbody>
-                                    <tr>
-                                        <td class="col-sm-2" style="text-align:center">
-                                            A :
-                                        </td>
-                                        <td style=";background:black">
-                                            @Html.DisplayFor(modelItem => item.QA)
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="col-sm-2" style="text-align:center">
-                                            B :
-                                        </td>
-                                        <td style=";background:black">
-                                            @Html.DisplayFor(modelItem => item.QB)
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="col-sm-2" style="text-align:center">
-                                            C :
-                                        </td>
-                                        <td style=";background:black">
-                                            @Html.DisplayFor(modelItem => item.QC)
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="col-sm-2" style="text-align:center">
-                                            D :
-                                        </td>
-                                        <td style=";background:black">
-                                            @Html.DisplayFor(modelItem => item.QD)
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="col-sm-2" style="text-align:center">
-                                            Đáp án đúng :
-                                        </td>
-                                        <td style="background:black">
-                                            @(item.QCorrectAns.ToString().ToUpper())
-                                        </td>
-                                    </tr>
-
-                                </tbody>
-                            </table>
-                            <div style="text-align:end;margin-top:5px">
-                                <div class="btn-group" style=" white-space:nowrap;">
-                                    <btn class="btn btn-outline-secondary btn-sm btnSua" data-id="@item.Id">
-                                        <i class="bi-exposure"> </i>
-                                        Sửa thang điểm
-                                    </btn>
-                                    <btn class="btn btn-outline-secondary btn-sm btnSua" data-id="@item.Id">
-                                        <i class="bi-pencil-fill"> </i>
-                                        Sửa câu hỏi
-                                    </btn>
-                                    <btn class="btn btn-outline-danger btn-sm btnXoa" data-id="@item.Id">
-                                        <i class="bi-trash"> </i>
-                                        Xoá
-                                    </btn>
-                                </div>
-                            </div>
-
+                        </tbody>
+                    </table>
+                    <div style="text-align:end;margin-top:5px">
+                        <div class="btn-group" style=" white-space:nowrap;">
+                            <btn class="btn btn-outline-secondary btn-sm btnSuaDiem" data-abc="@item.CategoryId" data-id="@item.Id" data-this-score="@(item.Score ?? 0) ">
+                                <i class="bi-exposure"> </i>
+                                Sửa thang điểm
+                            </btn>
+                            <btn class="btn btn-outline-secondary btn-sm btnSuaCauHoi" data-id="@item.Id">
+                                <i class="bi-pencil-fill"> </i>
+                                Sửa câu hỏi
+                            </btn>
+                            <btn class="btn btn-outline-danger btn-sm btnXoaCauHoiTracNghiem" data-abc="@item.CategoryId" data-id="@item.Id">
+                                <i class="bi-trash"> </i>
+                                Xoá
+                            </btn>
                         </div>
                     </div>
+
                 </div>
-            }
+            </div>
         </div>
-    </div>
-    <div class="tab-pane fade" id="pills-tuluan" role="tabpanel" aria-labelledby="pills-tuluan-tab" tabindex="0">
-    </div>
+    }
 </div>
-
-@*<script>
-    $(document).ready(function () {
-        $(".mybutton").hide();
-
-        $(".btnTitle").hover(
-            function () {
-                // Mouseover event
-                $(this).find(".mybutton").show();
-            },
-            function () {
-                // Mouseleave event
-                $(this).find(".mybutton").hide();
-            }
-        );
-    });
-</script>
-
-*@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<table id="example" class="table table-dark table-hover table-sm" style="font-size:small" hidden>
-    <thead style="font-size:smaller;text-align:center;white-space:nowrap">
-        <tr>
-            <th class="all">
-                Câu hỏi
-            </th>
-            <th class="col-md-2">
-            </th>
-            <th class="none">
-                Đáp án A
-            </th>
-            <th class="none">
-                Đáp án B
-            </th>
-            <th class="none">
-                Đáp án C
-            </th>
-            <th class="none">
-                Đáp án D
-            </th>
-            <th class="none">
-                Đáp án đúng
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Text)
-                </td>
-                <td style="text-align: end;">
-                    <div class="btn-group" style=" white-space:nowrap">
-                        <btn class="btn btn-outline-secondary btn-sm btnSua" data-id="@item.Id">
-                            <i class="fa fa-pencil fa-fw"> </i>
-                            Sửa
-                        </btn>
-                        <btn class="btn btn-outline-danger btn-sm btnXoa" data-id="@item.Id">
-                            <i class="fa fa-trash-can fa-fw"> </i>
-                            Xoá
-                        </btn>
-                    </div>
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.QA)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.QB)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.QC)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.QD)
-                </td>
-                <td>
-                    @(item.QCorrectAns?.ToString().ToUpper())
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
 
 <script>
     $(document).ready(function () {
-        //$('#table').DataTable({
-        //     "paging": true,
-        //     "lengthChange": true,
-        //     "searching": true,
-        //     "ordering": false,
-        //     "info": true,
-        //     "autoWidth": false,
-        //     "responsive":true,
-        //     "rowReorder": true
-        // });
-        $("[data-toggle=myCollapse]").click(function (ev) {
-            ev.preventDefault();
-            $(this.getAttribute('data-target')).toggleClass("in");
+        $(".btnSuaDiem").click(function () {
+            var categoryId = $(this).data('abc');
+            var intCategoryId = parseInt(categoryId);
+            var id = $(this).data('id');
+            var thisScore = $(this).data('this-score');
+            $.ajax({
+                url: 'GetTotalScore',
+                type: 'POST',
+                data: {
+                    categoryId: intCategoryId
+                },
+                success: function (result) {
+                    if (result.success) {
+                        let nowTotalScore = result.result;
+                        let remainScore = 10 - nowTotalScore;
+                        showScoreInputDialog(id, intCategoryId, remainScore, thisScore);
+                    }
+                    else {
+                        Swal.fire(
+                            "Lỗi máy chủ",
+                            "Thao tác đã được huỷ bỏ!",
+                            "error"
+                        );
+                    }
+                },
+                error: function (xhr, status, error) {
+                    Swal.fire(
+                        "Lỗi máy chủ",
+                        "Thao tác đã được huỷ bỏ!",
+                        "error"
+                    );
+                }
+            });
         });
+        $(".btnXoaCauHoiTracNghiem").click(function () {
+            var id = $(this).data('id');
+            var categoryId = $(this).data('abc');
+            var intCategoryId = parseInt(categoryId);
 
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: "btn btn-success",
+                    cancelButton: "btn btn-danger",
+                },
+                buttonsStyling: true,
+            });
+            swalWithBootstrapButtons
+                .fire({
+                    title: "Xoá câu hỏi?",
+                    text: "Dữ liệu liên quan tới câu hỏi sẽ bị xoá",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: "Xác nhận xoá!",
+                    cancelButtonText: "Huỷ bỏ!",
+                    reverseButtons: true,
+                })
+                .then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: 'DeleteTracNghiem',
+                            type: 'POST',
+                            data: {
+                                id: id
+                            },
+                            success: function (result) {
+                                if (result.success) {
+                                    Swal.fire({
+                                        icon: "success",
+                                        title: "Xoá câu hỏi thành công",
+                                        showConfirmButton: false,
+                                        timer: 1500
+                                    })
+                                    $.ajax({
+                                        url: "GetAllByCategoryId",
+                                        type: "POST",
+                                        data: {
+                                            id: intCategoryId,
+                                        },
+                                        success: function (result) {
+                                            $("#listQuestion").html(result);
+                                        },
+                                    });
+                                }
+                                else {
+                                    Swal.fire(
+                                        "Lỗi máy chủ",
+                                        "Thao tác đã được huỷ bỏ!",
+                                        "error"
+                                    );
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                                Swal.fire(
+                                    "Lỗi máy chủ",
+                                    "Thao tác đã được huỷ bỏ!",
+                                    "error"
+                                );
+                            }
+                        });
+                    } else if (result.dismiss === Swal.DismissReason.cancel) {
+                        swalWithBootstrapButtons.fire(
+                            "Đã huỷ bỏ",
+                            "Thao tác đã được huỷ bỏ",
+                            "error"
+                        );
+                    }
+                });
+        });
+    });
 
-    })
+    async function showScoreInputDialog(id, intCategoryId, remainScore, thisScore) {
+        const { value: soDiem } = await Swal.fire({
+            title: "Chọn điểm số cho câu hỏi",
+            icon: "question",
+            input: "range",
+            inputLabel: "Số điểm chưa gán còn lại: " + remainScore + " điểm",
+            inputAttributes: {
+                min: "0",
+                max: "10",
+                step: "0.25",
+            },
+            inputValue: parseFloat(thisScore),
+        });
+        var diemSoSanh = parseFloat(remainScore) + parseFloat(thisScore);
+        if (soDiem <= diemSoSanh) {
+            $.ajax({
+                url: 'UpdateScore',
+                type: 'POST',
+                data: {
+                    id: id,
+                    Score: soDiem
+                },
+                success: function (result) {
+                    if (result.success) {
+                        Swal.fire({
+                            icon: "success",
+                            title: "Sửa điểm số thành công",
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+                        $.ajax({
+                            url: "GetAllByCategoryId",
+                            type: "POST",
+                            data: {
+                                id: intCategoryId,
+                            },
+                            success: function (result) {
+                                $("#listQuestion").html(result);
+                            },
+                        });
+
+                    }
+                    else {
+                        Swal.fire(
+                            "Lỗi máy chủ",
+                            "Thao tác đã được huỷ bỏ!",
+                            "error"
+                        );
+                    }
+                },
+                error: function (xhr, status, error) {
+                    Swal.fire(
+                        "Lỗi máy chủ",
+                        "Thao tác đã được huỷ bỏ!",
+                        "error"
+                    );
+                }
+            });
+        }
+        if (soDiem > diemSoSanh) {
+            Swal.fire(
+                "Điểm số không phù hợp",
+                "Bạn chỉ được gán thêm tối đa: " + remainScore + " điểm",
+                "error"
+            );
+        }
+    }
+
 </script>
+

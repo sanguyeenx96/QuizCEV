@@ -1,0 +1,218 @@
+﻿@model IEnumerable<ViewModels.CauHoiTuLuan.Response.CauHoiTuLuanVm>
+
+<div class="accordion">
+    @foreach (var item in Model)
+    {
+        string speId = "new" + item.Id;
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed btnTitle" type="button" data-bs-toggle="collapse" data-bs-target="#@speId" aria-expanded="false">
+                    <span style="min-width:80px; margin-right:10px" class="badge badge-sm rounded-pill bg-secondary ">
+                        @{
+                            if (item.Score >= 1)
+                            {
+                                <i style="color:yellow" class="bi-star"></i>
+                            }
+                        }
+                        @(item.Score ?? 0)<small> điểm</small>
+                    </span>
+                    @item.Text
+                </button>
+            </h2>
+            <div id="@speId" class="accordion-collapse collapse">
+                <div class="accordion-body">
+                    <table id="example" class="table table-dark table-hover table-sm" style="font-size:small;margin-bottom:auto">
+                        <tbody>                            
+                        </tbody>
+                    </table>
+                    <div style="text-align:end;margin-top:5px">
+                        <div class="btn-group" style=" white-space:nowrap;">
+                            <btn class="btn btn-outline-secondary btn-sm btnSuaDiemTuLuan" data-abc="@item.CategoryId" data-id="@item.Id" data-this-score="@(item.Score ?? 0) ">
+                                <i class="bi-exposure"> </i>
+                                Sửa thang điểm
+                            </btn>
+                            <btn class="btn btn-outline-secondary btn-sm btnSuaCauHoiTuLuan" data-id="@item.Id">
+                                <i class="bi-pencil-fill"> </i>
+                                Sửa câu hỏi
+                            </btn>
+                            <btn class="btn btn-outline-danger btn-sm btnXoaCauHoiTuLuan" data-abc="@item.CategoryId" data-id="@item.Id">
+                                <i class="bi-trash"> </i>
+                                Xoá
+                            </btn>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<script>
+    $(document).ready(function () {
+        $(".btnSuaDiemTuLuan").click(function () {
+            var categoryId = $(this).data('abc');
+            var intCategoryId = parseInt(categoryId);
+            var id = $(this).data('id');
+            var thisScore = $(this).data('this-score');
+            $.ajax({
+                url: 'GetTotalScore',
+                type: 'POST',
+                data: {
+                    categoryId: intCategoryId
+                },
+                success: function (result) {
+                    if (result.success) {
+                        let nowTotalScore = result.result;
+                        let remainScore = 10 - nowTotalScore;
+                        showScoreInputDialogTuLuan(id, intCategoryId, remainScore, thisScore);
+                    }
+                    else {
+                        Swal.fire(
+                            "Lỗi máy chủ",
+                            "Thao tác đã được huỷ bỏ!",
+                            "error"
+                        );
+                    }
+                },
+                error: function (xhr, status, error) {
+                    Swal.fire(
+                        "Lỗi máy chủ",
+                        "Thao tác đã được huỷ bỏ!",
+                        "error"
+                    );
+                }
+            });
+        });
+        $(".btnXoaCauHoiTuLuan").click(function () {
+            var id = $(this).data('id');
+            var categoryId = $(this).data('abc');
+            var intCategoryId = parseInt(categoryId);
+
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: "btn btn-success",
+                    cancelButton: "btn btn-danger",
+                },
+                buttonsStyling: true,
+            });
+            swalWithBootstrapButtons
+                .fire({
+                    title: "Xoá câu hỏi?",
+                    text: "Dữ liệu liên quan tới câu hỏi sẽ bị xoá",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: "Xác nhận xoá!",
+                    cancelButtonText: "Huỷ bỏ!",
+                    reverseButtons: true,
+                })
+                .then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: 'DeleteTuLuan',
+                            type: 'POST',
+                            data: {
+                                id: id
+                            },
+                            success: function (result) {
+                                if (result.success) {
+                                    Swal.fire({
+                                        icon: "success",
+                                        title: "Xoá câu hỏi thành công",
+                                        showConfirmButton: false,
+                                        timer: 1500
+                                    })
+                                    $.ajax({
+                                        url: "GetAllTuLuanByCategoryId",
+                                        type: "POST",
+                                        data: {
+                                            id: intCategoryId,
+                                        },
+                                        success: function (result) {
+                                            $("#listQuestionTuLuan").html(result);
+                                        },
+                                    });
+                                }
+                                else {
+                                    Swal.fire(
+                                        "Lỗi máy chủ",
+                                        "Thao tác đã được huỷ bỏ!",
+                                        "error"
+                                    );
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                                Swal.fire(
+                                    "Lỗi máy chủ",
+                                    "Thao tác đã được huỷ bỏ!",
+                                    "error"
+                                );
+                            }
+                        });
+                    } else if (result.dismiss === Swal.DismissReason.cancel) {
+                        swalWithBootstrapButtons.fire(
+                            "Đã huỷ bỏ",
+                            "Thao tác đã được huỷ bỏ",
+                            "error"
+                        );
+                    }
+                });
+        });
+    });
+
+    async function showScoreInputDialogTuLuan(id, intCategoryId, remainScore, thisScore) {
+        const { value: soDiem } = await Swal.fire({
+            title: "Chọn điểm số cho câu hỏi",
+            icon: "question",
+            input: "range",
+            inputLabel: "Số điểm chưa gán còn lại: " + remainScore + " điểm",
+            inputAttributes: {
+                min: "0",
+                max: "10",
+                step: "0.25",
+            },
+            inputValue: parseFloat(thisScore),
+        });
+        var diemSoSanh = parseFloat(remainScore) + parseFloat(thisScore);
+        if (soDiem <= diemSoSanh) {
+            $.ajax({
+                url: 'UpdateScoreTuluan',
+                type: 'POST',
+                data: {
+                    id: id,
+                    Score: soDiem
+                },
+                success: function (result) {
+                    if (result.success) {
+                        Swal.fire({
+                            icon: "success",
+                            title: "Sửa điểm số thành công",
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+                        $.ajax({
+                            url: "GetAllTuLuanByCategoryId",
+                            type: "POST",
+                            data: {
+                                id: intCategoryId,
+                            },
+                            success: function (result) {
+                                $("#listQuestionTuLuan").html(result);
+                            },
+                        });
+
+                    }
+                 
+                }
+            });
+        }
+        if (soDiem > diemSoSanh) {
+            Swal.fire(
+                "Điểm số không phù hợp",
+                "Bạn chỉ được gán thêm tối đa: " + remainScore + " điểm",
+                "error"
+            );
+        }
+    }
+
+</script>
+
