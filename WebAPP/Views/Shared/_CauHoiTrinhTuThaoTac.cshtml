@@ -1,0 +1,93 @@
+﻿@model List<ViewModels.CauHoiTrinhTuThaoTac.Response.CauHoiTrinhTuThaoTacVm>
+
+@{
+    var randomid = GetHashCode();
+}
+<div id="result" class="box">
+    Event result:
+</div>
+<table id="@randomid">
+    <thead style="text-align:center; vertical-align:middle">
+        <tr>
+            <th>
+                Id
+            </th>
+            <th>
+                Thứ tự
+            </th>
+            <th>
+                Điểm
+            </th>
+            <th>
+                Nội dung thao tác
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @item.Id
+                </td>
+                <td>
+                    @item.ThuTu
+                </td>
+                <td>
+                    @item.Score
+                </td>
+                <td>
+                    @item.Text
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<script>
+    $(document).ready(function () {
+        var table = $('#@randomid').DataTable({
+            "paging": false,
+            "lengthChange": true,
+            "searching": false,
+            "ordering": false,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+            rowReorder: {
+                selector: 'tr'
+            }
+        });
+
+        table.on('row-reorder', function (e, diff, edit) {
+            table.one('draw', function () {
+                table.one('draw', function () {
+                    var newOrder = [];
+                    for (var i = 0; i < table.rows().count(); i++) {
+                        var rowData = table.row(i).data();
+                        newOrder.push({ Id: rowData[0], ThuTu: rowData[1] });
+                        console.log(newOrder)
+                    }
+                })
+
+                var parsedNewOrder = newOrder.map(item => ({ Id: parseInt(item.Id), ThuTu: parseInt(item.ThuTu) }));
+                console.log(parsedNewOrder)
+
+                // Gửi dữ liệu lên server bằng Ajax
+                $.ajax({
+                    url: 'UpdatePositions',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(parsedNewOrder),
+                    success: function (response) {
+                        console.log(response);
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                });
+            });
+        });
+    });
+
+</script>
+

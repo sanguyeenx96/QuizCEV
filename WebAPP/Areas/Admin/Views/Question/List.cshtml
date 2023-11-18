@@ -16,31 +16,32 @@
     <li class="nav-item" role="presentation">
         <button class="nav-link active" id="pills-tracnghiem-tab" data-bs-toggle="pill" data-bs-target="#pills-tracnghiem" type="button" role="tab" aria-controls="pills-tracnghiem" aria-selected="true">
             <i class="bi-folder2-open"></i>
-            Câu hỏi trắc nghiệm
-            <span class="badge badge-sm bg-dark ">
-                2
-            </span>
+            Phần trắc nghiệm:
+            <span id="countTracNghiem" style="vertical-align:baseline"></span>
+            câu hỏi
         </button>
     </li>
     <li class="nav-item" role="presentation">
         <button class="nav-link" id="pills-tuluan-tab" data-bs-toggle="pill" data-bs-target="#pills-tuluan" type="button" role="tab" aria-controls="pills-tuluan" aria-selected="false">
             <i class="bi-folder2-open"></i>
-            Câu hỏi tự luận
+            Phần tự luận:
+            <span id="countTuLuan" style="vertical-align:baseline"></span>
+            câu hỏi
         </button>
     </li>
 </ul>
 <div class="tab-content" id="pills-tabContent">
-    <div class="tab-pane fade show active" id="pills-tracnghiem" role="tabpanel" aria-labelledby="pills-tracnghiem-tab" tabindex="0">
+    <div class="tab-pane fade show active" id="pills-tracnghiem" role="tabpanel" aria-labelledby="pills-tracnghiem-tab">
         <div id="listQuestion"></div>
     </div>
-    <div class="tab-pane fade" id="pills-tuluan" role="tabpanel" aria-labelledby="pills-tuluan-tab" tabindex="0">
+    <div class="tab-pane fade" id="pills-tuluan" role="tabpanel" aria-labelledby="pills-tuluan-tab" >
         <div id="listQuestionTuLuan"></div>
     </div>
 </div>
 
 
 <script>
-    $(document).ready(function(){
+    $(document).ready(function () {
         var firstselect = $("select[name='categoryId']").val();
         $.ajax({
             url: "GetAllByCategoryId",
@@ -62,8 +63,30 @@
                 $("#listQuestionTuLuan").html(result);
             },
         });
+        $.ajax({
+            url: "CountTracNghiem",
+            type: "POST",
+            data: {
+                id: firstselect,
+            },
+            success: function (result) {
+                $("#countTracNghiem").html(result.data);
+            },
+        });
+        $.ajax({
+            url: "CountTuLuan",
+            type: "POST",
+            data: {
+                id: firstselect,
+            },
+            success: function (result) {
+                $("#countTuLuan").html(result.data);
+            },
+        });
 
-        $('#categoryId').on('change',function(){
+
+
+        $('#categoryId').on('change', function () {
             var id = $(this).val();
             $.ajax({
                 url: "GetAllByCategoryId",
@@ -85,7 +108,27 @@
                     $("#listQuestionTuLuan").html(result);
                 },
             });
+            $.ajax({
+                url: "CountTracNghiem",
+                type: "POST",
+                data: {
+                    id: id,
+                },
+                success: function (result) {
+                    $("#countTracNghiem").html(result.data);
+                },
+            });
+            $.ajax({
+                url: "CountTuLuan",
+                type: "POST",
+                data: {
+                    id: id,
+                },
+                success: function (result) {
+                    $("#countTuLuan").html(result.data);
+                },
+            });
         })
-       
+
     })
 </script>

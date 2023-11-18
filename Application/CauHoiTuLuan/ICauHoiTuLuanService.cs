@@ -18,6 +18,6 @@ namespace Application.CauHoiTuLuan
         Task<ApiResult<int>> Create(CauHoiTuLuanCreateRequest request);
         Task<ApiResult<bool>> Delete(int id);
         Task<ApiResult<bool>> UpdateScore(int id,CauHoiTuLuanUpdateScoreRequest request);
-
+        Task<ApiResult<int>> Count(int categoryId);
     }
 }

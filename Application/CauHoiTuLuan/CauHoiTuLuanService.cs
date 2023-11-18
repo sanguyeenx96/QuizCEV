@@ -21,6 +21,12 @@ namespace Application.CauHoiTuLuan
             _context = context;
         }
 
+        public async Task<ApiResult<int>> Count(int categoryId)
+        {
+            int total = await _context.CauHoiTuLuans.Where(x => x.CategoryId == categoryId).CountAsync();
+            return new ApiSuccessResult<int> { ResultObj = total };
+        }
+
         public async Task<ApiResult<int>> Create(CauHoiTuLuanCreateRequest request)
         {
             var checkDuplicateQuestion = await _context.CauHoiTuLuans.Where(x => (x.Text == request.Text && x.CategoryId == request.CategoryId)).FirstOrDefaultAsync();

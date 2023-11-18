@@ -50,6 +50,34 @@ namespace Data.Migrations
                     b.ToTable("Categories", (string)null);
                 });
 
+            modelBuilder.Entity("Data.Entities.CauHoiTrinhTuThaoTac", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("CauHoiTuLuanId")
+                        .HasColumnType("int");
+
+                    b.Property<float?>("Score")
+                        .HasColumnType("real");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ThuTu")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CauHoiTuLuanId");
+
+                    b.ToTable("CauHoiTrinhTuThaoTac", (string)null);
+                });
+
             modelBuilder.Entity("Data.Entities.CauHoiTuLuan", b =>
                 {
                     b.Property<int>("Id")
@@ -60,9 +88,6 @@ namespace Data.Migrations
 
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
-
-                    b.Property<string>("QCorrectAns")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<float?>("Score")
                         .HasColumnType("real");
@@ -235,6 +260,17 @@ namespace Data.Migrations
                     b.ToTable("Users", (string)null);
                 });
 
+            modelBuilder.Entity("Data.Entities.CauHoiTrinhTuThaoTac", b =>
+                {
+                    b.HasOne("Data.Entities.CauHoiTuLuan", "CauHoiTuLuan")
+                        .WithMany("cauHoiTrinhTuThaoTacs")
+                        .HasForeignKey("CauHoiTuLuanId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CauHoiTuLuan");
+                });
+
             modelBuilder.Entity("Data.Entities.CauHoiTuLuan", b =>
                 {
                     b.HasOne("Data.Entities.Category", "Category")
@@ -298,6 +334,11 @@ namespace Data.Migrations
                     b.Navigation("Questions");
 
                     b.Navigation("cauHoiTuLuans");
+                });
+
+            modelBuilder.Entity("Data.Entities.CauHoiTuLuan", b =>
+                {
+                    b.Navigation("cauHoiTrinhTuThaoTacs");
                 });
 
             modelBuilder.Entity("Data.Entities.ExamResult", b =>

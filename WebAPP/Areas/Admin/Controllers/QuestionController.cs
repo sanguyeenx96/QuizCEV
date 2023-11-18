@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using ViewModels.CauHoiTrinhTuThaoTac.Request;
 using ViewModels.CauHoiTuLuan.Request;
 using ViewModels.Question.Request;
 using WebAPP.Services;
@@ -11,12 +12,13 @@ namespace WebAPP.Areas.Admin.Controllers
         private readonly ICategoryApiClient _categoryApiClient;
         private readonly IQuestionApiClient _questionApiClient;
         private readonly ICauHoiTuLuanApiClient _cauHoiTuLuanApiClient;
-
-        public QuestionController(ICategoryApiClient categoryApiClient, IQuestionApiClient questionApiClient, ICauHoiTuLuanApiClient cauHoiTuLuanApiClient)
+        private readonly ICauHoiTrinhTuThaoTacApiClient _cauHoiTrinhTuThaoTacApiClient;
+        public QuestionController(ICategoryApiClient categoryApiClient, IQuestionApiClient questionApiClient, ICauHoiTuLuanApiClient cauHoiTuLuanApiClient, ICauHoiTrinhTuThaoTacApiClient cauHoiTrinhTuThaoTacApiClient)
         {
             _categoryApiClient = categoryApiClient;
             _questionApiClient = questionApiClient;
             _cauHoiTuLuanApiClient = cauHoiTuLuanApiClient;
+            _cauHoiTrinhTuThaoTacApiClient = cauHoiTrinhTuThaoTacApiClient;
         }
 
         public async Task<IActionResult> List()
@@ -30,7 +32,7 @@ namespace WebAPP.Areas.Admin.Controllers
             });
             var result = await _questionApiClient.GetAll();
             return View(result.ResultObj);
-        }       
+        }
 
         public async Task<IActionResult> Create()
         {
@@ -59,10 +61,24 @@ namespace WebAPP.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> GetAllByCategoryId(int id)
         {
-            var count = await _questionApiClient.Count(id);
-            ViewBag.countTracNghiem = count.ResultObj;
             var result = await _questionApiClient.GetAllByCategory(id);
             return PartialView("_questionList", result.ResultObj);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CountTracNghiem(int id)
+        {
+            var count = await _questionApiClient.Count(id);
+            var result = count.ResultObj;
+            return Json(new { success = true, data = result });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CountTuLuan(int id)
+        {
+            var countTuLuan = await _cauHoiTuLuanApiClient.Count(id);
+            var result = countTuLuan.ResultObj;
+            return Json(new { success = true, data = result });
         }
 
         [HttpPost]
@@ -84,7 +100,7 @@ namespace WebAPP.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateManual( QuestionCreateRequest request)
+        public async Task<IActionResult> CreateManual(QuestionCreateRequest request)
         {
             var result = await _questionApiClient.Create(request);
             if (!result.IsSuccessed)
@@ -102,7 +118,7 @@ namespace WebAPP.Areas.Admin.Controllers
             {
                 var result = await _questionApiClient.ImportExcel(fileStream, categoryId);
                 if (result.IsSuccessed)
-                {                  
+                {
                     return Json(new { success = true, data = result.ResultObj });
                 }
                 return Json(new { success = false, message = result.Message });
@@ -110,7 +126,7 @@ namespace WebAPP.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> GetTotalScore (int categoryId)
+        public async Task<IActionResult> GetTotalScore(int categoryId)
         {
             var result = await _questionApiClient.GetTotalScore(categoryId);
             if (!result.IsSuccessed)
@@ -123,7 +139,7 @@ namespace WebAPP.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateScore(int id, QuestionUpdateScoreRequest request)
         {
-            var result = await _questionApiClient.UpdateScore(id,request);
+            var result = await _questionApiClient.UpdateScore(id, request);
             if (!result.IsSuccessed)
             {
                 return Json(new { success = false });
@@ -157,6 +173,24 @@ namespace WebAPP.Areas.Admin.Controllers
         public async Task<IActionResult> DeleteTuLuan(int id)
         {
             var result = await _cauHoiTuLuanApiClient.Delete(id);
+            if (!result.IsSuccessed)
+            {
+                return Json(new { success = false });
+            }
+            return Json(new { success = true });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> GetAllByCauHoiTuLuan(int id)
+        {
+            var result = await _cauHoiTrinhTuThaoTacApiClient.GetAllByCauHoiTuLuan(id);
+            return PartialView("_CauHoiTrinhTuThaoTac", result.ResultObj);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> UpdatePositions([FromBody] List<CauHoiTrinhTuThaoTacChangeOrderRequest> parsedNewOrder)
+        {
+            var result = await _cauHoiTrinhTuThaoTacApiClient.ChangeOrder(parsedNewOrder);
             if (!result.IsSuccessed)
             {
                 return Json(new { success = false });
