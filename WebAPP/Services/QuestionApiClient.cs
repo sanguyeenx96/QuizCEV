@@ -144,7 +144,7 @@ namespace WebAPP.Services
             client.BaseAddress = new Uri(_configuration["BaseAdress"]);
             var json = JsonConvert.SerializeObject(request);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
-            var response = await client.PutAsync($"/api/question/GetById/{id}",httpContent);
+            var response = await client.PutAsync($"/api/question/{id}",httpContent);
             var result = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
             {

@@ -1,0 +1,104 @@
+﻿@removeTagHelper Microsoft.AspNetCore.Mvc.TagHelpers.OptionTagHelper, Microsoft.AspNetCore.Mvc.TagHelpers
+@model ViewModels.Question.Response.QuestionVm
+
+
+<div class="modal-header">
+    <h5 class="modal-title" id="staticBackdropLabel">
+        <i class="bi-pencil"> </i>
+        Sửa nội dung câu hỏi</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group mb-3">
+                <label class="form-label"> Nội dung câu hỏi</label>
+                <textarea rows="3" id="Text" class="form-control" required>@Model.Text</textarea>
+            </div>
+            <div class="form-group">
+                <label class="form-label"> Nội dung câu trả lời</label>
+                <div class="input-group mb-3">
+                    <span class="input-group-text">A.</span>
+                    <input id="QA" type="text" class="form-control" value="@Model.QA">
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text">B.</span>
+                    <input id="QB" type="text" class="form-control" value="@Model.QB">
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text">C.</span>
+                    <input id="QC" type="text" class="form-control" value="@Model.QC">
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text">D.</span>
+                    <input id="QD" type="text" class="form-control" value="@Model.QD">
+                </div>
+            </div>
+            <div class="form-group mb-3">
+                <label class="form-label"> Đáp án đúng</label>
+                <select name="QCorrectAns" class="form-control">
+                    <option value="a" @(Model.QCorrectAns == "a" ? "selected" : "")>A</option>
+                    <option value="b" @(Model.QCorrectAns == "b" ? "selected" : "")>B</option>
+                    <option value="c" @(Model.QCorrectAns == "c" ? "selected" : "")>C</option>
+                    <option value="d" @(Model.QCorrectAns == "d" ? "selected" : "")>D</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+        Huỷ Bỏ
+    </button>
+    <button id="btnXacNhan" type="button" class="btn btn-success" data-id="@Model.Id" data>
+        Xác nhận
+    </button>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#btnXacNhan").click(function () {
+            var text = $("#Text").val();
+            var qa = $("#QA").val() ?? null;
+            var qb = $("#QB").val() ?? null;
+            var qc = $("#QC").val() ?? null;
+            var qd = $("#QD").val() ?? null;
+            var qcorrectans = $("select[name='QCorrectAns']").val();
+            var id = $(this).data("id");
+            var intid = parseInt(id);
+            var data = {
+                id: intid,
+                Text: text,
+                QA: qa,
+                QB: qb,
+                QC: qc,
+                QD: qd,
+                QCorrectAns: qcorrectans
+            };
+            $.ajax({
+                url: "UpdateCauHoiTracNghiem",
+                type: "POST",
+                data: data,
+                success: function (data) {
+                    if (data.success) {
+                        Swal.fire({
+                            icon: "success",
+                            title: "Sửa câu hỏi thành công",
+                            showConfirmButton: false,
+                            timer: 1500,
+                        }).then(function () {
+                            window.location.reload();
+                        });
+
+                    } else {
+                        Swal.fire("Không thành công!", data.message, "error");
+                    }
+                },
+                error: function () {
+                    Swal.fire("Lỗi máy chủ!", "Không thành công", "error");
+                },
+            });
+        });
+    });
+
+</script>

@@ -51,5 +51,20 @@ namespace WebAPI.Controllers
             var result = await _cauHoiTuLuanService.UpdateScore(id, request);
             return Ok(result);
         }
+
+        [HttpGet("Count/{categoryId}")]
+        public async Task<IActionResult> Count(int categoryId)
+        {
+            var result = await _cauHoiTuLuanService.Count(categoryId);
+            return Ok(result);
+        }
+
+        [HttpPut("updatetext/{id}")]
+        public async Task<IActionResult> UpdateText(int id, CauHoiTuLuanUpdateTextRequest request)
+        {
+            var result = await _cauHoiTuLuanService.UpdateText(id, request);
+            return Ok(result);
+        }
+
     }
 }

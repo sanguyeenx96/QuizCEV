@@ -1,5 +1,6 @@
 
 using Application.Category;
+using Application.CauHoiTrinhTuThaoTac;
 using Application.CauHoiTuLuan;
 using Application.ExamResult;
 using Application.LogExam;
@@ -20,6 +21,8 @@ builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<ICategoryService, CategoryService>();
 builder.Services.AddTransient<IQuestionService, QuestionService>();
 builder.Services.AddTransient<ICauHoiTuLuanService, CauHoiTuLuanService>();
+builder.Services.AddTransient<ICauHoiTrinhTuThaoTacService, CauHoiTrinhTuThaoTacService>();
+
 
 builder.Services.AddTransient<IExamResultService, ExamResultService>();
 builder.Services.AddTransient<ILogExamService, LogExamService>();
