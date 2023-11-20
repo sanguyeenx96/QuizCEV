@@ -51,8 +51,8 @@ $(document).ready(function () {
                 text: "Dữ liệu liên quan tới câu hỏi sẽ bị xoá",
                 icon: "warning",
                 showCancelButton: true,
-                confirmButtonText: "Xác nhận xoá!",
-                cancelButtonText: "Huỷ bỏ!",
+                confirmButtonText: "Xác nhận",
+                cancelButtonText: "Huỷ bỏ",
                 reverseButtons: true,
             })
             .then((result) => {
@@ -97,14 +97,23 @@ $(document).ready(function () {
                             );
                         },
                     });
-                } else if (result.dismiss === Swal.DismissReason.cancel) {
-                    swalWithBootstrapButtons.fire(
-                        "Đã huỷ bỏ",
-                        "Thao tác đã được huỷ bỏ",
-                        "error"
-                    );
                 }
             });
+    });
+    $(".btnSuaCauHoi").click(function () {
+        var id = $(this).data("id");
+        $.ajax({
+            url: "GetCauHoiTracNghiemById",
+            type: "POST",
+            data: {
+                id: id,
+            },
+            success: function (result) {
+                $("#NoiDungCauHoiTracNghiem").html(result);
+                // Open the modal
+                $("#staticBackdrop").modal("show");
+            },
+        });
     });
 });
 

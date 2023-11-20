@@ -59,6 +59,13 @@ namespace WebAPP.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        public async Task<IActionResult> GetCauHoiTracNghiemById(int id)
+        {
+            var result = await _questionApiClient.GetById(id);
+            return PartialView("_questionCauHoiTracNghiemInfo", result.ResultObj);
+        }
+
+        [HttpPost]
         public async Task<IActionResult> GetAllByCategoryId(int id)
         {
             var result = await _questionApiClient.GetAllByCategory(id);
@@ -181,6 +188,17 @@ namespace WebAPP.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        public async Task<IActionResult> DeleteCauHoiTrinhTuThaoTac(int id, CauHoiTrinhTuThaoTacDeleteRequest request)
+        {
+            var result = await _cauHoiTrinhTuThaoTacApiClient.Delete(id,request);
+            if (!result.IsSuccessed)
+            {
+                return Json(new { success = false });
+            }
+            return Json(new { success = true });
+        }
+
+        [HttpPost]
         public async Task<IActionResult> GetAllByCauHoiTuLuan(int id)
         {
             var result = await _cauHoiTrinhTuThaoTacApiClient.GetAllByCauHoiTuLuan(id);
@@ -191,6 +209,39 @@ namespace WebAPP.Areas.Admin.Controllers
         public async Task<ActionResult> UpdatePositions([FromBody] List<CauHoiTrinhTuThaoTacChangeOrderRequest> parsedNewOrder)
         {
             var result = await _cauHoiTrinhTuThaoTacApiClient.ChangeOrder(parsedNewOrder);
+            if (!result.IsSuccessed)
+            {
+                return Json(new { success = false });
+            }
+            return Json(new { success = true });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateCauHoiTracNghiem(int id, QuestionUpdateRequest request)
+        {
+            var result = await _questionApiClient.Update(id, request);
+            if (!result.IsSuccessed)
+            {
+                return Json(new { success = false });
+            }
+            return Json(new { success = true });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateTextCauHoiTuLuan(int id, CauHoiTuLuanUpdateTextRequest request)
+        {
+            var result = await _cauHoiTuLuanApiClient.UpdateText(id, request);
+            if (!result.IsSuccessed)
+            {
+                return Json(new { success = false });
+            }
+            return Json(new { success = true });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateTextCauHoiTrinhTuThaoTac(int id, CauHoiTrinhTuThaoTacUpdateTextRequest request)
+        {
+            var result = await _cauHoiTrinhTuThaoTacApiClient.UpdateText(id, request);
             if (!result.IsSuccessed)
             {
                 return Json(new { success = false });

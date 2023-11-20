@@ -1,4 +1,5 @@
 ﻿using Data.EF;
+using Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -47,10 +48,21 @@ namespace Application.CauHoiTuLuan
             var question = await _context.CauHoiTuLuans.FindAsync(id);
             if (question == null)
                 return new ApiErrorResult<bool> { Message = "Không tìm thấy câu hỏi" };
+            var cacCauHoiTrinhTuThaoTac = await _context.cauHoiTrinhTuThaoTacs.Where(x => x.CauHoiTuLuanId == id).ToListAsync();
+            if (cacCauHoiTrinhTuThaoTac.Any())
+            {
+                foreach(var item in cacCauHoiTrinhTuThaoTac)
+                {
+                    _context.cauHoiTrinhTuThaoTacs.Remove(item);
+                }
+            }
             _context.CauHoiTuLuans.Remove(question);
             await _context.SaveChangesAsync();
             return new ApiSuccessResult<bool> { Message = "Đã xoá thành công!" };
         }
+
+  
+
 
         public async Task<ApiResult<List<CauHoiTuLuanVm>>> GetAllByCategory(int id)
         {
@@ -88,6 +100,17 @@ namespace Application.CauHoiTuLuan
             _context.CauHoiTuLuans.Update(question);
             await _context.SaveChangesAsync();
             return new ApiSuccessResult<bool> ();
+        }
+
+        public async Task<ApiResult<bool>> UpdateText(int id, CauHoiTuLuanUpdateTextRequest request)
+        {
+            var cauhoi = await _context.CauHoiTuLuans.FindAsync(id);
+            if (cauhoi == null)
+                return new ApiErrorResult<bool> { Message = "Không tìm thấy câu hỏi" };
+            cauhoi.Text = request.Text;            
+            _context.CauHoiTuLuans.Update(cauhoi);
+            await _context.SaveChangesAsync();
+            return new ApiSuccessResult<bool>();
         }
     }
 }

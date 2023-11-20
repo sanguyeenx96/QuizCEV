@@ -39,17 +39,10 @@ namespace WebAPI.Controllers
 
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        [HttpPost("Delete/{id}")]
+        public async Task<IActionResult> Delete(int id,CauHoiTrinhTuThaoTacDeleteRequest request)
         {
-            var result = await _cauHoiTrinhTuThaoTacService.Delete(id);
-            return Ok(result);
-        }
-
-        [HttpPut("updatescore/{id}")]
-        public async Task<IActionResult> UpdateScore(int id, CauHoiTrinhTuThaoTacUpdateScoreRequest request)
-        {
-            var result = await _cauHoiTrinhTuThaoTacService.UpdateScore(id, request);
+            var result = await _cauHoiTrinhTuThaoTacService.Delete(id,request);
             return Ok(result);
         }
 
@@ -64,6 +57,13 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> ChangeOrder(List<CauHoiTrinhTuThaoTacChangeOrderRequest> request)
         {
             var result = await _cauHoiTrinhTuThaoTacService.ChangeOrder(request);
+            return Ok(result);
+        }
+
+        [HttpPut("updatetext/{id}")]
+        public async Task<IActionResult> UpdateText(int id, CauHoiTrinhTuThaoTacUpdateTextRequest request)
+        {
+            var result = await _cauHoiTrinhTuThaoTacService.UpdateText(id, request);
             return Ok(result);
         }
 

@@ -59,5 +59,12 @@ namespace WebAPI.Controllers
             return Ok(result);
         }
 
+        [HttpPut("updatetext/{id}")]
+        public async Task<IActionResult> UpdateText(int id, CauHoiTuLuanUpdateTextRequest request)
+        {
+            var result = await _cauHoiTuLuanService.UpdateText(id, request);
+            return Ok(result);
+        }
+
     }
 }

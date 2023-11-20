@@ -252,7 +252,6 @@ namespace Application.Question
             question.QC = request.QC;
             question.QD = request.QD;
             question.QCorrectAns = request.QCorrectAns;
-            question.CategoryId = request.CategoryId;
             _context.Questions.Update(question);
             await _context.SaveChangesAsync();
             return new ApiSuccessResult<int> { Id = question.Id };

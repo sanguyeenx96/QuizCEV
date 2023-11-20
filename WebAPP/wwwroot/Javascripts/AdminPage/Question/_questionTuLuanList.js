@@ -92,6 +92,55 @@ $(document).ready(function () {
         });
     });
 
+    $(".btnSuaCauHoiTuLuan").click(async function () {
+        var id = $(this).data("id");
+        var noidungcauhoi = $(this).data("tencauhoi");
+        var categoryId = $(this).data("abc");
+        var intId = parseInt(id);
+        var intCategoryId = parseInt(categoryId);
+
+        const { value: text } = await Swal.fire({
+            input: "textarea",
+            inputLabel: "Sửa tiêu đề câu hỏi :",
+            inputValue: noidungcauhoi.trim(),
+            inputAttributes: {
+                "aria-label": "Type your message here",
+            },
+            showCancelButton: true,
+            confirmButtonText: "Xác nhận",
+            cancelButtonText: "Huỷ bỏ",
+            reverseButtons: true,
+        });
+        if (text) {
+            $.ajax({
+                url: "UpdateTextCauHoiTuLuan",
+                type: "POST",
+                data: {
+                    id: intId,
+                    Text: text,
+                },
+                success: function (result) {
+                    Swal.fire({
+                        icon: "success",
+                        title: "Sửa tiêu đề câu hỏi thành công",
+                        showConfirmButton: false,
+                        timer: 1500,
+                    });
+                    $.ajax({
+                        url: "GetAllTuLuanByCategoryId",
+                        type: "POST",
+                        data: {
+                            id: intCategoryId,
+                        },
+                        success: function (result) {
+                            $("#listQuestionTuLuan").html(result);
+                        },
+                    });
+                },
+            });
+        }
+    });
+
     $(".btnXoaCauHoiTuLuan").click(function () {
         var id = $(this).data("id");
         var categoryId = $(this).data("abc");
@@ -110,7 +159,7 @@ $(document).ready(function () {
                 text: "Dữ liệu liên quan tới câu hỏi sẽ bị xoá",
                 icon: "warning",
                 showCancelButton: true,
-                confirmButtonText: "Xác nhận xoá",
+                confirmButtonText: "Xác nhận",
                 cancelButtonText: "Huỷ bỏ",
                 reverseButtons: true,
             })
@@ -175,11 +224,7 @@ $(document).ready(function () {
                 id: id,
             },
             success: function (result) {
-                $("#" + id)
-                    .html(result)
-                    .then(function () {
-                        console.log(result);
-                    });
+                $("#" + id).html(result);
             },
         });
     });

@@ -1,4 +1,11 @@
 ﻿@model IEnumerable<ViewModels.Question.Response.QuestionVm>
+
+<style>
+    table {
+        border: 2px solid #ddd; /* 1px solid is a common style for borders */
+    }
+</style>
+
 <div class="accordion">
     @foreach (var item in Model)
     {
@@ -6,13 +13,13 @@
         <div class="accordion-item">
             <h2 class="accordion-header">
                 <button class="accordion-button collapsed btnTitle" type="button" data-bs-toggle="collapse" data-bs-target="#@speId" aria-expanded="false">
-                    <span style="min-width:80px; margin-right:10px" class="badge badge-sm rounded-pill bg-secondary ">
-                        @{
+                    <span style="min-width:70px; margin-right:10px;font-weight: 600" class="badge badge-sm bg-success shadow ">
+                      @*  @{
                             if (item.Score >= 1)
                             {
                                 <i style="color:yellow" class="bi-star"></i>
                             }
-                        }
+                        }*@
                         @(item.Score ?? 0)<small> điểm</small>
                     </span>
                     @item.Text
@@ -20,13 +27,29 @@
             </h2>
             <div id="@speId" class="accordion-collapse collapse">
                 <div class="accordion-body">
-                    <table id="example" class="table table-dark table-hover table-sm" style="font-size:small;margin-bottom:auto">
+                    <div style="text-align:start;margin-bottom:5px">
+                        <div class="btn-group" style=" white-space:nowrap;">
+                            <btn class="btn btn-outline-secondary btn-sm btnSuaDiem" data-abc="@item.CategoryId" data-id="@item.Id" data-this-score="@(item.Score ?? 0) ">
+                                <i class="bi-exposure"> </i>
+                                Sửa điểm
+                            </btn>
+                            <btn class="btn btn-outline-secondary btn-sm btnSuaCauHoi" data-id="@item.Id">
+                                <i class="bi-pencil-fill"> </i>
+                                Sửa câu hỏi
+                            </btn>
+                            <btn class="btn btn-outline-secondary btn-sm btnXoaCauHoiTracNghiem" data-abc="@item.CategoryId" data-id="@item.Id">
+                                <i class="bi-trash"> </i>
+                                Xoá
+                            </btn>
+                        </div>
+                    </div>
+                    <table id="example" class=" table table-light table-bordered table-hover table-sm" style="font-size:small;margin-bottom:auto">
                         <tbody>
                             <tr>
                                 <td class="col-sm-2" style="text-align:center">
                                     A :
                                 </td>
-                                <td style="background:black">
+                                <td>
                                     @Html.DisplayFor(modelItem => item.QA)
                                 </td>
                             </tr>
@@ -34,7 +57,7 @@
                                 <td class="col-sm-2" style="text-align:center">
                                     B :
                                 </td>
-                                <td style="background:black">
+                                <td>
                                     @Html.DisplayFor(modelItem => item.QB)
                                 </td>
                             </tr>
@@ -42,7 +65,7 @@
                                 <td class="col-sm-2" style="text-align:center">
                                     C :
                                 </td>
-                                <td style="background:black">
+                                <td>
                                     @Html.DisplayFor(modelItem => item.QC)
                                 </td>
                             </tr>
@@ -50,42 +73,35 @@
                                 <td class="col-sm-2" style="text-align:center">
                                     D :
                                 </td>
-                                <td style="background:black">
+                                <td>
                                     @Html.DisplayFor(modelItem => item.QD)
                                 </td>
                             </tr>
                             <tr>
                                 <td class="col-sm-2" style="text-align:center">
-                                    Đáp án đúng :
+                                    Đáp án :
                                 </td>
-                                <td style="background:black">
+                                <td>
                                     @(item.QCorrectAns.ToString().ToUpper())
                                 </td>
                             </tr>
 
                         </tbody>
                     </table>
-                    <div style="text-align:end;margin-top:5px">
-                        <div class="btn-group" style=" white-space:nowrap;">
-                            <btn class="btn btn-outline-secondary btn-sm btnSuaDiem" data-abc="@item.CategoryId" data-id="@item.Id" data-this-score="@(item.Score ?? 0) ">
-                                <i class="bi-exposure"> </i>
-                                Sửa thang điểm
-                            </btn>
-                            <btn class="btn btn-outline-secondary btn-sm btnSuaCauHoi" data-id="@item.Id">
-                                <i class="bi-pencil-fill"> </i>
-                                Sửa câu hỏi
-                            </btn>
-                            <btn class="btn btn-outline-danger btn-sm btnXoaCauHoiTracNghiem" data-abc="@item.CategoryId" data-id="@item.Id">
-                                <i class="bi-trash"> </i>
-                                Xoá
-                            </btn>
-                        </div>
-                    </div>
+                   
 
                 </div>
             </div>
         </div>
     }
+</div>
+
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div id="NoiDungCauHoiTracNghiem"></div>
+        </div>
+    </div>
 </div>
 
 <script src="~/javascripts/adminpage/question/_questionlist.js"></script>

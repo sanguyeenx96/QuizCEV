@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace ViewModels.CauHoiTrinhTuThaoTac.Request
 {
-    public class CauHoiTrinhTuThaoTacUpdateScoreRequest
+    public class CauHoiTrinhTuThaoTacDeleteRequest
     {
-        public float? Score { get; set; }
-
+        public int cauhoituluanId { get; set; }
     }
 }

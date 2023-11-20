@@ -68,15 +68,27 @@ namespace Application.CauHoiTrinhTuThaoTac
             return new ApiSuccessResult<int> { Id = newQuestion.Id };
         }
 
-        public async Task<ApiResult<bool>> Delete(int id)
+        public async Task<ApiResult<bool>> Delete(int id, CauHoiTrinhTuThaoTacDeleteRequest request)
         {
             var question = await _context.cauHoiTrinhTuThaoTacs.FindAsync(id);
             if (question == null)
                 return new ApiErrorResult<bool> { Message = "Không tìm thấy câu hỏi" };
             _context.cauHoiTrinhTuThaoTacs.Remove(question);
+            var remainingQuestions = await _context.cauHoiTrinhTuThaoTacs
+               .Where(x => x.CauHoiTuLuanId == request.cauhoituluanId)
+               .OrderBy(q => q.ThuTu)
+               .ToListAsync();
+            int count = 0;
+            for (int i = 0; i < remainingQuestions.Count; i++)
+            {
+                count++;
+                remainingQuestions[i].ThuTu = count;
+            }
+            _context.Update(count);
             await _context.SaveChangesAsync();
             return new ApiSuccessResult<bool> { Message = "Đã xoá thành công!" };
         }
+
 
         public async Task<ApiResult<List<CauHoiTrinhTuThaoTacVm>>> GetAllByCauHoiTuLuan(int id)
         {
@@ -84,7 +96,6 @@ namespace Application.CauHoiTrinhTuThaoTac
             {
                 Id = x.Id,
                 Text = x.Text,
-                Score = x.Score,
                 ThuTu = x.ThuTu,
                 CauHoiTuLuanId = x.CauHoiTuLuanId
             }).ToListAsync();
@@ -100,20 +111,19 @@ namespace Application.CauHoiTrinhTuThaoTac
             {
                 Id = result.Id,
                 Text = result.Text,
-                Score = result.Score,
                 ThuTu = result.ThuTu,
                 CauHoiTuLuanId = result.CauHoiTuLuanId
             };
             return new ApiSuccessResult<CauHoiTrinhTuThaoTacVm>(question);
-        }       
+        }
 
-        public async Task<ApiResult<bool>> UpdateScore(int id, CauHoiTrinhTuThaoTacUpdateScoreRequest request)
+        public async Task<ApiResult<bool>> UpdateText(int id, CauHoiTrinhTuThaoTacUpdateTextRequest request)
         {
-            var question = await _context.cauHoiTrinhTuThaoTacs.FindAsync(id);
-            if (question == null)
+            var cauhoi = await _context.cauHoiTrinhTuThaoTacs.FindAsync(id);
+            if (cauhoi == null)
                 return new ApiErrorResult<bool> { Message = "Không tìm thấy câu hỏi" };
-            question.Score = request.Score;
-            _context.cauHoiTrinhTuThaoTacs.Update(question);
+            cauhoi.Text = request.Text;
+            _context.cauHoiTrinhTuThaoTacs.Update(cauhoi);
             await _context.SaveChangesAsync();
             return new ApiSuccessResult<bool>();
         }

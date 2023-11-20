@@ -11,7 +11,6 @@ namespace Data.Entities
         public int Id { get; set; }
         public string Text { get; set; }
         public int ThuTu { get; set; }
-        public float? Score { get; set; }
         public int CauHoiTuLuanId { get; set; }
         public CauHoiTuLuan CauHoiTuLuan { get; set; }
     }

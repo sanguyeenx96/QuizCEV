@@ -61,11 +61,13 @@ namespace WebAPP.Services
             return JsonConvert.DeserializeObject<ApiErrorResult<int>>(result);
         }
 
-        public async Task<ApiResult<bool>> Delete(int id)
+        public async Task<ApiResult<bool>> Delete(int id, CauHoiTrinhTuThaoTacDeleteRequest request)
         {
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_configuration["BaseAdress"]);
-            var response = await client.DeleteAsync($"/api/cauhoitrinhtuthaotac/{id}");
+            var json = JsonConvert.SerializeObject(request);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+            var response = await client.PostAsync($"/api/cauhoitrinhtuthaotac/delete/{id}",httpContent);
             var result = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
             {
@@ -100,13 +102,13 @@ namespace WebAPP.Services
             return JsonConvert.DeserializeObject<ApiErrorResult<CauHoiTrinhTuThaoTacVm>>(result);
         }
 
-        public async Task<ApiResult<bool>> UpdateScore(int id, CauHoiTrinhTuThaoTacUpdateScoreRequest request)
+        public async Task<ApiResult<bool>> UpdateText(int id, CauHoiTrinhTuThaoTacUpdateTextRequest request)
         {
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_configuration["BaseAdress"]);
             var json = JsonConvert.SerializeObject(request);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
-            var response = await client.PutAsync($"/api/cauhoitrinhtuthaotac/updatescore/{id}", httpContent);
+            var response = await client.PutAsync($"/api/cauhoitrinhtuthaotac/updatetext/{id}", httpContent);
             var result = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
             {
