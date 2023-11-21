@@ -7,15 +7,9 @@
         <div class="accordion-item">
             <h2 class="accordion-header">
                 <button class="accordion-button collapsed btnXemchitiet " type="button" data-bs-toggle="collapse" data-bs-target="#@speId" aria-expanded="false" data-id="@item.Id">
-                    <span style="min-width:70px; margin-right:10px;font-weight: 600" class="badge badge-sm bg-success shadow ">
-                        @*        @{
-                    if (item.Score >= 1)
-                    {
-                    <i style="color:yellow" class="bi-star"></i>
-                    }
-                    }*@
+                    <btn class="btn btn-outline-success btn-sm " style="min-width:80px; margin-right:10px;font-weight: 600">
                         @(item.Score ?? 0)<small> điểm</small>
-                    </span>
+                    </btn>
                     @item.Text
                 </button>
             </h2>
@@ -23,12 +17,16 @@
                 <div class="accordion-body">
                     <div style="text-align:start;margin-bottom:5px;margin-left:2px">
                         <div class="btn-group" style=" white-space:nowrap;">
+                            <btn class="btn btn-outline-secondary  btn-sm btnThemNoiDungThaoTac" data-abc="@item.CategoryId" data-id="@item.Id" data-this-score="@(item.Score ?? 0) ">
+                                <i class="bi-file-earmark-plus"> </i>
+                                Thêm nội dung thao tác
+                            </btn>
                             <btn class="btn btn-outline-secondary  btn-sm btnSuaDiemTuLuan" data-abc="@item.CategoryId" data-id="@item.Id" data-this-score="@(item.Score ?? 0) ">
-                                <i class="bi-exposure"> </i>
+                                <i class="bi-plus-slash-minus"> </i>
                                 Sửa điểm
                             </btn>
                             <btn class="btn btn-outline-secondary  btn-sm btnSuaCauHoiTuLuan" data-abc="@item.CategoryId" data-id="@item.Id" data-tencauhoi="@item.Text">
-                                <i class="bi-pencil-fill"> </i>
+                                <i class="bi-pencil"> </i>
                                 Sửa câu hỏi
                             </btn>
                             <btn class="btn btn-outline-secondary  btn-sm btnXoaCauHoiTuLuan" data-abc="@item.CategoryId" data-id="@item.Id">

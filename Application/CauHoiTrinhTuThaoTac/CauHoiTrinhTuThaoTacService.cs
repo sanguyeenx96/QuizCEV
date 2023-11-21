@@ -55,7 +55,7 @@ namespace Application.CauHoiTrinhTuThaoTac
             var checkDuplicateQuestion = await _context.cauHoiTrinhTuThaoTacs.Where(x => (x.Text == request.Text && x.CauHoiTuLuanId == request.CauHoiTuLuanId)).FirstOrDefaultAsync();
             if (checkDuplicateQuestion != null)
                 return new ApiErrorResult<int> { Message = "Câu hỏi đã bị trùng" };
-            int num = _context.cauHoiTrinhTuThaoTacs.Where(x => x.CauHoiTuLuanId == request.CauHoiTuLuanId).Any() ? _context.cauHoiTrinhTuThaoTacs.Max(x => x.ThuTu) + 1 : 1;
+            int num = _context.cauHoiTrinhTuThaoTacs.Where(x => x.CauHoiTuLuanId == request.CauHoiTuLuanId).Any() ? _context.cauHoiTrinhTuThaoTacs.Where(x=>x.CauHoiTuLuanId == request.CauHoiTuLuanId).Max(x => x.ThuTu) + 1 : 1;
 
             var newQuestion = new Data.Entities.CauHoiTrinhTuThaoTac()
             {
@@ -74,6 +74,7 @@ namespace Application.CauHoiTrinhTuThaoTac
             if (question == null)
                 return new ApiErrorResult<bool> { Message = "Không tìm thấy câu hỏi" };
             _context.cauHoiTrinhTuThaoTacs.Remove(question);
+            await _context.SaveChangesAsync();
             var remainingQuestions = await _context.cauHoiTrinhTuThaoTacs
                .Where(x => x.CauHoiTuLuanId == request.cauhoituluanId)
                .OrderBy(q => q.ThuTu)
@@ -83,8 +84,8 @@ namespace Application.CauHoiTrinhTuThaoTac
             {
                 count++;
                 remainingQuestions[i].ThuTu = count;
+                _context.cauHoiTrinhTuThaoTacs.Update(remainingQuestions[i]);
             }
-            _context.Update(count);
             await _context.SaveChangesAsync();
             return new ApiSuccessResult<bool> { Message = "Đã xoá thành công!" };
         }

@@ -57,6 +57,50 @@ $(document).ready(function () {
         }
     }
 
+    $(".btnThemNoiDungThaoTac").click(async function () {
+        var categoryId = $(this).data("abc");
+        var intCategoryId = parseInt(categoryId);
+        var id = $(this).data("id");
+        var intId = parseInt(id);
+        const { value: text } = await Swal.fire({
+            input: "textarea",
+            inputLabel: "Nội dung thao tác mới :",
+            inputPlaceholder: "Nhập nội dung thao tác...",
+            showCancelButton: true,
+            confirmButtonText: "Xác nhận",
+            cancelButtonText: "Huỷ bỏ",
+            reverseButtons: true,
+        });
+        if (text) {
+            $.ajax({
+                url: "CreateNoiDungTrinhTuThaoTac",
+                type: "POST",
+                data: {
+                    CauHoiTuLuanId: intId,
+                    Text: text,
+                },
+                success: function (result) {
+                    Swal.fire({
+                        icon: "success",
+                        title: "Thêm nội dung thành công",
+                        showConfirmButton: false,
+                        timer: 1500,
+                    });
+                    $.ajax({
+                        url: "GetAllTuLuanByCategoryId",
+                        type: "POST",
+                        data: {
+                            id: intCategoryId,
+                        },
+                        success: function (result) {
+                            $("#listQuestionTuLuan").html(result);
+                        },
+                    });
+                },
+            });
+        }
+    });
+
     $(".btnSuaDiemTuLuan").click(function () {
         var categoryId = $(this).data("abc");
         var intCategoryId = parseInt(categoryId);
