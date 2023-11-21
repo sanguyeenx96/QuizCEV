@@ -8,6 +8,8 @@
 
   <ItemGroup>
     <PackageReference Include="EPPlus" Version="7.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.24" />
   </ItemGroup>
 
   <ItemGroup>

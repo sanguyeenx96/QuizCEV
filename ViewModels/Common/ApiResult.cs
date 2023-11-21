@@ -13,8 +13,13 @@ namespace ViewModels.Common
         public string Message { get; set; }
 
         public T ResultObj { get; set; }
+
         public int? Id { get; set; }
+
         public float? Score { get; set; }
+
+        public string? LoginToken { get; set; }
+
 
     }
 }

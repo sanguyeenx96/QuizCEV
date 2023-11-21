@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using ViewModels.CauHoiTrinhTuThaoTac.Request;
 using ViewModels.CauHoiTuLuan.Request;
@@ -7,6 +8,8 @@ using WebAPP.Services;
 
 namespace WebAPP.Areas.Admin.Controllers
 {
+    [Authorize]
+
     public class QuestionController : Controller
     {
         private readonly ICategoryApiClient _categoryApiClient;

@@ -1,7 +1,17 @@
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using WebAPP.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddHttpClient();
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+               .AddCookie(options =>
+               {
+                   options.LoginPath = "/Login/Login";
+                   options.AccessDeniedPath = "/User/Forbidden/";
+               });
+
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
@@ -10,6 +20,7 @@ builder.Services.AddTransient<ICategoryApiClient, CategoryApiClient>();
 builder.Services.AddTransient<IQuestionApiClient, QuestionApiClient>();
 builder.Services.AddTransient<ICauHoiTuLuanApiClient, CauHoiTuLuanApiClient>();
 builder.Services.AddTransient<ICauHoiTrinhTuThaoTacApiClient, CauHoiTrinhTuThaoTacApiClient>();
+builder.Services.AddTransient<IUserApiClient, UserApiClient>();
 
 
 var app = builder.Build();
@@ -25,20 +36,24 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
+app.UseAuthentication();
+
 app.UseRouting();
 
 app.UseAuthorization();
 
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{area=Admin}/{controller=Home}/{action=Index}/{id?}");
+
 
 app.UseEndpoints(endpoints =>
 {
+    endpoints.MapControllerRoute("areaRoute", "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
     endpoints.MapControllerRoute(
-      name: "areas",
-      pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
-    );
+        name: "default",
+        pattern: "{controller=Login}/{action=Login}/{id?}");
+
 });
+
+
 
 app.Run();

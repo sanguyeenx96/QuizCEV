@@ -1,5 +1,8 @@
 ﻿using Data.Configurations;
 using Data.Entities;
+using Data.Extensions;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -10,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Data.EF
 {
-    public class TracNghiemCEVDbContext : DbContext
+    public class TracNghiemCEVDbContext : IdentityDbContext<AppUser, AppRole, Guid>
     {
         public TracNghiemCEVDbContext(DbContextOptions options) : base(options)
         {
@@ -20,19 +23,29 @@ namespace Data.EF
         {
             //Configure using Fluent API
             modelBuilder.ApplyConfiguration(new CategoryConfigration());
-
             modelBuilder.ApplyConfiguration(new ExamResultConfiguration());
-
             modelBuilder.ApplyConfiguration(new LogExamConfiguration());
-
             modelBuilder.ApplyConfiguration(new QuestionConfiguration());
-
             modelBuilder.ApplyConfiguration(new CauHoiTuLuanConfiguration());
-
-            modelBuilder.ApplyConfiguration(new UserConfiguration());
-
             modelBuilder.ApplyConfiguration(new CauHoiTrinhTuThaoTacConfiguration());
+            modelBuilder.ApplyConfiguration(new AppRoleConfiguration());
+            modelBuilder.ApplyConfiguration(new AppUserConfiguration());
 
+            modelBuilder.Entity<IdentityUserClaim<Guid>>().ToTable("AppUserClaims");
+            modelBuilder.Entity<IdentityUserRole<Guid>>().ToTable("AppUserRoles")
+                .HasKey(x => new
+                {
+                    x.UserId,
+                    x.RoleId
+                });
+            modelBuilder.Entity<IdentityUserLogin<Guid>>().ToTable("AppUserLogins")
+                .HasKey(x => x.UserId);
+            modelBuilder.Entity<IdentityRoleClaim<Guid>>().ToTable("AppRoleClaims");
+            modelBuilder.Entity<IdentityUserToken<Guid>>().ToTable("AppUserTokens")
+                .HasKey(x => x.UserId);
+
+            //Data seeding
+            modelBuilder.Seed();
 
             //base.OnModelCreating(modelBuilder);
         }
@@ -43,7 +56,5 @@ namespace Data.EF
         public DbSet<Question> Questions { get; set; }
         public DbSet<CauHoiTuLuan> CauHoiTuLuans { get; set; }
         public DbSet<CauHoiTrinhTuThaoTac> cauHoiTrinhTuThaoTacs { get; set; }
-
-        public DbSet<User> Users { get; set; }
     }
 }
