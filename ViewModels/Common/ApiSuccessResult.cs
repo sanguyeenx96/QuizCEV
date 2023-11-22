@@ -31,5 +31,11 @@ namespace ViewModels.Common
             IsSuccessed = true;
             Score = score;
         }
+
+        public ApiSuccessResult(string logintoken)
+        {
+            IsSuccessed = true;
+            LoginToken = logintoken;
+        }
     }
 }

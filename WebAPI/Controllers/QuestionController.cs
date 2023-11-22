@@ -1,4 +1,5 @@
 ﻿using Application.Question;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ViewModels.Question.Request;
@@ -7,6 +8,7 @@ namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class QuestionController : ControllerBase
     {
         private readonly IQuestionService _QuestionService;

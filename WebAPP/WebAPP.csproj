@@ -7,7 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.IdentityModel.Logging" Version="6.10.0" />
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.10.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.16" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.10.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -20,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="wwwroot\clock-tz.js-master\.github\FUNDING.yml" />
     <None Include="wwwroot\flag-icons-main\.github\dependabot.yml" />
     <None Include="wwwroot\flag-icons-main\.github\workflows\flags.yml" />
     <None Include="wwwroot\flag-icons-main\.github\workflows\format.yml" />

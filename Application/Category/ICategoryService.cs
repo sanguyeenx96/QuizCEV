@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 using ViewModels.Category.Request;
 using ViewModels.Category.Response;
 using ViewModels.Common;
-using ViewModels.User.Request;
-using ViewModels.User.Response;
+
 
 namespace Application.Category
 {

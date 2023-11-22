@@ -24,8 +24,8 @@ namespace Data.Configurations
             builder.HasOne(t => t.Category).WithMany(pc => pc.ExamResults)
            .HasForeignKey(pc => pc.CategoryId);
 
-            builder.HasOne(t => t.User).WithMany(pc => pc.ExamResults)
-           .HasForeignKey(pc => pc.UserId);
+            builder.HasOne(x => x.AppUser).WithMany(x => x.ExamResults)
+           .HasForeignKey(x => x.UserId);
         }
     }
 }

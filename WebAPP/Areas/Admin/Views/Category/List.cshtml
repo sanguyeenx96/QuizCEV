@@ -5,64 +5,79 @@
     ViewData["ActiveChild"] = "pageDanhSachChuDePhongThi";
 }
 
-<table class="table" style="text-align:center; vertical-align:middle">
-    <thead>
-        <tr>
-            <th>
-                Tên
-            </th>
-            <th>
-                Ngày tạo
-            </th>
-            <th>
-                Cập nhật gần nhất
-            </th>
-            <th>
-                Trạng thái
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DateCreate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.LastUpdate)
-                </td>
-                <td>
-                   @if(item.Status == true){
-                        <div><i class="bi-toggle2-on" style="color:green"></i> Online</div>
-                   }else{
-                        <div><i class="bi-toggle2-off" style="color:red"></i> Offline</div>
-                   }
-                </td>
-                <td>
-                    <div class="btn-group" style=" white-space:nowrap">
-                        <btn class="btn btn-outline-secondary btn-sm btnSua" data-id="@item.Id">
-                            <i class="bi-pencil-fill"> </i>
-                            Đổi tên
-                        </btn>
-                        <btn class="btn btn-outline-danger btn-sm btnXoa" data-id="@item.Id" data-name="@item.Name">
-                            <i class="bi-trash"> </i>
-                            Xoá
-                        </btn>
-                    </div>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+<div class="card">
+    <div class="card-body">
+        <table id="tblDanhsachchudephongthi" class="table table-hover" style="text-align:center; vertical-align:middle;width:100%">
+            <thead style="font-size:small">
+                <tr>
+                    <th style="text-align:center">
+                        Tên Chủ đề & Phòng thi
+                    </th>
+                    <th style="text-align:center">
+                        Ngày tạo
+                    </th>
+                    <th style="text-align:center" hidden>
+                        Cập nhật gần nhất
+                    </th>
+                    <th style="text-align:center">
+                        Trạng thái
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td style="text-align:left">
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @item.DateCreate.ToString("dd/MM/yyyy")
+                        </td>
+                        <td hidden>
+                            @Html.DisplayFor(modelItem => item.LastUpdate)
+                        </td>
+                        <td>
+                            @if (item.Status == true)
+                            {
+                                <div><i class="bi-toggle2-on" style="color:green"></i> Online</div>
+                            }
+                            else
+                            {
+                                <div><i class="bi-toggle2-off" style="color:red"></i> Offline</div>
+                            }
+                        </td>
+                        <td style="text-align:end">
+                            <div class="btn-group" style=" white-space:nowrap">
+                                <btn class="btn btn-outline-secondary btn-sm btnSua" data-id="@item.Id">
+                                    <i class="bi-pencil"> </i>
+                                    Đổi tên
+                                </btn>
+                                <btn class="btn btn-outline-danger btn-sm btnXoa" data-id="@item.Id" data-name="@item.Name">
+                                    <i class="bi-trash"> </i>
+                                    Xoá
+                                </btn>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
 
 
 <script>
-    $(document).ready(function () { 
+    $(document).ready(function () {
+        $("#tblDanhsachchudephongthi").DataTable({
+            "paging": true,
+            "searching": true,
+            "info": true,
+            "responsive": true,
+            "ordering": false
+        });
+
         const swalWithBootstrapButtons = Swal.mixin({
             buttonsStyling: true,
         });
@@ -77,7 +92,7 @@
                 toast.onmouseleave = Swal.resumeTimer;
             }
         });
-        
+
         $(".btnSua").click(function (e) {
             var id = $(this).data("id");
             var data = {

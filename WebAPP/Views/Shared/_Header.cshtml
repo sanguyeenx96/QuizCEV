@@ -1,15 +1,30 @@
-﻿<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+﻿<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-1 mb-3 border-bottom">
     <h1 class="display-6">
         @ViewBag.thisPage
     </h1>
-    <div class="btn-toolbar mb-2 mb-md-0">
+    <div>
+        <div class="bg-light text-black-50" style="display: inline-block; padding: 5px; border-radius: 3px; text-align: center;">
+            <span id="date"></span>
+            <span id="month"></span>
+            <span id="year"></span>
+            <span id="hours"></span>:<span id="minutes"></span>:<span id="seconds"></span>
+        </div>
+        @*
         <div class="btn-group me-2">
-            <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
-            <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
+        <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
+        <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
         </div>
         <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
-            <span data-feather="calendar"></span>
-            This week
+        <span data-feather="calendar"></span>
+        This week
         </button>
+        *@
     </div>
 </div>
+<script>
+    const options = {
+       
+    };
+    const clock = new Clock(options);
+    clock.start();
+</script>

@@ -8,23 +8,15 @@ namespace ViewModels.Common
 {
     public class ApiErrorResult<T> : ApiResult<T>
     {
-        public string[] ValidationErrors { get; set; }
-
         public ApiErrorResult()
         {
             IsSuccessed = false;
         }
-
-        public ApiErrorResult(string message)
+        public ApiErrorResult(string mes)
         {
             IsSuccessed = false;
-            Message = message;
+            Message=mes;
         }
 
-        public ApiErrorResult(string[] validationErrors)
-        {
-            IsSuccessed = false;
-            ValidationErrors = validationErrors;
-        }
     }
 }

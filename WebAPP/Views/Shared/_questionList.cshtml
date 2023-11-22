@@ -13,15 +13,9 @@
         <div class="accordion-item">
             <h2 class="accordion-header">
                 <button class="accordion-button collapsed btnTitle" type="button" data-bs-toggle="collapse" data-bs-target="#@speId" aria-expanded="false">
-                    <span style="min-width:70px; margin-right:10px;font-weight: 600" class="badge badge-sm bg-success shadow ">
-                      @*  @{
-                            if (item.Score >= 1)
-                            {
-                                <i style="color:yellow" class="bi-star"></i>
-                            }
-                        }*@
+                    <btn class="btn btn-warning btn-sm " style="min-width:80px; margin-right:10px;font-weight: 600" >
                         @(item.Score ?? 0)<small> điểm</small>
-                    </span>
+                    </btn>                   
                     @item.Text
                 </button>
             </h2>
@@ -30,11 +24,11 @@
                     <div style="text-align:start;margin-bottom:5px">
                         <div class="btn-group" style=" white-space:nowrap;">
                             <btn class="btn btn-outline-secondary btn-sm btnSuaDiem" data-abc="@item.CategoryId" data-id="@item.Id" data-this-score="@(item.Score ?? 0) ">
-                                <i class="bi-exposure"> </i>
+                                <i class="bi-plus-slash-minus"> </i>
                                 Sửa điểm
                             </btn>
                             <btn class="btn btn-outline-secondary btn-sm btnSuaCauHoi" data-id="@item.Id">
-                                <i class="bi-pencil-fill"> </i>
+                                <i class="bi-pencil"> </i>
                                 Sửa câu hỏi
                             </btn>
                             <btn class="btn btn-outline-secondary btn-sm btnXoaCauHoiTracNghiem" data-abc="@item.CategoryId" data-id="@item.Id">

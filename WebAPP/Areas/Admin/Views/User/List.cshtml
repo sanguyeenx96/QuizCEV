@@ -1,0 +1,69 @@
+﻿@using ViewModels.Common
+@model PagedResult<ViewModels.Users.Response.UserVm>
+
+@{
+    ViewData["Active"] = "pageQuanLyTaiKhoan";
+    ViewData["ActiveChild"] = "pageDanhsachtaikhoan";
+}
+
+<div class="card">
+    <div class="card-body">
+        <table id="tblDanhsachchudephongthi" class="table table-hover" style="text-align:center; vertical-align:middle;width:100%">
+            <thead style="font-size:small">
+                <tr>
+                    <th style="text-align:center">
+                        Tên đăng nhập (Mã nhân viên)
+                    </th>
+                    <th style="text-align:center">
+                        Họ tên
+                    </th>
+                    <th style="text-align:center" >
+                        Bộ phận
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Items)
+                {
+                    <tr>
+                        <td >
+                            @item.UserName
+                        </td>
+                        <td>
+                            @item.Name
+                        </td>
+                        <td>
+                            @item.Dept
+                        </td>
+                        <td style="text-align:end">
+                            <div class="btn-group" style=" white-space:nowrap">
+                                <btn class="btn btn-outline-secondary btn-sm btnSua" data-id="@item.Id">
+                                    <i class="bi-key"> </i>
+                                    Đổi mật khẩu
+                                </btn>
+                                <btn class="btn btn-outline-danger btn-sm btnXoa" data-id="@item.Id" data-name="@item.Name">
+                                    <i class="bi-trash"> </i>
+                                    Xoá
+                                </btn>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        $("#tblDanhsachchudephongthi").DataTable({
+            "paging": false,
+            "searching": false,
+            "info": false,
+            "responsive": true,
+            "ordering": false
+        });
+    });
+</script>

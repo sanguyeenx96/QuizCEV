@@ -5,48 +5,61 @@
     ViewData["ActiveChild"] = "pageDongMoPhongThi";
 }
 
-<table class="table" style="text-align:center; vertical-align:middle">
-    <thead>
-        <tr>
-            <th>
-                Tên
-            </th>
-            <th>
-                Trạng thái
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    @if (item.Status == true)
-                    {
-                        <div><i class="bi-toggle2-on" style="color:green"></i> Online</div>
-                    }
-                    else
-                    {
-                        <div><i class="bi-toggle2-off" style="color:red"></i> Offline</div>
-                    }
-                </td>
-                <td>
-                    <btn class="btn btn-outline-secondary btn-sm btnChangeStatus" data-id="@item.Id">
-                        <i class="bi-transparency"> </i>
-                        Đổi trạng thái
-                    </btn>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+
+<div class="card">
+    <div class="card-body">
+        <table id="tblDongmophongthi" class="table table-hover" style="text-align:center; vertical-align:middle;width:100%">
+            <thead style="font-size:small">
+                <tr>
+                    <th style="text-align:center">
+                        Tên Phòng thi
+                    </th>
+                    <th style="text-align:center">
+                        Trạng thái
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td style="text-align:left">
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @if (item.Status == true)
+                            {
+                                <div><i class="bi-toggle2-on" style="color:green"></i> Online</div>
+                            }
+                            else
+                            {
+                                <div><i class="bi-toggle2-off" style="color:red"></i> Offline</div>
+                            }
+                        </td>
+                        <td style="text-align:end">
+                            <btn class="btn btn-outline-secondary btn-sm btnChangeStatus" data-id="@item.Id">
+                                <i class="bi-transparency"> </i>
+                                Đổi trạng thái
+                            </btn>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
 
 <script>
     $(document).ready(function () {
+        $("#tblDongmophongthi").DataTable({
+            "paging": true,
+            "searching": true,
+            "info": true,
+            "responsive": true,
+            "ordering": false
+        });
+
         $(".btnChangeStatus").click(function (e) {
             var id = $(this).data("id");
             $.ajax({

@@ -9,7 +9,6 @@ namespace ViewModels.CauHoiTuLuan.Request
     public class CauHoiTuLuanCreateRequest
     {
         public string Text { get; set; }
-        public string? QCorrectAns { get; set; }
         public int CategoryId { get; set; }
     }
 }
