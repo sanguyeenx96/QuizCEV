@@ -26,7 +26,6 @@ namespace WebAPI.Controllers
                 return BadRequest(ModelState);
             }
             var result = await _usersService.Authenticate(request);
-          
             return Ok(result);
         }
 
@@ -38,12 +37,16 @@ namespace WebAPI.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var result = await _usersService.Register(request);        
+            var result = await _usersService.Register(request);
             return Ok(result);
         }
 
-
-
+        [HttpGet("paging")]
+        public async Task<IActionResult> GetAllPaging([FromQuery] GetUserPagingRequest request)
+        {
+            var result = await _usersService.GetUsetPaging(request);
+            return Ok(result);
+        }
 
 
 

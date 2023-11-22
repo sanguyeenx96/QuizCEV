@@ -1,0 +1,30 @@
+{
+  "name": "clock-tz",
+  "version": "1.0.0",
+  "description": "Simple and fast clock widget at native JS with timezone option.",
+  "main": "index.js",
+  "scripts": {
+    "minify": "minify clock.js > clock.min.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arsensokolov/clock-tz.js.git"
+  },
+  "keywords": [
+    "clock",
+    "time",
+    "date",
+    "timezone",
+    "tz"
+  ],
+  "author": "Arseny Sokolov",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/arsensokolov/clock-tz.js/issues"
+  },
+  "homepage": "https://arsensokolov.github.io/clock-tz.js/",
+  "devDependencies": {
+    "minify": "^5.1.0"
+  }
+}

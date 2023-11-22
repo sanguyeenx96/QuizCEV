@@ -1,0 +1,23 @@
+body {
+    background: #fafafa;
+}
+
+.container {
+    margin: 150px auto;
+    max-width: 960px;
+    font-family: 'Orbitron';
+}
+
+    .container span {
+        display: inline-block;
+        padding: 10px;
+        background: #222;
+        color: #fff;
+        border-radius: 3px;
+        text-align: center;
+    }
+
+h1 {
+    margin-bottom: 5rem;
+}
+

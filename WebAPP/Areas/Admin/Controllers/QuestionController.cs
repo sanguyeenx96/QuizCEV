@@ -8,8 +8,8 @@ using WebAPP.Services;
 
 namespace WebAPP.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     [Authorize]
-
     public class QuestionController : Controller
     {
         private readonly ICategoryApiClient _categoryApiClient;

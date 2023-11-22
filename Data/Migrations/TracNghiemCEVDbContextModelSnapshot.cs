@@ -50,7 +50,7 @@ namespace Data.Migrations
                         new
                         {
                             Id = new Guid("8d04dce2-969a-435d-bba4-df3f325983dc"),
-                            ConcurrencyStamp = "8925a071-e7c9-4b89-8cd2-f3a3db3e3d9b",
+                            ConcurrencyStamp = "f88e6f7e-c70a-44fa-a72e-367b247ac5de",
                             Description = "Administrator role",
                             Name = "admin",
                             NormalizedName = "admin"
@@ -69,10 +69,9 @@ namespace Data.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Dept")
-                        .IsRequired()
+                    b.Property<int>("DeptId")
                         .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasColumnType("int");
 
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
@@ -117,6 +116,8 @@ namespace Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("DeptId");
+
                     b.ToTable("AppUsers", (string)null);
 
                     b.HasData(
@@ -124,15 +125,15 @@ namespace Data.Migrations
                         {
                             Id = new Guid("69bd714f-9576-45ba-b5b7-f00649be00de"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "b0fc505c-4699-41dc-8c15-a92d2ab1d7c0",
-                            Dept = "PDE",
+                            ConcurrencyStamp = "4f21d2e2-38cd-432a-a68d-2d6197a11639",
+                            DeptId = 1,
                             Email = "smt.ngocsang@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             Name = "Nguyen Ngoc Sang",
                             NormalizedEmail = "smt.ngocsang@gmail.com",
                             NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAEEJXmgDQyBeorWuBWam2PZ7pXtwGTnxzwRJLNbTNeEGA3xHkqRjBPX1g5hxiW30C2g==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEDe1gFS1cHH4cF3vhfbLNkpP4kAJ3e35pnWw7QHRf3EyRxixXYvFUJDZMoLiRTWFZA==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -216,6 +217,30 @@ namespace Data.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("CauHoiTuLuan", (string)null);
+                });
+
+            modelBuilder.Entity("Data.Entities.Dept", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Depts", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "MFE"
+                        });
                 });
 
             modelBuilder.Entity("Data.Entities.ExamResult", b =>
@@ -436,6 +461,17 @@ namespace Data.Migrations
                     b.ToTable("AppUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Data.Entities.AppUser", b =>
+                {
+                    b.HasOne("Data.Entities.Dept", "Dept")
+                        .WithMany("AppUsers")
+                        .HasForeignKey("DeptId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Dept");
+                });
+
             modelBuilder.Entity("Data.Entities.CauHoiTrinhTuThaoTac", b =>
                 {
                     b.HasOne("Data.Entities.CauHoiTuLuan", "CauHoiTuLuan")
@@ -516,6 +552,11 @@ namespace Data.Migrations
             modelBuilder.Entity("Data.Entities.CauHoiTuLuan", b =>
                 {
                     b.Navigation("cauHoiTrinhTuThaoTacs");
+                });
+
+            modelBuilder.Entity("Data.Entities.Dept", b =>
+                {
+                    b.Navigation("AppUsers");
                 });
 
             modelBuilder.Entity("Data.Entities.ExamResult", b =>

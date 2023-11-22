@@ -35,23 +35,23 @@
                         <label class="form-label"> Nhập nội dung câu hỏi</label>
                         <textarea rows="3" id="Text" class="form-control" required></textarea>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group mb-3">
                         <label class="form-label"> Nhập nội dung câu trả lời</label>
-                        <div class="input-group mb-3">
-                            <span class="input-group-text">A.</span>
-                            <input id="QA" type="text" class="form-control" placeholder="Nhập câu trả lời">
+                        <div class="form-floating mb-1">
+                            <input id="QA" type="text" class="form-control" placeholder="">
+                            <label for="floatingInput">Đáp án A</label>
                         </div>
-                        <div class="input-group mb-3">
-                            <span class="input-group-text">B.</span>
-                            <input id="QB" type="text" class="form-control" placeholder="Nhập câu trả lời">
+                        <div class="form-floating mb-1">
+                            <input id="QB" type="text" class="form-control" placeholder="">
+                            <label for="floatingInput">Đáp án B</label>
                         </div>
-                        <div class="input-group mb-3">
-                            <span class="input-group-text">C.</span>
-                            <input id="QC" type="text" class="form-control" placeholder="Nhập câu trả lời">
+                        <div class="form-floating mb-1">
+                            <input id="QC" type="text" class="form-control" placeholder="">
+                            <label for="floatingInput">Đáp án C</label>
                         </div>
-                        <div class="input-group mb-3">
-                            <span class="input-group-text">D.</span>
-                            <input id="QD" type="text" class="form-control" placeholder="Nhập câu trả lời">
+                        <div class="form-floating mb-1">
+                            <input id="QD" type="text" class="form-control" placeholder="">
+                            <label for="floatingInput">Đáp án D</label>
                         </div>
                     </div>
                     <div class="form-group mb-3">
@@ -157,9 +157,9 @@
                             Swal.fire({
                                 title: 'Nhập dữ liệu không thành công!',
                                 html: `<div class="col-12">
-                                        <span class="badge bg-success animate__animated animate__fadeIn"> Thêm mới : ${result.data.sodongupdate} </span>
-                                        <span class="badge bg-danger animate__animated animate__fadeIn"> Bị trùng : ${result.data.sodongtrung}</span>
-                                        </div>`,
+                                            <span class="badge bg-success animate__animated animate__fadeIn"> Thêm mới : ${result.data.sodongupdate} </span>
+                                            <span class="badge bg-danger animate__animated animate__fadeIn"> Bị trùng : ${result.data.sodongtrung}</span>
+                                            </div>`,
                                 icon: 'error',
                                 showConfirmButton: false
                             })
@@ -167,9 +167,9 @@
                             Swal.fire({
                                 title: 'Nhập dữ liệu thành công!',
                                 html: `<div class="col-12">
-                                        <span class="badge bg-success animate__animated animate__fadeIn"> Thêm mới : ${result.data.sodongupdate} </span>
-                                        <span class="badge bg-danger animate__animated animate__fadeIn"> Bị trùng : ${result.data.sodongtrung}</span>
-                                        </div>`,
+                                            <span class="badge bg-success animate__animated animate__fadeIn"> Thêm mới : ${result.data.sodongupdate} </span>
+                                            <span class="badge bg-danger animate__animated animate__fadeIn"> Bị trùng : ${result.data.sodongtrung}</span>
+                                            </div>`,
                                 icon: 'success',
                                 showConfirmButton: false
                             })

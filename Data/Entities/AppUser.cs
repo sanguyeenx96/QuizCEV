@@ -10,8 +10,8 @@ namespace Data.Entities
     public class AppUser : IdentityUser<Guid>
     {
         public string Name { get; set; }
-        public string Dept { get; set; }
+        public int DeptId { get; set; }
         public List<ExamResult> ExamResults { get; set; }
-
+        public Dept Dept { get; set; }
     }
 }

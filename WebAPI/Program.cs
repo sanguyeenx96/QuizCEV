@@ -17,6 +17,7 @@ using Utilities.Constants;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
 //Cấu Hình Database và Identity:
 
 //Thêm dịch vụ DbContext để sử dụng Entity Framework Core với cơ sở dữ liệu SQL Server
@@ -41,6 +42,9 @@ builder.Services.AddTransient<UserManager<AppUser>, UserManager<AppUser>>();
 builder.Services.AddTransient<SignInManager<AppUser>, SignInManager<AppUser>>();
 builder.Services.AddTransient<RoleManager<AppRole>, RoleManager<AppRole>>();
 builder.Services.AddTransient<IUsersService, UsersService>();
+
+builder.Services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
+
 
 builder.Services.AddControllers();
 

@@ -15,7 +15,9 @@ namespace Data.Configurations
         {
             builder.ToTable("AppUsers");
             builder.Property(x => x.Name).HasMaxLength(200).IsRequired();
-            builder.Property(x => x.Dept).HasMaxLength(200).IsRequired();
+            builder.Property(x => x.DeptId).HasMaxLength(200).IsRequired();
+            builder.HasOne(t => t.Dept).WithMany(pc => pc.AppUsers)
+                .HasForeignKey(pc => pc.DeptId);
         }
     }
 }

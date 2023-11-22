@@ -30,6 +30,7 @@ namespace Data.EF
             modelBuilder.ApplyConfiguration(new CauHoiTrinhTuThaoTacConfiguration());
             modelBuilder.ApplyConfiguration(new AppRoleConfiguration());
             modelBuilder.ApplyConfiguration(new AppUserConfiguration());
+            modelBuilder.ApplyConfiguration(new DeptConfiguration());
 
             modelBuilder.Entity<IdentityUserClaim<Guid>>().ToTable("AppUserClaims");
             modelBuilder.Entity<IdentityUserRole<Guid>>().ToTable("AppUserRoles")
@@ -56,5 +57,7 @@ namespace Data.EF
         public DbSet<Question> Questions { get; set; }
         public DbSet<CauHoiTuLuan> CauHoiTuLuans { get; set; }
         public DbSet<CauHoiTrinhTuThaoTac> cauHoiTrinhTuThaoTacs { get; set; }
+        public DbSet<Dept> Depts { get; set; }
+
     }
 }

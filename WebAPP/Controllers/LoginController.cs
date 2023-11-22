@@ -30,23 +30,30 @@ namespace WebAPP.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(LoginRequest request)
+        public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
             var result = await _userApiClient.Authenticate(request);
+            if (!result.IsSuccessed)
+            {
+                return Json(new { success = false, message = result.Message });
+            }
+
             var token = result.LoginToken;
             var userPrincipal = this.ValidateToken(token);
+
             var authProperties = new AuthenticationProperties
             {
                 ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
                 IsPersistent = false
             };
+            HttpContext.Session.SetString("Token", token);
+
             await HttpContext.SignInAsync(
                         CookieAuthenticationDefaults.AuthenticationScheme,
                         userPrincipal,
                         authProperties);
 
-            return RedirectToAction("List", "Category", new { area = "Admin" });
-
+            return Json(new { success = true });
         }
         private ClaimsPrincipal ValidateToken(string jwtToken)
         {
@@ -64,6 +71,13 @@ namespace WebAPP.Controllers
             ClaimsPrincipal principal = new JwtSecurityTokenHandler().ValidateToken(jwtToken, validationParameters, out validatedToken);
 
             return principal;
+        }
+
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            HttpContext.Session.Remove("Token");
+            return RedirectToAction("Login", "Login");
         }
     }
 }

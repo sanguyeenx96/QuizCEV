@@ -13,7 +13,13 @@ namespace Data.Extensions
     public static class ModelBuilderExtensions
     {
         public static void Seed(this ModelBuilder modelBuilder)
-        {            
+        {
+            modelBuilder.Entity<Dept>().HasData(new Dept
+            {
+                Id = 1,                
+                Name = "MFE"
+            });
+
             // any guid
             var roleId = new Guid("8D04DCE2-969A-435D-BBA4-DF3F325983DC");
             var adminId = new Guid("69BD714F-9576-45BA-B5B7-F00649BE00DE");
@@ -37,7 +43,7 @@ namespace Data.Extensions
                 PasswordHash = hasher.HashPassword(null, "Abcd1234$"),
                 SecurityStamp = string.Empty,
                 Name = "Nguyen Ngoc Sang",
-                Dept = "PDE",
+                DeptId = 1,
             });
 
             modelBuilder.Entity<IdentityUserRole<Guid>>().HasData(new IdentityUserRole<Guid>
@@ -46,9 +52,5 @@ namespace Data.Extensions
                 UserId = adminId
             });
         }
-
-
-
-
     }
 }
