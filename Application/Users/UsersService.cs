@@ -60,9 +60,39 @@ namespace Application.Users
             return new ApiSuccessResult<string> { LoginToken = resultToken };
         }
 
-        public async Task<ApiResult<PagedResult<UserVm>>> GetUsetPaging(GetUserPagingRequest request)
+        public async Task<ApiResult<bool>> Create(RegisterRequest request)
+        {
+            var checkDuplicate = await _userManager.FindByNameAsync(request.UserName);
+            if (checkDuplicate != null)
+            {
+                return new ApiErrorResult<bool>("'Tên đăng nhập (Mã nhân viên) đã bị trùng");
+            }
+            var user = new AppUser()
+            {
+                UserName = request.UserName,
+                Name = request.Name,
+                DeptId = request.DeptId
+            };
+            var result = await _userManager.CreateAsync(user, request.Password);
+            if (result.Succeeded)
+            {
+                return new ApiSuccessResult<bool>();
+            }
+            else
+            {
+                // Lấy danh sách các thông báo lỗi từ IdentityResult.Errors
+                var errorMessages = result.Errors.Select(error => error.Description).ToList();
+                return new ApiErrorResult<bool>(string.Join(", ", errorMessages));
+            }
+        }
+
+        public async Task<ApiResult<PagedResult<UserVm>>> GetUsetPaging(int id, GetUserPagingRequest request)
         {
             var query = _userManager.Users;
+            if(id != 0)
+            {
+                query = query.Where(x => x.DeptId == id);
+            }
             if (!string.IsNullOrEmpty(request.Keyword))
             {
                 query = query.Where(x => x.UserName.Contains(request.Keyword) || x.Name.Contains(request.Keyword) || x.Dept.Name.Contains(request.Keyword));
@@ -108,6 +138,52 @@ namespace Application.Users
                 var errorMessages = result.Errors.Select(error => error.Description).ToList();
                 return new ApiErrorResult<bool> (string.Join(", ", errorMessages) );
             }
+        }
+
+        public async Task<ApiResult<UserVm>> GetById(Guid id)
+        {
+            var user = await _userManager.Users
+                        .Include(u => u.Dept) // Sử dụng Include để kèm theo thông tin từ bảng có khóa ngoại
+                        .FirstOrDefaultAsync(u => u.Id == id);
+            if (user == null)
+            {
+                return new ApiErrorResult<UserVm>("User không tồn tại");
+            }
+            var roles = await _userManager.GetRolesAsync(user);
+            var userVm = new UserVm()
+            {
+                Id = user.Id,
+                Name = user.Name,
+                UserName = user.UserName,
+                Password = user.PasswordHash,
+                Dept = user.Dept.Name,
+                Roles = roles
+            };
+            return new ApiSuccessResult<UserVm>(userVm);
+        }
+
+        public async Task<ApiResult<bool>> RoleAssign(Guid id, RoleAssignRequest request)
+        {
+            var user = await _userManager.FindByIdAsync(id.ToString());
+            if (user == null)
+            {
+                return new ApiErrorResult<bool>("Tài khoản không tồn tại");
+            }
+            //Xoá hết role không được chọn
+            var removeRoles = request.Roles.Where(x => x.Selected == false).Select(x=>x.Name).ToList();
+            await _userManager.RemoveFromRolesAsync(user, removeRoles);
+            //Gán role mới
+            var addedRoles = request.Roles.Where(x => x.Selected == true).Select(x => x.Name).ToList();
+            foreach(var roleName in addedRoles)
+            {
+                if(await _userManager.IsInRoleAsync(user, roleName) == false)
+                {
+                    await _userManager.AddToRoleAsync(user, roleName);
+                }
+            }
+            return new ApiSuccessResult<bool>();
+
+
         }
     }
 }

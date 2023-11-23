@@ -6,7 +6,7 @@
 <div class="d-flex">
     <div class="form-group col-6 mb-3 me-3">
         <label class="form-label">Chọn loại tài khoản</label>
-        <select class="form-control" id="categoryId" name="categoryId" style="overflow: hidden;">
+        <select class="form-control" id="roleId" name="roleId" style="overflow: hidden;">
             <option value="user">Tài khoản người dùng</option>
             <option value="admin">Tài khoản quản trị</option>
         </select>
@@ -14,11 +14,11 @@
 
     <div class="form-group col-6  mb-3">
         <label class="form-label">Chọn bộ phận</label>
-        <select name="QCorrectAns" class="form-control">
-            <option value="a">A</option>
-            <option value="b">B</option>
-            <option value="c">C</option>
-            <option value="d">D</option>
+        <select name="deptId" id="deptId" class="form-control">
+            @foreach (var item in ViewBag.listDept)
+            {
+                <option value="@item.Value">@item.Text</option>
+            }
         </select>
     </div>
 </div>
@@ -45,7 +45,7 @@
                     <div class="form-group mb-3">
                         <label class="form-label"> Nhập thông tin tài khoản</label>
                         <div class="form-floating mb-1">
-                            <input type="text" class="form-control" id="usn" placeholder="" required autocomplete="off">
+                            <input type="text" class="form-control" id="hoten" placeholder="" required autocomplete="off">
                             <label for="floatingInput">Họ tên</label>
                         </div>
                         <div class="form-floating mb-1">
@@ -53,16 +53,16 @@
                             <label for="floatingInput">Tên đăng nhập (Mã nhân viên)</label>
                         </div>
                         <div class="form-floating mb-1">
-                            <input type="password" class="form-control" id="usn" placeholder="" required autocomplete="off">
+                            <input type="password" class="form-control" id="pwd" placeholder="" required autocomplete="off">
                             <label for="floatingInput">Mật khẩu</label>
                         </div>
                         <div class="form-floating mb-1">
-                            <input type="password" class="form-control" id="usn" placeholder="" required autocomplete="off">
+                            <input type="password" class="form-control" id="repwd" placeholder="" required autocomplete="off">
                             <label for="floatingInput">Xác nhận mật khẩu</label>
                         </div>
-                    </div>                    
+                    </div>
                     <div class="col-12" style="text-align:center">
-                        <button id="btnXacNhanThemThuCong" class="btn btn-outline-success" style="width:200px">
+                        <button id="btnXacNhanThemTaiKhoanThuCong" class="btn btn-outline-success" style="width:200px">
                             <i class="bi-check-circle"> </i>Xác nhận
                         </button>
                     </div>
@@ -84,3 +84,47 @@
         </form>
     </div>
 </div>
+
+<script>
+    $(document).ready(function () {
+        $("#btnXacNhanThemTaiKhoanThuCong").click(function (e) {
+            e.preventDefault();
+            var deptId = $("#deptId").val();
+            var name = $("#hoten").val();
+            var username = $("#usn").val();
+            var password = $("#pwd").val();
+            var repassword = $("#repwd").val();
+
+            var data = {
+                UserName: username,
+                Password: password,
+                ConfirmPassword: repassword,
+                Name: name,
+                DeptId: deptId
+            }
+
+            $.ajax({
+                url: "Create",
+                type: "POST",
+                data: data,
+                success: function (result) {
+                    if (result.success) {
+                        Swal.fire(
+                            "Thành công!",
+                            "Bạn vừa thêm tài khoản mới thành công",
+                            "success"
+                        ).then(function () {
+                            window.location.reload();
+                        });
+                    } else {
+                        Swal.fire("Không thành công!", result.message, "error");
+                    }
+                },
+                error: function () {
+                    Swal.fire("Lỗi máy chủ!", "Không thành công", "error");
+                },
+            });
+        })
+    })
+
+</script>

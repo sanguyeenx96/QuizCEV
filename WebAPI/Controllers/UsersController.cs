@@ -29,9 +29,15 @@ namespace WebAPI.Controllers
             return Ok(result);
         }
 
-        [HttpPost("register")]
-        [AllowAnonymous]
-        public async Task<IActionResult> Register([FromBody] RegisterRequest request)
+        [HttpGet("paging")]
+        public async Task<IActionResult> GetAllPaging(int id, [FromQuery] GetUserPagingRequest request)
+        {
+            var result = await _usersService.GetUsetPaging(id,request);
+            return Ok(result);
+        }
+
+        [HttpPost("create")]
+        public async Task<IActionResult> Create([FromBody] RegisterRequest request)
         {
             if (!ModelState.IsValid)
             {
@@ -41,14 +47,18 @@ namespace WebAPI.Controllers
             return Ok(result);
         }
 
-        [HttpGet("paging")]
-        public async Task<IActionResult> GetAllPaging([FromQuery] GetUserPagingRequest request)
+        [HttpPut("{id}/roles")]
+        public async Task<IActionResult> RoleAssign(Guid id, [FromBody] RoleAssignRequest request)
         {
-            var result = await _usersService.GetUsetPaging(request);
+            var result = await _usersService.RoleAssign(id, request);
             return Ok(result);
         }
 
-
-
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(Guid id)
+        {
+            var user = await _usersService.GetById(id);
+            return Ok(user);
+        }
     }
 }

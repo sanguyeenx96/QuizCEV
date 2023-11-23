@@ -59,9 +59,7 @@ namespace Application.CauHoiTuLuan
             _context.CauHoiTuLuans.Remove(question);
             await _context.SaveChangesAsync();
             return new ApiSuccessResult<bool> { Message = "Đã xoá thành công!" };
-        }
-
-  
+        } 
 
 
         public async Task<ApiResult<List<CauHoiTuLuanVm>>> GetAllByCategory(int id)
