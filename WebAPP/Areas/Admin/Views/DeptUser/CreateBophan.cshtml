@@ -1,0 +1,86 @@
+﻿@{
+    ViewData["Active"] = "pageQuanLyTaiKhoan";
+    ViewData["ActiveChild"] = "pageThembophanmoi";
+}
+
+<form id="myForm" class="mb-3">
+    <div class="row g-2">
+        <div class="col-12">
+            <label class="form-label">Thêm bộ phận mới</label>
+            <div class="input-group">
+                <input type="text" class="form-control" id="name" placeholder="Nhập tên tại đây" required="@true">
+                <button id="btnXacNhan" class="btn btn-outline-success btn-sm" style="display: flex; align-items: center">
+                    <i class="bi-check-circle" style="margin-right: 5px;"></i>Xác nhận
+                </button>
+            </div>
+        </div>
+    </div>
+</form>
+<hr />
+<div class="card">
+    <div class="card-body">
+        <div id="danhsachBophan"></div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            url: "GetListBophan",
+            type: "GET",
+            success: function (data) {
+                console.log(data)
+                $("#danhsachBophan").html(data)
+            },
+            error: function (xhr, t, error) {
+                Swal.fire("Thất bại!", "Lỗi máy chủ", "error");
+            },
+        });
+
+        $("#btnXacNhan").click(function (e) {
+            var form = $("#myForm")[0];
+            if (form.checkValidity()) {
+                e.preventDefault();
+                var name = $("#name").val();
+                var data = {
+                    Name: name
+                };
+                $.ajax({
+                    url: "CreateBophan",
+                    type: "POST",
+                    data: data,
+                    success: function (data) {
+                        if (data.success) {
+                            $("#name").val("");
+                            $.ajax({
+                                url: "GetListBophan",
+                                type: "GET",
+                                success: function (data) {
+                                    console.log(data)
+                                    $("#danhsachBophan").html(data)
+                                },
+                                error: function (xhr, t, error) {
+                                    Swal.fire("Thất bại!", "Lỗi máy chủ", "error");
+                                },
+                            });
+                            Swal.fire({
+                                icon: "success",
+                                title: "Tạo mới thành công",
+                                showConfirmButton: false,
+                                timer: 1500
+                            })
+                        } else {
+                            Swal.fire("Thất bại!", data.message, "error");
+                        }
+                    },
+                    error: function (xhr, t, error) {
+                        Swal.fire("Thất bại!", "Lỗi máy chủ", "error");
+                    },
+                });
+            } else {
+                form.reportValidity();
+            }
+        });
+    });
+
+</script>

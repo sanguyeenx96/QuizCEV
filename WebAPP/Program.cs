@@ -19,6 +19,10 @@ builder.Services.AddTransient<IQuestionApiClient, QuestionApiClient>();
 builder.Services.AddTransient<ICauHoiTuLuanApiClient, CauHoiTuLuanApiClient>();
 builder.Services.AddTransient<ICauHoiTrinhTuThaoTacApiClient, CauHoiTrinhTuThaoTacApiClient>();
 builder.Services.AddTransient<IUserApiClient, UserApiClient>();
+builder.Services.AddTransient<IDeptApiClient, DeptApiClient>();
+builder.Services.AddTransient<IRoleApiClient, RoleApiClient>();
+
+
 var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

@@ -1,4 +1,5 @@
 ﻿using Application.ExamResult;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ViewModels.ExamResult.Request;
@@ -7,6 +8,8 @@ namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
+
     public class ExamResultController : ControllerBase
     {
         private readonly IExamResultService _examResultService;

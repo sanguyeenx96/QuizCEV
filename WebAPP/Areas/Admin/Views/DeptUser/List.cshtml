@@ -1,0 +1,40 @@
+﻿@{
+    ViewData["Active"] = "pageQuanLyTaiKhoan";
+    ViewData["ActiveChild"] = "pageDanhsachbophantaikhoan";
+}
+<div class="form-group mb-3">
+    <label class="form-label">Chọn bộ phận</label>
+    <select class="form-control " id="deptId" name="deptId" style="overflow: hidden;">
+        <option value=0>Tất cả</option>
+        @foreach (var item in ViewBag.listDept)
+        {
+            <option value="@item.Value">@item.Text</option>
+        }
+    </select>
+</div>
+<div class="card">
+    <div class="card-body">
+        <div id="contentUsers"></div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#deptId").on("change", function () {
+            var deptId = $(this).val();
+            $.ajax({
+                url: "GetListUsers",
+                type: "POST",
+                data: {
+                    id:deptId
+                },
+                success: function (result) {
+                    $("#contentUsers").html(result)
+                },
+                error: function () {
+                    Swal.fire("Lỗi máy chủ!", "Không thành công", "error");
+                },
+            });
+        })
+    })
+</script>

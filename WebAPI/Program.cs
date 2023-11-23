@@ -1,9 +1,11 @@
 ﻿using Application.Category;
 using Application.CauHoiTrinhTuThaoTac;
 using Application.CauHoiTuLuan;
+using Application.Dept;
 using Application.ExamResult;
 using Application.LogExam;
 using Application.Question;
+using Application.Role;
 using Application.Users;
 using Data.EF;
 using Data.Entities;
@@ -42,6 +44,10 @@ builder.Services.AddTransient<UserManager<AppUser>, UserManager<AppUser>>();
 builder.Services.AddTransient<SignInManager<AppUser>, SignInManager<AppUser>>();
 builder.Services.AddTransient<RoleManager<AppRole>, RoleManager<AppRole>>();
 builder.Services.AddTransient<IUsersService, UsersService>();
+builder.Services.AddTransient<IDeptService, DeptService>();
+builder.Services.AddTransient<IRoleService, RoleService>();
+
+
 
 builder.Services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
 
@@ -54,7 +60,7 @@ builder.Services.AddControllers();
 builder.Services.AddSwaggerGen(c =>
 {
     //Cấu hình thông tin API và định nghĩa chú thích
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Swagger eShop Solution", Version = "v1" });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Swagger eExam CEV", Version = "v1" });
 
     // Cấu hình xác thực JWT trong Swagger
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme

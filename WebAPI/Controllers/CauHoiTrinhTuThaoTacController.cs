@@ -1,4 +1,5 @@
 ﻿using Application.CauHoiTrinhTuThaoTac;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ViewModels.CauHoiTrinhTuThaoTac.Request;
@@ -8,6 +9,8 @@ namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
+
     public class CauHoiTrinhTuThaoTacController : ControllerBase
     {
         private readonly ICauHoiTrinhTuThaoTacService _cauHoiTrinhTuThaoTacService;

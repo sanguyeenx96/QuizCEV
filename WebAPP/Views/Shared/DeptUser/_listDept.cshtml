@@ -1,0 +1,49 @@
+﻿@using ViewModels.Common
+@model IEnumerable<ViewModels.Dept.Response.DeptVm>
+
+<table id="tblDanhsachbophan" class="table table-hover" style="text-align:center; vertical-align:middle;width:100%">
+    <thead style="font-size:small">
+        <tr>
+            <th style="text-align:center">
+                Tên bộ phận
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @item.Name
+                </td>
+                <td style="text-align:end">
+                    <div class="btn-group" style=" white-space:nowrap">
+                        <btn class="btn btn-outline-secondary btn-sm btnSua" data-id="@item.Id">
+                            <i class="bi-key"> </i>
+                            Sửa tên
+                        </btn>
+                        <btn class="btn btn-outline-danger btn-sm btnXoa" data-id="@item.Id" data-name="@item.Name">
+                            <i class="bi-trash"> </i>
+                            Xoá
+                        </btn>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+    $(document).ready(function () {
+        $("#tblDanhsachbophan").DataTable({
+            "paging": true,
+            "searching": true,
+            "info": true,
+            "responsive": true,
+            "ordering": false
+        });
+
+    });
+</script>
+

@@ -51,6 +51,19 @@ namespace Data.Extensions
                 RoleId = roleId,
                 UserId = adminId
             });
+
+
+            // Thêm user role
+            var userRoleId = new Guid("470F4021-29D8-4C8E-A9DE-527571683D86");
+            modelBuilder.Entity<AppRole>().HasData(new AppRole
+            {
+                Id = userRoleId,
+                Name = "user",
+                NormalizedName = "user",
+                Description = "User role"
+            });
+
+
         }
     }
 }

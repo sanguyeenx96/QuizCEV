@@ -13,7 +13,11 @@ namespace Application.Users
     {
         Task<ApiResult<string>> Authenticate(LoginRequest request);
         Task<ApiResult<bool>> Register(RegisterRequest request);
-        Task<ApiResult<PagedResult<UserVm>>> GetUsetPaging(GetUserPagingRequest request);
+        Task<ApiResult<PagedResult<UserVm>>> GetUsetPaging(int id, GetUserPagingRequest request);
+        Task<ApiResult<bool>> Create(RegisterRequest request);
+
+        Task<ApiResult<UserVm>> GetById(Guid id);
+        Task<ApiResult<bool>> RoleAssign(Guid id, RoleAssignRequest request);
 
     }
 }

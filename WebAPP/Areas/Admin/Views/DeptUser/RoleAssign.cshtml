@@ -1,0 +1,26 @@
+﻿@model ViewModels.Users.Request.RoleAssignRequest
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="RoleAssign" asp-controller="DeptUser" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            @for (var i = 0; i < Model.Roles.Count; i++)
+            {
+                <div class="form-group">
+                    <label>
+                        @Model.Roles[i].Name
+                        <input type="checkbox" asp-for="Roles[i].Selected" name="Roles[@i].Selected" />
+                        <input asp-for="Roles[i].Id" name="Roles[@i].Id" />
+                        <input  asp-for="Roles[i].Name" name="Roles[@i].Name" />
+                    </label>
+                </div>
+            }
+            <div class="form-group">
+                <input type="submit" value="Lưu lại" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+

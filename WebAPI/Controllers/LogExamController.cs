@@ -1,4 +1,5 @@
 ﻿using Application.LogExam;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ViewModels.LogExam.Request;
@@ -7,6 +8,8 @@ namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
+
     public class LogExamController : ControllerBase
     {
         private readonly ILogExamService _logExamService;
