@@ -20,8 +20,23 @@
 
 <script>
     $(document).ready(function () {
+        var deptId = $("#deptId").val();
+        $.ajax({
+            url: "GetListUsers",
+            type: "POST",
+            data: {
+                id: deptId
+            },
+            success: function (result) {
+                $("#contentUsers").html(result)
+            },
+            error: function () {
+                Swal.fire("Lỗi máy chủ!", "Không thành công", "error");
+            },
+        });
+
         $("#deptId").on("change", function () {
-            var deptId = $(this).val();
+            deptId = $(this).val();
             $.ajax({
                 url: "GetListUsers",
                 type: "POST",

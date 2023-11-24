@@ -5,9 +5,9 @@ VisualStudioVersion = 17.3.32901.215
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1. Infrastructure", "1. Infrastructure", "{D32E7BAC-7528-475D-A091-7FE82404126B}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2. Core", "2. Core", "{43281621-88FF-431B-8972-5E6FF0A17E06}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2. Application Core", "2. Application Core", "{43281621-88FF-431B-8972-5E6FF0A17E06}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3. Web", "3. Web", "{01BCDDC0-A575-46E3-8637-CA4F52E6B225}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3. Interface", "3. Interface", "{01BCDDC0-A575-46E3-8637-CA4F52E6B225}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utilities", "Utilities\Utilities.csproj", "{C716DF52-B334-47E7-95E9-530B7A3A7063}"
 EndProject

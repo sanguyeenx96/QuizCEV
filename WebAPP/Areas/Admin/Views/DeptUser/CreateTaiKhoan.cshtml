@@ -6,9 +6,11 @@
 <div class="d-flex">
     <div class="form-group col-6 mb-3 me-3">
         <label class="form-label">Chọn loại tài khoản</label>
-        <select class="form-control" id="roleId" name="roleId" style="overflow: hidden;">
-            <option value="user">Tài khoản người dùng</option>
-            <option value="admin">Tài khoản quản trị</option>
+        <select class="form-control" id="roleName" name="roleId" style="overflow: hidden;">
+            @foreach (var item in ViewBag.listRoles)
+            {
+                <option value="@item.Text">@item.Text</option>
+            }
         </select>
     </div>
 
@@ -88,42 +90,64 @@
 <script>
     $(document).ready(function () {
         $("#btnXacNhanThemTaiKhoanThuCong").click(function (e) {
-            e.preventDefault();
-            var deptId = $("#deptId").val();
-            var name = $("#hoten").val();
-            var username = $("#usn").val();
-            var password = $("#pwd").val();
-            var repassword = $("#repwd").val();
+            var form = $("#myForm")[0];
+            if (form.checkValidity()){
+                e.preventDefault();
 
-            var data = {
-                UserName: username,
-                Password: password,
-                ConfirmPassword: repassword,
-                Name: name,
-                DeptId: deptId
-            }
+                var roleName = $("#roleName").val();
 
-            $.ajax({
-                url: "Create",
-                type: "POST",
-                data: data,
-                success: function (result) {
-                    if (result.success) {
-                        Swal.fire(
-                            "Thành công!",
-                            "Bạn vừa thêm tài khoản mới thành công",
-                            "success"
-                        ).then(function () {
-                            window.location.reload();
-                        });
-                    } else {
-                        Swal.fire("Không thành công!", result.message, "error");
+                var deptId = $("#deptId").val();
+                var name = $("#hoten").val();
+                var username = $("#usn").val();
+                var password = $("#pwd").val();
+                var repassword = $("#repwd").val();
+
+                if (password != repassword) {
+                    Swal.fire(
+                        "Mật khẩu xác nhận không trùng nhau",
+                        "Hãy nhập lại mât khẩu",
+                        "error"
+                    );
+                    $("#pwd").val("");
+                    $("#repwd").val("");
+                    $("#pwd").focus();
+
+                } else {
+                    var data = {
+                        Role: roleName,
+                        UserName: username,
+                        Password: password,
+                        ConfirmPassword: repassword,
+                        Name: name,
+                        DeptId: deptId
                     }
-                },
-                error: function () {
-                    Swal.fire("Lỗi máy chủ!", "Không thành công", "error");
-                },
-            });
+
+                    $.ajax({
+                        url: "Create",
+                        type: "POST",
+                        data: data,
+                        success: function (result) {
+                            if (result.success) {
+                                Swal.fire(
+                                    "Thành công!",
+                                    "Bạn vừa thêm tài khoản mới thành công",
+                                    "success"
+                                ).then(function () {
+                                    window.location.reload();
+                                });
+                            } else {
+                                Swal.fire("Không thành công!", result.message, "error");
+                            }
+                        },
+                        error: function () {
+                            Swal.fire("Lỗi máy chủ!", "Không thành công", "error");
+                        },
+                    });
+                }
+            } else {
+                form.reportValidity();
+            }           
+
         })
     })
 

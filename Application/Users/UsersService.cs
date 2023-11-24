@@ -23,7 +23,7 @@ namespace Application.Users
         private readonly SignInManager<AppUser> _signInManager;
         private readonly IConfiguration _config;
 
-        public UsersService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager,IConfiguration configuration)
+        public UsersService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IConfiguration configuration)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -38,7 +38,7 @@ namespace Application.Users
             var result = await _signInManager.PasswordSignInAsync(user, request.Password, false, false);
             if (!result.Succeeded)
             {
-                return new ApiErrorResult<string>("Sai mật khẩu" );
+                return new ApiErrorResult<string>("Sai mật khẩu");
             }
             var roles = await _userManager.GetRolesAsync(user);
             var claims = new[]
@@ -89,7 +89,7 @@ namespace Application.Users
         public async Task<ApiResult<PagedResult<UserVm>>> GetUsetPaging(int id, GetUserPagingRequest request)
         {
             var query = _userManager.Users;
-            if(id != 0)
+            if (id != 0)
             {
                 query = query.Where(x => x.DeptId == id);
             }
@@ -108,6 +108,12 @@ namespace Application.Users
                     Name = x.Name,
                     Dept = x.Dept.Name
                 }).ToListAsync();
+            foreach (var item in data)
+            {
+                var user = await _userManager.FindByIdAsync(item.Id.ToString());
+                var roles = await _userManager.GetRolesAsync(user);
+                item.Roles = roles;
+            }
             //4. Select and projection
             var pagedResult = new PagedResult<UserVm>()
             {
@@ -128,15 +134,16 @@ namespace Application.Users
                 DeptId = request.DeptId
             };
             var result = await _userManager.CreateAsync(user, request.Password);
-            if(result.Succeeded)
+            if (result.Succeeded)
             {
+                var addRole = await _userManager.AddToRoleAsync(user, request.Role);
                 return new ApiSuccessResult<bool>();
             }
             else
             {
                 // Lấy danh sách các thông báo lỗi từ IdentityResult.Errors
                 var errorMessages = result.Errors.Select(error => error.Description).ToList();
-                return new ApiErrorResult<bool> (string.Join(", ", errorMessages) );
+                return new ApiErrorResult<bool>(string.Join(", ", errorMessages));
             }
         }
 
@@ -170,20 +177,113 @@ namespace Application.Users
                 return new ApiErrorResult<bool>("Tài khoản không tồn tại");
             }
             //Xoá hết role không được chọn
-            var removeRoles = request.Roles.Where(x => x.Selected == false).Select(x=>x.Name).ToList();
+            var removeRoles = request.Roles.Where(x => x.Selected == false).Select(x => x.Name).ToList();
             await _userManager.RemoveFromRolesAsync(user, removeRoles);
             //Gán role mới
             var addedRoles = request.Roles.Where(x => x.Selected == true).Select(x => x.Name).ToList();
-            foreach(var roleName in addedRoles)
+            foreach (var roleName in addedRoles)
             {
-                if(await _userManager.IsInRoleAsync(user, roleName) == false)
+                if (await _userManager.IsInRoleAsync(user, roleName) == false)
                 {
                     await _userManager.AddToRoleAsync(user, roleName);
                 }
             }
             return new ApiSuccessResult<bool>();
+        }
 
+        public async Task<ApiResult<List<UserVm>>> GetAllByDeptId(int id)
+        {
+            var query = _userManager.Users;
+            if (id != 0)
+            {
+                query = query.Where(x => x.DeptId == id);
+            }
+            var data = await query
+                .Select(x => new UserVm()
+                {
+                    Id = x.Id,
+                    UserName = x.UserName,
+                    Password = x.PasswordHash,
+                    Name = x.Name,
+                    Dept = x.Dept.Name
+                }).ToListAsync();
+            foreach (var item in data)
+            {
+                var user = await _userManager.FindByIdAsync(item.Id.ToString());
+                var roles = await _userManager.GetRolesAsync(user);
+                item.Roles = roles;
+            }
 
+            return new ApiSuccessResult<List<UserVm>>(data);
+        }
+
+        public async Task<ApiResult<bool>> Phanquyen(Guid id, UserPhanquyenRequest request)
+        {
+            var user = await _userManager.FindByIdAsync(id.ToString());
+            if (user == null)
+            {
+                return new ApiErrorResult<bool>("Tài khoản không tồn tại");
+            }
+            // Xoá hết các vai trò hiện tại của người dùng
+            var currentRoles = await _userManager.GetRolesAsync(user);
+            await _userManager.RemoveFromRolesAsync(user, currentRoles);
+            // Gán vai trò mới
+            await _userManager.AddToRoleAsync(user, request.roleName);
+            return new ApiSuccessResult<bool>();
+        }
+
+        public async Task<ApiResult<bool>> Update(Guid id, UserUpdateRequest request)
+        {
+            if (await _userManager.Users.AnyAsync(x => x.UserName == request.UserName && x.Id != id))
+            {
+                return new ApiErrorResult<bool>("Tên đăng nhập đã tồn tại");
+            }
+            var user = await _userManager.FindByIdAsync(id.ToString());
+            if (user == null)
+            {
+                return new ApiErrorResult<bool>("User không tồn tại");
+            }
+            user.Name = request.Name;
+            user.UserName = request.UserName;
+            user.DeptId = request.DeptId;
+
+            var result = await _userManager.UpdateAsync(user);
+            if (result.Succeeded)
+            {
+                return new ApiSuccessResult<bool>();
+            }
+            return new ApiErrorResult<bool>("Cập nhật không thành công");
+        }
+
+        public async Task<ApiResult<bool>> ResetPassword(Guid id, UserResetPasswordRequest request)
+        {
+            var user = await _userManager.FindByIdAsync(id.ToString());
+            if (user == null)
+            {
+                return new ApiErrorResult<bool>("User không tồn tại");
+            }
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var result = await _userManager.ResetPasswordAsync(user, token, request.Password);
+            if (result.Succeeded)
+            {
+                return new ApiSuccessResult<bool>();
+            }
+            return new ApiErrorResult<bool>("Cập nhật mật khẩu không thành công");
+        }
+
+        public async Task<ApiResult<bool>> Delete(Guid id)
+        {
+            var user = await _userManager.FindByIdAsync(id.ToString());
+            if (user == null)
+            {
+                return new ApiErrorResult<bool>("User không tồn tại");
+            }
+            var result = await _userManager.DeleteAsync(user);
+            if (result.Succeeded)
+            {
+                return new ApiSuccessResult<bool>();
+            }
+            return new ApiErrorResult<bool>("Xoá không thành công");
         }
     }
 }

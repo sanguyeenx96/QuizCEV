@@ -1,0 +1,91 @@
+﻿@model ViewModels.Users.Response.UserVm
+
+<div class="modal-header">
+    <h5 class="modal-title" id="staticBackdropLabel">
+        <i class="bi-pencil"> </i>
+        Sửa thông tin tài khoản
+    </h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-floating mb-1">
+                <input id="tendangnhap" type="text" class="form-control" placeholder="" value="@Model.UserName">
+                <label for="floatingInput">Tên đăng nhập (Mã nhân viên)</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input id="hovaten" type="text" class="form-control" placeholder="" value="@Model.Name">
+                <label for="floatingInput">Họ tên</label>
+            </div>
+            <div class="form-group ">
+                <label class="form-label">Bộ phận</label>
+                <select class="form-control " id="ssdeptId" name="ssdeptId" style="overflow: hidden;">
+                    @foreach (var item in ViewBag.listDept)
+                    {
+                        string value = item.Text;
+                        string thisDept = Model.Dept;
+                        if (value == thisDept)
+                        {
+                            <option value="@item.Value" selected>@item.Text</option>
+                        }
+                        else
+                        {
+                            <option value="@item.Value" >@item.Text</option>
+                        }
+                    }
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+        Huỷ Bỏ
+    </button>
+    <button id="btnXacNhan" type="button" class="btn btn-success" data-id="@Model.Id" data>
+        Xác nhận
+    </button>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        $("#btnXacNhan").click(function () {
+            var tendangnhap = $("#tendangnhap").val();
+            var hovaten = $("#hovaten").val();
+            var deptId = $("#ssdeptId").val();
+            var intdeptid = parseInt(deptId);
+            var id = $(this).data("id");
+            var data = {
+                id: id,
+                UserName: tendangnhap,
+                Name: hovaten,
+                DeptId: intdeptid
+            };
+            $.ajax({
+                url: "UpdateUserInfo",
+                type: "POST",
+                data: data,
+                success: function (data) {
+                    if (data.success) {
+                        Swal.fire({
+                            icon: "success",
+                            title: "Sửa thông tin thành công",
+                            showConfirmButton: false,
+                            timer: 1500,
+                        }).then(function () {
+                            window.location.reload();
+                        });
+
+                    } else {
+                        Swal.fire("Không thành công!", data.message, "error");
+                    }
+                },
+                error: function () {
+                    Swal.fire("Lỗi máy chủ!", "Không thành công", "error");
+                },
+            });
+        });
+    });
+</script>

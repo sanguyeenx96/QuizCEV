@@ -15,6 +15,12 @@
             </a>
             <div class="collapse show" id="pageChuDePhongThi-collapse" style="">
                 <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                      <li class="nav-item">
+                        <a id="pageDongMoPhongThi" class="nav-link" asp-action="changestatus" asp-controller="category" asp-area="admin">
+                            <i class="bi-dot"></i>
+                            Đóng / Mở phòng thi
+                        </a>
+                    </li>
                     <li class="nav-item">
                         <a id="pageDanhSachChuDePhongThi" class="nav-link" asp-action="list" asp-controller="category" asp-area="admin">
                             <i class="bi-dot"></i>
@@ -26,13 +32,7 @@
                             <i class="bi-dot"></i>
                             Thêm mới
                         </a>
-                    </li>
-                    <li class="nav-item">
-                        <a id="pageDongMoPhongThi" class="nav-link" asp-action="changestatus" asp-controller="category" asp-area="admin">
-                            <i class="bi-dot"></i>
-                            Đóng / Mở phòng thi
-                        </a>
-                    </li>
+                    </li>                  
                 </ul>
             </div>
         </li>
@@ -106,23 +106,31 @@
         </li>
     </ul>
 </div>
-
 @if (ViewData["Active"] != null)
 {
     string tenthe = ViewData["Active"].ToString();
     string tenthecon = tenthe + "-collapse";
 
     <script type="text/javascript">
-        document.getElementById("@tenthe").classList.add("active");
-        document.getElementById("@tenthecon").classList.add("show");
+        var element = document.getElementById("@tenthe");
+        if (element !== null) {
+            element.classList.add("active");
+        }
+
+        var elementCon = document.getElementById("@tenthecon");
+        if (elementCon !== null) {
+            elementCon.classList.add("show");
+        }
     </script>
 }
+
 @if (ViewData["ActiveChild"] != null)
 {
-    <script type="text/javascript">document.getElementById("@ViewData["ActiveChild"]").classList.add("active")</script>
+    <script type="text/javascript">
+        var elementChild = document.getElementById("@ViewData["ActiveChild"]");
+        if (elementChild !== null) {
+            elementChild.classList.add("active");
+        }
+    </script>
 }
-
-
-
-
 

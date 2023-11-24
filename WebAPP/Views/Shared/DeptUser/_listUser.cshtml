@@ -1,26 +1,30 @@
 ﻿@using ViewModels.Common
-@model PagedResult<ViewModels.Users.Response.UserVm>
+@model List<ViewModels.Users.Response.UserVm>
+
 
 <table id="tblDanhsachtaikhoan" class="table table-hover" style="text-align:center; vertical-align:middle;width:100%">
     <thead style="font-size:small">
         <tr>
-            <th style="text-align:center">
+            <th style="text-align:start;font-weight: 350;">
                 Tên đăng nhập (Mã nhân viên)
             </th>
-            <th style="text-align:center">
+            <th style="text-align:center;font-weight: 350;">
                 Họ tên
             </th>
-            <th style="text-align:center">
+            <th style="text-align:center;font-weight: 350;">
                 Bộ phận
+            </th>
+            <th style="text-align:center;font-weight: 350;">
+                Phân quyền
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.Items)
+        @foreach (var item in Model)
         {
             <tr>
-                <td>
+                <td style="text-align:start">
                     @item.UserName
                 </td>
                 <td>
@@ -28,15 +32,39 @@
                 </td>
                 <td>
                     @item.Dept
-                </td> 
+                </td>
+                <td>
+                    @{
+                        string rules = string.Join(",", item.Roles);
+                        if (rules.Contains("user"))
+                        {
+                                <span style="min-width:70px" class="badge rounded-pill bg-success"><i class="bi-person-fill"></i> USER</span>
+                        }
+                        if (rules.Contains("admin"))
+                        {
+                                <span style="min-width:70px" class="badge rounded-pill bg-warning"> <i class="bi-star-fill"></i> ADMIN</span>
+                        }
+                    }
+
+
+                </td>
                 <td style="text-align:end">
-                    @Html.ActionLink("Gán quyền","RoleAssign",new{id=item.Id})
-                    <div class="btn-group" style=" white-space:nowrap">                        
-                        <btn class="btn btn-outline-secondary btn-sm btnSua" data-id="@item.Id">
+                    @*                    @Html.ActionLink("Gán quyền","RoleAssign",new{id=item.Id})
+                *@
+                    <div class="btn-group" style=" white-space:nowrap">
+                        <btn class="btn btn-outline-secondary btn-sm btnResetMK" data-id="@item.Id" data-name="@item.Name">
                             <i class="bi-key"> </i>
-                            Đổi mật khẩu
+                            Mật khẩu
                         </btn>
-                        <btn class="btn btn-outline-danger btn-sm btnXoa" data-id="@item.Id" data-name="@item.Name">
+                        <btn class="btn btn-outline-secondary btn-sm btnPhanQuyen" data-id="@item.Id" data-name="@item.Name">
+                            <i class="bi-person-lock"> </i>
+                            Phân quyền
+                        </btn>
+                        <btn class="btn btn-outline-secondary btn-sm btnSua" data-id="@item.Id" data-name="@item.Name" data-dept="@item.Dept">
+                            <i class="bi-pencil"> </i>
+                            Sửa 
+                        </btn>
+                        <btn class="btn btn-outline-danger btn-sm btnXoa" data-id="@item.Id" data-name="@item.UserName">
                             <i class="bi-trash"> </i>
                             Xoá
                         </btn>
@@ -47,15 +75,205 @@
     </tbody>
 </table>
 
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div id="NoiDungUser"></div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
 <script>
     $(document).ready(function () {
         $("#tblDanhsachtaikhoan").DataTable({
-            "paging": false,
-            "searching": false,
-            "info": false,
+            "paging": true,
+            "searching": true,
+            "info": true,
             "responsive": true,
-            "ordering": false
+            "ordering": true
         });
+
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+                confirmButton: "btn btn-success",
+                cancelButton: "btn btn-danger",
+            },
+            buttonsStyling: true,
+        });
+
+        $(".btnPhanQuyen").click(async function () {
+            var id = $(this).data("id");
+            var name = $(this).data("name");
+            const { value: role } = await Swal.fire({
+                title: "Chọn quyền tài khoản",
+                input: "select",
+                inputOptions: {
+                    user: "Người dùng",
+                    admin: "Admin"
+                },
+                inputPlaceholder: "Lựa chọn quyền tài khoản ",
+                showCancelButton: true,
+                confirmButtonText: "Xác nhận",
+                cancelButtonText: "Huỷ bỏ",
+                reverseButtons: true,
+                inputValidator: (value) => {
+                    return new Promise((resolve) => {
+                        if (value === "admin" || value === "user") {
+                            resolve();
+                        } else {
+                            resolve("Chưa chọn quyền");
+                        }
+                    });
+                }
+            });
+            if (role) {
+                $.ajax({
+                    url: "Phanquyen",
+                    type: "POST",
+                    data: { id: id, roleName: role },
+                    success: function (data) {
+                        if (data.success) {
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: "top-end",
+                                showConfirmButton: false,
+                                timer: 800,
+                                timerProgressBar: true,
+                                didOpen: (toast) => {
+                                    toast.onmouseenter = Swal.stopTimer;
+                                    toast.onmouseleave = Swal.resumeTimer;
+                                }
+                            });
+                            Toast.fire({
+                                icon: "success",
+                                title: "Đang xử lý..."
+                            });
+                            deptId = $("#deptId").val();
+                            $.ajax({
+                                url: "GetListUsers",
+                                type: "POST",
+                                data: {
+                                    id: deptId
+                                },
+                                success: function (result) {
+                                    $("#contentUsers").html(result)
+                                },
+                                error: function () {
+                                    Swal.fire("Lỗi máy chủ!", "Không thành công", "error");
+                                },
+                            });
+                        } else {
+                            Swal.fire("Thất bại!", data.message, "error");
+                        }
+                    },
+                    error: function (xhr, t, error) {
+                        Swal.fire("Thất bại!", "Lỗi máy chủ", "error");
+                    },
+                });
+            }
+        });
+
+        $(".btnSua").click(async function () {
+            var id = $(this).data("id");
+            $.ajax({
+                url: "GetUserById",
+                type: "POST",
+                data: {
+                    id: id,
+                },
+                success: function (result) {
+                    $("#NoiDungUser").html(result);
+                    // Open the modal
+                    $("#staticBackdrop").modal("show");
+                },
+            });
+        })
+
+        $(".btnResetMK").click(async function () {
+            var id = $(this).data("id");
+            const { value: newPass } = await Swal.fire({
+                title: "Đổi mật khẩu",
+                input: "password",
+                inputLabel: "Nhập mật khẩu mới"
+            });
+            if (newPass) {
+                $.ajax({
+                    url: "ResetUserPassword",
+                    type: "POST",
+                    data: {
+                        id: id,
+                        Password:newPass
+                    },
+                    success: function (result) {
+                        if (result.success) {
+                            Swal.fire({
+                                icon: "success",
+                                title: "Đổi mật khẩu thành công",
+                                showConfirmButton: false,
+                                timer: 1500,
+                            })
+                        } else {
+                            Swal.fire(
+                                "Không thành công!",
+                                data.message,
+                                "error"
+                            );
+                        }
+                    },
+                });
+            }
+
+           
+        })
+
+        $(".btnXoa").click(function(){
+            var id = $(this).data("id");
+            var name = $(this).data("name");
+
+            swalWithBootstrapButtons
+                .fire({
+                    title: "Xoá tài khoản " + name + "?",
+                    text: "Toàn bộ dữ liệu và lịch sử liên quan tới tài khoản " + name + " sẽ bị xoá",
+                    icon: "error",
+                    showCancelButton: true,
+                    confirmButtonText: "Xác nhận",
+                    cancelButtonText: "Huỷ bỏ",
+                    reverseButtons: true,
+                })
+                .then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: "DeleteUser",
+                            type: "POST",
+                            data: {
+                                id: id
+                            },
+                            success: function (data) {
+                                if (data.success) {
+                                    Swal.fire({
+                                        icon: "success",
+                                        title: "Xoá tài khoản thành công",
+                                        showConfirmButton: false,
+                                        timer: 1500,
+                                    }).then(function () {
+                                        window.location.reload();
+                                    });
+                                } else {
+                                    Swal.fire(
+                                        "Không thành công!",
+                                        data.message,
+                                        "error"
+                                    );
+                                }
+                            },
+                        });
+                    }
+                });
+        })
     });
 </script>
 
