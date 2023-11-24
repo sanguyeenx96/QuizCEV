@@ -32,7 +32,7 @@ namespace WebAPI.Controllers
         [HttpGet("paging")]
         public async Task<IActionResult> GetAllPaging(int id, [FromQuery] GetUserPagingRequest request)
         {
-            var result = await _usersService.GetUsetPaging(id,request);
+            var result = await _usersService.GetUsetPaging(id, request);
             return Ok(result);
         }
 
@@ -59,6 +59,41 @@ namespace WebAPI.Controllers
         {
             var user = await _usersService.GetById(id);
             return Ok(user);
+        }
+
+        [HttpGet("GetAllByDeptId/{id}")]
+        public async Task<IActionResult> GetAllByDeptId(int id)
+        {
+            var result = await _usersService.GetAllByDeptId(id);
+            return Ok(result);
+        }
+
+        [HttpPut("phanquyen/{id}")]
+        public async Task<IActionResult> Phanquyen(Guid id, [FromBody] UserPhanquyenRequest request)
+        {
+            var result = await _usersService.Phanquyen(id,request);
+            return Ok(result);
+        }
+
+        [HttpPut("update/{id}")]
+        public async Task<IActionResult> Update(Guid id, [FromBody] UserUpdateRequest request)
+        {
+            var result = await _usersService.Update(id, request);
+            return Ok(result);
+        }
+
+        [HttpPut("resetpassword/{id}")]
+        public async Task<IActionResult> ResetPassword(Guid id, [FromBody] UserResetPasswordRequest request)
+        {
+            var result = await _usersService.ResetPassword(id, request);
+            return Ok(result);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var result = await _usersService.Delete(id);
+            return Ok(result);
         }
     }
 }

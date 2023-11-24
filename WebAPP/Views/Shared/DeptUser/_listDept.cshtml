@@ -4,7 +4,7 @@
 <table id="tblDanhsachbophan" class="table table-hover" style="text-align:center; vertical-align:middle;width:100%">
     <thead style="font-size:small">
         <tr>
-            <th style="text-align:center">
+            <th style="text-align:center;font-weight: 350;">
                 Tên bộ phận
             </th>
             <th></th>
@@ -14,13 +14,13 @@
         @foreach (var item in Model)
         {
             <tr>
-                <td>
+                <td class="col-8">
                     @item.Name
                 </td>
                 <td style="text-align:end">
                     <div class="btn-group" style=" white-space:nowrap">
-                        <btn class="btn btn-outline-secondary btn-sm btnSua" data-id="@item.Id">
-                            <i class="bi-key"> </i>
+                        <btn class="btn btn-outline-secondary btn-sm btnSua" data-id="@item.Id" data-name="@item.Name">
+                            <i class="bi-pencil"> </i>
                             Sửa tên
                         </btn>
                         <btn class="btn btn-outline-danger btn-sm btnXoa" data-id="@item.Id" data-name="@item.Name">
@@ -43,6 +43,108 @@
             "responsive": true,
             "ordering": false
         });
+
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+                confirmButton: "btn btn-success",
+                cancelButton: "btn btn-danger",
+            },
+            buttonsStyling: true,
+        });
+
+        $(".btnSua").click(async function (e) {
+            var id = $(this).data("id");
+            var name = $(this).data("name");
+            const { value: newName } = await swalWithBootstrapButtons.fire({
+                input: "text",
+                inputLabel: "Nhập tên mới cho bộ phận",
+                inputValue: name,
+                showCancelButton: true,
+                confirmButtonText: "Xác nhận",
+                cancelButtonText: "Huỷ bỏ",
+                reverseButtons: true,
+            });
+            if (newName) {
+                $.ajax({
+                    url: "UpdateDeptInfo",
+                    type: "POST",
+                    data: { id: id, Name: newName },
+                    success: function (data) {
+                        if (data.success) {
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: "top-end",
+                                showConfirmButton: false,
+                                timer: 800,
+                                timerProgressBar: true,
+                                didOpen: (toast) => {
+                                    toast.onmouseenter = Swal.stopTimer;
+                                    toast.onmouseleave = Swal.resumeTimer;
+                                }
+                            });
+                            Toast.fire({
+                                icon: "success",
+                                title: "Đang xử lý..."
+                            }).then(function () {
+                                window.location.reload();
+                            });
+                        } else {
+                            Swal.fire("Thất bại!", data.message, "error");
+                        }
+                    },
+                    error: function (xhr, t, error) {
+                        Swal.fire("Thất bại!", "Lỗi máy chủ", "error");
+                    },
+                });
+            }
+        });
+
+        $(".btnXoa").click(async function (e) {
+            var id = $(this).data("id");
+            var name = $(this).data("name");
+
+            swalWithBootstrapButtons
+                .fire({
+                    title: "Xoá dữ liệu bộ phận " + name + " ?",
+                    text: "Toàn bộ dữ liệu và tài khoản liên quan tới bộ phận " + name + " sẽ bị xoá",
+                    icon: "error",
+                    showCancelButton: true,
+                    confirmButtonText: "Xác nhận",
+                    cancelButtonText: "Huỷ bỏ",
+                    reverseButtons: true,
+                })
+                .then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: "DeleteDeptAndUsers",
+                            type: "POST",
+                            data: {
+                                id: id                               
+                            },
+                            success: function (data) {
+                                if (data.success) {
+                                    Swal.fire({
+                                        icon: "success",
+                                        title: "Xoá dữ liệu thành công",
+                                        showConfirmButton: false,
+                                        timer: 1500,
+                                    }).then(function () {
+                                        window.location.reload();
+                                    });
+                                } else {
+                                    Swal.fire(
+                                        "Không thành công!",
+                                        data.message,
+                                        "error"
+                                    );
+                                }
+                            },
+                        });
+                    }
+                });
+        });
+
+
 
     });
 </script>

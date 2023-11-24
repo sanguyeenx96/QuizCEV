@@ -24,14 +24,14 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(DeptCreateRequest request)
+        public async Task<IActionResult> Create([FromBody] DeptCreateRequest request)
         {
             var result = await _deptService.Create(request);
             return Ok(result);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Edit(int id, DeptUpdateRequest request)
+        public async Task<IActionResult> Edit(int id, [FromBody] DeptUpdateRequest request)
         {
             var result = await _deptService.Update(id, request);
             return Ok(result);

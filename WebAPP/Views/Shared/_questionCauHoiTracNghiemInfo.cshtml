@@ -15,23 +15,23 @@
                 <label class="form-label"> Nội dung câu hỏi</label>
                 <textarea rows="3" id="Text" class="form-control" required>@Model.Text</textarea>
             </div>
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <label class="form-label"> Nội dung câu trả lời</label>
-                <div class="input-group mb-3">
-                    <span class="input-group-text">A.</span>
-                    <input id="QA" type="text" class="form-control" value="@Model.QA">
+                <div class="form-floating mb-1">
+                    <input id="QA" type="text" class="form-control" placeholder="" value="@Model.QA">
+                    <label for="floatingInput">Đáp án A</label>
                 </div>
-                <div class="input-group mb-3">
-                    <span class="input-group-text">B.</span>
-                    <input id="QB" type="text" class="form-control" value="@Model.QB">
+                <div class="form-floating mb-1">
+                    <input id="QB" type="text" class="form-control" placeholder="" value="@Model.QB">
+                    <label for="floatingInput">Đáp án B</label>
                 </div>
-                <div class="input-group mb-3">
-                    <span class="input-group-text">C.</span>
-                    <input id="QC" type="text" class="form-control" value="@Model.QC">
+                <div class="form-floating mb-1">
+                    <input id="QC" type="text" class="form-control" placeholder="" value="@Model.QC">
+                    <label for="floatingInput">Đáp án C</label>
                 </div>
-                <div class="input-group mb-3">
-                    <span class="input-group-text">D.</span>
-                    <input id="QD" type="text" class="form-control" value="@Model.QD">
+                <div class="form-floating mb-1">
+                    <input id="QD" type="text" class="form-control" placeholder="" value="@Model.QD">
+                    <label for="floatingInput">Đáp án D</label>
                 </div>
             </div>
             <div class="form-group mb-3">

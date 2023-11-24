@@ -21,7 +21,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 //Cấu Hình Database và Identity:
-
 //Thêm dịch vụ DbContext để sử dụng Entity Framework Core với cơ sở dữ liệu SQL Server
 builder.Services.AddDbContext<TracNghiemCEVDbContext>(options =>
                options.UseSqlServer(builder.Configuration.GetConnectionString(SystemConstants.MainConnectionString)));
@@ -31,8 +30,19 @@ builder.Services.AddIdentity<AppUser,AppRole>()
     .AddEntityFrameworkStores<TracNghiemCEVDbContext>()
     .AddDefaultTokenProviders();
 
-//Dependency Injection:
+// Truy cập IdentityOptions
+builder.Services.Configure<IdentityOptions>(options => {
+    // Thiết lập về Password
+    options.Password.RequireDigit = false; // Không bắt phải có số
+    options.Password.RequireLowercase = false; // Không bắt phải có chữ thường
+    options.Password.RequireNonAlphanumeric = false; // Không bắt ký tự đặc biệt
+    options.Password.RequireUppercase = false; // Không bắt buộc chữ in
+    options.Password.RequiredLength = 3; // Số ký tự tối thiểu của password
+    options.Password.RequiredUniqueChars = 1; // Số ký tự riêng biệt
+});
 
+
+//Dependency Injection:
 //Đăng ký các dịch vụ ứng dụng (Category, Question, CauHoiTuLuan, CauHoiTrinhTuThaoTac, ExamResult, LogExam, Users).
 builder.Services.AddTransient<ICategoryService, CategoryService>();
 builder.Services.AddTransient<IQuestionService, QuestionService>();
@@ -46,16 +56,11 @@ builder.Services.AddTransient<RoleManager<AppRole>, RoleManager<AppRole>>();
 builder.Services.AddTransient<IUsersService, UsersService>();
 builder.Services.AddTransient<IDeptService, DeptService>();
 builder.Services.AddTransient<IRoleService, RoleService>();
-
-
-
-builder.Services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
-
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 builder.Services.AddControllers();
 
 //Swagger
-
 //Sử dụng Swagger để tạo và hiển thị tài liệu API.
 builder.Services.AddSwaggerGen(c =>
 {

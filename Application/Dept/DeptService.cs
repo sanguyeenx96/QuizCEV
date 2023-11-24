@@ -1,4 +1,6 @@
 ﻿using Data.EF;
+using Data.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -14,9 +16,12 @@ namespace Application.Dept
     public class DeptService : IDeptService
     {
         private readonly TracNghiemCEVDbContext _context;
-        public DeptService(TracNghiemCEVDbContext context)
+        private readonly UserManager<AppUser> _userManager;
+
+        public DeptService(TracNghiemCEVDbContext context, UserManager<AppUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         public async Task<ApiResult<bool>> Create(DeptCreateRequest request)
@@ -38,6 +43,11 @@ namespace Application.Dept
             var dept = await _context.Depts.FindAsync(id);
             if (dept == null)
                 return new ApiErrorResult<bool>($"Không tìm thấy bộ phận với id {id}");
+            var listUserOfDept = _userManager.Users.Include(x=>x.Dept).Where(x=>x.DeptId == id).ToList();
+            foreach(var user in listUserOfDept)
+            {
+                _context.Remove(user);
+            }
             _context.Remove(dept);
             await _context.SaveChangesAsync();
             return new ApiSuccessResult<bool>();

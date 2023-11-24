@@ -44,6 +44,13 @@ namespace WebAPP.Areas.Admin.Controllers
                 Text = x.Name,
                 Value = x.Id.ToString()
             });
+            var listRoles = await _roleApiClient.GetAll();
+            ViewBag.listRoles = listRoles.ResultObj.Select(x => new SelectListItem()
+            {
+                Text = x.Name,
+                Value = x.Id.ToString()
+            });
+
             return View();
         }
         public IActionResult CreateBophan()
@@ -64,15 +71,9 @@ namespace WebAPP.Areas.Admin.Controllers
 
         //POST:
         [HttpPost]
-        public async Task<IActionResult> GetListUsers(int id, string keyword, int pageIndex = 1, int pageSize = 10)
+        public async Task<IActionResult> GetListUsers(int id)
         {
-            var request = new GetUserPagingRequest()
-            {
-                Keyword = keyword,
-                PageIndex = pageIndex,
-                PageSize = pageSize
-            };
-            var result = await _userApiClient.GetuserPaging(id, request);
+            var result = await _userApiClient.GetAllByDeptId(id);
             return PartialView("DeptUser/_listUser", result.ResultObj);
         }
         [HttpPost]
@@ -106,6 +107,84 @@ namespace WebAPP.Areas.Admin.Controllers
             }
             return Json(new { success = true });
         }
+        [HttpPost]
+        public async Task<IActionResult> UpdateDeptInfo(int id, DeptUpdateRequest request)
+        {
+            var result = await _deptApiClient.Update(id, request);
+            if (!result.IsSuccessed)
+            {
+                return Json(new { success = false, message = result.Message });
+            }
+            return Json(new { success = true });
+        }
+        [HttpPost]
+        public async Task<IActionResult> DeleteDeptAndUsers(int id)
+        {
+            var result = await _deptApiClient.Delete(id);
+            if (!result.IsSuccessed)
+            {
+                return Json(new { success = false, message = result.Message });
+            }
+            return Json(new { success = true });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Phanquyen(Guid id, UserPhanquyenRequest request)
+        {
+            var result = await _userApiClient.Phanquyen(id,request);
+            if (!result.IsSuccessed)
+            {
+                return Json(new { success = false, message = result.Message });
+            }
+            return Json(new { success = true });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> GetUserById(Guid id)
+        {
+            var listDept = await _deptApiClient.GetAll();
+            ViewBag.listDept = listDept.ResultObj.Select(x => new SelectListItem()
+            {
+                Text = x.Name,
+                Value = x.Id.ToString()
+            });
+            var result = await _userApiClient.GetById(id);
+            return PartialView("DeptUser/_userInfoById", result.ResultObj);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateUserInfo(Guid id,UserUpdateRequest request)
+        {
+            var result = await _userApiClient.Update(id,request);
+            if (!result.IsSuccessed)
+            {
+                return Json(new { success = false, message = result.Message });
+            }
+            return Json(new { success = true });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ResetUserPassword(Guid id, UserResetPasswordRequest request)
+        {
+            var result = await _userApiClient.ResetPassword(id, request);
+            if (!result.IsSuccessed)
+            {
+                return Json(new { success = false, message = result.Message });
+            }
+            return Json(new { success = true });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteUser(Guid id)
+        {
+            var result = await _userApiClient.Delete(id);
+            if (!result.IsSuccessed)
+            {
+                return Json(new { success = false, message = result.Message });
+            }
+            return Json(new { success = true });
+        }
+
 
         //PRIVATE:
         private async Task<RoleAssignRequest> GetRoleAssignRequest(Guid id)
