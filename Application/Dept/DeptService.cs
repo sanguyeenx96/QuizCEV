@@ -31,7 +31,7 @@ namespace Application.Dept
                 return new ApiErrorResult<bool>("Tên bộ phận đã bị trùng");
             var newDept = new Data.Entities.Dept()
             {
-                Name = request.Name
+                Name = request.Name.ToUpper()
             };
             _context.Add(newDept);
             await _context.SaveChangesAsync();
@@ -60,6 +60,11 @@ namespace Application.Dept
                 Id = x.Id,
                 Name = x.Name,
             }).ToListAsync();
+            foreach(var item in result)
+            {
+                int soluongtaikhoan = await _context.Users.Where(x=>x.DeptId == item.Id).CountAsync();
+                item.Soluongtaikhoan = soluongtaikhoan;
+            }
             return new ApiSuccessResult<List<DeptVm>>(result);
         }
 
@@ -68,7 +73,7 @@ namespace Application.Dept
             var dept = await _context.Depts.FindAsync(id);
             if (dept == null)
                 return new ApiErrorResult<bool>($"Không tìm thấy bộ phận với id {id}");
-            dept.Name = request.Name;
+            dept.Name = request.Name.ToUpper();
             _context.Update(dept);
             await _context.SaveChangesAsync();
             return new ApiSuccessResult<bool>();

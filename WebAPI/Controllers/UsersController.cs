@@ -95,5 +95,12 @@ namespace WebAPI.Controllers
             var result = await _usersService.Delete(id);
             return Ok(result);
         }
+
+        [HttpGet("count/{id}")]
+        public async Task<IActionResult> Count(int id)
+        {
+            var result = await _usersService.Count(id);
+            return Ok(result);
+        }
     }
 }

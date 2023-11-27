@@ -68,6 +68,15 @@ namespace WebAPP.Areas.Admin.Controllers
             var roleAssignRequest = await GetRoleAssignRequest(id);
             return View(roleAssignRequest);
         }
+        public async Task<IActionResult> Count(int id)
+        {
+            var result = await _userApiClient.Count(id);
+            if (!result.IsSuccessed)
+            {
+                return Json(new { success = false, message = result.Message });
+            }
+            return Json(new { success = true });
+        }
 
         //POST:
         [HttpPost]
@@ -127,7 +136,6 @@ namespace WebAPP.Areas.Admin.Controllers
             }
             return Json(new { success = true });
         }
-
         [HttpPost]
         public async Task<IActionResult> Phanquyen(Guid id, UserPhanquyenRequest request)
         {
@@ -138,7 +146,6 @@ namespace WebAPP.Areas.Admin.Controllers
             }
             return Json(new { success = true });
         }
-
         [HttpPost]
         public async Task<IActionResult> GetUserById(Guid id)
         {
@@ -151,7 +158,6 @@ namespace WebAPP.Areas.Admin.Controllers
             var result = await _userApiClient.GetById(id);
             return PartialView("DeptUser/_userInfoById", result.ResultObj);
         }
-
         [HttpPost]
         public async Task<IActionResult> UpdateUserInfo(Guid id,UserUpdateRequest request)
         {
@@ -162,7 +168,6 @@ namespace WebAPP.Areas.Admin.Controllers
             }
             return Json(new { success = true });
         }
-
         [HttpPost]
         public async Task<IActionResult> ResetUserPassword(Guid id, UserResetPasswordRequest request)
         {
@@ -173,7 +178,6 @@ namespace WebAPP.Areas.Admin.Controllers
             }
             return Json(new { success = true });
         }
-
         [HttpPost]
         public async Task<IActionResult> DeleteUser(Guid id)
         {
@@ -184,7 +188,6 @@ namespace WebAPP.Areas.Admin.Controllers
             }
             return Json(new { success = true });
         }
-
 
         //PRIVATE:
         private async Task<RoleAssignRequest> GetRoleAssignRequest(Guid id)
@@ -203,6 +206,5 @@ namespace WebAPP.Areas.Admin.Controllers
             }
             return roleAssignRequest;
         }
-
     }
 }

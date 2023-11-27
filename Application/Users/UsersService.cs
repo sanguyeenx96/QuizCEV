@@ -32,7 +32,9 @@ namespace Application.Users
 
         public async Task<ApiResult<string>> Authenticate(LoginRequest request)
         {
-            var user = await _userManager.FindByNameAsync(request.UserName);
+            var user = await _userManager.Users
+                        .Include(u => u.Dept) // Sử dụng Include để kèm theo thông tin từ bảng có khóa ngoại
+                        .FirstOrDefaultAsync(u => u.UserName == request.UserName);
             if (user == null)
                 return new ApiErrorResult<string>("Tài khoản không tồn tại");
             var result = await _signInManager.PasswordSignInAsync(user, request.Password, false, false);
@@ -44,7 +46,8 @@ namespace Application.Users
             var claims = new[]
             {
                 new Claim(ClaimTypes.Name,user.Name),
-                new Claim(ClaimTypes.Role, string.Join(";",roles))
+                new Claim(ClaimTypes.Role, string.Join(";",roles)),
+                new Claim(ClaimTypes.Country,user.Dept.Name)
             };
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Tokens:Key"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -284,6 +287,12 @@ namespace Application.Users
                 return new ApiSuccessResult<bool>();
             }
             return new ApiErrorResult<bool>("Xoá không thành công");
+        }
+
+        public async Task<ApiResult<int>> Count(int id)
+        {
+            var result = await _userManager.Users.Where(x => x.DeptId == id).CountAsync();
+            return new ApiSuccessResult<int> (result);
         }
     }
 }

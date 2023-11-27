@@ -1,0 +1,97 @@
+﻿@{
+    Layout = null;
+}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Đăng nhập</title>
+    <!-- Bootstrap core CSS -->
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Custom styles for this template -->
+    <link href="~/css/dashboard.css" rel="stylesheet" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/sweetalert2/sweetalert2.all.min.js"></script>
+
+    <link href="~/bootstrap-icons/font/bootstrap-icons.min.css" rel="stylesheet" />
+    <link href="~/css/login.css" rel="stylesheet" />
+
+
+</head>
+<body class="text-center">
+    <div class="container-fluid">
+        <main class="form-signin">
+            <form id="formLogin">
+                @*            <img class="mb-4" src="~/css/bootstrap-logo.svg" alt="" width="72" height="57">
+                *@
+                <h1 class="h3 mb-3 fw-normal ">
+                    CEV
+                    <span style="vertical-align:text-bottom" class="badge bg-secondary">eExam</span>
+                </h1>
+                <div class="form-floating">
+                    <input type="text" class="form-control" id="usn" placeholder="Nhập mã nhân viên..." required autocomplete="off">
+                    <label for="floatingInput">Mã nhân viên</label>
+                </div>
+                <div class="form-floating">
+                    <input type="password" class="form-control" id="pwd" placeholder="Nhập mật khẩu..." required autocomplete="off">
+                    <label for="floatingPassword">Mật khẩu</label>
+                </div>
+                <button class="w-100 btn btn-lg btn-primary" type="submit">Đăng nhập</button>
+                <p class="mt-3 mb-3 text-muted">Canon Electronis VietNam &copy; 2023</p>
+            </form>
+            <div id="alertContainer" style="position: fixed; top: 10px; right: 10px; z-index: 1000;"></div>
+
+        </main>
+    </div>
+    <script>
+        $(document).ready(function () {
+            $('#formLogin').submit(function (e) {
+                e.preventDefault(); // Ngăn chặn hành động mặc định của form
+                var usn = $("#usn").val();
+                var pwd = $("#pwd").val();
+                var data = {
+                    UserName: usn,
+                    Password: pwd
+                };
+                $.ajax({
+                    type: "POST",
+                    url: "Login",
+                    contentType: "application/json", // Đặt loại dữ liệu của yêu cầu là JSON
+                    data: JSON.stringify(data), // Chuyển đối tượng thành chuỗi JSON
+                    success: function (result) {
+                        if (result.success) {
+                            if(result.message == "admin"){
+                                var url = "Admin/Home/Index";
+                                window.location.href = url;
+                            }else{
+                                var url = "User/Home/Index";
+                                window.location.href = url;
+                            }
+
+                            
+                        }
+                        else {
+                            $("#usn").focus();
+                            $("#usn").val("");
+                            $("#pwd").val("");
+                            var alertContainer = $('#alertContainer');
+                            alertContainer.html('<div class="alert alert-danger alert-dismissible fade show" role="alert">' +
+                                '<i class="bi-exclamation-triangle-fill"></i> ' + result.message +
+                                '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
+                                '</div>');
+
+                            // Tự động đóng alert sau 5 giây
+                            setTimeout(function () {
+                                $('.alert').alert('close');
+                            }, 5000);
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+

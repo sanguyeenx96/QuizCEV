@@ -16,7 +16,7 @@ namespace WebAPP.Services
         Task<ApiResult<bool>> Update(Guid id, UserUpdateRequest request);
         Task<ApiResult<bool>> ResetPassword(Guid id, UserResetPasswordRequest request);
         Task<ApiResult<bool>> Delete(Guid id);
-
+        Task<ApiResult<int>> Count(int id);
 
     }
 }
