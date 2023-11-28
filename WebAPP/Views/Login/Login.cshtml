@@ -64,6 +64,14 @@
         $(document).ready(function () {
             $('#formLogin').submit(function (e) {
                 e.preventDefault(); // Ngăn chặn hành động mặc định của form
+                Swal.fire({
+                    html: "Đang đang nhập...",
+                    width: 300,
+                    timerProgressBar: true,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                })
                 var usn = $("#usn").val();
                 var pwd = $("#pwd").val();
                 var data = {
@@ -83,6 +91,7 @@
                                 text: "Đăng nhập thành công",
                                 showConfirmButton: false,
                                 timer: 1000,
+
                             }).then(function () {
                                 if (result.message == "admin") {
                                     var url = "Admin/Home/Index";

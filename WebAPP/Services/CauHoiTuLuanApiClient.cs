@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Net.Http.Headers;
 using System.Text;
 using ViewModels.CauHoiTuLuan.Request;
 using ViewModels.CauHoiTuLuan.Response;
@@ -12,16 +13,23 @@ namespace WebAPP.Services
 
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IConfiguration _configuration;
-        public CauHoiTuLuanApiClient(IHttpClientFactory httpClientFactory, IConfiguration configuration)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+        public CauHoiTuLuanApiClient(IHttpClientFactory httpClientFactory, IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         {
             _httpClientFactory = httpClientFactory;
             _configuration = configuration;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<ApiResult<int>> Count(int categoryId)
         {
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_configuration["BaseAdress"]);
+
+            var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
+
             var response = await client.GetAsync($"/api/cauhoituluan/count/{categoryId}");
             var result = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
@@ -35,6 +43,12 @@ namespace WebAPP.Services
         {
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_configuration["BaseAdress"]);
+
+
+            var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
+
+
             var json = JsonConvert.SerializeObject(request);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
             var response = await client.PostAsync("/api/cauhoituluan/", httpContent);
@@ -50,6 +64,12 @@ namespace WebAPP.Services
         {
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_configuration["BaseAdress"]);
+
+
+            var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
+
+
             var response = await client.DeleteAsync($"/api/cauhoituluan/{id}");
             var result = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
@@ -63,6 +83,12 @@ namespace WebAPP.Services
         {
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_configuration["BaseAdress"]);
+
+
+            var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
+
+
             var response = await client.GetAsync($"/api/cauhoituluan/GetAllByCategory/{id}");
             var result = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
@@ -76,6 +102,12 @@ namespace WebAPP.Services
         {
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_configuration[ "BaseAdress"]);
+
+
+            var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
+
+
             var response = await client.GetAsync($"/api/cauhoituluan/{id}");
             var result = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
@@ -89,6 +121,12 @@ namespace WebAPP.Services
         {
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_configuration["BaseAdress"]);
+
+
+            var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
+
+
             var json = JsonConvert.SerializeObject(request);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
             var response = await client.PutAsync($"/api/cauhoituluan/updatescore/{id}", httpContent);
@@ -104,6 +142,12 @@ namespace WebAPP.Services
         {
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_configuration["BaseAdress"]);
+
+
+            var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
+
+
             var json = JsonConvert.SerializeObject(request);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
             var response = await client.PutAsync($"/api/cauhoituluan/updatetext/{id}", httpContent);
