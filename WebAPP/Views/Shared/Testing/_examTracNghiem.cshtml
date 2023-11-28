@@ -1,0 +1,62 @@
+﻿@model ViewModels.Question.Response.QuestionVm
+@{
+    int thisQ = Convert.ToInt32(ViewBag.numQuestion);
+    int totalQTracNghiem = Convert.ToInt32(ViewBag.soluongcauhoiTracNghiem);
+    int totalQTuLuan = Convert.ToInt32(ViewBag.soluongcauhoiTuLuan);
+
+    int totalQ = Convert.ToInt32(ViewBag.totalQuestion);
+    double percentProcessbar = ((double)thisQ / totalQ) * 100;
+    string pP = percentProcessbar.ToString("0") + "%";
+}
+
+<div class="progress-group">
+    <div class="progress-group-header">
+        <i class="bi-mortarboard mx-1"></i>
+        <div>Phần thi trắc nghiệm</div>
+        <div class="ms-auto font-weight-bold"> @thisQ/@totalQ câu hỏi</div>
+    </div>
+    <div class="progress-group-bars">
+        <div class="progress mb-3">
+            <div class="progress-bar progress-bar-striped bg-success progress-bar-animated" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: @pP"></div>
+        </div>
+    </div>
+</div>
+<div class="card bg-white pt-1">
+    <div class="card-body text-center">
+        <form asp-action="testing" asp-controller="home" asp-area="user" method="post">
+            <div>
+                <span class="badge rounded-pill text-bg-warning mb-3 shadow">@Model.Score điểm</span>
+                <h2>@Model.Text</h2>
+                <p>Tên linh kiện tại công đoạn?</p>
+                @{
+                    if (!string.IsNullOrEmpty(Model.QA))
+                    {
+                        <button class="btn w-100 btn-outline-primary mt-2" type="submit" name="answer" value="A">@Model.QA</button>
+                    }
+                    if (!string.IsNullOrEmpty(Model.QB))
+                    {
+                        <button class="btn w-100 btn-outline-primary mt-2" type="submit" name="answer" value="B">@Model.QB</button>
+                    }
+                    if (!string.IsNullOrEmpty(Model.QC))
+                    {
+                        <button class="btn w-100 btn-outline-primary mt-2" type="submit" name="answer" value="C">@Model.QC</button>
+                    }
+                    if (!string.IsNullOrEmpty(Model.QD))
+                    {
+                        <button class="btn w-100 btn-outline-primary mt-2" type="submit" name="answer" value="D">@Model.QD</button>
+                    }
+                }
+            </div>
+            @Html.HiddenFor(x => x.Text)
+            @Html.HiddenFor(x => x.QA)
+            @Html.HiddenFor(x => x.QB)
+            @Html.HiddenFor(x => x.QC)
+            @Html.HiddenFor(x => x.QD)
+            @Html.HiddenFor(x => x.QCorrectAns)
+            @Html.HiddenFor(x => x.Score)
+            @Html.HiddenFor(x => x.CategoryId)
+            @Html.HiddenFor(x => x.Id)
+        </form>
+    </div>
+</div>
+

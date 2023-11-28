@@ -1,0 +1,126 @@
+﻿@model List<ViewModels.Question.Response.QuestionAndAnswerVm>
+
+@{
+    //List<ViewModels.Question.Response.QuestionAndAnswerVm> cauhoivacautraloitracnghiem = ViewBag.questionAndAnswerTracNghiem as List<ViewModels.Question.Response.QuestionAndAnswerVm>;
+    int dem = 0;
+}
+
+@foreach (var item in Model)
+{
+    dem++;
+    string idThe = item.Id.ToString();
+    <div class="accordion-item">
+        <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-coreui-toggle="collapse" data-coreui-target="#@idThe" aria-expanded="true" aria-controls="@idThe">
+                <span class="badge text-bg-light me-2 shadow">Câu @dem</span>  @item.Text
+            </button>
+        </h2>
+        <div id="@idThe" class="accordion-collapse collapse" data-coreui-parent="#accordionExample">
+            <div class="accordion-body">
+                <div class="row">
+                    @{
+                        if (!string.IsNullOrEmpty(item.QA))
+                        {
+                            <div class="col-6">
+                                <button class="btn w-100 btnDoicautraloi
+                                @if(item.Answer == "A")
+                            {
+                                                                <text>btn-primary disabled</text>
+                                            }
+                                            else
+                                            {
+                                                                <text>btn-outline-primary</text>
+                                            }
+                                                                    mt-1" data-id="@item.Id" data-newAs="A">@item.QA</button>
+                            </div>
+                        }
+                        if (!string.IsNullOrEmpty(item.QB))
+                        {
+                            <div class="col-6">
+                                <button class="btn w-100 btnDoicautraloi
+                                @if(item.Answer == "B")
+                            {
+                                                                <text>btn-primary disabled</text>
+                                            }
+                                            else
+                                            {
+                                                                <text>btn-outline-primary</text>
+                                            }
+                                                                        mt-1" data-id="@item.Id" data-newAs="B">@item.QB</button>
+                            </div>
+                        }
+                        if (!string.IsNullOrEmpty(item.QC))
+                        {
+                            <div class="col-6">
+                                <button class="btn w-100 btnDoicautraloi
+                                @if(item.Answer == "C")
+                            {
+                                                                <text>btn-primary disabled</text>
+                                            }
+                                            else
+                                            {
+                                                                <text>btn-outline-primary</text>
+                                            }
+                                                                        mt-1" data-id="@item.Id" data-newAs="C">@item.QC</button>
+                            </div>
+                        }
+                        if (!string.IsNullOrEmpty(item.QD))
+                        {
+                            <div class="col-6">
+                                <button class="btn w-100 btnDoicautraloi
+                                @if(item.Answer == "D")
+                            {
+                                                                <text>btn-primary disabled</text>
+                                            }
+                                            else
+                                            {
+                                                                <text>btn-outline-primary</text>
+                                            }
+                                                                        mt-1" data-id="@item.Id" data-newAs="D">@item.QD</button>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+
+        </div>
+    </div>
+}
+
+<script>
+    $(document).ready(function () {
+        $(".btnDoicautraloi").click(function () {
+            var id = $(this).attr("data-id");
+            var intId = parseInt(id);
+            var newas = $(this).attr("data-newAs");
+            $.ajax({
+                url: 'ChangeAnswer',
+                type: 'POST',
+                data: { id: intId, newAns: newas },
+                success: function (response) {
+                    Swal.fire({
+                        icon: "success",
+                        width: 300,
+                        text: "Đổi câu trả lời thành công",
+                        showConfirmButton: false,
+                        timer: 1000,
+
+                    })
+                    $.ajax({
+                        url: 'GetLogQuestionAndAnswers',
+                        type: 'GET',
+                        success: function (response) {
+                            $("#accordionExample").html(response);
+                        },
+                        error: function (error) {
+                            console.log(error);
+                        }
+                    });
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        })
+    })
+</script>

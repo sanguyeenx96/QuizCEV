@@ -53,7 +53,19 @@ namespace WebAPP.Controllers
                         userPrincipal,
                         authProperties);
 
-            return Json(new { success = true });
+            var roles = userPrincipal.FindAll(ClaimTypes.Role).Select(c => c.Value).ToList();
+            if (roles.Contains("admin"))
+            {
+                return Json(new { success = true, message = "admin" });
+            }
+            if (roles.Contains("user"))
+            {
+                return Json(new { success = true, message = "user" });
+            }
+            else
+            {
+                return Json(new { success = false, message = "Tài khoản chưa được gán quyền" });
+            }
         }
         private ClaimsPrincipal ValidateToken(string jwtToken)
         {

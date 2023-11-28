@@ -1,0 +1,36 @@
+﻿<div class="sidebar sidebar-dark sidebar-fixed" id="sidebar">
+    <div class="sidebar-brand d-none d-md-flex">
+        CEV eExam
+        <span class="badge badge-sm bg-warning text-dark m-2 ">Trang người dùng</span>
+    </div>
+    <ul class="sidebar-nav" data-coreui="navigation" data-simplebar="">
+        <li class="nav-item">
+            <a id="pageBatdaukiemtra" class="nav-link" href="index.html">
+                <i class="bi-mortarboard" style="width:40px;text-align:center"></i>
+                Bắt đầu kiểm tra
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="colors.html">
+                <i class="bi-clipboard-data" style="width:40px;text-align:center"></i>
+                Tra cứu lịch sử
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="colors.html">
+                <i class="bi-gear" style="width:40px;text-align:center"></i>
+                Quản lý tài khoản
+            </a>
+        </li>
+    </ul>
+</div>
+@if (ViewData["Active"] != null)
+{
+    string tenthe = ViewData["Active"].ToString();
+    <script type="text/javascript">
+        var element = document.getElementById("@tenthe");
+        if (element !== null) {
+            element.classList.add("active");
+        }    
+    </script>
+}

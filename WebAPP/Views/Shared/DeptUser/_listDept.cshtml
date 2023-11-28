@@ -7,6 +7,9 @@
             <th style="text-align:center;font-weight: 350;">
                 Tên bộ phận
             </th>
+            <th style="text-align:center;font-weight: 350;">
+                Số lượng tài khoản
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -14,8 +17,11 @@
         @foreach (var item in Model)
         {
             <tr>
-                <td class="col-8">
+                <td class="col-4">
                     @item.Name
+                </td>
+                <td class="col-4">
+                    @item.Soluongtaikhoan
                 </td>
                 <td style="text-align:end">
                     <div class="btn-group" style=" white-space:nowrap">
@@ -119,7 +125,7 @@
                             url: "DeleteDeptAndUsers",
                             type: "POST",
                             data: {
-                                id: id                               
+                                id: id
                             },
                             success: function (data) {
                                 if (data.success) {
@@ -143,9 +149,6 @@
                     }
                 });
         });
-
-
-
     });
 </script>
 

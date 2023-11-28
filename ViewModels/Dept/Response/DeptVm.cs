@@ -10,5 +10,6 @@ namespace ViewModels.Dept.Response
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public int? Soluongtaikhoan { get; set; }
     }
 }

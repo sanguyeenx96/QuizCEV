@@ -16,6 +16,6 @@ namespace ViewModels.Question.Response
         public string? QD { get; set; }
         public string QCorrectAns { get; set; }
         public float? Score { get; set; }
-        public int CategoryId { get; set; }
+        public int CategoryId { get; set; }       
     }
 }

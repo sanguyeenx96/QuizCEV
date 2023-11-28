@@ -9,6 +9,14 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
                    options.LoginPath = "/Login/Login";
                    options.AccessDeniedPath = "/User/Forbidden/";
                });
+
+builder.Services.AddAuthorization(options => {
+    options.AddPolicy("userpolicy",
+        builder => builder.RequireRole("user"));
+    options.AddPolicy("adminpolicy",
+        builder => builder.RequireRole("admin"));
+});
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddSession();
