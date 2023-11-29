@@ -79,12 +79,15 @@
                         }
                         else
                         {
-                            <button type="button" class="btn btn-success btnBatdauthi"
-                            data-idPhong=@item.Id
-                            data-tenPhong="@item.Name">
-                                <i class="bi-play"></i>
-                                Bắt đầu
-                            </button>
+                            <form asp-action="SelectRoom" asp-controller="Home" asp-area="User">
+                                <input name="idPhong" value="@item.Id" hidden>
+                                <button type="submit" class="btn btn-success btnBatdauthi"
+                                data-idPhong=@item.Id
+                                data-tenPhong="@item.Name">
+                                    <i class="bi-play"></i>
+                                    Bắt đầu
+                                </button>
+                            </form>                   
                         }
                     }
                 </div>
