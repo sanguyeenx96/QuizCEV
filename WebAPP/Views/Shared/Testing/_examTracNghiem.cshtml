@@ -1,31 +1,31 @@
 ﻿@model ViewModels.Question.Response.QuestionVm
 @{
-    int thisQ = Convert.ToInt32(ViewBag.numQuestion);
+    int thisQ = Convert.ToInt32(ViewBag.numQuestionTracnghiem);
     int totalQTracNghiem = Convert.ToInt32(ViewBag.soluongcauhoiTracNghiem);
     int totalQTuLuan = Convert.ToInt32(ViewBag.soluongcauhoiTuLuan);
 
     int totalQ = Convert.ToInt32(ViewBag.totalQuestion);
-    double percentProcessbar = ((double)thisQ / totalQ) * 100;
-    string pP = percentProcessbar.ToString("0") + "%";
+    double percentProcessbar = ((double)thisQ / totalQTracNghiem) * 100;
+    string pP = percentProcessbar.ToString() + "%";
 }
 
 <div class="progress-group">
     <div class="progress-group-header">
         <i class="bi-mortarboard mx-1"></i>
         <div>Phần thi trắc nghiệm</div>
-        <div class="ms-auto font-weight-bold"> @thisQ/@totalQ câu hỏi</div>
+        <div class="ms-auto font-weight-bold">Đã hoàn thành @thisQ/@totalQTracNghiem câu hỏi</div>
     </div>
     <div class="progress-group-bars">
-        <div class="progress mb-3">
+        <div class="progress ">
             <div class="progress-bar progress-bar-striped bg-success progress-bar-animated" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: @pP"></div>
         </div>
     </div>
 </div>
 <div class="card bg-white pt-1">
     <div class="card-body text-center">
-        <form asp-action="testing" asp-controller="home" asp-area="user" method="post">
+        <form id="formTraLoiCauHoiTracNghiem">
             <div>
-                <span class="badge rounded-pill text-bg-warning mb-3 shadow">@Model.Score điểm</span>
+                <span class="badge rounded-pill text-bg-dark mb-3 ">@Model.Score điểm</span>
                 <h2>@Model.Text</h2>
                 <p>Tên linh kiện tại công đoạn?</p>
                 @{
@@ -47,16 +47,71 @@
                     }
                 }
             </div>
-            @Html.HiddenFor(x => x.Text)
-            @Html.HiddenFor(x => x.QA)
-            @Html.HiddenFor(x => x.QB)
-            @Html.HiddenFor(x => x.QC)
-            @Html.HiddenFor(x => x.QD)
-            @Html.HiddenFor(x => x.QCorrectAns)
-            @Html.HiddenFor(x => x.Score)
-            @Html.HiddenFor(x => x.CategoryId)
-            @Html.HiddenFor(x => x.Id)
+            <input id="Id" value="@Model.Id" hidden />
+            <input id="Text" value="@Model.Text" hidden />
+            <input id="QA" value="@Model.QA" hidden />
+            <input id="QB" value="@Model.QB" hidden />
+            <input id="QC" value="@Model.QC" hidden />
+            <input id="QD" value="@Model.QD" hidden />
+            <input id="QCorrectAns" value="@Model.QCorrectAns" hidden />
+            <input id="Score" value="@Model.Score" hidden />
+            <input id="CategoryId" value="@Model.CategoryId" hidden />
         </form>
     </div>
 </div>
 
+<script>
+    $(document).ready(function () {
+        $('#formTraLoiCauHoiTracNghiem').submit(function (e) {
+            e.preventDefault();
+            var Id = $("#Id").val();
+            var Text = $("#Text").val();
+            var QA = $("#QA").val();
+            var QB = $("#QB").val();
+            var QC = $("#QC").val();
+            var QD = $("#QD").val();
+            var QCorrectAns = $("#QCorrectAns").val();
+            var Score = $("#Score").val();
+            var CategoryId = $("#CategoryId").val();
+            var answer = $("button[name='answer']:focus").val();
+
+            var intId = parseInt(Id);
+            var floatScore = parseFloat(Score);
+            var intCategoryId = parseInt(CategoryId);
+
+            var data = {
+                Id: intId,
+                Text: Text,
+                QA: QA,
+                QB: QB,
+                QC: QC,
+                QD: QD,
+                QCorrectAns: QCorrectAns,
+                Score: floatScore,
+                CategoryId: intCategoryId,
+            };
+            $.ajax({
+                type: "POST",
+                url: "TraloiTracNghiem",
+                data: {
+                    q : data,
+                    answer: answer
+                },
+                success: function (result) {
+                    if (result.success) {
+                        window.location.reload();
+                    }
+                    else {                        
+                        Swal.fire({
+                            icon: "error",
+                            width: 300,
+                            text: result.message,
+                            showConfirmButton: false,
+                            timer: 2000,
+                        });
+                    }
+                }
+            });
+        });
+    });
+</script>

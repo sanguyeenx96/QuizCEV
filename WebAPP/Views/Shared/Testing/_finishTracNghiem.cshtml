@@ -1,0 +1,24 @@
+﻿@{
+    int thisQ = Convert.ToInt32(ViewBag.numQuestionTracnghiem);
+    int totalQTracNghiem = Convert.ToInt32(ViewBag.soluongcauhoiTracNghiem);
+
+    double percentProcessbar = ((double)thisQ / totalQTracNghiem) * 100;
+    string pP = percentProcessbar.ToString("0") + "%";
+}
+<div class="progress-group">
+    <div class="progress-group-header">
+        <i class="bi-mortarboard mx-1"></i>
+        <div>Phần thi trắc nghiệm</div>
+        <div class="ms-auto font-weight-bold"> @thisQ/@totalQTracNghiem câu hỏi trắc nghiệm</div>
+    </div>
+    <div class="progress-group-bars">
+        <div class="progress ">
+            <div class="progress-bar progress-bar-striped bg-success progress-bar-animated" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: @pP"></div>
+        </div>
+    </div>
+</div>
+<div class="card bg-white pt-1">
+    <div class="card-body text-center">
+        <h1 class="display-6">Đã hoàn thành phần trắc nghiệm!</h1>
+    </div>
+</div>

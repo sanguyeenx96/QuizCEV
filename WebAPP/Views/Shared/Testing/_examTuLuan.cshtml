@@ -1,0 +1,145 @@
+﻿@model ViewModels.CauHoiTuLuan.Response.CauHoiTuLuanVm
+@{
+    int thisQ = Convert.ToInt32(ViewBag.numQuestionTuLuan);
+    int totalQTuLuan = Convert.ToInt32(ViewBag.soluongcauhoiTuLuan);
+
+    double percentProcessbar = ((double)thisQ / totalQTuLuan) * 100;
+    string pP = percentProcessbar.ToString("0") + "%";
+
+}
+<style>
+    #trinhtuthaotac thead tr th {
+        pointer-events: none;
+    }
+
+    #trinhtuthaotac tbody > tr:last-child > td {
+        border-bottom: 0;
+    }
+</style>
+<div class="progress-group">
+    <div class="progress-group-header">
+        <i class="bi-mortarboard mx-1"></i>
+        <div>Phần thi tự luận</div>
+        <div class="ms-auto font-weight-bold">Đã hoàn thành @thisQ/@totalQTuLuan câu hỏi</div>
+    </div>
+    <div class="progress-group-bars">
+        <div class="progress ">
+            <div class="progress-bar progress-bar-striped bg-success progress-bar-animated" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: @pP"></div>
+        </div>
+    </div>
+</div>
+<div class="card bg-white pt-1">
+    <div class="card-body text-center">
+        <form id="formTraLoiCauHoiTuLuan">
+            <div>
+                <span class="badge rounded-pill text-bg-dark mb-3">@Model.Score điểm</span>
+                <h2>@Model.Text</h2>
+                <p>Sắp xếp theo đúng trình tự WSD</p>
+                <div class="card">
+                    <div class="card-body">
+                        <table id="trinhtuthaotac" class="table table-hover " style="width:100%">
+                            <thead style="vertical-align:middle;font-size:small">
+                                <tr>
+                                    <th class="col-2" style="text-align:center;font-weight: 300">
+                                        Thứ tự
+                                    </th>
+                                    <th hidden>
+                                        Id
+                                    </th>
+                                    <th class="col-8" style="font-weight: 300">
+                                        Nội dung thao tác
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in ViewBag.listTrinhTuThaoTac as List<ViewModels.CauHoiTrinhTuThaoTac.Response.CauHoiTrinhTuThaoTacVm>)
+                                {
+                                    <tr style="text-align:center;vertical-align:middle">
+                                        <td>
+                                            @item.ThuTu
+                                        </td>
+                                        <td hidden>
+                                            @item.Id
+                                        </td>
+                                        <td style="text-align:start">
+                                            @item.Text
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                        <button class="btn btn-success mt-3" type="submit">
+                            <i class="bi-check"></i>
+                            Xác nhận
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        var isPartialDirty = false;
+        var newOrder = [];
+        var parsedNewOrder = [];
+        var table = $("#trinhtuthaotac").DataTable({
+            "paging": false,
+            "searching": false,
+            "info": false,
+            columnDefs: [
+                { orderable: true, className: 'reorder', targets: '_all' },
+            ],
+            rowReorder: {
+                selector: 'tr',
+                snapX: 10
+
+            }
+        });
+        table.on('row-reorder', function (e, diff, edit) {
+            table.one('draw', function () {
+                newOrder = [];
+                for (var i = 0; i < table.rows().count(); i++) {
+                    var rowData = table.row(i).data();
+                    newOrder.push({ Id: rowData[1], ThuTu: rowData[0] });
+                }
+                parsedNewOrder = newOrder.map(item => ({ Id: parseInt(item.Id), ThuTu: parseInt(item.ThuTu) }));
+                console.log(parsedNewOrder)
+            });
+        });
+        $('#formTraLoiCauHoiTuLuan').submit(function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: 'TraloiTuLuan',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(parsedNewOrder),
+                success: function (response) {
+                    console.log(response);
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+
+        });
+
+        $(".btnCauhoitracnghiem").click(function () {
+            alert("123")
+            //$.ajax({
+            //    url: 'TestingTracNghiem',
+            //    type: 'GET',
+            //    success: function (response) {
+            //        $("#examTracNghiem").html(response);
+            //    },
+            //    error: function (error) {
+            //        console.log(error);
+            //    }
+            //});
+        })
+        
+    });
+    
+</script>
+
