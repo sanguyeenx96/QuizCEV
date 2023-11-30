@@ -36,7 +36,8 @@
                         <input name="idPhong" value="@item.Id" hidden>
                         <button type="submit" class="btn btn-success btnBatdauthi"
                             data-idPhong=@item.Id
-                            data-tenPhong="@item.Name">
+                            data-tenPhong="@item.Name"
+                            onclick="localStorage.clear();">
                             <i class="bi-play"></i>
                             Bắt đầu
                         </button>
@@ -83,7 +84,8 @@
                                 <input name="idPhong" value="@item.Id" hidden>
                                 <button type="submit" class="btn btn-success btnBatdauthi"
                                 data-idPhong=@item.Id
-                                data-tenPhong="@item.Name">
+                                data-tenPhong="@item.Name"
+                                onclick="localStorage.clear();">
                                     <i class="bi-play"></i>
                                     Bắt đầu
                                 </button>

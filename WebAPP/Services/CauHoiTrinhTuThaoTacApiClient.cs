@@ -58,7 +58,7 @@ namespace WebAPP.Services
             return JsonConvert.DeserializeObject<ApiErrorResult<int>>(result);
         }
 
-        public async Task<ApiResult<int>> Create(CauHoiTrinhTuThaoTacCreateRequest request)
+        public async Task<ApiResult<bool>> Create(CauHoiTrinhTuThaoTacCreateRequest request)
         {
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_configuration["BaseAdress"]);
@@ -72,9 +72,9 @@ namespace WebAPP.Services
             var result = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
             {
-                return JsonConvert.DeserializeObject<ApiSuccessResult<int>>(result);
+                return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
             }
-            return JsonConvert.DeserializeObject<ApiErrorResult<int>>(result);
+            return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
         }
 
         public async Task<ApiResult<bool>> Delete(int id, CauHoiTrinhTuThaoTacDeleteRequest request)

@@ -40,13 +40,14 @@
                         <table id="trinhtuthaotac" class="table table-hover " style="width:100%">
                             <thead style="vertical-align:middle;font-size:small">
                                 <tr>
-                                    <th class="col-2" style="text-align:center;font-weight: 300">
-                                        Thứ tự
-                                    </th>
-                                    <th hidden>
+                                    <th style="font-weight: 300">
                                         Id
                                     </th>
-                                    <th class="col-8" style="font-weight: 300">
+                                    <th style="font-weight: 300">
+                                        Thứ tự
+                                    </th>
+                                   
+                                    <th style="font-weight: 300">
                                         Nội dung thao tác
                                     </th>
                                 </tr>
@@ -54,13 +55,14 @@
                             <tbody>
                                 @foreach (var item in ViewBag.listTrinhTuThaoTac as List<ViewModels.CauHoiTrinhTuThaoTac.Response.CauHoiTrinhTuThaoTacVm>)
                                 {
-                                    <tr style="text-align:center;vertical-align:middle">
+                                    <tr style="text-align:center;vertical-align:middle" >
                                         <td>
-                                            @item.ThuTu
-                                        </td>
-                                        <td hidden>
                                             @item.Id
                                         </td>
+                                        <td >
+                                            @item.ThuTu
+                                        </td>
+                                        
                                         <td style="text-align:start">
                                             @item.Text
                                         </td>
@@ -68,7 +70,7 @@
                                 }
                             </tbody>
                         </table>
-                        <button class="btn btn-success mt-3" type="submit">
+                        <button style="width:200px" class="btn btn-outline-primary mt-3" type="submit">
                             <i class="bi-check"></i>
                             Xác nhận
                         </button>
@@ -94,9 +96,9 @@
             rowReorder: {
                 selector: 'tr',
                 snapX: 10
-
             }
         });
+    
         table.on('row-reorder', function (e, diff, edit) {
             table.one('draw', function () {
                 newOrder = [];
@@ -110,36 +112,39 @@
         });
         $('#formTraLoiCauHoiTuLuan').submit(function (e) {
             e.preventDefault();
-            $.ajax({
-                url: 'TraloiTuLuan',
-                type: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify(parsedNewOrder),
-                success: function (response) {
-                    console.log(response);
-                },
-                error: function (error) {
-                    console.log(error);
-                }
-            });
-
+            if (parsedNewOrder.length === 0) {
+                Swal.fire({
+                    icon: "error",
+                    width: 400,
+                    text: "Hãy sắp xếp trước khi xác nhận",
+                    showConfirmButton: false,
+                    timer: 1000,
+                })
+            }
+            else {
+                $.ajax({
+                    url: 'TraloiTuLuan',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(parsedNewOrder),
+                    success: function (response) {
+                        $.ajax({
+                            url: 'TestingTuLuan',
+                            type: 'GET',
+                            success: function (response) {
+                                $("#examTuluan").html(response);
+                            },
+                            error: function (error) {
+                                console.log(error);
+                            }
+                        });
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                });
+            }
         });
-
-        $(".btnCauhoitracnghiem").click(function () {
-            alert("123")
-            //$.ajax({
-            //    url: 'TestingTracNghiem',
-            //    type: 'GET',
-            //    success: function (response) {
-            //        $("#examTracNghiem").html(response);
-            //    },
-            //    error: function (error) {
-            //        console.log(error);
-            //    }
-            //});
-        })
-        
     });
-    
 </script>
 

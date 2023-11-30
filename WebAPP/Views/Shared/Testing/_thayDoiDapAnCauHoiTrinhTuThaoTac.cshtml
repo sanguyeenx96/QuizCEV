@@ -1,0 +1,139 @@
+﻿@model List<ViewModels.CauHoiTrinhTuThaoTac.Response.QuestionAndAnswerTrinhTuThaoTacVm>
+@{
+    var cauhoituluanId = Model.FirstOrDefault().CauHoiTuLuanId;
+}
+<style>
+    #tbl thead tr th {
+        pointer-events: none;
+    }
+
+    #tbl tbody > tr:last-child > td {
+        border-bottom: 0;
+    }
+</style>
+<div class="modal-header">
+    <h5 class="modal-title" id="staticBackdropLabel">
+        <i class="bi-arrow-clockwise"></i>
+        Thay đổi câu trả lời
+    </h5>
+    <button type="button" class="btn-close" data-coreui-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+    <div class="card">
+        <div class="card-header">
+            @Model.FirstOrDefault().CauHoiTuLuanText?
+        </div>
+        <div class="card-body text-end">
+            <table id="tbl" class="table table-hover" style="width:100%;margin-bottom:0px">
+                <thead style="vertical-align:middle;font-size:small">
+                    <tr>
+                        <th class="col-3" style="text-align:center;font-weight: 300">
+                            Thứ tự
+                        </th>
+                        <th hidden>
+                        </th>
+                        <th class="col-9" style="text-align:start;font-weight: 300">
+                            Nội dung thao tác
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.OrderBy(x => x.Answer))
+                    {
+                        <tr style="text-align:center;vertical-align:middle">
+                            <td>
+                                @item.Answer
+                            </td>
+                            <td hidden>
+                                @item.Id
+                            </td>
+                            <td style="text-align:start">
+                                @item.Text
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <button id="btnXacNhanThayDoiCauTraLoiTuLuan" style="width:200px" class="btn btn-outline-primary mt-3">
+                <i class="bi-check"></i>
+                Xác nhận
+            </button>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    $(document).ready(function () {
+        var cauhoituluanId = parseInt(@cauhoituluanId);
+        var newOrder = [];
+        var parsedNewOrder = [];
+        var table = $("#tbl").DataTable({
+            "paging": false,
+            "searching": false,
+            "info": false,
+            columnDefs: [
+                { orderable: true, className: 'reorder', targets: '_all' },
+            ],
+            rowReorder: {
+                selector: 'tr',
+                snapX: 10
+            }
+        });
+        table.on('row-reorder', function (e, diff, edit) {
+            table.one('draw', function () {
+                newOrder = [];
+                for (var i = 0; i < table.rows().count(); i++) {
+                    var rowData = table.row(i).data();
+                    newOrder.push({ Id: rowData[1], ThuTu: rowData[0],cauhoituluanId:cauhoituluanId });
+                }
+                parsedNewOrder = newOrder.map(item => ({ Id: parseInt(item.Id), ThuTu: parseInt(item.ThuTu), cauhoituluanId: parseInt(cauhoituluanId) }));
+                console.log(parsedNewOrder)
+            });
+        });
+        $("#btnXacNhanThayDoiCauTraLoiTuLuan").click(function () {
+            if (parsedNewOrder.length === 0) {
+                Swal.fire({
+                    icon: "error",
+                    width: 400,
+                    text: "Hãy sắp xếp trước khi xác nhận",
+                    showConfirmButton: false,
+                    timer: 1000,
+                })
+            } else {
+                $.ajax({
+                    url: 'PostChangeChooseTuLuan',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(parsedNewOrder),
+                    success: function (response) {
+                        Swal.fire({
+                            icon: "success",
+                            width: 300,
+                            text: "Đổi câu trả lời thành công",
+                            showConfirmButton: false,
+                            timer: 1000,
+                        }).then(function(){
+                            $("#staticBackdrop").modal("hide");
+                            $.ajax({
+                                url: 'GetLogQuestionAndAnswers',
+                                type: 'GET',
+                                success: function (response) {
+                                    $("#accordionExample").html(response);
+                                },
+                                error: function (error) {
+                                    console.log(error);
+                                }
+                            });
+                        });
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                });
+            }
+        })
+    });
+</script>
+

@@ -193,15 +193,18 @@ namespace WebAPP.Areas.User.Controllers
             ViewBag.numQuestionTuLuan = TempData["numQuestionTuLuan"];
             CauHoiTuLuanVm q = null;
             string jsonQuestionsTuLuan = TempData["questionsTuLuan"].ToString();
+
             Queue<CauHoiTuLuanVm> qlistTuLuan = JsonConvert.DeserializeObject<Queue<CauHoiTuLuanVm>>(jsonQuestionsTuLuan);
             if (qlistTuLuan.Count > 0)
             {
                 q = qlistTuLuan.Peek();
 
                 int id = q.Id;
-                var resultTrinhTuThaoTac = await _cauHoiTrinhTuThaoTacApiClient.GetAllByCauHoiTuLuan(id);
-                List<CauHoiTrinhTuThaoTacVm> listTrinhTuThaoTac = resultTrinhTuThaoTac.ResultObj;
-                ViewBag.listTrinhTuThaoTac = listTrinhTuThaoTac;
+                var danhsachcauhoitrinhtuthaotac = await _cauHoiTrinhTuThaoTacApiClient.GetAllByCauHoiTuLuan(id);
+                List<CauHoiTrinhTuThaoTacVm> listdanhsachcauhoitrinhtuthaotac = danhsachcauhoitrinhtuthaotac.ResultObj;
+                var random = new Random();
+                listdanhsachcauhoitrinhtuthaotac = listdanhsachcauhoitrinhtuthaotac.OrderBy(x => random.Next()).ToList();
+                ViewBag.listTrinhTuThaoTac = listdanhsachcauhoitrinhtuthaotac;
 
                 TempData.Keep();
                 return PartialView("Testing/_examTuLuan", q);
@@ -252,7 +255,6 @@ namespace WebAPP.Areas.User.Controllers
             return Json(new { success = true });
         }
 
-
         //Trang lịch sử câu trả lời
         [HttpGet]
         public async Task<IActionResult> GetLogQuestionAndAnswers()
@@ -266,6 +268,37 @@ namespace WebAPP.Areas.User.Controllers
             TempData.Keep();
             return PartialView("Testing/_LogQuestionAndAnswers", listQuestionAndAnswerTracNghiem);
         }
+
+        //Trang sửa câu trả lời bài thi Tự luận:
+        [HttpGet]
+        public async Task<IActionResult> ChangeChooseTuLuan(int cauhoituluanId)
+        {
+            string jsonlistQuestionAndAnswerTrinhTuThaoTac = TempData["QuestionAndAnswerTrinhTuThaoTac"].ToString();
+            List<QuestionAndAnswerTrinhTuThaoTacVm> listQuestionAndAnswerTrinhTuThaoTac = JsonConvert.DeserializeObject<List<QuestionAndAnswerTrinhTuThaoTacVm>>(jsonlistQuestionAndAnswerTrinhTuThaoTac);
+            var result = listQuestionAndAnswerTrinhTuThaoTac.Where(x => x.CauHoiTuLuanId == cauhoituluanId).ToList();
+            TempData.Keep();
+            return PartialView("Testing/_thayDoiDapAnCauHoiTrinhTuThaoTac", result);
+        }
+        //Sửa câu trả lời bài thi Tự luận:
+        [HttpPost]
+        public async Task<IActionResult> PostChangeChooseTuLuan([FromBody] List<ChangeAnswerTrinhTuThaoTacRequest> request)
+        {
+            string jsonlistQuestionAndAnswerTrinhTuThaoTac = TempData["QuestionAndAnswerTrinhTuThaoTac"].ToString();
+            List<QuestionAndAnswerTrinhTuThaoTacVm> listQuestionAndAnswerTrinhTuThaoTac = JsonConvert.DeserializeObject<List<QuestionAndAnswerTrinhTuThaoTacVm>>(jsonlistQuestionAndAnswerTrinhTuThaoTac);
+            var listToChange = listQuestionAndAnswerTrinhTuThaoTac.Where(x => x.CauHoiTuLuanId == request.FirstOrDefault().CauHoiTuLuanId).ToList();
+            foreach (var item in listToChange)
+            {
+                item.Answer = request.Where(x => x.Id == item.Id).FirstOrDefault().ThuTu;                
+            }
+            TempData["QuestionAndAnswerTrinhTuThaoTac"] = JsonConvert.SerializeObject(listToChange);
+            TempData.Keep();
+            return Json(new { success = true });
+        }
+
+
+
+
+
 
 
 

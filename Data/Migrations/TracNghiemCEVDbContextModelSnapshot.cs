@@ -50,7 +50,7 @@ namespace Data.Migrations
                         new
                         {
                             Id = new Guid("8d04dce2-969a-435d-bba4-df3f325983dc"),
-                            ConcurrencyStamp = "64f47897-6ef3-4f80-9ac1-94ae38dd195a",
+                            ConcurrencyStamp = "bf3777c2-77b1-4af7-8771-38b8031f09b2",
                             Description = "Administrator role",
                             Name = "admin",
                             NormalizedName = "admin"
@@ -58,7 +58,7 @@ namespace Data.Migrations
                         new
                         {
                             Id = new Guid("470f4021-29d8-4c8e-a9de-527571683d86"),
-                            ConcurrencyStamp = "c90ef37f-66c8-41d3-82c9-9fba22555216",
+                            ConcurrencyStamp = "678b5f6f-1cfb-4697-a3b5-d3a3181d11ef",
                             Description = "User role",
                             Name = "user",
                             NormalizedName = "user"
@@ -133,7 +133,7 @@ namespace Data.Migrations
                         {
                             Id = new Guid("69bd714f-9576-45ba-b5b7-f00649be00de"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "4584d247-af6e-43a3-8748-e6c40b1a1517",
+                            ConcurrencyStamp = "a68d357d-3c68-4712-bd16-57fd38c6d6cf",
                             DeptId = 1,
                             Email = "smt.ngocsang@gmail.com",
                             EmailConfirmed = true,
@@ -141,7 +141,7 @@ namespace Data.Migrations
                             Name = "Nguyen Ngoc Sang",
                             NormalizedEmail = "smt.ngocsang@gmail.com",
                             NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAEFgZjD19D1AepX9+wjPs1j7RHRVumTeaBWg40vp/XXi4zMAc4Sd4Dcc9i4S3abURYw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAECEQivnk+CjhEBqP4xu8aLNMmt9fFvq64pCnIeCSSydX5GLcrf/jsEnwg7KVxQtu/Q==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -179,11 +179,9 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Data.Entities.CauHoiTrinhTuThaoTac", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("CauHoiTuLuanId")
                         .HasColumnType("int");

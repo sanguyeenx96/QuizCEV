@@ -18,8 +18,6 @@ namespace Data.Configurations
 
             builder.HasKey(x => x.Id);
 
-            builder.Property(x => x.Id).UseIdentityColumn();
-
             builder.HasOne(t => t.CauHoiTuLuan).WithMany(pc => pc.cauHoiTrinhTuThaoTacs)
                 .HasForeignKey(pc => pc.CauHoiTuLuanId);
         }
