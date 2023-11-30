@@ -9,6 +9,10 @@
     {
       "library": "bootstrap-icons@1.11.1",
       "destination": "wwwroot/bootstrap-icons/"
+    },
+    {
+      "library": "underscore.js@1.13.6",
+      "destination": "wwwroot/underscore.js/"
     }
   ]
 }

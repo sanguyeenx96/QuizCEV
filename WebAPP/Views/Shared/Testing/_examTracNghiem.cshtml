@@ -31,19 +31,19 @@
                 @{
                     if (!string.IsNullOrEmpty(Model.QA))
                     {
-                        <button class="btn w-100 btn-outline-primary mt-2" type="submit" name="answer" value="A">@Model.QA</button>
+                        <button style="width:200px" class="btn  btn-outline-primary mt-2" type="submit" name="answer" value="A">@Model.QA</button>
                     }
                     if (!string.IsNullOrEmpty(Model.QB))
                     {
-                        <button class="btn w-100 btn-outline-primary mt-2" type="submit" name="answer" value="B">@Model.QB</button>
+                        <button style="width:200px" class="btn  btn-outline-primary mt-2" type="submit" name="answer" value="B">@Model.QB</button>
                     }
                     if (!string.IsNullOrEmpty(Model.QC))
                     {
-                        <button class="btn w-100 btn-outline-primary mt-2" type="submit" name="answer" value="C">@Model.QC</button>
+                        <button style="width:200px" class="btn  btn-outline-primary mt-2" type="submit" name="answer" value="C">@Model.QC</button>
                     }
                     if (!string.IsNullOrEmpty(Model.QD))
                     {
-                        <button class="btn w-100 btn-outline-primary mt-2" type="submit" name="answer" value="D">@Model.QD</button>
+                        <button style="width:200px" class="btn  btn-outline-primary mt-2" type="submit" name="answer" value="D">@Model.QD</button>
                     }
                 }
             </div>
@@ -99,7 +99,16 @@
                 },
                 success: function (result) {
                     if (result.success) {
-                        window.location.reload();
+                        $.ajax({
+                            url: 'TestingTracNghiem',
+                            type: 'GET',
+                            success: function (response) {
+                                $("#examTracNghiem").html(response);
+                            },
+                            error: function (error) {
+                                console.log(error);
+                            }
+                        });
                     }
                     else {                        
                         Swal.fire({

@@ -8,7 +8,7 @@ namespace ViewModels.CauHoiTrinhTuThaoTac.Response
 {
     public class QuestionAndAnswerTrinhTuThaoTacVm
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string CauHoiTuLuanText { get; set; }
         public string Text { get; set; }
         public int? ThuTu { get; set; }

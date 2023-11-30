@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Data.Migrations
 {
-    public partial class addDept : Migration
+    public partial class Init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -207,8 +207,7 @@ namespace Data.Migrations
                 name: "CauHoiTrinhTuThaoTac",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Text = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ThuTu = table.Column<int>(type: "int", nullable: false),
                     CauHoiTuLuanId = table.Column<int>(type: "int", nullable: false)
@@ -282,7 +281,11 @@ namespace Data.Migrations
             migrationBuilder.InsertData(
                 table: "AppRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Description", "Name", "NormalizedName" },
-                values: new object[] { new Guid("8d04dce2-969a-435d-bba4-df3f325983dc"), "f88e6f7e-c70a-44fa-a72e-367b247ac5de", "Administrator role", "admin", "admin" });
+                values: new object[,]
+                {
+                    { new Guid("470f4021-29d8-4c8e-a9de-527571683d86"), "678b5f6f-1cfb-4697-a3b5-d3a3181d11ef", "User role", "user", "user" },
+                    { new Guid("8d04dce2-969a-435d-bba4-df3f325983dc"), "bf3777c2-77b1-4af7-8771-38b8031f09b2", "Administrator role", "admin", "admin" }
+                });
 
             migrationBuilder.InsertData(
                 table: "AppUserRoles",
@@ -297,7 +300,7 @@ namespace Data.Migrations
             migrationBuilder.InsertData(
                 table: "AppUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "DeptId", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "Name", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { new Guid("69bd714f-9576-45ba-b5b7-f00649be00de"), 0, "4f21d2e2-38cd-432a-a68d-2d6197a11639", 1, "smt.ngocsang@gmail.com", true, false, null, "Nguyen Ngoc Sang", "smt.ngocsang@gmail.com", "admin", "AQAAAAEAACcQAAAAEDe1gFS1cHH4cF3vhfbLNkpP4kAJ3e35pnWw7QHRf3EyRxixXYvFUJDZMoLiRTWFZA==", null, false, "", false, "admin" });
+                values: new object[] { new Guid("69bd714f-9576-45ba-b5b7-f00649be00de"), 0, "a68d357d-3c68-4712-bd16-57fd38c6d6cf", 1, "smt.ngocsang@gmail.com", true, false, null, "Nguyen Ngoc Sang", "smt.ngocsang@gmail.com", "admin", "AQAAAAEAACcQAAAAECEQivnk+CjhEBqP4xu8aLNMmt9fFvq64pCnIeCSSydX5GLcrf/jsEnwg7KVxQtu/Q==", null, false, "", false, "admin" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AppUsers_DeptId",

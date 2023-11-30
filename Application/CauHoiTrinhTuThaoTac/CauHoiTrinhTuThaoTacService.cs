@@ -50,11 +50,11 @@ namespace Application.CauHoiTrinhTuThaoTac
             return new ApiSuccessResult<int> { ResultObj = total };
         }
 
-        public async  Task<ApiResult<int>> Create(CauHoiTrinhTuThaoTacCreateRequest request)
+        public async  Task<ApiResult<bool>> Create(CauHoiTrinhTuThaoTacCreateRequest request)
         {
             var checkDuplicateQuestion = await _context.cauHoiTrinhTuThaoTacs.Where(x => (x.Text == request.Text && x.CauHoiTuLuanId == request.CauHoiTuLuanId)).FirstOrDefaultAsync();
             if (checkDuplicateQuestion != null)
-                return new ApiErrorResult<int> { Message = "Câu hỏi đã bị trùng" };
+                return new ApiErrorResult<bool> { Message = "Câu hỏi đã bị trùng" };
             int num = _context.cauHoiTrinhTuThaoTacs.Where(x => x.CauHoiTuLuanId == request.CauHoiTuLuanId).Any() ? _context.cauHoiTrinhTuThaoTacs.Where(x=>x.CauHoiTuLuanId == request.CauHoiTuLuanId).Max(x => x.ThuTu) + 1 : 1;
 
             var newQuestion = new Data.Entities.CauHoiTrinhTuThaoTac()
@@ -65,7 +65,7 @@ namespace Application.CauHoiTrinhTuThaoTac
             };
             _context.cauHoiTrinhTuThaoTacs.Add(newQuestion);
             await _context.SaveChangesAsync();
-            return new ApiSuccessResult<int> { Id = newQuestion.Id };
+            return new ApiSuccessResult<bool>();
         }
 
         public async Task<ApiResult<bool>> Delete(int id, CauHoiTrinhTuThaoTacDeleteRequest request)

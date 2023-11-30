@@ -8,7 +8,7 @@ namespace ViewModels.CauHoiTrinhTuThaoTac.Request
 {
     public class CauHoiTrinhTuThaoTacChangeOrderRequest
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public int ThuTu { get; set; }
     }
 }

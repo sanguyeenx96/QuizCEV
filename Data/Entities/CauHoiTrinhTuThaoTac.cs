@@ -8,7 +8,7 @@ namespace Data.Entities
 {
     public class CauHoiTrinhTuThaoTac
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
         public string Text { get; set; }
         public int ThuTu { get; set; }
         public int CauHoiTuLuanId { get; set; }

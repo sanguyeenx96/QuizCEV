@@ -15,7 +15,7 @@ namespace Application.CauHoiTrinhTuThaoTac
     {
         Task<ApiResult<List<CauHoiTrinhTuThaoTacVm>>> GetAllByCauHoiTuLuan(int id);
         Task<ApiResult<CauHoiTrinhTuThaoTacVm>> GetById(int id);
-        Task<ApiResult<int>> Create(CauHoiTrinhTuThaoTacCreateRequest request);
+        Task<ApiResult<bool>> Create(CauHoiTrinhTuThaoTacCreateRequest request);
         Task<ApiResult<bool>> Delete(int id,CauHoiTrinhTuThaoTacDeleteRequest request);
         Task<ApiResult<int>> Count(int id);
         Task<ApiResult<bool>> ChangeOrder(List<CauHoiTrinhTuThaoTacChangeOrderRequest> request);

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(TracNghiemCEVDbContext))]
-    [Migration("20231122093304_addDept")]
-    partial class addDept
+    [Migration("20231130093805_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -52,10 +52,18 @@ namespace Data.Migrations
                         new
                         {
                             Id = new Guid("8d04dce2-969a-435d-bba4-df3f325983dc"),
-                            ConcurrencyStamp = "f88e6f7e-c70a-44fa-a72e-367b247ac5de",
+                            ConcurrencyStamp = "bf3777c2-77b1-4af7-8771-38b8031f09b2",
                             Description = "Administrator role",
                             Name = "admin",
                             NormalizedName = "admin"
+                        },
+                        new
+                        {
+                            Id = new Guid("470f4021-29d8-4c8e-a9de-527571683d86"),
+                            ConcurrencyStamp = "678b5f6f-1cfb-4697-a3b5-d3a3181d11ef",
+                            Description = "User role",
+                            Name = "user",
+                            NormalizedName = "user"
                         });
                 });
 
@@ -127,7 +135,7 @@ namespace Data.Migrations
                         {
                             Id = new Guid("69bd714f-9576-45ba-b5b7-f00649be00de"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "4f21d2e2-38cd-432a-a68d-2d6197a11639",
+                            ConcurrencyStamp = "a68d357d-3c68-4712-bd16-57fd38c6d6cf",
                             DeptId = 1,
                             Email = "smt.ngocsang@gmail.com",
                             EmailConfirmed = true,
@@ -135,7 +143,7 @@ namespace Data.Migrations
                             Name = "Nguyen Ngoc Sang",
                             NormalizedEmail = "smt.ngocsang@gmail.com",
                             NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAEDe1gFS1cHH4cF3vhfbLNkpP4kAJ3e35pnWw7QHRf3EyRxixXYvFUJDZMoLiRTWFZA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAECEQivnk+CjhEBqP4xu8aLNMmt9fFvq64pCnIeCSSydX5GLcrf/jsEnwg7KVxQtu/Q==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -173,11 +181,9 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Data.Entities.CauHoiTrinhTuThaoTac", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("CauHoiTuLuanId")
                         .HasColumnType("int");

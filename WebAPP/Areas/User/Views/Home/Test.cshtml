@@ -1,14 +1,80 @@
-﻿
+﻿<style>
+    .tick {
+        font-size: 1rem;
+        white-space: nowrap;
+        font-family: arial,sans-serif;
+    }
+
+    .tick-flip, .tick-text-inline {
+        font-size: 2.5em;
+    }
+
+    .tick-label {
+        margin-top: 1em;
+        font-size: 1em;
+    }
+
+    .tick-char {
+        width: 1.5em;
+    }
+
+    .tick-group {
+        margin: 0 0.15em;
+        text-align: center;
+    }
+
+    body {
+        background-color: #fff !important;
+    }
+
+    .tick-text-inline {
+        color: #595d63 !important;
+    }
+
+    .tick-label {
+        color: #595d63 !important;
+    }
+
+    .tick-flip-panel {
+        color: #fff !important;
+    }
+
+    .tick-flip {
+        font-family: inherit !important;
+    }
+
+    .tick-flip-panel-text-wrapper {
+        line-height: 1.45 !important;
+    }
+
+    .tick-flip-panel {
+        background-color: #3c3e3c !important;
+    }
+
+    .tick-flip {
+        border-radius: 0.12em !important;
+    }
+
+    #dongho {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        padding-bottom: 60px; /* Adjust the padding as needed */
+        pointer-events: none;
+    }
+</style>
+
 <ul class="nav nav-pills mb-3 justify-content-center" id="pills-tab" role="tablist">
     <li class="nav-item" role="presentation">
         <button class="nav-link active btnCauhoitracnghiem" id="pills-tracnghiem-tab" data-coreui-toggle="pill" data-coreui-target="#pills-tracnghiem" type="button" role="tab" aria-controls="pills-tracnghiem" aria-selected="true">
-            <i class="bi-dot"></i>
+            <i class="bi-patch-question-fill"></i>
             Câu hỏi trắc nghiệm
         </button>
     </li>
     <li class="nav-item" role="presentation">
-        <button class="nav-link btnCauhoituluan" id="pills-tuluan-tab" data-coreui-toggle="pill" data-coreui-target="#pills-tuluan" type="button" role="tab" aria-controls="pills-tuluan" aria-selected="false">
-            <i class="bi-dot"></i>
+        <button class="nav-link  btnCauhoituluan" id="pills-tuluan-tab" data-coreui-toggle="pill" data-coreui-target="#pills-tuluan" type="button" role="tab" aria-controls="pills-tuluan" aria-selected="false">
+            <i class="bi-patch-question-fill"></i>
             Câu hỏi tự luận
         </button>
     </li>
@@ -21,7 +87,7 @@
 </ul>
 
 <div class="tab-content" id="pills-tabContent">
-    <div class="tab-pane fade show active" id="pills-tracnghiem" role="tabpanel" aria-labelledby="pills-tracnghiem-tab" tabindex="0">
+    <div class="tab-pane fade  show active" id="pills-tracnghiem" role="tabpanel" aria-labelledby="pills-tracnghiem-tab" tabindex="0">
         <div id="examTracNghiem">
         </div>
     </div>
@@ -33,35 +99,49 @@
         </div>
     </div>
 </div>
-<hr />
-<div>
-    <div class="text-center">
+
+<div id="dongho" class="row col-12">
+    <div class="col-8">  </div>
+    <div class="col-4">
         <div class="tick" data-did-init="handleTickInit">
-            <div>
-                <span>Thời gian </span>
-                <span data-key="minutes" data-transform="pad(00)" data-view="flip"></span>
-                <span data-view="text" data-key="sep" class="tick-text-inline"></span>
-                <span data-key="seconds" data-transform="pad(00)" data-view="flip"></span>
+            <div data-layout="horizontal fit" data-value-mapping="indexes">
+                <span class="tick-group">
+                    <span data-view="flip"></span>
+                    <span class="tick-text-inline">:</span>
+                </span>
+                <span class="tick-group">
+                    <span data-view="flip"></span>
+                </span>
             </div>
         </div>
     </div>
 </div>
 
+
 <script>
+    var countDownTime = 45; //Load từ db
     function handleTickInit(tick) {
-
-        // start interval (default is 1 second) and update clock with current time
-        Tick.helper.interval(function () {
-            var d = Tick.helper.date();
-            tick.value = {
-                sep: ':',
-                hours: d.getHours(),
-                minutes: d.getMinutes(),
-                seconds: d.getSeconds()
-            };
-        });
-
+        // Lấy giá trị thời gian còn lại từ localStorage (nếu có)
+        var remainingTimeStr = localStorage.getItem('countdownTime');
+        var remainingTime = remainingTimeStr ? parseInt(remainingTimeStr) : countDownTime * 60 * 1000; // Default: 45 minutes
+        var countdownDuration = Tick.helper.duration(remainingTime, 'milliseconds');
+        var timer = Tick.helper.interval(function (passed) {
+            var remainingTime = Math.max(countdownDuration - passed, 0);
+            if (remainingTime === 0) {
+                // Xử lý sự kiện khi đếm ngược kết thúc
+                // Ví dụ: window.location = 'my-location.html'; // Redirect
+                // Hoặc: tick.root.style.display = 'none'; // Ẩn đồng hồ đếm
+            }
+            tick.value = Tick.helper.duration(remainingTime, ['m', 's', 'ms']);
+            // Lưu thời gian còn lại vào localStorage
+            localStorage.setItem('countdownTime', remainingTime.toString());
+        }, 16, { autostart: true });
     }
+
+
+
+
+
 
     $(document).ready(function () {
         document.onkeydown = function (e) {
@@ -69,19 +149,28 @@
                 e.preventDefault();
             }
         };
-
-        //$.ajax({
-        //    url: 'TestingTracNghiem',
-        //    type: 'GET',
-        //    success: function (response) {
-        //        $("#examTracNghiem").html(response);
-        //    },
-        //    error: function (error) {
-        //        console.log(error);
-        //    }
-        //});
-
-
+        $.ajax({
+            url: 'TestingTracNghiem',
+            type: 'GET',
+            success: function (response) {
+                $("#examTracNghiem").html(response);
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+        $(".btnCauhoitracnghiem").click(function () {
+            $.ajax({
+                url: 'TestingTracNghiem',
+                type: 'GET',
+                success: function (response) {
+                    $("#examTracNghiem").html(response);
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        })
 
         $(".btnCauhoituluan").click(function () {
             $.ajax({
@@ -95,7 +184,6 @@
                 }
             });
         })
-
         $(".btnXemlichsu").click(function () {
             $.ajax({
                 url: 'GetLogQuestionAndAnswers',
