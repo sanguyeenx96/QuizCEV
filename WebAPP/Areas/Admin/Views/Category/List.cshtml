@@ -19,6 +19,9 @@
                     <th style="text-align:center" hidden>
                         Cập nhật gần nhất
                     </th>
+                      <th style="text-align:center;font-weight: 350;">
+                        Thời gian thi
+                    </th>
                     <th style="text-align:center;font-weight: 350;">
                         Trạng thái
                     </th>
@@ -39,6 +42,9 @@
                             @Html.DisplayFor(modelItem => item.LastUpdate)
                         </td>
                         <td>
+                            @item.Time phút
+                        </td>
+                        <td>
                             @if (item.Status == true)
                             {
                                 <div><i class="bi-toggle2-on" style="color:green"></i> Online</div>
@@ -50,6 +56,10 @@
                         </td>
                         <td style="text-align:end">
                             <div class="btn-group" style=" white-space:nowrap">
+                                <btn class="btn btn-outline-secondary btn-sm btnSuaThoiGian" data-id="@item.Id">
+                                    <i class="bi-clock"> </i>
+                                    Đổi thời gian thi
+                                </btn>
                                 <btn class="btn btn-outline-secondary btn-sm btnSua" data-id="@item.Id">
                                     <i class="bi-pencil"> </i>
                                     Đổi tên
@@ -93,6 +103,78 @@
             }
         });
 
+        $(".btnSuaThoiGian").click(function (e) {
+            var id = $(this).data("id");
+            var data = {
+                id: id
+            };
+            $.ajax({
+                url: "GetById",
+                type: "POST",
+                data: data,
+                success: function (data) {
+                    if (data.success) {
+                        handleSuccessChangeTime(data, id);
+                    } else {
+                        Swal.fire("Thất bại!", data.message, "error");
+                    }
+                },
+                error: function (xhr, t, error) {
+                    Swal.fire("Thất bại!", "Lỗi máy chủ", "error");
+                },
+            });
+        });
+
+        async function handleSuccessChangeTime(data, id) {
+            if (data.success) {
+                const { value: newTime } = await swalWithBootstrapButtons.fire({
+                    title: "Đổi thời gian thi",
+                    input: "number",
+                    inputLabel: "Phòng thi : " + data.data.name,
+                    inputPlaceholder: "Nhập thời gian thi",
+                    showCancelButton: true,
+                    confirmButtonText: "Xác nhận",
+                    cancelButtonText: "Huỷ bỏ"
+                });
+                if (newTime) {
+                    $.ajax({
+                        url: "UpdateTime",
+                        type: "POST",
+                        data: {
+                            id: id,
+                            time: newTime
+                        },
+                        success: function (data) {
+                            if (data.success) {
+                                Toast.fire({
+                                    icon: "success",
+                                    title: "Đang xử lý..."
+                                }).then(function () {
+                                    window.location.reload();
+                                });
+                            } else {
+                                Swal.fire(
+                                    "Không thành công!",
+                                    data.message,
+                                    "error"
+                                );
+                            }
+                        },
+                    });
+
+                }
+            } else {
+                Swal.fire("Thất bại!", data.message, "error");
+            }
+        }
+
+
+
+
+
+
+
+
         $(".btnSua").click(function (e) {
             var id = $(this).data("id");
             var data = {
@@ -118,9 +200,9 @@
         async function handleSuccess(data, id) {
             if (data.success) {
                 const { value: newName } = await swalWithBootstrapButtons.fire({
-                    title: "Đổi tên chủ đề & phòng thi",
+                    title: "Đổi tên phòng thi",
                     input: "text",
-                    inputLabel: data.data.name,
+                    inputLabel: "Phòng thi : " + data.data.name,
                     inputPlaceholder: "Nhập tên mới",
                     showCancelButton: true,
                     confirmButtonText: "Xác nhận",
@@ -164,7 +246,7 @@
 
             swalWithBootstrapButtons
                 .fire({
-                    title: "Xoá chủ đề & phòng thi?",
+                    title: "Xoá phòng thi?",
                     text: name,
                     icon: "warning",
                     showCancelButton: true,

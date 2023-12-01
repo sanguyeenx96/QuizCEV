@@ -89,7 +89,8 @@ namespace WebAPP.Controllers
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             HttpContext.Session.Remove("Token");
-            return RedirectToAction("Login", "Login");
+            //return RedirectToAction("Login", "Login");
+            return Json(new { success = true });
         }
     }
 }

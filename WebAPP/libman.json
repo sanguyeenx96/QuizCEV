@@ -13,6 +13,10 @@
     {
       "library": "underscore.js@1.13.6",
       "destination": "wwwroot/underscore.js/"
+    },
+    {
+      "library": "animate.css@4.1.1",
+      "destination": "wwwroot/animate.css/"
     }
   ]
 }

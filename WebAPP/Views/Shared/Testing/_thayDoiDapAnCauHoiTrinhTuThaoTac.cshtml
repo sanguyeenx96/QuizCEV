@@ -88,7 +88,7 @@
                     var rowData = table.row(i).data();
                     newOrder.push({ Id: rowData[1], ThuTu: rowData[0],cauhoituluanId:cauhoituluanId });
                 }
-                parsedNewOrder = newOrder.map(item => ({ Id: parseInt(item.Id), ThuTu: parseInt(item.ThuTu), cauhoituluanId: parseInt(cauhoituluanId) }));
+                parsedNewOrder = newOrder.map(item => ({ Id: item.Id, ThuTu: parseInt(item.ThuTu), cauhoituluanId: parseInt(cauhoituluanId) }));
                 console.log(parsedNewOrder)
             });
         });

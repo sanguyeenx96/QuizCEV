@@ -14,6 +14,7 @@ namespace Data.Entities
         public DateTime DateCreate { get; set; }
         public DateTime LastUpdate { get; set; }
         public bool Status { get; set; }
+        public int Time { get; set; }
         public List<Question> Questions { get; set; }
         public List<CauHoiTuLuan> cauHoiTuLuans { get; set; }
         public List<ExamResult> ExamResults { get; set; }

@@ -19,7 +19,7 @@
         </ul>
         <ul class="header-nav ms-3">
             <li class="nav-item">
-                <a class="btn btn-outline-danger" href="@Url.Action("Logout", "Login", new { area = "" })">
+                <a id="btnLogout" class="btn btn-dark">
                     <i class="bi-box-arrow-left"></i>
                     Đăng xuất
                 </a>
@@ -40,3 +40,33 @@
     </div>
 </header>
 
+<script>
+    $(document).ready(function(){
+        $("#btnLogout").click(function(){
+            Swal.fire({
+                title: "Đăng xuất tài khoản?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Xác nhận",
+                cancelButtonText: "Huỷ bỏ"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "/Login/Logout", // Đường dẫn đến action
+                        method: "POST",
+                        success: function (response) {
+                            var url = "/Login";
+                            window.location.href = url;
+                        },
+                        error: function (error) {
+                            // Xử lý lỗi nếu có
+                            console.error("Error:", error);
+                        }
+                    });
+                }
+            });
+        })
+    })
+</script>

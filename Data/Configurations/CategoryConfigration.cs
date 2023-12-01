@@ -24,6 +24,8 @@ namespace Data.Configurations
 
             builder.Property(x => x.DateCreate).IsRequired(true);
 
+            builder.Property(x => x.Time).IsRequired(true);
+
             builder.Property(x => x.Status).IsRequired(true);
 
             builder.Property(x => x.Status).HasDefaultValue(Status.Active);

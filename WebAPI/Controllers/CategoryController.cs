@@ -58,5 +58,12 @@ namespace WebAPI.Controllers
             var result = await _categoryService.UpdateStatus(id);
             return Ok(result);
         }
+
+        [HttpPatch("updatetime/{id}")]
+        public async Task<IActionResult> UpdateTime(int id, CategoryUpdateTimeRequest request)
+        {
+            var result = await _categoryService.UpdateTime(id, request);
+            return Ok(result);
+        }
     }
 }
