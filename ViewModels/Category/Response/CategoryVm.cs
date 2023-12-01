@@ -13,6 +13,8 @@ namespace ViewModels.Category.Response
         public DateTime DateCreate { get; set; }
         public DateTime LastUpdate { get; set; }
         public bool Status { get; set; }
+        public int Time { get; set; }
+
 
 
     }

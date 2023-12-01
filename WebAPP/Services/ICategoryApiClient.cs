@@ -18,5 +18,8 @@ namespace WebAPP.Services
 
         Task<ApiResult<bool>> UpdateStatus(int id);
 
+        Task<ApiResult<bool>> UpdateTime(int id,CategoryUpdateTimeRequest request);
+
+
     }
 }

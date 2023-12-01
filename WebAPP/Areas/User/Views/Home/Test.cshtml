@@ -1,4 +1,7 @@
-﻿<style>
+﻿@{
+    int thoigianthi = ViewBag.thoiGianThi;
+}
+<style>
     .tick {
         font-size: 1rem;
         white-space: nowrap;
@@ -68,13 +71,13 @@
 <ul class="nav nav-pills mb-3 justify-content-center" id="pills-tab" role="tablist">
     <li class="nav-item" role="presentation">
         <button class="nav-link active btnCauhoitracnghiem" id="pills-tracnghiem-tab" data-coreui-toggle="pill" data-coreui-target="#pills-tracnghiem" type="button" role="tab" aria-controls="pills-tracnghiem" aria-selected="true">
-            <i class="bi-patch-question-fill"></i>
+            <i class="bi-question-circle-fill"></i>
             Câu hỏi trắc nghiệm
         </button>
     </li>
     <li class="nav-item" role="presentation">
         <button class="nav-link  btnCauhoituluan" id="pills-tuluan-tab" data-coreui-toggle="pill" data-coreui-target="#pills-tuluan" type="button" role="tab" aria-controls="pills-tuluan" aria-selected="false">
-            <i class="bi-patch-question-fill"></i>
+            <i class="bi-question-circle-fill"></i>
             Câu hỏi tự luận
         </button>
     </li>
@@ -101,7 +104,12 @@
 </div>
 
 <div id="dongho" class="row col-12">
-    <div class="col-8">  </div>
+    <div class="col-8" style="display: grid; place-items: center;">
+        <button id="btnNopbai" class="btn btn-success text-white w-50 animate__animated animate__pulse animate__infinite shadow" style="pointer-events: auto; height:60%;opacity:0.9" >
+            <i class="bi-check-circle-fill"></i>
+            Nộp bài thi
+        </button>
+    </div>
     <div class="col-4">
         <div class="tick" data-did-init="handleTickInit">
             <div data-layout="horizontal fit" data-value-mapping="indexes">
@@ -119,7 +127,7 @@
 
 
 <script>
-    var countDownTime = 45; //Load từ db
+    var countDownTime = @thoigianthi; //Load từ db
     function handleTickInit(tick) {
         // Lấy giá trị thời gian còn lại từ localStorage (nếu có)
         var remainingTimeStr = localStorage.getItem('countdownTime');
@@ -131,19 +139,143 @@
                 // Xử lý sự kiện khi đếm ngược kết thúc
                 // Ví dụ: window.location = 'my-location.html'; // Redirect
                 // Hoặc: tick.root.style.display = 'none'; // Ẩn đồng hồ đếm
+                let timerInterval;
+                Swal.fire({
+                    title: "Hết thời gian làm bài!",
+
+                    html: "<b></b>",
+                    timer: 2000,
+                    timerProgressBar: true,
+                    didOpen: () => {
+                        Swal.showLoading();
+                        const timer = Swal.getPopup().querySelector("b");
+                        timerInterval = setInterval(() => {
+                            timer.textContent = `${Swal.getTimerLeft()}`;
+                        }, 100);
+                    },
+                    willClose: () => {
+                        clearInterval(timerInterval);
+                    }
+                }).then((result) => {
+                    /* Read more about handling dismissals below */
+                    if (result.dismiss === Swal.DismissReason.timer) {
+                        console.log("I was closed by the timer");
+                    }
+                });
+
+                
+
+                $.ajax({
+                    type: "POST",
+                    url: "Login",
+                    contentType: "application/json", // Đặt loại dữ liệu của yêu cầu là JSON
+                    data: JSON.stringify(data), // Chuyển đối tượng thành chuỗi JSON
+                    success: function (result) {
+                        if (result.success) {
+                            Swal.fire({
+                                icon: "success",
+                                width: 300,
+                                text: "Đăng nhập thành công",
+                                showConfirmButton: false,
+                                timer: 1000,
+
+                            }).then(function () {
+                                if (result.message == "admin") {
+                                    var url = "Admin/Home/Index";
+                                    window.location.href = url;
+                                } else {
+                                    var url = "User/Home/SelectRoom";
+                                    window.location.href = url;
+                                }
+                            });
+                        }
+                        else {
+                            $("#usn").focus();
+                            $("#usn").val("");
+                            $("#pwd").val("");
+                            Swal.fire({
+                                icon: "error",
+                                width: 300,
+                                text: result.message,
+                                showConfirmButton: false,
+                                timer: 2000,
+                            });
+                        }
+                    }
+                });
             }
             tick.value = Tick.helper.duration(remainingTime, ['m', 's', 'ms']);
             // Lưu thời gian còn lại vào localStorage
             localStorage.setItem('countdownTime', remainingTime.toString());
-        }, 16, { autostart: true });
+        }, 1000, { autostart: true });
     }
 
+    var intervalId;
+    function checkTempData() {
+        $.ajax({
+            url: 'GetTempDataStatusValue',
+            type: 'GET',
+            success: function (data) {
+                console.log(data)
+                if (data == "done") {
+                    // Dừng interval khi data bằng "done"
+                    clearInterval(intervalId);
+                    $("#btnNopbai").show();
+                }
+            }
+        });
+    }
+    // Gán ID của interval vào biến
+    intervalId = setInterval(checkTempData, 1000);
 
+    $("#btnNopbai").click(function(){
+        Swal.fire({
+            title: "Nộp bài thi?",
+            text: "Hãy kiểm tra lịch sử câu trả lời trước khi nộp",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Nộp bài",
+            cancelButtonText: "Huỷ bỏ"
 
-
+        }).then((result) => {
+            if (result.isConfirmed) {
+                let timerInterval;
+                Swal.fire({
+                    html: "Đang chấm điểm... <b></b>",
+                    timer: 3333,
+                    timerProgressBar: true,
+                    didOpen: () => {
+                        Swal.showLoading();
+                        const timer = Swal.getPopup().querySelector("b");
+                        timerInterval = setInterval(() => {
+                            timer.textContent = `${Swal.getTimerLeft()}`;
+                        }, 100);
+                    },
+                    willClose: () => {
+                        clearInterval(timerInterval);
+                    }
+                }).then((result) => {
+                    if (result.dismiss === Swal.DismissReason.timer) {
+                        $.ajax({
+                            type: "GET",
+                            url: "ConfirmEndExam",
+                            success: function (result) {
+                                var url = "ConfirmEndExam";
+                                window.location.href = url;
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    })
 
 
     $(document).ready(function () {
+        $("#btnNopbai").hide();
+
         document.onkeydown = function (e) {
             if ((e.which || e.keyCode) === 116) {
                 e.preventDefault();

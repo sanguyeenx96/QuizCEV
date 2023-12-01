@@ -3,12 +3,14 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.Options;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.Security.Claims;
 using ViewModels.CauHoiTrinhTuThaoTac.Request;
 using ViewModels.CauHoiTrinhTuThaoTac.Response;
 using ViewModels.CauHoiTuLuan.Response;
 using ViewModels.Question.Response;
 using WebAPP.Services;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace WebAPP.Areas.User.Controllers
 {
@@ -68,10 +70,13 @@ namespace WebAPP.Areas.User.Controllers
             //Tự luận:
             List<QuestionAndAnswerTrinhTuThaoTacVm> listQuestionAndAnswerTrinhTuThaoTac = new List<QuestionAndAnswerTrinhTuThaoTacVm>();
             TempData["QuestionAndAnswerTrinhTuThaoTac"] = JsonConvert.SerializeObject(listQuestionAndAnswerTrinhTuThaoTac);
+
             var listTuLuan = await _cauHoiTuLuanApiClient.GetAllByCategory(idPhong);
             var dsCauHoiTuLuan = listTuLuan.ResultObj;
             dsCauHoiTuLuan = dsCauHoiTuLuan.OrderBy(x => random.Next()).ToList();
             List<CauHoiTuLuanVm> listQuestionTuLuan = dsCauHoiTuLuan;
+            TempData["dsCauHoiTL"] = JsonConvert.SerializeObject(listQuestionTuLuan);
+
             TempData["danhsachcauhoiTuLuan"] = JsonConvert.SerializeObject(listQuestionTuLuan);
             TempData["soluongcauhoiTuLuan"] = listQuestionTuLuan.Count();
             Queue<CauHoiTuLuanVm> queueTuluan = new Queue<CauHoiTuLuanVm>();
@@ -83,15 +88,21 @@ namespace WebAPP.Areas.User.Controllers
 
 
             //Common:
+            var phongThi = await _categoryApiClient.GetById(idPhong);
+            int thoiGianThi = phongThi.ResultObj.Time;
             int totalQuestion = listQuestionTracNghiem.Count() + listQuestionTuLuan.Count();
             TempData["totalQuestion"] = totalQuestion;
             TempData["idPhong"] = idPhong;
+            TempData["thoiGianThi"] = thoiGianThi;
+
             TempData["score"] = 0;
             TempData["numQuestionTracnghiem"] = 0;
             TempData["numQuestionTuLuan"] = 0;
+            TempData["StatusTN"] = 0;
+            TempData["StatusTL"] = 0;
 
             TempData.Keep();
-            return RedirectToAction("Test");
+            return Json(new { success = true });
         }
 
         //Trang làm bài thi:
@@ -104,6 +115,7 @@ namespace WebAPP.Areas.User.Controllers
             ViewBag.bophan = User.FindFirst(ClaimTypes.Country).Value.ToString();
             ViewBag.thisPage = phongThi.ResultObj.Name.ToString();
             ViewBag.totalQuestion = TempData["totalQuestion"];
+            ViewBag.thoiGianThi = TempData["thoiGianThi"];
             TempData.Keep();
             return View();
         }
@@ -141,6 +153,7 @@ namespace WebAPP.Areas.User.Controllers
             }
             else
             {
+                TempData["StatusTN"] = 1;
                 TempData.Keep();
                 return PartialView("Testing/_finishTracNghiem"); //Khi hết câu hỏi trả về partial view báo đã trả lời hết
             }
@@ -211,6 +224,7 @@ namespace WebAPP.Areas.User.Controllers
             }
             else
             {
+                TempData["StatusTL"] = 1;
                 TempData.Keep();
                 return PartialView("Testing/_finishTuLuan");
             }
@@ -279,6 +293,7 @@ namespace WebAPP.Areas.User.Controllers
             TempData.Keep();
             return PartialView("Testing/_thayDoiDapAnCauHoiTrinhTuThaoTac", result);
         }
+
         //Sửa câu trả lời bài thi Tự luận:
         [HttpPost]
         public async Task<IActionResult> PostChangeChooseTuLuan([FromBody] List<ChangeAnswerTrinhTuThaoTacRequest> request)
@@ -288,27 +303,31 @@ namespace WebAPP.Areas.User.Controllers
             var listToChange = listQuestionAndAnswerTrinhTuThaoTac.Where(x => x.CauHoiTuLuanId == request.FirstOrDefault().CauHoiTuLuanId).ToList();
             foreach (var item in listToChange)
             {
-                item.Answer = request.Where(x => x.Id == item.Id).FirstOrDefault().ThuTu;                
+                item.Answer = request.Where(x => x.Id == item.Id).FirstOrDefault().ThuTu;
             }
             TempData["QuestionAndAnswerTrinhTuThaoTac"] = JsonConvert.SerializeObject(listToChange);
             TempData.Keep();
             return Json(new { success = true });
         }
 
+        [HttpGet]
+        public IActionResult GetTempDataStatusValue()
+        {
+            var tempDataTNValue = Convert.ToInt32(TempData["StatusTN"].ToString());
+            var tempDataTLValue = Convert.ToInt32(TempData["StatusTL"].ToString());
+            TempData.Keep();
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+            if (tempDataTNValue == 1 && tempDataTLValue == 1)
+            {
+                string value = "done";
+                return Json(value);
+            }
+            else
+            {
+                string value = "notyet";
+                return Json(value);
+            }
+        }
         //Đổi lịch sử câu trả lời
         [HttpPost]
         public IActionResult ChangeAnswer(int id, string newAns)
@@ -329,9 +348,67 @@ namespace WebAPP.Areas.User.Controllers
         [HttpGet]
         public async Task<IActionResult> ConfirmEndExam()
         {
-            string jsonlistQuestionAndAnswerTracNghiem = TempData["QuestionAndAnswerTracNghiem"].ToString();
-            List<QuestionAndAnswerVm> listQuestionAndAnswerTracNghiem = JsonConvert.DeserializeObject<List<QuestionAndAnswerVm>>(jsonlistQuestionAndAnswerTracNghiem);
+            int idPhong = Convert.ToInt32(TempData["idPhong"].ToString());
+            var phongThi = await _categoryApiClient.GetById(idPhong);
+            ViewBag.hoten = User.FindFirst(ClaimTypes.Name).Value.ToString();
+            ViewBag.bophan = User.FindFirst(ClaimTypes.Country).Value.ToString();
+            ViewBag.thisPage = phongThi.ResultObj.Name.ToString();
+            ViewBag.totalQuestion = TempData["totalQuestion"];
+            ViewBag.thoiGianThi = TempData["thoiGianThi"];
 
+            //Tính điểm phần thi trắc nghiệm
+            float totalScoreTracNghiem = 0;
+            float scoreTracNghiem = 0;
+            int slTraLoiDungTracNghiem = 0;
+            string jsonlistQuestionAndAnswerTracNghiem = TempData.Peek("QuestionAndAnswerTracNghiem")?.ToString();
+            List<QuestionAndAnswerVm> listQuestionAndAnswerTracNghiem = JsonConvert.DeserializeObject<List<QuestionAndAnswerVm>>(jsonlistQuestionAndAnswerTracNghiem);
+            foreach (var item in listQuestionAndAnswerTracNghiem)
+            {
+                totalScoreTracNghiem += item.Score ?? 0;
+                if (item.Answer == item.QCorrectAns.ToUpper())
+                {
+                    scoreTracNghiem += item.Score ?? 0;
+                    slTraLoiDungTracNghiem++;
+                }
+            }
+            //Tính điểm phần thi tự luận
+            float totalScoreTuLuan = 0;
+            float scoreTuluan = 0;
+            int slTraLoiDungTuLuan = 0;
+            string jsonQuestionsTuLuan = TempData["dsCauHoiTL"].ToString();
+            List<CauHoiTuLuanVm> listQuestionsTuLuan = JsonConvert.DeserializeObject<List<CauHoiTuLuanVm>>(jsonQuestionsTuLuan);
+
+            string jsonlistQuestionAndAnswerTrinhTuThaoTac = TempData["QuestionAndAnswerTrinhTuThaoTac"].ToString();
+            List<QuestionAndAnswerTrinhTuThaoTacVm> listQuestionAndAnswerTrinhTuThaoTac = JsonConvert.DeserializeObject<List<QuestionAndAnswerTrinhTuThaoTacVm>>(jsonlistQuestionAndAnswerTrinhTuThaoTac);
+            var groupListQuestionAndAnswerTrinhTuThaoTac = listQuestionAndAnswerTrinhTuThaoTac.GroupBy(x => x.CauHoiTuLuanId);
+            foreach (var group in groupListQuestionAndAnswerTrinhTuThaoTac)
+            {
+                var cauhoituluan = listQuestionsTuLuan.FirstOrDefault(x => x.Id == group.First().CauHoiTuLuanId);
+                float scoreCauhoituluan = cauhoituluan.Score ?? 0;
+                totalScoreTuLuan += scoreCauhoituluan;
+
+                if (group.All(item => item.Answer == item.ThuTu))
+                {
+                    scoreTuluan += scoreCauhoituluan;
+                    slTraLoiDungTuLuan++;
+                }
+            }
+            float totalScore = scoreTuluan + scoreTracNghiem;
+            ViewBag.tracnghiemScore = scoreTracNghiem;
+            ViewBag.tuluanScore = scoreTuluan;
+            ViewBag.totalTracNghiemScore = totalScoreTracNghiem;
+            ViewBag.totalTuLuanScore = totalScoreTuLuan;
+
+            ViewBag.totalScore = totalScore;
+
+            ViewBag.slTraLoiDungTracNghiem = slTraLoiDungTracNghiem;
+            ViewBag.slTraLoiDungTuLuan = slTraLoiDungTuLuan;
+            ViewBag.slTotalTracNghiem = Convert.ToInt32(TempData["soluongcauhoiTracNghiem"].ToString());
+            ViewBag.slTotalTuLuan = Convert.ToInt32(TempData["soluongcauhoiTuLuan"].ToString());
+
+            ViewBag.dsTN = listQuestionAndAnswerTracNghiem;
+
+            TempData.Keep();
             return View();
         }
 

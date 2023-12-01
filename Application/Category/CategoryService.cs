@@ -30,8 +30,8 @@ namespace Application.Category
             {
                 Name = request.Name,
                 DateCreate = DateTime.Now,
-                LastUpdate = DateTime.Now
-
+                LastUpdate = DateTime.Now,
+                Time = request.Time
             };
             _context.Categories.Add(newCategory);
             await _context.SaveChangesAsync();
@@ -56,7 +56,8 @@ namespace Application.Category
                 Name = x.Name,
                 DateCreate = x.DateCreate,
                 LastUpdate = x.LastUpdate,
-                Status = x.Status
+                Status = x.Status,
+                Time = x.Time
             }).ToListAsync();
             return new ApiSuccessResult<List<CategoryVm>>(result);
         }
@@ -72,7 +73,8 @@ namespace Application.Category
                 Name = category.Name,
                 DateCreate = category.DateCreate,
                 LastUpdate = category.LastUpdate,
-                Status = category.Status
+                Status = category.Status,
+                Time = category.Time
             };
             return new ApiSuccessResult<CategoryVm>(result);
         }
@@ -98,6 +100,18 @@ namespace Application.Category
             _context.Update(category);
             await _context.SaveChangesAsync();
             return new ApiSuccessResult<bool>();
+        }
+
+        public async Task<ApiResult<bool>> UpdateTime(int id, CategoryUpdateTimeRequest request)
+        {
+            var category = await _context.Categories.FindAsync(id);
+            if (category == null)
+                return new ApiErrorResult<bool>("Không tìm thấy dữ liệu Category");
+            category.Time = request.Time;
+            category.LastUpdate = DateTime.Now;
+            _context.Update(category);
+            await _context.SaveChangesAsync();
+            return new ApiSuccessResult<bool> ();
         }
     }
 }

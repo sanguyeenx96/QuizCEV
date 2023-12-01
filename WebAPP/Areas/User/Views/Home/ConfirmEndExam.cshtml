@@ -1,1 +1,192 @@
-﻿Xac nhan
+﻿@using ViewModels.Question.Response
+@{
+    float totalScore = ViewBag.totalScore;
+    string danhgia = (totalScore >= 8) ? "tốt" : (totalScore >= 6) ? "trung bình" : "không đạt";
+    int demtn = 0;
+}
+<h1 class="display-6 mb-3 ">
+    <i class="bi-chevron-down"></i>
+    Kết quả bài thi
+</h1>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <div class="card mb-3
+             @{
+             if (danhgia == "tốt")
+             {
+                                <text>border-top-success border-top-3 mb-3</text>
+            }
+            if (danhgia == "trung bình")
+            {
+                                <text>border-top-warning border-top-3 mb-3</text>
+            }
+            if (danhgia == "không đạt")
+            {
+                                <text>border-top-danger border-top-3 mb-3</text>
+            }
+        }">
+            <div class="card-body">
+                <h5 class="card-title">Điểm số @totalScore điểm</h5>
+                <p class="card-text"><small>Kết quả <b class="text-danger">@danhgia</b> </small></p>
+            </div><img class="card-img-bottom" src="~/full.jpg" alt="">
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="bi-folder2-open"></i>
+                Chi tiết bài thi
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-4">
+                        <div class="border-start border-start-4 border-start-info px-3 mb-3">
+                            <small class="text-medium-emphasis">Thời gian làm bài thi</small>
+                            <div class="fs-7">3.5/5 phút</div>
+                            <span class="badge bg-light me-2 text-dark"> Cho phép</span>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="border-start border-start-4 border-start-info px-3 mb-3">
+                            <small class="text-medium-emphasis">Phần thi trắc nghiệm</small>
+                            <div class="fs-7">Đúng @ViewBag.slTraLoiDungTracNghiem/@ViewBag.slTotalTracNghiem câu </div>
+                            <span class="badge bg-light me-2 text-dark"> @ViewBag.tracnghiemScore/@ViewBag.totalTracNghiemScore điểm</span>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="border-start border-start-4 border-start-info px-3 mb-3">
+                            <small class="text-medium-emphasis">Phần thi tự luận</small>
+                            <div class="fs-7">Đúng @ViewBag.slTraLoiDungTuLuan/@ViewBag.slTotalTuLuan câu</div>
+                            <span class="badge bg-light me-2 text-dark">@ViewBag.tuluanScore/@ViewBag.totalTuLuanScore điểm</span>
+
+                        </div>
+                    </div>
+                </div>
+                <nav>
+                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                        <button class="nav-link active" id="nav-home-tab" data-coreui-toggle="tab" data-coreui-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">
+                            <i class="bi-dot"></i>
+                            Phần thi trắc nghiệm                          
+                        </button>
+                        <button class="nav-link" id="nav-profile-tab" data-coreui-toggle="tab" data-coreui-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">
+                            <i class="bi-dot"></i>
+                            Phần thi tự luận
+                        </button>
+                    </div>
+                </nav>
+                <div class="tab-content" id="nav-tabContent">
+                    <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab" tabindex="0">
+                        <div class="accordion">
+                            @foreach (var item in ViewBag.dsTN as List<QuestionAndAnswerVm>)
+                            {
+                                demtn++;
+                                string idThe = "tn" + item.Id.ToString();
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button collapsed" type="button" data-coreui-toggle="collapse" data-coreui-target="#@idThe" aria-expanded="false" aria-controls="@idThe">
+                                            @{
+                                                if (item.QCorrectAns.ToUpper() == item.Answer.ToUpper())
+                                                {
+                                                    <span class="badge bg-success me-2 ">
+                                                        Câu @demtn
+                                                        <small>
+                                                            <span class="badge bg-dark" style="vertical-align: text-top;">
+                                                                @item.Score điểm
+                                                            </span>
+                                                        </small>
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-danger me-2 ">
+                                                        Câu @demtn
+                                                        <small>
+                                                            <span class="badge bg-dark" style="vertical-align: text-top;">
+                                                                @item.Score điểm
+                                                            </span>
+                                                        </small>
+                                                    </span>
+                                                }
+                                            }
+                                            @item.Text
+                                        </button>
+                                    </h2>
+                                    <div id="@idThe" class="accordion-collapse collapse" data-coreui-parent="#accordionExample">
+                                        <div class="accordion-body">
+                                            <div class="row">
+                                                @{
+                                                    if (!string.IsNullOrEmpty(item.QA))
+                                                    {
+                                                        if (item.QCorrectAns == "a")
+                                                        {
+                                                            <div class="col-6">
+                                                                <button class="btn w-100 text-black btn-success " disabled>@item.QA</button>
+                                                            </div>
+                                                        }
+                                                        else
+                                                        {
+                                                            if (item.Answer == "A")
+                                                            {
+                                                                <div class="col-6">
+                                                                    <button class="btn w-100 text-black btn-danger " disabled>@item.QA</button>
+                                                                </div>
+                                                            }
+                                                            else
+                                                            {
+                                                                <div class="col-6">
+                                                                    <button class="btn w-100 text-black btn-outline-light " disabled>@item.QA</button>
+                                                                </div>
+                                                            }
+                                                        }
+                                                    }
+                                                    if (!string.IsNullOrEmpty(item.QB))
+                                                    {
+                                                        if (item.QCorrectAns == "b")
+                                                        {
+                                                            <div class="col-6">
+                                                                <button class="btn w-100 text-black btn-success " disabled>@item.QB</button>
+                                                            </div>
+                                                        }
+                                                        else
+                                                        {
+                                                            if (item.Answer == "B")
+                                                            {
+                                                                <div class="col-6">
+                                                                    <button class="btn w-100 text-black btn-danger " disabled>@item.QB</button>
+                                                                </div>
+                                                            }
+                                                            else
+                                                            {
+                                                                <div class="col-6">
+                                                                    <button class="btn w-100 text-black btn-outline-light " disabled>@item.QB</button>
+                                                                </div>
+                                                            }
+                                                        }
+                                                    }
+                                                    if (!string.IsNullOrEmpty(item.QC))
+                                                    {
+                                                        <div class="col-6">
+                                                            <button class="btn w-100 btn-outline-light disabled">@item.QC</button>
+                                                        </div>
+                                                    }
+                                                    if (!string.IsNullOrEmpty(item.QD))
+                                                    {
+                                                        <div class="col-6">
+                                                            <button class="btn w-100 btn-outline-light disabled">@item.QD</button>
+                                                        </div>
+                                                    }
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab" tabindex="0">tl</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

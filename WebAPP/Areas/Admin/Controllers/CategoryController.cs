@@ -36,12 +36,8 @@ namespace WebAPP.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(string name)
-        {
-            var request = new CategoryCreateRequest()
-            {
-                Name = name
-            };
+        public async Task<IActionResult> Create([FromBody] CategoryCreateRequest request)
+        {            
             var result = await _categoryApiClient.Create(request);
             if (!result.IsSuccessed)
             {
@@ -87,6 +83,16 @@ namespace WebAPP.Areas.Admin.Controllers
         public async Task<IActionResult> UpdateStatus(int id)
         {
             var result = await _categoryApiClient.UpdateStatus(id);
+            if (!result.IsSuccessed)
+            {
+                return Json(new { success = false, message = result.Message });
+            }
+            return Json(new { success = true });
+        }
+        [HttpPost]
+        public async Task<IActionResult> UpdateTime(int id,CategoryUpdateTimeRequest request)
+        {
+            var result = await _categoryApiClient.UpdateTime(id, request);
             if (!result.IsSuccessed)
             {
                 return Json(new { success = false, message = result.Message });

@@ -30,18 +30,15 @@
             <div class="card mb-2">
                 <div class="card-body">
                     <h5 class="card-title">Phòng thi @item.Name</h5>
-                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                    <p class="card-text">Ngày tạo @item.DateCreate.ToString("dd/MM/yyyy")</p>
-                    <form asp-action="SelectRoom" asp-controller="Home" asp-area="User">
-                        <input name="idPhong" value="@item.Id" hidden>
-                        <button type="submit" class="btn btn-success btnBatdauthi"
-                            data-idPhong=@item.Id
-                            data-tenPhong="@item.Name"
-                            onclick="localStorage.clear();">
-                            <i class="bi-play"></i>
-                            Bắt đầu
-                        </button>
-                    </form>
+                    <p class="card-text">Thời gian làm bài <span class="badge bg-light text-dark">@item.Time phút</span> <br> Ngày tạo <span class="badge bg-light text-dark">@item.DateCreate.ToString("dd/MM/yyyy")</span> </p>
+                    <input name="idPhong" value="@item.Id" hidden>
+                    <button type="submit" class="btn btn-success btnBatdauthi"
+                        data-idPhong=@item.Id
+                        data-tenPhong="@item.Name"
+                        onclick="localStorage.clear();">
+                        <i class="bi-play"></i>
+                        Bắt đầu
+                    </button>
                 </div>
             </div>
         }
@@ -80,16 +77,14 @@
                         }
                         else
                         {
-                            <form asp-action="SelectRoom" asp-controller="Home" asp-area="User">
-                                <input name="idPhong" value="@item.Id" hidden>
-                                <button type="submit" class="btn btn-success btnBatdauthi"
-                                data-idPhong=@item.Id
-                                data-tenPhong="@item.Name"
-                                onclick="localStorage.clear();">
-                                    <i class="bi-play"></i>
-                                    Bắt đầu
-                                </button>
-                            </form>                   
+                            <input name="idPhong" value="@item.Id" hidden>
+                            <button type="submit" class="btn btn-success btnBatdauthi"
+                            data-idPhong=@item.Id
+                            data-tenPhong="@item.Name"
+                            onclick="localStorage.clear();">
+                                <i class="bi-play"></i>
+                                Bắt đầu
+                            </button>
                         }
                     }
                 </div>
@@ -98,7 +93,7 @@
     </div>
 </div>
 
-@*
+
 <script>
     $(document).ready(function () {
         const swalWithBootstrapButtons = Swal.mixin({
@@ -124,26 +119,20 @@
                 .then((result) => {
                     if (result.isConfirmed) {
                         $.ajax({
-                            url: "/User/Home/SelectRoom", // Đường dẫn đến action
+                            url: "SelectRoom", // Đường dẫn đến action
                             method: "POST",
                             data: { idPhong: idPhong }, // Dữ liệu gửi đi
                             success: function (response) {
-                                // Xử lý kết quả thành công nếu cần
-                                console.log("Success:", response);
+                                var url = "Test";
+                                window.location.href = url;
                             },
                             error: function (error) {
                                 // Xử lý lỗi nếu có
                                 console.error("Error:", error);
                             }
                         });
-                    } else if (result.dismiss === Swal.DismissReason.cancel) {
-                        swalWithBootstrapButtons.fire(
-                            "Đã huỷ bỏ",
-                            "Thao tác đã được huỷ bỏ",
-                            "error"
-                        );
-                    }
+                    } 
                 });
         });
     });
-</script>*@
+</script>

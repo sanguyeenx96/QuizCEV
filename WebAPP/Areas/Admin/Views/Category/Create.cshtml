@@ -6,14 +6,20 @@
 <form id="myForm">
     <div class="row g-2">
         <div class="col-12">
-            <label for="address" class="form-label">Tên chủ đề (Phòng thi)</label>
-            <div class="input-group">
-                <input type="text" class="form-control" id="name" placeholder="Nhập tên tại đây" required="@true">
-                <button id="btnXacNhan" class="btn btn-outline-success btn-sm" style="display: flex; align-items: center">
-                    <i class="bi-check-circle" style="margin-right: 5px;"></i>Xác nhận
-                </button>               
+            <label for="address" class="form-label">Nhập thông tin phòng thi</label>
+            <div class="form-floating ">
+                <input id="name" type="text" class="form-control" placeholder="" required="@true">
+                <label for="floatingInput">Tên phòng thi</label>
             </div>
+            <div class="form-floating mt-1">
+                <input id="time" type="number" class="form-control" placeholder="" required="@true">
+                <label for="floatingInput">Thời gian thi (phút)</label>
+            </div>
+            <button id="btnXacNhan" class="btn btn-outline-success mt-2" style="display: flex; align-items: center">
+                <i class="bi-check-circle" style="margin-right: 5px;"></i>Xác nhận
+            </button>
         </div>
+
     </div>
 </form>
 
@@ -24,13 +30,16 @@
             if (form.checkValidity()) {
                 e.preventDefault();
                 var name = $("#name").val();
+                var time = $("#time").val();
                 var data = {
-                    name: name
+                    name: name,
+                    time: time
                 };
                 $.ajax({
                     url: "Create",
                     type: "POST",
-                    data: data,
+                    contentType: 'application/json',
+                    data: JSON.stringify(data),
                     success: function (data) {
                         if (data.success) {
                             Swal.fire({

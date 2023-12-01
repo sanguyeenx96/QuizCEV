@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace ViewModels.Category.Request
 {
-    public class CategoryCreateRequest
+    public class CategoryUpdateTimeRequest
     {
-        public string Name { get; set; }
         public int Time { get; set; }
-
     }
 }

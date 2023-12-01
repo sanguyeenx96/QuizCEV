@@ -5,7 +5,7 @@
 
     double percentProcessbar = ((double)thisQ / totalQTuLuan) * 100;
     string pP = percentProcessbar.ToString("0") + "%";
-
+    int no = 0;
 }
 <style>
     #trinhtuthaotac thead tr th {
@@ -28,7 +28,7 @@
         </div>
     </div>
 </div>
-<div class="card bg-white pt-1">
+<div class="card bg-white pt-1 animate__animated animate__zoomIn">
     <div class="card-body text-center">
         <form id="formTraLoiCauHoiTuLuan">
             <div>
@@ -40,14 +40,13 @@
                         <table id="trinhtuthaotac" class="table table-hover " style="width:100%">
                             <thead style="vertical-align:middle;font-size:small">
                                 <tr>
-                                    <th style="font-weight: 300">
+                                    <th class="col-3" style="font-weight: 300;text-align:center">
+                                        Trình tự thao tác
+                                    </th>
+                                    <th hidden>
                                         Id
-                                    </th>
-                                    <th style="font-weight: 300">
-                                        Thứ tự
-                                    </th>
-                                   
-                                    <th style="font-weight: 300">
+                                    </th>                                 
+                                    <th class="col-9" style="font-weight: 300">
                                         Nội dung thao tác
                                     </th>
                                 </tr>
@@ -55,14 +54,14 @@
                             <tbody>
                                 @foreach (var item in ViewBag.listTrinhTuThaoTac as List<ViewModels.CauHoiTrinhTuThaoTac.Response.CauHoiTrinhTuThaoTacVm>)
                                 {
+                                    no++;
                                     <tr style="text-align:center;vertical-align:middle" >
-                                        <td>
+                                        <th style="font-weight: 300">
+                                            @no
+                                        </th>
+                                        <td hidden>
                                             @item.Id
-                                        </td>
-                                        <td >
-                                            @item.ThuTu
-                                        </td>
-                                        
+                                        </td>                                   
                                         <td style="text-align:start">
                                             @item.Text
                                         </td>
@@ -106,7 +105,7 @@
                     var rowData = table.row(i).data();
                     newOrder.push({ Id: rowData[1], ThuTu: rowData[0] });
                 }
-                parsedNewOrder = newOrder.map(item => ({ Id: parseInt(item.Id), ThuTu: parseInt(item.ThuTu) }));
+                parsedNewOrder = newOrder.map(item => ({ Id: item.Id, ThuTu: parseInt(item.ThuTu) }));
                 console.log(parsedNewOrder)
             });
         });

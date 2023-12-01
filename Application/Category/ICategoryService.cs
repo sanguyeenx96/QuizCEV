@@ -18,5 +18,7 @@ namespace Application.Category
         Task<ApiResult<bool>> Delete(int id);
         Task<ApiResult<int>> UpdateName(int id, CategoryUpdateNameRequest request);
         Task<ApiResult<bool>> UpdateStatus(int id);
+        Task<ApiResult<bool>> UpdateTime(int id, CategoryUpdateTimeRequest request);
+
     }
 }

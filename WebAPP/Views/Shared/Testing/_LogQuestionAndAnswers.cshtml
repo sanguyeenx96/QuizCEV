@@ -17,7 +17,7 @@
 {
     demtn++;
     string idThe = "tn" + item.Id.ToString();
-    <div class="accordion-item">
+    <div class="accordion-item  animate__animated animate__fadeInLeft">
         <h2 class="accordion-header">
             <button class="accordion-button collapsed" type="button" data-coreui-toggle="collapse" data-coreui-target="#@idThe" aria-expanded="false" aria-controls="@idThe">
                 <span class="badge bg-dark me-2 ">Câu @demtn</span>  @item.Text
@@ -109,7 +109,7 @@
             demtl++;
             string idThe = "tl" + group.FirstOrDefault().Id.ToString();
             int cauhoituluanId = group.FirstOrDefault().CauHoiTuLuanId;
-    <div class="accordion-item">
+            <div class="accordion-item  animate__animated animate__fadeInLeft">
             <h2 class="accordion-header">
                 <button class="accordion-button collapsed" type="button" data-coreui-toggle="collapse" data-coreui-target="#@idThe" aria-expanded="false" aria-controls="@idThe">
                     <span class="badge bg-dark me-2 ">Câu @demtl</span>  @group.FirstOrDefault().CauHoiTuLuanText
