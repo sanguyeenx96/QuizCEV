@@ -4,6 +4,7 @@ using Application.CauHoiTuLuan;
 using Application.Dept;
 using Application.ExamResult;
 using Application.LogExam;
+using Application.LogExamTrinhtuthaotac;
 using Application.Question;
 using Application.Role;
 using Application.Users;
@@ -57,6 +58,8 @@ builder.Services.AddTransient<IUsersService, UsersService>();
 builder.Services.AddTransient<IDeptService, DeptService>();
 builder.Services.AddTransient<IRoleService, RoleService>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddTransient<ILogExamTrinhtuthaotacService, LogExamTrinhtuthaotacService>();
+
 
 builder.Services.AddControllers();
 
@@ -87,8 +90,8 @@ builder.Services.AddSwaggerGen(c =>
                 {
                 Reference = new OpenApiReference
                     {
-                    Type = ReferenceType.SecurityScheme, //Xác định loại tham chiếu, ở đây là SecurityScheme.
-                    Id = "Bearer" //Một chuỗi định danh cho Security Scheme, ở đây là "Bearer"
+                        Type = ReferenceType.SecurityScheme, //Xác định loại tham chiếu, ở đây là SecurityScheme.
+                        Id = "Bearer" //Một chuỗi định danh cho Security Scheme, ở đây là "Bearer"
                     },
                     Scheme = "oauth2", //Chỉ định loại xác thực được sử dụng. Ở đây, bạn đang sử dụng oauth2.
                     Name = "Bearer", //Xác định tên của scheme xác thực. Trong trường hợp này, bạn đang sử dụng Bearer.

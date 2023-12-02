@@ -45,6 +45,7 @@ namespace Application.Users
             var roles = await _userManager.GetRolesAsync(user);
             var claims = new[]
             {
+                new Claim("UserId", user.Id.ToString()),
                 new Claim(ClaimTypes.Name,user.Name),
                 new Claim(ClaimTypes.Role, string.Join(";",roles)),
                 new Claim(ClaimTypes.Country,user.Dept.Name)

@@ -29,6 +29,9 @@ builder.Services.AddTransient<ICauHoiTrinhTuThaoTacApiClient, CauHoiTrinhTuThaoT
 builder.Services.AddTransient<IUserApiClient, UserApiClient>();
 builder.Services.AddTransient<IDeptApiClient, DeptApiClient>();
 builder.Services.AddTransient<IRoleApiClient, RoleApiClient>();
+builder.Services.AddTransient<IExamResultApiClient, ExamResultApiClient>();
+builder.Services.AddTransient<ILogExamApiClient, LogExamApiClient>();
+builder.Services.AddTransient<ILogExamTrinhtuthaotacApiClient, LogExamTrinhtuthaotacApiClient>();
 
 
 var app = builder.Build();

@@ -10,6 +10,7 @@ namespace ViewModels.LogExam.Response
     {
         public int Id { get; set; }
         public int ExamResultId { get; set; }
+        public string LoaiCauHoi { get; set; } //tn hay tl
         public string Cauhoi { get; set; }
         public string QA { get; set; }
         public string QB { get; set; }
@@ -17,5 +18,7 @@ namespace ViewModels.LogExam.Response
         public string QD { get; set; }
         public string Cautraloi { get; set; }
         public string Dapandung { get; set; }
+        public float Score { get; set; }
+        public float FinalScore { get; set; }
     }
 }

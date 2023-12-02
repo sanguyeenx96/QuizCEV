@@ -17,6 +17,14 @@
     {
       "library": "animate.css@4.1.1",
       "destination": "wwwroot/animate.css/"
+    },
+    {
+      "library": "Chart.js@4.4.0",
+      "destination": "wwwroot/Chart.js/"
+    },
+    {
+      "library": "chartjs-plugin-datalabels@2.2.0",
+      "destination": "wwwroot/chartjs-plugin-datalabels/"
     }
   ]
 }
