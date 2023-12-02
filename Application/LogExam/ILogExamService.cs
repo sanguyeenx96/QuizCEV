@@ -15,6 +15,9 @@ namespace Application.LogExam
 
         Task<ApiResult<List<LogExamVm>>> GetByExamId(int id);
 
-        Task<ApiResult<int>> Create(LogExamCreateRequest request);
+        Task<ApiResult<int>> CreateSingle(LogExamCreateRequest request);
+
+        Task<ApiResult<bool>> CreateList(List<LogExamCreateRequest> request);
+
     }
 }

@@ -162,47 +162,6 @@
                         console.log("I was closed by the timer");
                     }
                 });
-
-                
-
-                $.ajax({
-                    type: "POST",
-                    url: "Login",
-                    contentType: "application/json", // Đặt loại dữ liệu của yêu cầu là JSON
-                    data: JSON.stringify(data), // Chuyển đối tượng thành chuỗi JSON
-                    success: function (result) {
-                        if (result.success) {
-                            Swal.fire({
-                                icon: "success",
-                                width: 300,
-                                text: "Đăng nhập thành công",
-                                showConfirmButton: false,
-                                timer: 1000,
-
-                            }).then(function () {
-                                if (result.message == "admin") {
-                                    var url = "Admin/Home/Index";
-                                    window.location.href = url;
-                                } else {
-                                    var url = "User/Home/SelectRoom";
-                                    window.location.href = url;
-                                }
-                            });
-                        }
-                        else {
-                            $("#usn").focus();
-                            $("#usn").val("");
-                            $("#pwd").val("");
-                            Swal.fire({
-                                icon: "error",
-                                width: 300,
-                                text: result.message,
-                                showConfirmButton: false,
-                                timer: 2000,
-                            });
-                        }
-                    }
-                });
             }
             tick.value = Tick.helper.duration(remainingTime, ['m', 's', 'ms']);
             // Lưu thời gian còn lại vào localStorage
@@ -244,7 +203,7 @@
                 let timerInterval;
                 Swal.fire({
                     html: "Đang chấm điểm... <b></b>",
-                    timer: 3333,
+                    timer: 999,
                     timerProgressBar: true,
                     didOpen: () => {
                         Swal.showLoading();
@@ -260,10 +219,14 @@
                     if (result.dismiss === Swal.DismissReason.timer) {
                         $.ajax({
                             type: "GET",
-                            url: "ConfirmEndExam",
+                            url: "Save",
                             success: function (result) {
-                                var url = "ConfirmEndExam";
-                                window.location.href = url;
+                                if (result.success) {
+                                    alert("OK")
+                                    var url = "ConfirmEndExam";
+                                    window.location.href = url;
+                                }
+                                
                             }
                         });
                     }

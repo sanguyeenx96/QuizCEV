@@ -4,6 +4,7 @@ using Data.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(TracNghiemCEVDbContext))]
-    partial class TracNghiemCEVDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231202065607_UpdateIntToFloatExamresult")]
+    partial class UpdateIntToFloatExamresult
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,7 +52,7 @@ namespace Data.Migrations
                         new
                         {
                             Id = new Guid("8d04dce2-969a-435d-bba4-df3f325983dc"),
-                            ConcurrencyStamp = "df55a115-8354-4fd0-be8b-6787d66d73ea",
+                            ConcurrencyStamp = "5eaaf461-ee0a-4143-bcae-4f7694edbdb9",
                             Description = "Administrator role",
                             Name = "admin",
                             NormalizedName = "admin"
@@ -58,7 +60,7 @@ namespace Data.Migrations
                         new
                         {
                             Id = new Guid("470f4021-29d8-4c8e-a9de-527571683d86"),
-                            ConcurrencyStamp = "d6da5d98-dcd7-43e2-ab0d-7a71f2c9c886",
+                            ConcurrencyStamp = "c0c5c7ed-3eb1-4f00-bb5b-b802b3897106",
                             Description = "User role",
                             Name = "user",
                             NormalizedName = "user"
@@ -133,7 +135,7 @@ namespace Data.Migrations
                         {
                             Id = new Guid("69bd714f-9576-45ba-b5b7-f00649be00de"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "600421d2-6329-4480-b2ec-82464d51d3ef",
+                            ConcurrencyStamp = "8c409fc5-0eca-471b-a66e-2f61faafd655",
                             DeptId = 1,
                             Email = "smt.ngocsang@gmail.com",
                             EmailConfirmed = true,
@@ -141,7 +143,7 @@ namespace Data.Migrations
                             Name = "Nguyen Ngoc Sang",
                             NormalizedEmail = "smt.ngocsang@gmail.com",
                             NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAEMbyed2sckz4sBmQACvvqzIxtvea8xAbyr3SuLhV6HwqfVQtHjWaJBLOgDqR4HzJTA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAELlnfWoa4qrIs3jC5G4oietEqL8Pa2J8qRI5uRR5TBpEDhsILZYuHM8pj+z0xhnQ5w==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -294,20 +296,18 @@ namespace Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Cautraloi")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Dapandung")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ExamResultId")
                         .HasColumnType("int");
 
-                    b.Property<float>("FinalScore")
-                        .HasColumnType("real");
-
-                    b.Property<string>("LoaiCauHoi")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("FinalScore")
+                        .HasColumnType("int");
 
                     b.Property<string>("QA")
                         .HasColumnType("nvarchar(max)");
@@ -321,42 +321,11 @@ namespace Data.Migrations
                     b.Property<string>("QD")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<float>("Score")
-                        .HasColumnType("real");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ExamResultId");
 
                     b.ToTable("LogExams", (string)null);
-                });
-
-            modelBuilder.Entity("Data.Entities.LogExamTrinhtuthaotac", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("Answer")
-                        .HasColumnType("int");
-
-                    b.Property<int>("LogExamId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Text")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ThuTu")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LogExamId");
-
-                    b.ToTable("LogExamTrinhtuthaotacs", (string)null);
                 });
 
             modelBuilder.Entity("Data.Entities.Question", b =>
@@ -566,17 +535,6 @@ namespace Data.Migrations
                     b.Navigation("ExamResult");
                 });
 
-            modelBuilder.Entity("Data.Entities.LogExamTrinhtuthaotac", b =>
-                {
-                    b.HasOne("Data.Entities.LogExam", "LogExam")
-                        .WithMany("LogExamTrinhtuthaotacs")
-                        .HasForeignKey("LogExamId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("LogExam");
-                });
-
             modelBuilder.Entity("Data.Entities.Question", b =>
                 {
                     b.HasOne("Data.Entities.Category", "Category")
@@ -615,11 +573,6 @@ namespace Data.Migrations
             modelBuilder.Entity("Data.Entities.ExamResult", b =>
                 {
                     b.Navigation("LogExams");
-                });
-
-            modelBuilder.Entity("Data.Entities.LogExam", b =>
-                {
-                    b.Navigation("LogExamTrinhtuthaotacs");
                 });
 #pragma warning restore 612, 618
         }

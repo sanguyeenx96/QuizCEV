@@ -25,19 +25,19 @@ namespace WebAPI.Controllers
         //    return Ok(result);
         //}
 
-        //[HttpGet("GetAll")]
-        //public async Task<IActionResult> Getall()
-        //{
-        //    var result = await _examResultService.Getall();
-        //    return Ok(result);
-        //}
+        [HttpGet("GetAll")]
+        public async Task<IActionResult> Getall()
+        {
+            var result = await _examResultService.Getall();
+            return Ok(result);
+        }
 
-        //[HttpPost]
-        //public async Task<IActionResult> Create(ExamResultCreateRequest request)
-        //{
-        //    var result = await _examResultService.Create(request);
-        //    return Ok(result);
-        //}
+        [HttpPost]
+        public async Task<IActionResult> Create(ExamResultCreateRequest request)
+        {
+            var result = await _examResultService.Create(request);
+            return Ok(result);
+        }
 
         //[HttpPut("{id}")]
         //public async Task<IActionResult> Update(int id, ExamResultUpdateRequest request)

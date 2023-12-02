@@ -8,8 +8,8 @@ namespace ViewModels.ExamResult.Request
 {
     public class ExamResultCreateRequest
     {
-        public int Score { get; set; }
-        public int UserId { get; set; }
+        public float Score { get; set; }
+        public Guid UserId { get; set; }
         public int CategoryId { get; set; }
     }
 }

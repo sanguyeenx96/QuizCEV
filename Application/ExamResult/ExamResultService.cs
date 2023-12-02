@@ -19,6 +19,34 @@ namespace Application.ExamResult
             _context = context;
         }
 
+        public async Task<ApiResult<int>> Create(ExamResultCreateRequest request)
+        {
+            var newExamResult = new Data.Entities.ExamResult
+            {
+                Score = request.Score,
+                CategoryId = request.CategoryId,
+                UserId = request.UserId,
+                Date = DateTime.Now
+            };
+            _context.ExamResults.Add(newExamResult);
+            await _context.SaveChangesAsync();
+            return new ApiSuccessResult<int> { Id = newExamResult.Id };
+        }
+
+        public async Task<ApiResult<List<ExamResultVm>>> Getall()
+        {
+            var ExamResults = await _context.ExamResults.Select(x => new ExamResultVm
+            {
+                Id = x.Id,
+                UserId = x.UserId,
+                CategoryId = x.CategoryId,
+                Date = x.Date,
+                Score = x.Score
+            }).ToListAsync();
+            return new ApiSuccessResult<List<ExamResultVm>>(ExamResults);
+        }
+
+
         //public async Task<ApiResult<int>> Create(ExamResultCreateRequest request)
         //{
         //    var newExamResult = new Data.Entities.ExamResult

@@ -11,11 +11,11 @@ namespace Application.ExamResult
 {
     public interface IExamResultService 
     {
-        //Task<ApiResult<List<ExamResultVm>>> Getall();
+        Task<ApiResult<List<ExamResultVm>>> Getall();
 
         //Task<ApiResult<List<ExamResultVm>>> Search(ExamResultSearchRequest request);
 
-        //Task<ApiResult<int>> Create(ExamResultCreateRequest request);
+        Task<ApiResult<int>> Create(ExamResultCreateRequest request);
 
         //Task<ApiResult<int>> Update(int id, ExamResultUpdateRequest request);
 

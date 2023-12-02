@@ -1,9 +1,17 @@
 ﻿@using ViewModels.Question.Response
 @{
+    string hoten = ViewBag.hoten.ToString();
     float totalScore = ViewBag.totalScore;
     string danhgia = (totalScore >= 8) ? "tốt" : (totalScore >= 6) ? "trung bình" : "không đạt";
     int demtn = 0;
+    int demtl = 0;
+
+    float scoreTracNghiem = ViewBag.tracnghiemScore;
+    float totalScoreTracNghiem = ViewBag.totalTracNghiemScore;
+    float scoreTuLuan = ViewBag.tuluanScore;
+    float totalScoreTuLuan = ViewBag.totalTuLuanScore;
 }
+
 <h1 class="display-6 mb-3 ">
     <i class="bi-chevron-down"></i>
     Kết quả bài thi
@@ -15,29 +23,62 @@
              @{
              if (danhgia == "tốt")
              {
-                                <text>border-top-success border-top-3 mb-3</text>
+                <text>border-top-success border-top-3 mb-3</text>
             }
             if (danhgia == "trung bình")
             {
-                                <text>border-top-warning border-top-3 mb-3</text>
+                                                                    <text>border-top-warning border-top-3 mb-3</text>
             }
             if (danhgia == "không đạt")
             {
-                                <text>border-top-danger border-top-3 mb-3</text>
+                                                                                    <text>border-top-danger border-top-3 mb-3</text>
             }
         }">
             <div class="card-body">
-                <h5 class="card-title">Điểm số @totalScore điểm</h5>
-                <p class="card-text"><small>Kết quả <b class="text-danger">@danhgia</b> </small></p>
-            </div><img class="card-img-bottom" src="~/full.jpg" alt="">
+                <h5 class="card-title">Điểm số @totalScore/10 điểm</h5>
+                <p class="card-text"><small>Đánh giá: <b
+                    @{
+                        if (danhgia == "tốt")
+                        {
+                                                                        <text>class="text-success</text>
+                        }
+                        if (danhgia == "trung bình")
+                        {
+                                                                        <text>class="text-warning</text>
+                        }
+                        if (danhgia == "không đạt")
+                        {
+                                                                        <text>class="text-danger</text>
+                        }
+                    }
+                    ">@danhgia</b> </small></p>
+                 <hr>
+            <div style="position: relative; text-align: center;">
+                <div style="width: 100%; position: absolute; top: 50%; left: 0; transform: translateY(-50%); z-index: 999999999999999">
+                    @{
+                        if (danhgia == "tốt")
+                        {
+                                        <h1 class="display-6 text-success animate__animated animate__flip">OK</h1>
+                        }
+                        if (danhgia == "trung bình")
+                        {
+                                        <h1 class="display-6 text-warning animate__animated animate__flip">OK</h1>
+                        }
+                        if (danhgia == "không đạt")
+                        {
+                                        <h1 class="display-6 text-danger animate__animated animate__flip">NG</h1>
+                        }
+                    }
+                </div>
+                <canvas id="myChart"></canvas>
+            </div>
+
+
+            </div>
         </div>
     </div>
     <div class="col-md-8">
         <div class="card mb-4">
-            <div class="card-header">
-                <i class="bi-folder2-open"></i>
-                Chi tiết bài thi
-            </div>
             <div class="card-body">
                 <div class="row">
                     <div class="col-4">
@@ -49,16 +90,16 @@
                     </div>
                     <div class="col-4">
                         <div class="border-start border-start-4 border-start-info px-3 mb-3">
-                            <small class="text-medium-emphasis">Phần thi trắc nghiệm</small>
+                            <small class="text-medium-emphasis">Trắc nghiệm</small>
                             <div class="fs-7">Đúng @ViewBag.slTraLoiDungTracNghiem/@ViewBag.slTotalTracNghiem câu </div>
-                            <span class="badge bg-light me-2 text-dark"> @ViewBag.tracnghiemScore/@ViewBag.totalTracNghiemScore điểm</span>
+                            <span class="badge bg-light me-2 text-dark"> @scoreTracNghiem/@totalScoreTracNghiem điểm</span>
                         </div>
                     </div>
                     <div class="col-4">
                         <div class="border-start border-start-4 border-start-info px-3 mb-3">
-                            <small class="text-medium-emphasis">Phần thi tự luận</small>
+                            <small class="text-medium-emphasis">Tự luận</small>
                             <div class="fs-7">Đúng @ViewBag.slTraLoiDungTuLuan/@ViewBag.slTotalTuLuan câu</div>
-                            <span class="badge bg-light me-2 text-dark">@ViewBag.tuluanScore/@ViewBag.totalTuLuanScore điểm</span>
+                            <span class="badge bg-light me-2 text-dark">@scoreTuLuan/@totalScoreTuLuan điểm</span>
 
                         </div>
                     </div>
@@ -67,7 +108,7 @@
                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
                         <button class="nav-link active" id="nav-home-tab" data-coreui-toggle="tab" data-coreui-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">
                             <i class="bi-dot"></i>
-                            Phần thi trắc nghiệm                          
+                            Phần thi trắc nghiệm
                         </button>
                         <button class="nav-link" id="nav-profile-tab" data-coreui-toggle="tab" data-coreui-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">
                             <i class="bi-dot"></i>
@@ -80,113 +121,269 @@
                         <div class="accordion">
                             @foreach (var item in ViewBag.dsTN as List<QuestionAndAnswerVm>)
                             {
-                                demtn++;
-                                string idThe = "tn" + item.Id.ToString();
+                            demtn++;
+                            string idThe = "tn" + item.Id.ToString();
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-coreui-toggle="collapse" data-coreui-target="#@idThe" aria-expanded="false" aria-controls="@idThe">
+                                        @{
+                                        if (item.QCorrectAns.ToUpper() == item.Answer.ToUpper())
+                                        {
+                                            <span class="badge bg-success me-2 ">
+                                                Câu @demtn
+                                                <small>
+                                                    <span class="badge bg-dark" style="vertical-align: text-top;">
+                                                        @item.Score điểm
+                                                    </span>
+                                                </small>
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-danger me-2 ">
+                                                Câu @demtn
+                                                <small>
+                                                    <span class="badge bg-dark" style="vertical-align: text-top;">
+                                                        @item.Score điểm
+                                                    </span>
+                                                </small>
+                                            </span>
+                                        }
+                                        }
+                                        @item.Text
+                                    </button>
+                                </h2>
+                                <div id="@idThe" class="accordion-collapse collapse" data-coreui-parent="#accordionExample">
+                                    <div class="accordion-body">
+                                        <div class="row">
+                                            @{
+                                            if (!string.IsNullOrEmpty(item.QA))
+                                            {
+                                            if (item.QCorrectAns == "a")
+                                            {
+                                                <div class="col-6">
+                                                    <button class="btn w-100 text-black btn-success " disabled>@item.QA</button>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                            if (item.Answer == "A")
+                                            {
+                                                <div class="col-6">
+                                                    <button class="btn w-100 text-black btn-danger " disabled>@item.QA</button>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="col-6">
+                                                    <button class="btn w-100 text-black btn-outline-light " disabled>@item.QA</button>
+                                                </div>
+                                            }
+                                            }
+                                            }
+                                            if (!string.IsNullOrEmpty(item.QB))
+                                            {
+                                            if (item.QCorrectAns == "b")
+                                            {
+                                                <div class="col-6">
+                                                    <button class="btn w-100 text-black btn-success " disabled>@item.QB</button>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                            if (item.Answer == "B")
+                                            {
+                                                <div class="col-6">
+                                                    <button class="btn w-100 text-black btn-danger " disabled>@item.QB</button>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="col-6">
+                                                    <button class="btn w-100 text-black btn-outline-light " disabled>@item.QB</button>
+                                                </div>
+                                            }
+                                            }
+                                            }
+                                            if (!string.IsNullOrEmpty(item.QC))
+                                            {
+                                                <div class="col-6">
+                                                    <button class="btn w-100 btn-outline-light disabled">@item.QC</button>
+                                                </div>
+                                            }
+                                            if (!string.IsNullOrEmpty(item.QD))
+                                            {
+                                                <div class="col-6">
+                                                    <button class="btn w-100 btn-outline-light disabled">@item.QD</button>
+                                                </div>
+                                            }
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            }
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab" tabindex="0">
+                        <div class="accordion">
+                            @{
+                            var chTL = ViewBag.chTL as List<ViewModels.CauHoiTuLuan.Response.CauHoiTuLuanVm>;
+                            var dsTL = ViewBag.dsTL as List<ViewModels.CauHoiTrinhTuThaoTac.Response.QuestionAndAnswerTrinhTuThaoTacVm>;
+                            var groupdsTL = dsTL.GroupBy(x => x.CauHoiTuLuanId);
+                            foreach (var group in groupdsTL)
+                            {
+                            demtl++;
+                            string idThe = "tl" + group.FirstOrDefault().Id.ToString();
+                            int cauhoituluanId = group.FirstOrDefault().CauHoiTuLuanId;
                                 <div class="accordion-item">
                                     <h2 class="accordion-header">
                                         <button class="accordion-button collapsed" type="button" data-coreui-toggle="collapse" data-coreui-target="#@idThe" aria-expanded="false" aria-controls="@idThe">
                                             @{
-                                                if (item.QCorrectAns.ToUpper() == item.Answer.ToUpper())
-                                                {
-                                                    <span class="badge bg-success me-2 ">
-                                                        Câu @demtn
-                                                        <small>
-                                                            <span class="badge bg-dark" style="vertical-align: text-top;">
-                                                                @item.Score điểm
-                                                            </span>
-                                                        </small>
-                                                    </span>
-                                                }
-                                                else
-                                                {
-                                                    <span class="badge bg-danger me-2 ">
-                                                        Câu @demtn
-                                                        <small>
-                                                            <span class="badge bg-dark" style="vertical-align: text-top;">
-                                                                @item.Score điểm
-                                                            </span>
-                                                        </small>
-                                                    </span>
-                                                }
+                                        if (group.All(x => x.ThuTu == x.Answer))
+                                        {
+                                                <span class="badge bg-success me-2 ">
+                                                    Câu @demtl
+                                                    <small>
+                                                        <span class="badge bg-dark" style="vertical-align: text-top;">
+                                                            @chTL.Where(x=>x.Id == group.FirstOrDefault().CauHoiTuLuanId).FirstOrDefault().Score điểm
+                                                        </span>
+                                                    </small>
+                                                </span>
+                                        }
+                                        else
+                                        {
+                                                <span class="badge bg-danger me-2 ">
+                                                    Câu @demtl
+                                                    <small>
+                                                        <span class="badge bg-dark" style="vertical-align: text-top;">
+                                                            @chTL.Where(x=>x.Id == group.FirstOrDefault().CauHoiTuLuanId).FirstOrDefault().Score điểm
+                                                        </span>
+                                                    </small>
+                                                </span>
+                                        }
                                             }
-                                            @item.Text
+                                            @group.FirstOrDefault().CauHoiTuLuanText
                                         </button>
                                     </h2>
                                     <div id="@idThe" class="accordion-collapse collapse" data-coreui-parent="#accordionExample">
                                         <div class="accordion-body">
-                                            <div class="row">
-                                                @{
-                                                    if (!string.IsNullOrEmpty(item.QA))
-                                                    {
-                                                        if (item.QCorrectAns == "a")
-                                                        {
-                                                            <div class="col-6">
-                                                                <button class="btn w-100 text-black btn-success " disabled>@item.QA</button>
-                                                            </div>
-                                                        }
-                                                        else
-                                                        {
-                                                            if (item.Answer == "A")
-                                                            {
-                                                                <div class="col-6">
-                                                                    <button class="btn w-100 text-black btn-danger " disabled>@item.QA</button>
-                                                                </div>
-                                                            }
-                                                            else
-                                                            {
-                                                                <div class="col-6">
-                                                                    <button class="btn w-100 text-black btn-outline-light " disabled>@item.QA</button>
-                                                                </div>
-                                                            }
-                                                        }
-                                                    }
-                                                    if (!string.IsNullOrEmpty(item.QB))
-                                                    {
-                                                        if (item.QCorrectAns == "b")
-                                                        {
-                                                            <div class="col-6">
-                                                                <button class="btn w-100 text-black btn-success " disabled>@item.QB</button>
-                                                            </div>
-                                                        }
-                                                        else
-                                                        {
-                                                            if (item.Answer == "B")
-                                                            {
-                                                                <div class="col-6">
-                                                                    <button class="btn w-100 text-black btn-danger " disabled>@item.QB</button>
-                                                                </div>
-                                                            }
-                                                            else
-                                                            {
-                                                                <div class="col-6">
-                                                                    <button class="btn w-100 text-black btn-outline-light " disabled>@item.QB</button>
-                                                                </div>
-                                                            }
-                                                        }
-                                                    }
-                                                    if (!string.IsNullOrEmpty(item.QC))
-                                                    {
-                                                        <div class="col-6">
-                                                            <button class="btn w-100 btn-outline-light disabled">@item.QC</button>
-                                                        </div>
-                                                    }
-                                                    if (!string.IsNullOrEmpty(item.QD))
-                                                    {
-                                                        <div class="col-6">
-                                                            <button class="btn w-100 btn-outline-light disabled">@item.QD</button>
-                                                        </div>
-                                                    }
+
+                                            <table class="table table-hover " style="width:100%">
+                                                <thead style="vertical-align:middle;font-size:small">
+                                                    <tr>
+                                                        <th class="col-2" style="text-align:center;font-weight: 300">
+                                                            Đáp án
+                                                        </th>
+                                                        <th class="col-8" style="text-align:start;font-weight: 300">
+                                                            Nội dung thao tác
+                                                        </th>
+                                                        <th class="col-2" style="text-align:center;font-weight: 300">
+                                                            Trả lời
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (var item in group.OrderBy(x => x.ThuTu))
+                                                {
+                                                if (item.ThuTu == item.Answer)
+                                                {
+                                                    <tr style="text-align:center;vertical-align:middle" class="bg-success p-2 text-dark bg-opacity-10">
+                                                        <td>
+                                                            @item.ThuTu
+                                                        </td>
+                                                        <td style="text-align:start">
+                                                            @item.Text
+                                                        </td>
+                                                        <td>
+                                                            @item.Answer
+                                                        </td>
+                                                    </tr>
                                                 }
-                                            </div>
+                                                else
+                                                {
+                                                    <tr style="text-align:center;vertical-align:middle" class="bg-danger p-2 text-dark bg-opacity-10">
+                                                        <td>
+                                                            @item.ThuTu
+                                                        </td>
+                                                        <td style="text-align:start">
+                                                            @item.Text
+                                                        </td>
+                                                        <td>
+                                                            @item.Answer
+                                                        </td>
+                                                    </tr>
+                                                }
+                                                }
+                                                </tbody>
+                                            </table>
                                         </div>
+
                                     </div>
                                 </div>
                             }
+                            }
                         </div>
                     </div>
-                    <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab" tabindex="0">tl</div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function () {
+        Chart.register(ChartDataLabels); // Enable plugin
+
+        const ctx = document.getElementById('myChart').getContext('2d');
+        var tracnghiemScore = @scoreTracNghiem;
+        var tuluanScore = @scoreTuLuan;
+        var totalScore = tracnghiemScore + tuluanScore;
+        var errorScore = 10 - totalScore;
+        // Create a pie chart
+        var myChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Trắc nghiệm', 'Tự luận', 'Sai'],
+                datasets: [{
+                    data: [tracnghiemScore, tuluanScore, errorScore],
+                    backgroundColor: [
+                        'rgba(46, 184, 92, 0.5)',
+                        'rgba(46, 184, 92, 0.5)',
+                        'rgba(229, 83, 83, 0.5)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    title: {
+                        display: false,
+                        text: 'Biểu đồ kết quả điểm số bài thi'
+                    },
+                    datalabels: {
+                        formatter: (value, ctx) => {
+                            return ctx.chart.data.labels[ctx.dataIndex] + ': ' + value + ' điểm';
+                        },
+                        color: 'black',
+                        backgroundColor: 'hsla(70 100% 50% / 0.7)',
+                        font: {
+                            size: 12,
+                        },
+                        display: true,
+                    },
+                },
+                tooltips: {
+                    enabled: true,
+                },
+
+            }
+        });
+    })
+
+</script>

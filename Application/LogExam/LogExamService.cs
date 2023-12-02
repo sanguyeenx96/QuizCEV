@@ -19,18 +19,45 @@ namespace Application.LogExam
             _context = context;
         }
 
-        public async Task<ApiResult<int>> Create(LogExamCreateRequest request)
+        public async Task<ApiResult<bool>> CreateList(List<LogExamCreateRequest> request)
+        {
+            foreach( var item in request)
+            {
+                var logExam = new Data.Entities.LogExam()
+                {
+                    ExamResultId = item.ExamResultId,
+                    LoaiCauHoi = item.LoaiCauHoi,
+                    Cauhoi = item.Cauhoi,
+                    QA = item.QA,
+                    QB = item.QB,
+                    QC = item.QC,
+                    QD = item.QD,
+                    Cautraloi = item.Cautraloi,
+                    Dapandung = item.Dapandung,
+                    Score = item.Score,
+                    FinalScore = item.FinalScore
+                };
+                _context.LogExams.Add(logExam);
+            }
+            await _context.SaveChangesAsync();
+            return new ApiSuccessResult<bool>();
+        }
+
+        public async Task<ApiResult<int>> CreateSingle(LogExamCreateRequest request)
         {
             var logExam = new Data.Entities.LogExam()
             {
                 ExamResultId = request.ExamResultId,
+                LoaiCauHoi = request.LoaiCauHoi,
                 Cauhoi = request.Cauhoi,
                 QA = request.QA,
                 QB = request.QB,
                 QC = request.QC,
                 QD = request.QD,
                 Cautraloi = request.Cautraloi,
-                Dapandung = request.Dapandung
+                Dapandung = request.Dapandung,
+                Score = request.Score,
+                FinalScore = request.FinalScore
             };
             _context.LogExams.Add(logExam);
             await _context.SaveChangesAsync();

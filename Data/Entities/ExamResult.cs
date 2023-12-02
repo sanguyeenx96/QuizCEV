@@ -10,7 +10,7 @@ namespace Data.Entities
     {
         public int Id { get; set; }
         public DateTime Date { get; set; }
-        public int Score { get; set; }
+        public float Score { get; set; }
         public Guid UserId { get; set; }
         public int CategoryId { get; set; }
         public Category Category { get; set; }

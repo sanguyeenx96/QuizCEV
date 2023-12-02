@@ -4,14 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ViewModels.CauHoiTrinhTuThaoTac.Response
+namespace ViewModels.LogExamTrinhtuthaotac.Response
 {
-    public class CauHoiTrinhTuThaoTacVm
+    public class LogExamTrinhtuthaotacVm
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public string Text { get; set; }
         public int ThuTu { get; set; }
-        public int CauHoiTuLuanId { get; set; }
-
+        public int Answer { get; set; }
+        public int LogExamId { get; set; }
     }
 }
