@@ -7,6 +7,8 @@
 - Token, Tempdata, Session
 - DI
 - 
+![1](https://github.com/sanguyeenx96/QuizCEV/assets/103011257/f6418438-ffe9-4032-99e3-1c9fa4bdfba2)
+![2](https://github.com/sanguyeenx96/QuizCEV/assets/103011257/21ad1946-ac63-4bac-8bc9-c2164d0cf1f1)
 
 ![1](https://github.com/sanguyeenx96/QuizCEV/assets/103011257/9782e131-0f85-4958-b0fb-3e813941a2d0)
 ![2](https://github.com/sanguyeenx96/QuizCEV/assets/103011257/43919a34-8aca-41ed-aa09-7a3d0bd132f2)
