@@ -1,4 +1,13 @@
 # QuizCEV
+- .Net Core 6 MVC 
+- N-Layer architecture
+- MSSQL Server
+- EF Code First
+- Identity
+- Token, Tempdata, Session
+- DI
+- 
+
 ![1](https://github.com/sanguyeenx96/QuizCEV/assets/103011257/9782e131-0f85-4958-b0fb-3e813941a2d0)
 ![2](https://github.com/sanguyeenx96/QuizCEV/assets/103011257/43919a34-8aca-41ed-aa09-7a3d0bd132f2)
 ![3](https://github.com/sanguyeenx96/QuizCEV/assets/103011257/0660911b-3522-4bfe-838e-f8631823bd99)
