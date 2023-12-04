@@ -18,12 +18,12 @@ namespace WebAPI.Controllers
             _examResultService = examResultService;
         }
 
-        //[HttpPost("Search")]
-        //public async Task<IActionResult> Search( ExamResultSearchRequest request)
-        //{
-        //    var result = await _examResultService.Search(request);
-        //    return Ok(result);
-        //}
+        [HttpPost("Search")]
+        public async Task<IActionResult> Search(ExamResultSearchRequest request)
+        {
+            var result = await _examResultService.Search(request);
+            return Ok(result);
+        }
 
         [HttpGet("GetAll")]
         public async Task<IActionResult> Getall()

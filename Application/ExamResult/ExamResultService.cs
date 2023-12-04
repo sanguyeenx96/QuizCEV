@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using ViewModels.Common;
 using ViewModels.ExamResult.Request;
 using ViewModels.ExamResult.Response;
+using ViewModels.LogExam.Response;
+using ViewModels.LogExamTrinhtuthaotac.Response;
 
 namespace Application.ExamResult
 {
@@ -25,6 +27,7 @@ namespace Application.ExamResult
             {
                 Score = request.Score,
                 CategoryId = request.CategoryId,
+                CategoryName = request.CategoryName,
                 UserId = request.UserId,
                 Date = DateTime.Now
             };
@@ -40,10 +43,75 @@ namespace Application.ExamResult
                 Id = x.Id,
                 UserId = x.UserId,
                 CategoryId = x.CategoryId,
+                CategoryName=x.CategoryName,
                 Date = x.Date,
                 Score = x.Score
             }).ToListAsync();
             return new ApiSuccessResult<List<ExamResultVm>>(ExamResults);
+        }
+
+        public async Task<ApiResult<List<ExamResultVm>>> Search(ExamResultSearchRequest request)
+        {
+            // Sử dụng IQueryable để tận dụng deferred execution
+            IQueryable<Data.Entities.ExamResult> resultQuery = _context.ExamResults
+                                                                .Include(x => x.LogExams)
+                                                                    .ThenInclude(x => x.LogExamTrinhtuthaotacs)
+                                                                .Include(x => x.AppUser)
+                                                                    .ThenInclude(x => x.Dept);
+                                                                
+            if (request.UserId != null)
+                resultQuery = resultQuery.Where(x => x.UserId == request.UserId);
+            if (request.examResultId != null)
+                resultQuery = resultQuery.Where(x => x.Id == request.examResultId);
+            if (request.CategoryId != null)
+                resultQuery = resultQuery.Where(x => x.CategoryId == request.CategoryId);
+            if (request.Date != null)
+            {
+                DateTime requestDate = request.Date.Value.Date; // Lấy ngày tháng từ request.Date
+                resultQuery = resultQuery.Where(x => x.Date.Date == requestDate);
+            }
+            // Sử dụng ToListAsync() để thực hiện truy vấn
+            var resultList = await resultQuery.ToListAsync();
+            // Chuyển đổi danh sách kết quả thành danh sách ExamResultVm
+            var listExamResults = resultList.Select(result => new ExamResultVm
+            {
+                Id = result.Id,
+                Hoten = result.AppUser.Name,
+                Bophan = result.AppUser.Dept.Name,
+                CategoryName = result.CategoryName,
+                UserId = result.UserId,
+                CategoryId = result.CategoryId,
+                Date = result.Date,
+                Score = result.Score,
+                LogExams = result.LogExams != null
+                ? result.LogExams.Select(logExam => new LogExamVm
+                {
+                    Id = logExam.Id,
+                    ExamResultId = logExam.ExamResultId,
+                    LoaiCauHoi = logExam.LoaiCauHoi,
+                    Cauhoi = logExam.Cauhoi,
+                    QA = logExam.QA,
+                    QB = logExam.QB,
+                    QC = logExam.QC,
+                    QD = logExam.QD,
+                    Cautraloi = logExam.Cautraloi,
+                    Dapandung = logExam.Dapandung,
+                    Score = logExam.Score,
+                    FinalScore = logExam.FinalScore,
+                    LogExamTrinhtuthaotacs = logExam.LogExamTrinhtuthaotacs != null
+                            ? logExam.LogExamTrinhtuthaotacs.Select(LogExamTrinhtuthaotac => new LogExamTrinhtuthaotacVm
+                            {
+                                Id = LogExamTrinhtuthaotac.Id,
+                                Text = LogExamTrinhtuthaotac.Text,
+                                ThuTu = LogExamTrinhtuthaotac.ThuTu,
+                                Answer = LogExamTrinhtuthaotac.Answer,
+                                LogExamId = LogExamTrinhtuthaotac.LogExamId
+                            }).ToList()
+                            : new List<LogExamTrinhtuthaotacVm>()
+                }).ToList()
+                : new List<LogExamVm>()
+            }).ToList();
+            return new ApiSuccessResult<List<ExamResultVm>>(listExamResults);
         }
 
 

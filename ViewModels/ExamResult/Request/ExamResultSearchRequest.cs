@@ -8,10 +8,9 @@ namespace ViewModels.ExamResult.Request
 {
     public class ExamResultSearchRequest
     {
-        public int? Id { get; set; }
-        public DateTime? Date { get; set; }
-        public int? Score { get; set; }
         public Guid? UserId { get; set; }
+        public int? examResultId { get; set; }
         public int? CategoryId { get; set; }
+        public DateTime? Date { get; set; }
     }
 }

@@ -11,5 +11,7 @@ namespace ViewModels.ExamResult.Request
         public float Score { get; set; }
         public Guid UserId { get; set; }
         public int CategoryId { get; set; }
+        public string CategoryName { get; set; }
+
     }
 }

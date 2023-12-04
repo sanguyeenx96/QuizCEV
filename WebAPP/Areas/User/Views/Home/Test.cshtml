@@ -105,7 +105,7 @@
 
 <div id="dongho" class="row col-12">
     <div class="col-8" style="display: grid; place-items: center;">
-        <button id="btnNopbai" class="btn btn-success text-white w-50 animate__animated animate__pulse animate__infinite shadow" style="pointer-events: auto; height:60%;opacity:0.9" >
+        <button id="btnNopbai" class="btn btn-success text-white w-50 animate__animated animate__pulse animate__infinite shadow" style="pointer-events: auto; height:60%;opacity:0.9">
             <i class="bi-check-circle-fill"></i>
             Nộp bài thi
         </button>
@@ -187,7 +187,8 @@
     // Gán ID của interval vào biến
     intervalId = setInterval(checkTempData, 1000);
 
-    $("#btnNopbai").click(function(){
+
+    $("#btnNopbai").click(function () {
         Swal.fire({
             title: "Nộp bài thi?",
             text: "Hãy kiểm tra lịch sử câu trả lời trước khi nộp",
@@ -197,44 +198,43 @@
             cancelButtonColor: "#d33",
             confirmButtonText: "Nộp bài",
             cancelButtonText: "Huỷ bỏ"
-
         }).then((result) => {
             if (result.isConfirmed) {
-                let timerInterval;
                 Swal.fire({
-                    html: "Đang chấm điểm... <b></b>",
-                    timer: 999,
+                    html: "Đang chấm điểm...",
                     timerProgressBar: true,
+                    allowOutsideClick: false, // Tắt việc đóng cửa sổ khi bấm ngoài
                     didOpen: () => {
                         Swal.showLoading();
-                        const timer = Swal.getPopup().querySelector("b");
-                        timerInterval = setInterval(() => {
-                            timer.textContent = `${Swal.getTimerLeft()}`;
-                        }, 100);
-                    },
-                    willClose: () => {
-                        clearInterval(timerInterval);
-                    }
-                }).then((result) => {
-                    if (result.dismiss === Swal.DismissReason.timer) {
                         $.ajax({
                             type: "GET",
                             url: "Save",
                             success: function (result) {
                                 if (result.success) {
-                                    alert("OK")
-                                    var url = "ConfirmEndExam";
-                                    window.location.href = url;
+                                    Swal.fire({
+                                        icon: "success",
+                                        showConfirmButton: false,
+                                        timer: 1500 // Hiển thị thông báo thành công trong 1.5 giây
+                                    }).then(() => {
+                                        var url = "ConfirmEndExam";
+                                        window.location.href = url;
+                                    });
                                 }
-                                
+                                else{
+                                    Swal.fire({
+                                        icon: "error",
+                                        title: "Lỗi kết nối, hãy thử lại...",
+                                        showConfirmButton: false,
+                                        timer: 1500 // Hiển thị thông báo thành công trong 1.5 giây
+                                    })
+                                }
                             }
                         });
                     }
-                });
+                })
             }
         });
-    })
-
+    });
 
     $(document).ready(function () {
         $("#btnNopbai").hide();

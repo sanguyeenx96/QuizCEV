@@ -13,7 +13,7 @@ namespace Application.ExamResult
     {
         Task<ApiResult<List<ExamResultVm>>> Getall();
 
-        //Task<ApiResult<List<ExamResultVm>>> Search(ExamResultSearchRequest request);
+        Task<ApiResult<List<ExamResultVm>>> Search(ExamResultSearchRequest request);
 
         Task<ApiResult<int>> Create(ExamResultCreateRequest request);
 

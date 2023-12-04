@@ -5,6 +5,7 @@ using Microsoft.CodeAnalysis.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Security.Claims;
+using ViewModels.Category.Response;
 using ViewModels.CauHoiTrinhTuThaoTac.Request;
 using ViewModels.CauHoiTrinhTuThaoTac.Response;
 using ViewModels.CauHoiTuLuan.Response;
@@ -121,9 +122,11 @@ namespace WebAPP.Areas.User.Controllers
         {
             int idPhong = Convert.ToInt32(TempData["idPhong"].ToString());
             var phongThi = await _categoryApiClient.GetById(idPhong);
+            string tenPhongthi = phongThi.ResultObj.Name.ToString();
             ViewBag.hoten = User.FindFirst(ClaimTypes.Name).Value.ToString();
             ViewBag.bophan = User.FindFirst(ClaimTypes.Country).Value.ToString();
-            ViewBag.thisPage = phongThi.ResultObj.Name.ToString();
+            ViewBag.thisPage = tenPhongthi;
+            TempData["Tenphongthi"] = tenPhongthi;
             ViewBag.totalQuestion = TempData["totalQuestion"];
             ViewBag.thoiGianThi = TempData["thoiGianThi"];
             TempData.Keep();
@@ -365,6 +368,7 @@ namespace WebAPP.Areas.User.Controllers
                 id = userId;
             };
             int idPhong = Convert.ToInt32(TempData["idPhong"].ToString());
+            string tenPhongthi = TempData["Tenphongthi"].ToString();
 
             //Tính điểm phần thi trắc nghiệm
             float totalScoreTracNghiem = 0;
@@ -410,6 +414,7 @@ namespace WebAPP.Areas.User.Controllers
             {
                 UserId = id,
                 CategoryId = idPhong,
+                CategoryName = tenPhongthi,
                 Score = totalScore
             };
 
@@ -502,21 +507,15 @@ namespace WebAPP.Areas.User.Controllers
                     return Json(new { success = false });
                 }
             }
-
-
             TempData.Keep();
             return Json(new { success = true });
         }
-
-
-
-
-
 
         //Trang kết thúc
         [HttpGet]
         public async Task<IActionResult> ConfirmEndExam()
         {
+            ViewBag.tenPhongthi = TempData["Tenphongthi"].ToString();
             int idPhong = Convert.ToInt32(TempData["idPhong"].ToString());
             var phongThi = await _categoryApiClient.GetById(idPhong);
             ViewBag.hoten = User.FindFirst(ClaimTypes.Name).Value.ToString();
@@ -577,7 +576,6 @@ namespace WebAPP.Areas.User.Controllers
             //Tu luan
             ViewBag.chTL = listQuestionsTuLuan;
             ViewBag.dsTL = listQuestionAndAnswerTrinhTuThaoTac;
-
 
             TempData.Keep();
             return View();
