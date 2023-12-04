@@ -13,6 +13,7 @@ namespace Data.Entities
         public float Score { get; set; }
         public Guid UserId { get; set; }
         public int CategoryId { get; set; }
+        public string CategoryName { get; set; }
         public Category Category { get; set; }
         public List<LogExam> LogExams { get; set; }
         public AppUser AppUser { get; set; }

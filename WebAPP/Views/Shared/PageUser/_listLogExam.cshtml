@@ -1,0 +1,87 @@
+﻿@model List<ViewModels.ExamResult.Response.ExamResultVm>
+@foreach (var item in Model)
+{
+    float totalScore = item.Score;
+    string danhgia = (totalScore >= 8) ? "Kết quả tốt" : (totalScore >= 6) ? "Kết quả trung bình" : "Không đạt";
+    <div class="card my-2">
+        <div class="card-body">
+            <h5 class="card-title">Bài thi @item.CategoryName </h5>
+            <p class="card-text">@item.Hoten - Bộ phận @item.Bophan</p>
+            @{
+                if (danhgia == "Kết quả tốt")
+                {
+                    <p>
+                        Điểm số : <span class="badge bg-success "> @item.Score điểm</span> |
+                        Kết quả : <span class="badge bg-success">@danhgia</span>
+                        <br>
+                        Ngày làm bài thi <span class="badge bg-light text-dark">@item.Date</span>
+                    </p>
+                }
+                if (danhgia == "Kết quả trung bình")
+                {
+                    <p>
+                        Điểm số : <span class="badge bg-warning "> @item.Score điểm</span> |
+                        Kết quả : <span class="badge bg-warning">@danhgia</span>
+                        <br>
+                        Ngày làm bài thi <span class="badge bg-light text-dark">@item.Date</span>
+                    </p>
+                }
+                if (danhgia == "Không đạt")
+                {
+                    <p>
+                        Điểm số : <span class="badge bg-danger "> @item.Score điểm</span> |
+                        Kết quả : <span class="badge bg-danger">@danhgia</span>
+                        <br>
+                        Ngày làm bài thi <span class="badge bg-light text-dark">@item.Date</span>
+                    </p>
+                }
+            }            
+            <button class="btn btn-outline-primary btnXemchitietlichsu" data-idbaithi="@item.Id">
+                <i class="bi-eye"></i>
+                Xem chi tiết
+            </button>
+        </div>
+    </div>
+}
+
+<div class="modal fade" id="staticBackdrop" data-coreui-backdrop="static" data-coreui-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+                <button type="button" class="btn-close" data-coreui-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="noidungbaithi"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-coreui-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Understood</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        $('.btnXemchitietlichsu').click(function () {
+            var idBaithi = $(this).data("idbaithi");
+            var intIdBaithi = parseInt(idBaithi)
+            $.ajax({
+                url: 'logexam/GetLogAfterExam',
+                type: 'POST',
+                data: { examResultId: intIdBaithi },
+                success: function (data) {
+                    //$('#ketquaTimkiem').html(data);
+                    $('#noidungbaithi').html(data);
+                    $('#staticBackdrop').modal("show")
+                },
+                error: function (error) {
+                    // Xử lý lỗi nếu có
+                    console.error(error);
+                }
+            });
+        })
+    })
+</script>

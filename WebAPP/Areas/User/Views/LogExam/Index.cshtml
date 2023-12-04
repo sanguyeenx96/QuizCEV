@@ -1,0 +1,114 @@
+﻿@{
+    var selectListPhongThi = ViewBag.SelectListPhongThi as List<SelectListItem>;
+    selectListPhongThi.Insert(0, new SelectListItem { Value = "-1", Text = "" });
+}
+
+
+@section SideBar
+    {
+    <partial name="PageUser/_sideBar" />
+    }
+    <div class="row">
+        <div class="col-6 col-lg-3">
+            <div class="card mb-2">
+                <div class="card-body p-2 d-flex align-items-center">
+                    <div class="bg-primary text-white p-3 me-3">
+                        <i class="bi-folder2-open"></i>
+                    </div>
+                    <div>
+                        <div class="fs-6 fw-semibold text-primary">23 </div>
+                        <div class="text-medium-emphasis text-uppercase fw-semibold small">Tổng số</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.col-->
+        <div class="col-6 col-lg-3">
+            <div class="card">
+                <div class="card-body p-2 d-flex align-items-center">
+                    <div class="bg-success text-white p-3 me-3">
+                        <i class="bi-hand-thumbs-up"></i>
+                    </div>
+                    <div>
+                        <div class="fs-6 fw-semibold text-success">15</div>
+                        <div class="text-medium-emphasis text-uppercase fw-semibold small">Kết quả tốt</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.col-->
+        <div class="col-6 col-lg-3">
+            <div class="card">
+                <div class="card-body p-2 d-flex align-items-center">
+                    <div class="bg-warning text-white p-3 me-3">
+                        <i class="bi bi-align-middle"></i>
+                    </div>
+                    <div>
+                        <div class="fs-6 fw-semibold text-warning">15</div>
+                        <div class="text-medium-emphasis text-uppercase fw-semibold small">Trung bình</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.col-->
+        <div class="col-6 col-lg-3">
+            <div class="card">
+                <div class="card-body p-2 d-flex align-items-center">
+                    <div class="bg-danger text-white p-3 me-3">
+                        <i class="bi-hand-thumbs-down"></i>
+                    </div>
+                    <div>
+                        <div class="fs-6 fw-semibold text-danger">1</div>
+                        <div class="text-medium-emphasis text-uppercase fw-semibold small">Không đạt</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.col-->
+    </div>
+    <hr />
+    <div class="row gx-3 gy-2 align-items-center">
+        <div class="col-sm-9">
+            <label for="formGroupExampleInput" class="form-label">Chọn bài thi</label>
+            @Html.DropDownList("PhongThi", selectListPhongThi, new { @class = "form-control" })
+        </div>
+        <div class="col-sm-3">
+            <label for="formGroupExampleInput" class="form-label">Chọn ngày thi</label>
+            <input type="text" id="datepicker" class="form-control" autocomplete="off">
+        </div>
+        <div id="ketquaTimkiem">
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            var picker = new Pikaday({
+                field: document.getElementById('datepicker'),
+                format: 'YYYY-MM-DD',
+                defaultDate: null,  // Đặt mặc định là ngày hiện tại
+                onSelect: function () {
+                    loadDataTheoChuDe();
+                }
+            });
+            $('#PhongThi').on("change", function () {
+                loadDataTheoChuDe();
+            });
+            function loadDataTheoChuDe() {
+                var selectphongThiValue = $('#PhongThi').val();
+                var selectDate = $('#datepicker').val();
+                var intId = parseInt(selectphongThiValue);
+                $.ajax({
+                    url: 'logexam/GetLogAfterExam',
+                    type: 'POST',
+                    data: { CategoryId: intId, Date: selectDate },
+                    success: function (data) {
+                        $('#ketquaTimkiem').html(data);
+                    },
+                    error: function (error) {
+                        // Xử lý lỗi nếu có
+                        console.error(error);
+                    }
+                });
+            }
+        });
+    </script>

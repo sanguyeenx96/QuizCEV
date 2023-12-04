@@ -50,7 +50,7 @@ namespace Data.Migrations
                         new
                         {
                             Id = new Guid("8d04dce2-969a-435d-bba4-df3f325983dc"),
-                            ConcurrencyStamp = "df55a115-8354-4fd0-be8b-6787d66d73ea",
+                            ConcurrencyStamp = "fb0fb2e4-b39b-4851-8f80-51e67acff30a",
                             Description = "Administrator role",
                             Name = "admin",
                             NormalizedName = "admin"
@@ -58,7 +58,7 @@ namespace Data.Migrations
                         new
                         {
                             Id = new Guid("470f4021-29d8-4c8e-a9de-527571683d86"),
-                            ConcurrencyStamp = "d6da5d98-dcd7-43e2-ab0d-7a71f2c9c886",
+                            ConcurrencyStamp = "38c52804-e595-4d71-876f-847461c986e6",
                             Description = "User role",
                             Name = "user",
                             NormalizedName = "user"
@@ -133,7 +133,7 @@ namespace Data.Migrations
                         {
                             Id = new Guid("69bd714f-9576-45ba-b5b7-f00649be00de"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "600421d2-6329-4480-b2ec-82464d51d3ef",
+                            ConcurrencyStamp = "cefd7a1e-7736-40fc-9b0f-d7fa53b5e436",
                             DeptId = 1,
                             Email = "smt.ngocsang@gmail.com",
                             EmailConfirmed = true,
@@ -141,7 +141,7 @@ namespace Data.Migrations
                             Name = "Nguyen Ngoc Sang",
                             NormalizedEmail = "smt.ngocsang@gmail.com",
                             NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAEMbyed2sckz4sBmQACvvqzIxtvea8xAbyr3SuLhV6HwqfVQtHjWaJBLOgDqR4HzJTA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEA+kCYdrt9HcuJpfNTp2791DeYxsPY8Yrl6wmkvju6byd3D+FcqFyiWfNpToy5310w==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -262,6 +262,10 @@ namespace Data.Migrations
 
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
+
+                    b.Property<string>("CategoryName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");

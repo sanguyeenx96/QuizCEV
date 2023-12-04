@@ -1,5 +1,6 @@
 ﻿@using ViewModels.Question.Response
 @{
+    string tenPhongthi = ViewBag.tenPhongthi.ToString();
     string hoten = ViewBag.hoten.ToString();
     float totalScore = ViewBag.totalScore;
     string danhgia = (totalScore >= 8) ? "tốt" : (totalScore >= 6) ? "trung bình" : "không đạt";
@@ -11,44 +12,48 @@
     float scoreTuLuan = ViewBag.tuluanScore;
     float totalScoreTuLuan = ViewBag.totalTuLuanScore;
 }
+@section SideBar
+    {
+    <partial name="PageUser/_sideBar" />
+    }
 
-<h1 class="display-6 mb-3 ">
-    <i class="bi-chevron-down"></i>
-    Kết quả bài thi
-</h1>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <div class="card mb-3
+    <h1 class="display-6 mb-3 ">
+        <i class="bi-chevron-down"></i>
+        Kết quả bài thi @tenPhongthi
+    </h1>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card mb-3
              @{
              if (danhgia == "tốt")
              {
-                <text>border-top-success border-top-3 mb-3</text>
+                        <text>border-top-success border-top-3 mb-3</text>
             }
             if (danhgia == "trung bình")
             {
-                                                                    <text>border-top-warning border-top-3 mb-3</text>
+                        <text>border-top-warning border-top-3 mb-3</text>
             }
             if (danhgia == "không đạt")
             {
-                                                                                    <text>border-top-danger border-top-3 mb-3</text>
+                        <text>border-top-danger border-top-3 mb-3</text>
             }
         }">
-            <div class="card-body">
-                <h5 class="card-title">Điểm số @totalScore/10 điểm</h5>
-                <p class="card-text"><small>Đánh giá: <b
+                    <div class="card-body">
+                        <h5 class="card-title">Điểm số @totalScore/10 điểm</h5>
+                        <p class="card-text"><small>Đánh giá: <b
                     @{
                         if (danhgia == "tốt")
                         {
-                                                                        <text>class="text-success</text>
+                                    <text>class="text-success</text>
                         }
                         if (danhgia == "trung bình")
                         {
-                                                                        <text>class="text-warning</text>
+                                    <text>class="text-warning</text>
                         }
                         if (danhgia == "không đạt")
                         {
-                                                                        <text>class="text-danger</text>
+                                    <text>class="text-danger</text>
                         }
                     }
                     ">@danhgia</b> </small></p>
@@ -58,15 +63,15 @@
                     @{
                         if (danhgia == "tốt")
                         {
-                                        <h1 class="display-6 text-success animate__animated animate__flip">OK</h1>
+                            <h1 class="display-6 text-success animate__animated animate__rotateIn">OK</h1>
                         }
                         if (danhgia == "trung bình")
                         {
-                                        <h1 class="display-6 text-warning animate__animated animate__flip">OK</h1>
+                            <h1 class="display-6 text-warning animate__animated animate__rotateIn">OK</h1>
                         }
                         if (danhgia == "không đạt")
                         {
-                                        <h1 class="display-6 text-danger animate__animated animate__flip">NG</h1>
+                            <h1 class="display-6 text-danger animate__animated animate__rotateIn">NG</h1>
                         }
                     }
                 </div>
@@ -334,7 +339,6 @@
 <script>
     $(document).ready(function () {
         Chart.register(ChartDataLabels); // Enable plugin
-
         const ctx = document.getElementById('myChart').getContext('2d');
         var tracnghiemScore = @scoreTracNghiem;
         var tuluanScore = @scoreTuLuan;

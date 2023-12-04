@@ -24,7 +24,6 @@ namespace WebAPP.Areas.Admin.Controllers
             _cauHoiTrinhTuThaoTacApiClient = cauHoiTrinhTuThaoTacApiClient;
         }
 
-
         //PAGE:
         public async Task<IActionResult> List()
         {
