@@ -1,6 +1,6 @@
-﻿@{
+﻿@model List<ViewModels.ExamResult.Response.ExamResultVm>
+@{
     var selectListPhongThi = ViewBag.SelectListPhongThi as List<SelectListItem>;
-    selectListPhongThi.Insert(0, new SelectListItem { Value = "-1", Text = "" });
 }
 
 
@@ -12,17 +12,16 @@
         <div class="col-6 col-lg-3">
             <div class="card mb-2">
                 <div class="card-body p-2 d-flex align-items-center">
-                    <div class="bg-primary text-white p-3 me-3">
+                    <div class="bg-info text-white p-3 me-3">
                         <i class="bi-folder2-open"></i>
                     </div>
                     <div>
-                        <div class="fs-6 fw-semibold text-primary">23 </div>
+                        <div class="fs-6 fw-semibold text-medium-emphasis text-primary">@Model.Count() bài thi</div>
                         <div class="text-medium-emphasis text-uppercase fw-semibold small">Tổng số</div>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- /.col-->
         <div class="col-6 col-lg-3">
             <div class="card">
                 <div class="card-body p-2 d-flex align-items-center">
@@ -30,13 +29,12 @@
                         <i class="bi-hand-thumbs-up"></i>
                     </div>
                     <div>
-                        <div class="fs-6 fw-semibold text-success">15</div>
+                        <div class="fs-6 fw-semibold text-success text-medium-emphasis">@Model.Where(x=>x.Score >= 8).Count() bài thi</div>
                         <div class="text-medium-emphasis text-uppercase fw-semibold small">Kết quả tốt</div>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- /.col-->
         <div class="col-6 col-lg-3">
             <div class="card">
                 <div class="card-body p-2 d-flex align-items-center">
@@ -44,13 +42,12 @@
                         <i class="bi bi-align-middle"></i>
                     </div>
                     <div>
-                        <div class="fs-6 fw-semibold text-warning">15</div>
+                        <div class="fs-6 fw-semibold text-medium-emphasis">@Model.Where(x=>(x.Score >= 6) &&(x.Score < 8)).Count() bài thi</div>
                         <div class="text-medium-emphasis text-uppercase fw-semibold small">Trung bình</div>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- /.col-->
         <div class="col-6 col-lg-3">
             <div class="card">
                 <div class="card-body p-2 d-flex align-items-center">
@@ -58,23 +55,24 @@
                         <i class="bi-hand-thumbs-down"></i>
                     </div>
                     <div>
-                        <div class="fs-6 fw-semibold text-danger">1</div>
+                        <div class="fs-6 fw-semibold text-danger text-medium-emphasis">@Model.Where(x=>x.Score <6).Count() bài thi</div>
                         <div class="text-medium-emphasis text-uppercase fw-semibold small">Không đạt</div>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- /.col-->
     </div>
     <hr />
     <div class="row gx-3 gy-2 align-items-center">
         <div class="col-sm-9">
             <label for="formGroupExampleInput" class="form-label">Chọn bài thi</label>
-            @Html.DropDownList("PhongThi", selectListPhongThi, new { @class = "form-control" })
+            <select id="PhongThi" asp-items="selectListPhongThi" class="form-select">
+                <option value="" disabled selected>Nhấn để chọn</option>
+            </select>
         </div>
         <div class="col-sm-3">
             <label for="formGroupExampleInput" class="form-label">Chọn ngày thi</label>
-            <input type="text" id="datepicker" class="form-control" autocomplete="off">
+            <input type="text" id="datepicker" class="form-select" autocomplete="off" placeholder="Nhấn để chọn">
         </div>
         <div id="ketquaTimkiem">
         </div>
@@ -96,16 +94,16 @@
             function loadDataTheoChuDe() {
                 var selectphongThiValue = $('#PhongThi').val();
                 var selectDate = $('#datepicker').val();
-                var intId = parseInt(selectphongThiValue);
+                var intId = parseInt(selectphongThiValue);                
                 $.ajax({
                     url: 'logexam/GetLogAfterExam',
                     type: 'POST',
                     data: { CategoryId: intId, Date: selectDate },
                     success: function (data) {
                         $('#ketquaTimkiem').html(data);
+                        console.log(data)
                     },
                     error: function (error) {
-                        // Xử lý lỗi nếu có
                         console.error(error);
                     }
                 });

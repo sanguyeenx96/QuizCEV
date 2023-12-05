@@ -68,7 +68,7 @@ namespace Application.CauHoiTrinhTuThaoTac
             return new ApiSuccessResult<bool>();
         }
 
-        public async Task<ApiResult<bool>> Delete(int id, CauHoiTrinhTuThaoTacDeleteRequest request)
+        public async Task<ApiResult<bool>> Delete(Guid id, CauHoiTrinhTuThaoTacDeleteRequest request)
         {
             var question = await _context.cauHoiTrinhTuThaoTacs.FindAsync(id);
             if (question == null)
@@ -103,7 +103,7 @@ namespace Application.CauHoiTrinhTuThaoTac
             return new ApiSuccessResult<List<CauHoiTrinhTuThaoTacVm>>(listquestions);
         }
 
-        public async Task<ApiResult<CauHoiTrinhTuThaoTacVm>> GetById(int id)
+        public async Task<ApiResult<CauHoiTrinhTuThaoTacVm>> GetById(Guid id)
         {
             var result = await _context.cauHoiTrinhTuThaoTacs.FindAsync(id);
             if (result == null)
@@ -118,7 +118,7 @@ namespace Application.CauHoiTrinhTuThaoTac
             return new ApiSuccessResult<CauHoiTrinhTuThaoTacVm>(question);
         }
 
-        public async Task<ApiResult<bool>> UpdateText(int id, CauHoiTrinhTuThaoTacUpdateTextRequest request)
+        public async Task<ApiResult<bool>> UpdateText(Guid id, CauHoiTrinhTuThaoTacUpdateTextRequest request)
         {
             var cauhoi = await _context.cauHoiTrinhTuThaoTacs.FindAsync(id);
             if (cauhoi == null)

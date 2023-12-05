@@ -102,5 +102,11 @@ namespace WebAPI.Controllers
             var result = await _usersService.Count(id);
             return Ok(result);
         }
+        [HttpPost("checkpw/{id}")]
+        public async Task<IActionResult> CheckPassword(Guid id, [FromBody] UserCheckPasswordRequest request)
+        {
+            var result = await _usersService.CheckPassWord(id,request);
+            return Ok(result);
+        }
     }
 }

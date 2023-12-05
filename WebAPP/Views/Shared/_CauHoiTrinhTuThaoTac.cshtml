@@ -4,7 +4,7 @@
     var randomid = GetHashCode();
 }
 
-<table id="@randomid" class="table table-light table-hover table-sm" style="font-size:small;width:100%">
+<table id="@randomid" class="table table-dark table-hover " style="width:100%">
     <thead style="vertical-align:middle;font-size:small">
         <tr>
             <th class="col-2" style="text-align:center">
@@ -25,7 +25,7 @@
         {
             <tr style="text-align:center;vertical-align:middle">
                 <td>
-                    @item.ThuTu
+                    <span class="badge text-bg-light">@item.ThuTu</span>
                 </td>
                 <td hidden>
                     @item.Id
@@ -35,11 +35,11 @@
                 </td>
                 <td>
                     <div class="btn-group" style=" white-space:nowrap;">
-                        <btn class="btn btn-outline-secondary btn-sm btnSuaCauHoiTrinhTuThaoTac" data-abc="@item.CauHoiTuLuanId" data-id="@item.Id" data-noidungcauhoi="@item.Text">
+                        <btn class="btn btn-light btnSuaCauHoiTrinhTuThaoTac" data-abc="@item.CauHoiTuLuanId" data-id="@item.Id" data-noidungcauhoi="@item.Text">
                             <i class="bi-pencil"> </i>
                             Sửa
                         </btn>
-                        <btn class="btn btn-outline-secondary btn-sm btnXoaCauHoiTrinhTuThaoTac" data-abc="@item.CauHoiTuLuanId" data-id="@item.Id" data-noidungcauhoi="@item.Text">
+                        <btn class="btn btn-danger text-light  btnXoaCauHoiTrinhTuThaoTac" data-abc="@item.CauHoiTuLuanId" data-id="@item.Id" data-noidungcauhoi="@item.Text">
                             <i class="bi-trash"> </i>
                             Xoá
                         </btn>
@@ -85,13 +85,12 @@
             var id = $(this).data("id");
             var noidungcauhoi = $(this).data("noidungcauhoi");
             var cauhoituluanId = $(this).data("abc");
-            var intId = parseInt(id);
             var intcauhoituluanId = parseInt(cauhoituluanId);
 
             const { value: text } = await Swal.fire({
                 input: "textarea",
                 inputLabel: "Sửa nội dung :",
-                inputValue: noidungcauhoi.trim(),
+                inputValue: noidungcauhoi,
                 inputAttributes: {
                     "aria-label": "Type your message here",
                 },
@@ -105,7 +104,7 @@
                     url: "UpdateTextCauHoiTrinhTuThaoTac",
                     type: "POST",
                     data: {
-                        id: intId,
+                        id: id,
                         Text: text,
                     },
                     success: function (result) {

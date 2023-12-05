@@ -137,7 +137,7 @@ $(document).ready(function () {
     });
 
     $(".btnSuaCauHoiTuLuan").click(async function () {
-        var id = $(this).data("id");
+        var id = $(this).attr("data-id");
         var noidungcauhoi = $(this).data("tencauhoi");
         var categoryId = $(this).data("abc");
         var intId = parseInt(id);
@@ -146,7 +146,7 @@ $(document).ready(function () {
         const { value: text } = await Swal.fire({
             input: "textarea",
             inputLabel: "Sửa tiêu đề câu hỏi :",
-            inputValue: noidungcauhoi.trim(),
+            inputValue: noidungcauhoi,
             inputAttributes: {
                 "aria-label": "Type your message here",
             },

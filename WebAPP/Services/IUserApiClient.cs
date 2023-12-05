@@ -17,6 +17,8 @@ namespace WebAPP.Services
         Task<ApiResult<bool>> ResetPassword(Guid id, UserResetPasswordRequest request);
         Task<ApiResult<bool>> Delete(Guid id);
         Task<ApiResult<int>> Count(int id);
+        Task<ApiResult<bool>> CheckPassWord(Guid id, UserCheckPasswordRequest request);
+
 
     }
 }

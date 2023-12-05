@@ -25,6 +25,8 @@ namespace Application.ExamResult
         {
             var newExamResult = new Data.Entities.ExamResult
             {
+                ThoiGianLamBai = request.ThoiGianLamBai,
+                ThoiGianChoPhepLamBai = request.ThoiGianChoPhepLamBai,
                 Score = request.Score,
                 CategoryId = request.CategoryId,
                 CategoryName = request.CategoryName,
@@ -43,7 +45,7 @@ namespace Application.ExamResult
                 Id = x.Id,
                 UserId = x.UserId,
                 CategoryId = x.CategoryId,
-                CategoryName=x.CategoryName,
+                CategoryName = x.CategoryName,
                 Date = x.Date,
                 Score = x.Score
             }).ToListAsync();
@@ -58,7 +60,7 @@ namespace Application.ExamResult
                                                                     .ThenInclude(x => x.LogExamTrinhtuthaotacs)
                                                                 .Include(x => x.AppUser)
                                                                     .ThenInclude(x => x.Dept);
-                                                                
+
             if (request.UserId != null)
                 resultQuery = resultQuery.Where(x => x.UserId == request.UserId);
             if (request.examResultId != null)
@@ -76,6 +78,8 @@ namespace Application.ExamResult
             var listExamResults = resultList.Select(result => new ExamResultVm
             {
                 Id = result.Id,
+                ThoiGianLamBai = result.ThoiGianLamBai,
+                ThoiGianChoPhepLamBai = result.ThoiGianChoPhepLamBai,
                 Hoten = result.AppUser.Name,
                 Bophan = result.AppUser.Dept.Name,
                 CategoryName = result.CategoryName,

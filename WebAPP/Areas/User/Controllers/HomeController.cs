@@ -358,9 +358,13 @@ namespace WebAPP.Areas.User.Controllers
         }
 
         //Lưu kết quả
-        [HttpGet]
-        public async Task<IActionResult> Save()
+        [HttpPost]
+        public async Task<IActionResult> Save(string time)
         {
+            int thoiGianChoPhepLamBai = Convert.ToInt32(TempData["thoiGianThi"].ToString());
+            int thoiGianConLai = Convert.ToInt32(time);
+            int thoiGianLamBai = thoiGianChoPhepLamBai - (thoiGianConLai/60/1000);
+            TempData["thoiGianLamBai"] = thoiGianLamBai;
             Guid id = Guid.Empty;
             var userIdString = User.FindFirstValue("UserId");
             if (Guid.TryParse(userIdString, out var userId))
@@ -415,7 +419,9 @@ namespace WebAPP.Areas.User.Controllers
                 UserId = id,
                 CategoryId = idPhong,
                 CategoryName = tenPhongthi,
-                Score = totalScore
+                Score = totalScore,
+                ThoiGianLamBai = thoiGianLamBai,
+                ThoiGianChoPhepLamBai = thoiGianChoPhepLamBai
             };
 
             var result = await _examResultApiClient.Create(request);
@@ -522,7 +528,7 @@ namespace WebAPP.Areas.User.Controllers
             ViewBag.bophan = User.FindFirst(ClaimTypes.Country).Value.ToString();
             ViewBag.thisPage = phongThi.ResultObj.Name.ToString();
             ViewBag.totalQuestion = TempData["totalQuestion"];
-            ViewBag.thoiGianThi = TempData["thoiGianThi"];
+            ViewBag.thoiGianLamBai = TempData["thoiGianLamBai"];
 
             //Tính điểm phần thi trắc nghiệm
             float totalScoreTracNghiem = 0;

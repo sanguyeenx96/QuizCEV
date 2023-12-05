@@ -28,7 +28,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<IActionResult> GetById(Guid id)
         {
             var result = await _cauHoiTrinhTuThaoTacService.GetById(id);
             return Ok(result);
@@ -43,7 +43,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("Delete/{id}")]
-        public async Task<IActionResult> Delete(int id,CauHoiTrinhTuThaoTacDeleteRequest request)
+        public async Task<IActionResult> Delete(Guid id,CauHoiTrinhTuThaoTacDeleteRequest request)
         {
             var result = await _cauHoiTrinhTuThaoTacService.Delete(id,request);
             return Ok(result);
@@ -64,7 +64,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut("updatetext/{id}")]
-        public async Task<IActionResult> UpdateText(int id, CauHoiTrinhTuThaoTacUpdateTextRequest request)
+        public async Task<IActionResult> UpdateText(Guid id, CauHoiTrinhTuThaoTacUpdateTextRequest request)
         {
             var result = await _cauHoiTrinhTuThaoTacService.UpdateText(id, request);
             return Ok(result);
