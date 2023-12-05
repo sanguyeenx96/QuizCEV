@@ -211,7 +211,7 @@ namespace WebAPP.Areas.Admin.Controllers
             return Json(new { success = true });
         }
         [HttpPost]
-        public async Task<IActionResult> UpdateTextCauHoiTrinhTuThaoTac(int id, CauHoiTrinhTuThaoTacUpdateTextRequest request)
+        public async Task<IActionResult> UpdateTextCauHoiTrinhTuThaoTac(Guid id, CauHoiTrinhTuThaoTacUpdateTextRequest request)
         {
             var result = await _cauHoiTrinhTuThaoTacApiClient.UpdateText(id, request);
             if (!result.IsSuccessed)
@@ -244,7 +244,7 @@ namespace WebAPP.Areas.Admin.Controllers
             return Json(new { success = true });
         }
         [HttpPost]
-        public async Task<IActionResult> DeleteCauHoiTrinhTuThaoTac(int id, CauHoiTrinhTuThaoTacDeleteRequest request)
+        public async Task<IActionResult> DeleteCauHoiTrinhTuThaoTac(Guid id, CauHoiTrinhTuThaoTacDeleteRequest request)
         {
             var result = await _cauHoiTrinhTuThaoTacApiClient.Delete(id,request);
             if (!result.IsSuccessed)

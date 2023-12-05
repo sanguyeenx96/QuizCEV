@@ -1,0 +1,104 @@
+﻿<style>
+
+</style>
+<div class="sidebar sidebar-dark sidebar-fixed" id="sidebar">
+    <div class="sidebar-brand d-none d-md-flex">
+        CEV eExam
+        <span class="badge badge-sm bg-danger m-2 ">Trang quản trị</span>
+    </div>
+    <ul class="sidebar-nav" data-coreui="navigation" data-simplebar="">
+        <li class="nav-item">
+            <a id="pageTrangChu" class="nav-link" asp-action="index" asp-controller="home" asp-area="admin">
+                <i class="bi-house mx-3"></i>
+                Trang chủ
+            </a>
+        </li>
+        <li class="nav-title">Quản lý chung</li>
+        <li class="nav-group" aria-expanded="false">
+            <a class="nav-link nav-group-toggle" href="#">
+                <i class="bi-folder2-open mx-3"></i>
+                Phòng thi
+            </a>
+            <ul class="nav-group-items" style="height: auto;">
+                <li class="nav-item">
+                    <a id="pageDongMoPhongThi" class="nav-link" asp-action="changestatus" asp-controller="category" asp-area="admin">
+                        Đóng / Mở phòng thi
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a id="pageDanhSachChuDePhongThi" class="nav-link" asp-action="list" asp-controller="category" asp-area="admin">
+                        Danh sách
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a id="pageThemChuDePhongThi" class="nav-link" asp-action="create" asp-controller="category" asp-area="admin">
+                        Thêm mới
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li class="nav-group" aria-expanded="false">
+            <a class="nav-link nav-group-toggle" href="#">
+                <i class="bi-folder2-open mx-3"></i>
+                Câu hỏi
+            </a>
+            <ul class="nav-group-items" style="height: auto;">
+                <li class="nav-item">
+                    <a id="pageDanhsachcauhoi" class="nav-link" asp-action="list" asp-controller="question" asp-area="admin">
+                        Danh sách
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a id="pageThemcauhoitracnghiem" class="nav-link" asp-action="create" asp-controller="question" asp-area="admin">
+                        Thêm mới trắc nghiệm
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a id="pageThemcauhoituluan" class="nav-link" asp-action="createtuluan" asp-controller="question" asp-area="admin">
+                        Thêm mới tự luận
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li class="nav-group" aria-expanded="false">
+            <a class="nav-link nav-group-toggle" href="#">
+                <i class="bi-folder2-open mx-3"></i>
+                Bộ phận & Tài khoản
+            </a>
+            <ul class="nav-group-items" style="height: auto;">
+                <li class="nav-item">
+                    <a id="pageThembophanmoi" class="nav-link" asp-action="createbophan" asp-controller="deptuser" asp-area="admin">
+                        Bộ phận
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a id="pageDanhsachbophantaikhoan" class="nav-link" asp-action="list" asp-controller="deptuser" asp-area="admin">
+                        Tài khoản
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a id="pageThemtaikhoanmoi" class="nav-link" asp-action="createtaikhoan" asp-controller="deptuser" asp-area="admin">
+                        Thêm tài khoản
+                    </a>
+                </li>
+            </ul>
+        </li>     
+        <li class="nav-title">Thống kê</li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">
+                <i class="bi-clipboard-data mx-3"></i>
+                Điểm số & Thống kê
+            </a>
+        </li>
+    </ul>
+</div>
+@if (ViewData["Active"] != null)
+{
+    string tenthe = ViewData["Active"].ToString();
+    <script type="text/javascript">
+        var element = document.getElementById("@tenthe");
+        if (element !== null) {
+            element.classList.add("active");
+        }
+    </script>
+}

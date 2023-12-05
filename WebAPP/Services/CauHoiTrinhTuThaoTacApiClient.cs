@@ -77,7 +77,7 @@ namespace WebAPP.Services
             return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
         }
 
-        public async Task<ApiResult<bool>> Delete(int id, CauHoiTrinhTuThaoTacDeleteRequest request)
+        public async Task<ApiResult<bool>> Delete(Guid id, CauHoiTrinhTuThaoTacDeleteRequest request)
         {
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_configuration["BaseAdress"]);
@@ -113,7 +113,7 @@ namespace WebAPP.Services
             return JsonConvert.DeserializeObject<ApiErrorResult<List<CauHoiTrinhTuThaoTacVm>>>(result);
         }
 
-        public async Task<ApiResult<CauHoiTrinhTuThaoTacVm>> GetById(int id)
+        public async Task<ApiResult<CauHoiTrinhTuThaoTacVm>> GetById(Guid id)
         {
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_configuration["BaseAdress"]);
@@ -130,7 +130,7 @@ namespace WebAPP.Services
             return JsonConvert.DeserializeObject<ApiErrorResult<CauHoiTrinhTuThaoTacVm>>(result);
         }
 
-        public async Task<ApiResult<bool>> UpdateText(int id, CauHoiTrinhTuThaoTacUpdateTextRequest request)
+        public async Task<ApiResult<bool>> UpdateText(Guid id, CauHoiTrinhTuThaoTacUpdateTextRequest request)
         {
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_configuration["BaseAdress"]);

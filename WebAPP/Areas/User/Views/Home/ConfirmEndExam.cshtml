@@ -11,6 +11,9 @@
     float totalScoreTracNghiem = ViewBag.totalTracNghiemScore;
     float scoreTuLuan = ViewBag.tuluanScore;
     float totalScoreTuLuan = ViewBag.totalTuLuanScore;
+
+    int thoiGianLamBai = ViewBag.thoiGianLamBai;
+
 }
 @section SideBar
     {
@@ -88,8 +91,8 @@
                 <div class="row">
                     <div class="col-4">
                         <div class="border-start border-start-4 border-start-info px-3 mb-3">
-                            <small class="text-medium-emphasis">Thời gian làm bài thi</small>
-                            <div class="fs-7">3.5/5 phút</div>
+                            <small class="text-medium-emphasis">Thời gian làm bài</small>
+                            <div class="fs-7">@thoiGianLamBai phút</div>
                             <span class="badge bg-light me-2 text-dark"> Cho phép</span>
                         </div>
                     </div>
@@ -188,39 +191,75 @@
                                             }
                                             if (!string.IsNullOrEmpty(item.QB))
                                             {
-                                            if (item.QCorrectAns == "b")
-                                            {
-                                                <div class="col-6">
-                                                    <button class="btn w-100 text-black btn-success " disabled>@item.QB</button>
-                                                </div>
-                                            }
-                                            else
-                                            {
-                                            if (item.Answer == "B")
-                                            {
-                                                <div class="col-6">
-                                                    <button class="btn w-100 text-black btn-danger " disabled>@item.QB</button>
-                                                </div>
-                                            }
-                                            else
-                                            {
-                                                <div class="col-6">
-                                                    <button class="btn w-100 text-black btn-outline-light " disabled>@item.QB</button>
-                                                </div>
-                                            }
-                                            }
+                                                if (item.QCorrectAns == "b")
+                                                {
+                                                    <div class="col-6">
+                                                        <button class="btn w-100 text-black btn-success " disabled>@item.QB</button>
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    if (item.Answer == "B")
+                                                    {
+                                                        <div class="col-6">
+                                                            <button class="btn w-100 text-black btn-danger " disabled>@item.QB</button>
+                                                        </div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="col-6">
+                                                            <button class="btn w-100 text-black btn-outline-light " disabled>@item.QB</button>
+                                                        </div>
+                                                    }
+                                                }
                                             }
                                             if (!string.IsNullOrEmpty(item.QC))
                                             {
-                                                <div class="col-6">
-                                                    <button class="btn w-100 btn-outline-light disabled">@item.QC</button>
-                                                </div>
+                                                if (item.QCorrectAns == "c")
+                                                {
+                                                    <div class="col-6">
+                                                        <button class="btn w-100 text-black btn-success " disabled>@item.QC</button>
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    if (item.Answer == "C")
+                                                    {
+                                                        <div class="col-6">
+                                                            <button class="btn w-100 text-black btn-danger " disabled>@item.QC</button>
+                                                        </div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="col-6">
+                                                            <button class="btn w-100 text-black btn-outline-light " disabled>@item.QC</button>
+                                                        </div>
+                                                    }
+                                                }
                                             }
                                             if (!string.IsNullOrEmpty(item.QD))
                                             {
-                                                <div class="col-6">
-                                                    <button class="btn w-100 btn-outline-light disabled">@item.QD</button>
-                                                </div>
+                                                if (item.QCorrectAns == "d")
+                                                {
+                                                    <div class="col-6">
+                                                        <button class="btn w-100 text-black btn-success " disabled>@item.QD</button>
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    if (item.Answer == "D")
+                                                    {
+                                                        <div class="col-6">
+                                                            <button class="btn w-100 text-black btn-danger " disabled>@item.QD</button>
+                                                        </div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="col-6">
+                                                            <button class="btn w-100 text-black btn-outline-light " disabled>@item.QD</button>
+                                                        </div>
+                                                    }
+                                                }
                                             }
                                             }
                                         </div>

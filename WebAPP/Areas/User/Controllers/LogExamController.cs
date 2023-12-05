@@ -47,13 +47,14 @@ namespace WebAPP.Areas.User.Controllers
                 Text = item.CategoryName
             }).ToList();
             ViewBag.SelectListPhongThi = selectListPhongThi;
-            return View();
+            return View(resultPhongthi.ResultObj);
         }
 
         //Trang xem lịch sử
         [HttpPost]
         public async Task<IActionResult> GetLogAfterExam(int? CategoryId, DateTime? Date, int? examResultId)
         {
+
             Guid id = Guid.Empty;
             var userIdString = User.FindFirstValue("UserId");
             if (Guid.TryParse(userIdString, out var userId))
@@ -68,18 +69,40 @@ namespace WebAPP.Areas.User.Controllers
                 Date = Date
             };
             var result = await _examResultApiClient.Search(request);
-            if(examResultId == null)
+            if (examResultId == null)
             {
                 return PartialView("PageUser/_listLogExam", result.ResultObj);
             }
             else
             {
-                return PartialView("PageUser/_logExam", result.ResultObj);
+                ExamResultVm log = result.ResultObj.FirstOrDefault();
+                if (log == null)
+                {
+                    return View();
+                }
+                else
+                {
+                    int slCauhoiTN = log.LogExams.Where(x => x.LoaiCauHoi == "TN").Count();
+                    int slCauhoiTL = log.LogExams.Where(x => x.LoaiCauHoi == "TL").Count();
+                    int slDungTN = log.LogExams.Where(x => (x.LoaiCauHoi == "TN") && (x.Score == x.FinalScore)).Count();
+                    int slDungTL = log.LogExams.Where(x => (x.LoaiCauHoi == "TL") && (x.Score == x.FinalScore)).Count();
+                    float totalScoreTN = log.LogExams.Where(x => x.LoaiCauHoi == "TN").Sum(x => x.Score).Value;
+                    float scoreTN = log.LogExams.Where(x => x.LoaiCauHoi == "TN").Sum(x => x.FinalScore).Value;
+                    float totalScoreTL = log.LogExams.Where(x => x.LoaiCauHoi == "TL").Sum(x => x.Score).Value;
+                    float scoreTL = log.LogExams.Where(x => x.LoaiCauHoi == "TL").Sum(x => x.FinalScore).Value;
+
+                    ViewBag.slCauhoiTN = slCauhoiTN;
+                    ViewBag.slCauhoiTL = slCauhoiTL;
+                    ViewBag.slDungTN = slDungTN;
+                    ViewBag.slDungTL = slDungTL;
+                    ViewBag.totalScoreTN = totalScoreTN;
+                    ViewBag.scoreTN = scoreTN;
+                    ViewBag.totalScoreTL = totalScoreTL;
+                    ViewBag.scoreTL = scoreTL;
+
+                    return PartialView("PageUser/_logExam", log);
+                }
             }
-            
         }
-
-
-
     }
 }

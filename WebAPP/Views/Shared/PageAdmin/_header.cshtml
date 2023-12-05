@@ -3,18 +3,8 @@
         <button class="header-toggler px-md-0 me-md-3" type="button" onclick="coreui.Sidebar.getInstance(document.querySelector('#sidebar')).toggle()">
             <i class="bi-list"></i>
         </button>
-        <ul class="header-nav d-none d-md-flex">
-            <li class="nav-item">
-                <a class="nav-link active">
-                    <i class="bi-person-circle"></i>
-                    @ViewBag.hoten -  @ViewBag.bophan
-                </a>
-            </li>
-        </ul>
-        <ul class="header-nav ms-auto">
-            <li class="nav-item">
-            </li>
-        </ul>
+     
+        
         <ul class="header-nav ms-3">
             <li class="nav-item">
                 <a id="btnLogout" class="btn btn-outline-danger">
@@ -39,8 +29,8 @@
 </header>
 
 <script>
-    $(document).ready(function(){
-        $("#btnLogout").click(function(){
+    $(document).ready(function () {
+        $("#btnLogout").click(function () {
             Swal.fire({
                 title: "Đăng xuất tài khoản?",
                 icon: "warning",

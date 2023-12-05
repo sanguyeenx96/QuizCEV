@@ -9,6 +9,8 @@ namespace Data.Entities
     public class ExamResult
     {
         public int Id { get; set; }
+        public int ThoiGianLamBai { get; set; }
+        public int ThoiGianChoPhepLamBai { get; set; }
         public DateTime Date { get; set; }
         public float Score { get; set; }
         public Guid UserId { get; set; }

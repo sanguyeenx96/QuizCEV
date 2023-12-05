@@ -4,7 +4,21 @@
     ViewData["Active"] = "pageChuDePhongThi";
     ViewData["ActiveChild"] = "pageDanhSachChuDePhongThi";
 }
-
+<style>
+    .btn-group .btn {
+        margin-right: 2px; /* Điều chỉnh giá trị để thay đổi kích thước của khoảng trống */
+    }
+</style>
+<div class="col-sm-6 col-md-3 mb-2">
+    <div class="card">
+        <div class="card-body">
+            <div class="text-medium-emphasis text-end">
+                <i class="bi-folder2-open"></i>
+            </div>
+            <div class="fs-4 fw-semibold">@Model.Count()</div><small class="text-medium-emphasis text-uppercase fw-semibold">Phòng thi</small>
+        </div>
+    </div>
+</div>
 <div class="card">
     <div class="card-body">
         <table id="tblDanhsachchudephongthi" class="table table-hover" style="text-align:center; vertical-align:middle;width:100%">
@@ -56,15 +70,15 @@
                         </td>
                         <td style="text-align:end">
                             <div class="btn-group" style=" white-space:nowrap">
-                                <btn class="btn btn-outline-secondary btn-sm btnSuaThoiGian" data-id="@item.Id">
+                                <btn class="btn btn-dark btnSuaThoiGian" data-id="@item.Id">
                                     <i class="bi-clock"> </i>
                                     Đổi thời gian thi
                                 </btn>
-                                <btn class="btn btn-outline-secondary btn-sm btnSua" data-id="@item.Id">
+                                <btn class="btn btn-dark btnSua" data-id="@item.Id">
                                     <i class="bi-pencil"> </i>
                                     Đổi tên
                                 </btn>
-                                <btn class="btn btn-outline-danger btn-sm btnXoa" data-id="@item.Id" data-name="@item.Name">
+                                <btn class="btn btn-danger text-light btnXoa" data-id="@item.Id" data-name="@item.Name">
                                     <i class="bi-trash"> </i>
                                     Xoá
                                 </btn>

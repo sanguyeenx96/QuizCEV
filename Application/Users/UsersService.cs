@@ -295,5 +295,23 @@ namespace Application.Users
             var result = await _userManager.Users.Where(x => x.DeptId == id).CountAsync();
             return new ApiSuccessResult<int> (result);
         }
+
+        public async Task<ApiResult<bool>> CheckPassWord(Guid id, UserCheckPasswordRequest request)
+        {
+            var user = await _userManager.FindByIdAsync(id.ToString());
+            if (user == null)
+            {
+                return new ApiErrorResult<bool>("User không tồn tại");
+            }
+            var result = await _userManager.CheckPasswordAsync(user, request.pwd);
+            if (result)
+            {
+                return new ApiSuccessResult<bool>(true);
+            }
+            else
+            {
+                return new ApiErrorResult<bool>("Mật khẩu không đúng");
+            }
+        }
     }
 }
