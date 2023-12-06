@@ -21,7 +21,5 @@ namespace ViewModels.ExamResult.Response
 
         public int CategoryId { get; set; }
         public List<LogExamVm>? LogExams { get; set; }
-
-
     }
 }

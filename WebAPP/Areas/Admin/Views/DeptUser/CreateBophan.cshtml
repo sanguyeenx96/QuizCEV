@@ -3,25 +3,27 @@
     ViewData["ActiveChild"] = "pageThembophanmoi";
 }
 
-<form id="myForm" class="mb-3">
+<form id="myForm" class="mb-2">
     <div class="row g-2">
         <div class="col-12">
             <label class="form-label">Thêm bộ phận mới</label>
             <div class="input-group">
-                <input type="text" class="form-control" id="name" placeholder="Nhập tên tại đây" required="@true">
-                <button id="btnXacNhan" class="btn btn-outline-success btn-sm" style="display: flex; align-items: center">
-                    <i class="bi-check-circle" style="margin-right: 5px;"></i>Xác nhận
+                <input type="text" class="form-control form-control-lg" id="name" placeholder="Nhập tên tại đây" required="@true">
+                <button id="btnXacNhan" class="btn btn-success " style="display: flex; align-items: center">
+                    <i class="bi-check" style="margin-right: 5px;"></i>Xác nhận
                 </button>
             </div>
         </div>
     </div>
 </form>
-<hr />
 <div class="card">
     <div class="card-body">
         <div id="danhsachBophan"></div>
     </div>
 </div>
+
+
+Object-Relational Mapping
 
 <script>
     $(document).ready(function () {

@@ -1,0 +1,276 @@
+﻿@model List<ViewModels.ExamResult.Response.ExamResultVm>
+
+@{
+    var dataTen = Json.Serialize(ViewBag.dataTen);
+    var dataDiem = Json.Serialize(ViewBag.dataDiem);
+}
+
+<div class="row">
+    <div class="col-sm-6 col-lg-3">
+        <div class="card mb-4 text-white bg-primary">
+            <div class="card-body pb-0 d-flex justify-content-between align-items-start">
+                <div>
+                    <div class="fs-4 fw-semibold">
+                        26K <span class="fs-6 fw-normal">
+                            (-12.4%
+                            <i class="bi-chevron-down"></i>)
+                        </span>
+                    </div>
+                    <div>Users</div>
+                </div>
+                <div class="dropdown">
+                    <button class="btn btn-transparent text-white p-0" type="button" data-coreui-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="bi-chevron-down"></i>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-end"><a class="dropdown-item" href="#">Action</a><a class="dropdown-item" href="#">Another action</a><a class="dropdown-item" href="#">Something else here</a></div>
+                </div>
+            </div>
+            <div class="c-chart-wrapper mt-3 mx-3" style="height:70px;">
+                <canvas class="chart" id="card-chart1" height="73" style="display: block; box-sizing: border-box; height: 69.5238px; width: 196.19px;" width="206"></canvas>
+                
+            </div>
+        </div>
+    </div>
+    <!-- /.col-->
+    <div class="col-sm-6 col-lg-3">
+        <div class="card mb-4 text-white bg-info">
+            <div class="card-body pb-0 d-flex justify-content-between align-items-start">
+                <div>
+                    <div class="fs-4 fw-semibold">
+                        $6.200 <span class="fs-6 fw-normal">
+                            (40.9%
+                            <i class="bi-chevron-down"></i>)
+                        </span>
+                    </div>
+                    <div>Income</div>
+                </div>
+                <div class="dropdown">
+                    <button class="btn btn-transparent text-white p-0" type="button" data-coreui-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="bi-chevron-down"></i>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-end"><a class="dropdown-item" href="#">Action</a><a class="dropdown-item" href="#">Another action</a><a class="dropdown-item" href="#">Something else here</a></div>
+                </div>
+            </div>
+            <div class="c-chart-wrapper mt-3 mx-3" style="height:70px;">
+                <canvas class="chart" id="card-chart2" height="73" style="display: block; box-sizing: border-box; height: 69.5238px; width: 196.19px;" width="206"></canvas>
+            </div>
+        </div>
+    </div>
+    <!-- /.col-->
+    <div class="col-sm-6 col-lg-3">
+        <div class="card mb-4 text-white bg-warning">
+            <div class="card-body pb-0 d-flex justify-content-between align-items-start">
+                <div>
+                    <div class="fs-4 fw-semibold">
+                        2.49% <span class="fs-6 fw-normal">
+                            (84.7%
+                            <i class="bi-chevron-down"></i>)
+                        </span>
+                    </div>
+                    <div>Conversion Rate</div>
+                </div>
+                <div class="dropdown">
+                    <button class="btn btn-transparent text-white p-0" type="button" data-coreui-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="bi-chevron-down"></i>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-end"><a class="dropdown-item" href="#">Action</a><a class="dropdown-item" href="#">Another action</a><a class="dropdown-item" href="#">Something else here</a></div>
+                </div>
+            </div>
+            <div class="c-chart-wrapper mt-3" style="height:70px;">
+                <canvas class="chart" id="card-chart3" height="73" style="display: block; box-sizing: border-box; height: 69.5238px; width: 228.571px;" width="240"></canvas>
+            </div>
+        </div>
+    </div>
+    <!-- /.col-->
+    <div class="col-sm-6 col-lg-3">
+        <div class="card mb-4 text-white bg-danger">
+            <div class="card-body pb-0 d-flex justify-content-between align-items-start">
+                <div>
+                    <div class="fs-4 fw-semibold">
+                        44K <span class="fs-6 fw-normal">
+                            (-23.6%
+                            <i class="bi-chevron-down"></i>)
+                        </span>
+                    </div>
+                    <div>Sessions</div>
+                </div>
+                <div class="dropdown">
+                    <button class="btn btn-transparent text-white p-0" type="button" data-coreui-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="bi-chevron-down"></i>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-end"><a class="dropdown-item" href="#">Action</a><a class="dropdown-item" href="#">Another action</a><a class="dropdown-item" href="#">Something else here</a></div>
+                </div>
+            </div>
+            <div class="c-chart-wrapper mt-3 mx-3" style="height:70px;">
+                <canvas class="chart" id="card-chart4" height="73" style="display: block; box-sizing: border-box; height: 69.5238px; width: 196.19px;" width="206"></canvas>
+            </div>
+        </div>
+    </div>
+    <!-- /.col-->
+</div>
+<canvas class="mb-3" id="myChart" width="400" height="100"></canvas>
+
+
+<div class="card my-2">
+    <div class="card-body">
+        <table id="tblDanhsachdulieu" class="table table-hover" style="vertical-align:middle;width:100%">
+            <thead style="font-size:small">
+                <tr>
+                    <th style="font-weight: 350;">
+                        Phòng thi
+                    </th>
+                    <th style="font-weight: 350;">
+                        Họ tên
+                    </th>
+                    <th style="font-weight: 350;">
+                        Bộ phận
+                    </th>
+                    <th style="font-weight: 350;">
+                        Kết quả
+                    </th>
+                    <th style="font-weight: 350;">
+                        Điểm số
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    float totalScore = item.Score;
+                    string danhgia = (totalScore >= 8) ? "Kết quả tốt" : (totalScore >= 6) ? "Trung bình" : "Không đạt";
+                    <tr>
+                        <td style="text-align:start">
+                            @item.CategoryName
+                        </td>
+                        <td>
+                            @item.Hoten
+                        </td>
+                        <td>
+                            @item.Bophan
+                        </td>
+                        <td>
+                            @danhgia
+                        </td>
+                        <td>
+                            @item.Score
+                        </td>
+                        <td style="text-align:end">
+                            <button class="btn btn-primary">Xem chi tiết</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#tblDanhsachdulieu").DataTable({
+            "paging": true,
+            "searching": true,
+            "info": true,
+            "responsive": true,
+            "ordering": true
+        });
+
+        var dataTen = @Html.Raw(dataTen);
+        var dataDiem = @Html.Raw(dataDiem);
+
+        // Tạo mảng dữ liệu cho điểm số dưới 6
+        var dataDiemDuoi6 = dataDiem.map(function (score) {
+            return score < 6 ? score : null;
+        });
+
+        // Loại bỏ các phần tử null từ mảng
+        dataDiemDuoi6 = dataDiemDuoi6.filter(function (score) {
+            return score !== null;
+        });
+
+        // Tạo mảng dữ liệu cho điểm số trên hoặc bằng 6
+        var dataDiemTren6 = dataDiem.map(function (score) {
+            return score >= 6 ? score : null;
+        });
+
+        // Loại bỏ các phần tử null từ mảng
+        dataDiemTren6 = dataDiemTren6.filter(function (score) {
+            return score !== null;
+        });
+
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: dataTen,
+                datasets: [
+                    {
+                        label: 'Điểm số >= 6',
+                        data: dataDiemTren6,
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Điểm số < 6',
+                        data: dataDiemDuoi6,
+                        backgroundColor: 'rgba(255, 0, 0, 0.2)',
+                        borderColor: 'rgba(255, 0, 0, 1)',
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true,
+                            stepSize: 1
+                        }
+                    }]
+                }
+            }
+        });
+
+
+
+
+
+       
+    })
+
+
+</script>
+
+@*@*
+<div class="modal fade" id="staticBackdrop" data-coreui-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div id="noidungbaithi"></div>
+    </div>
+</div>
+
+
+
+<script>
+    $(document).ready(function () {
+        $('.btnXemchitietlichsu').click(function () {
+            var idBaithi = $(this).data("idbaithi");
+            var intIdBaithi = parseInt(idBaithi)
+            $.ajax({
+                url: 'logexam/GetLogAfterExam',
+                type: 'POST',
+                data: { examResultId: intIdBaithi },
+                success: function (data) {
+                    //$('#ketquaTimkiem').html(data);
+                    $('#noidungbaithi').html(data);
+                    $('#staticBackdrop').modal("show")
+                },
+                error: function (error) {
+                    // Xử lý lỗi nếu có
+                    console.error(error);
+                }
+            });
+        })
+    })
+</script>*@

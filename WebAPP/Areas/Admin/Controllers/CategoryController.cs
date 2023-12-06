@@ -6,7 +6,7 @@ using WebAPP.Services;
 namespace WebAPP.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize]
+    [Authorize(Policy = "adminpolicy")]
     public class CategoryController : Controller
     {
         private readonly ICategoryApiClient _categoryApiClient;

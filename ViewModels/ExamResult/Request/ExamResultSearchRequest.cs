@@ -12,5 +12,10 @@ namespace ViewModels.ExamResult.Request
         public int? examResultId { get; set; }
         public int? CategoryId { get; set; }
         public DateTime? Date { get; set; }
+        public int? boPhanId { get; set; }
+        public string? userName { get; set; }
+        public string? name { get; set; }
+
+
     }
 }

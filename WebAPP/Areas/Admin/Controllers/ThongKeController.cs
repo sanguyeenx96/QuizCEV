@@ -2,79 +2,88 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Security.Claims;
-using ViewModels.Category.Response;
 using ViewModels.ExamResult.Request;
 using ViewModels.ExamResult.Response;
 using WebAPP.Services;
 
-namespace WebAPP.Areas.User.Controllers
+namespace WebAPP.Areas.Admin.Controllers
 {
-    [Area("User")]
-    [Authorize(Policy = "userpolicy")]
-    public class LogExamController : Controller
+    [Area("Admin")]
+    [Authorize(Policy = "adminpolicy")]
+    public class ThongKeController : Controller
     {
         private readonly IExamResultApiClient _examResultApiClient;
-        public LogExamController(IExamResultApiClient examResultApiClient)
+        private readonly IDeptApiClient _deptApiClient;
+
+        public ThongKeController(IExamResultApiClient examResultApiClient, IDeptApiClient deptApiClient)
         {
             _examResultApiClient = examResultApiClient;
+            _deptApiClient = deptApiClient;
         }
 
         public async Task<IActionResult> Index()
         {
-            ViewBag.hoten = User.FindFirst(ClaimTypes.Name).Value.ToString();
-            ViewBag.bophan = User.FindFirst(ClaimTypes.Country).Value.ToString();
-            ViewBag.thisPage = "Tra cứu lịch sử";
-
-            Guid id = Guid.Empty;
-            var userIdString = User.FindFirstValue("UserId");
-            if (Guid.TryParse(userIdString, out var userId))
-            {
-                id = userId;
-            };
+            ViewBag.thisPage = "Thống kê dữ liệu lịch sử bài thi";
             var request = new ExamResultSearchRequest()
             {
-                UserId = id,
+                UserId = null,
                 CategoryId = null,
                 examResultId = null,
                 Date = null,
-                boPhanId =null,
-                name =null,
-                userName =null
+                boPhanId = null,
+                name = null,
+                userName = null,
             };
-            var resultPhongthi = await _examResultApiClient.Search(request);
-            var listPhongthi = resultPhongthi.ResultObj.DistinctBy(x => x.CategoryId).ToList();
-
+            var result = await _examResultApiClient.Search(request);
+            var listPhongthi = result.ResultObj.DistinctBy(x => x.CategoryId).ToList();
             var selectListPhongThi = listPhongthi.Select(item => new SelectListItem
             {
                 Value = item.CategoryId.ToString(),
                 Text = item.CategoryName
             }).ToList();
             ViewBag.SelectListPhongThi = selectListPhongThi;
-            return View(resultPhongthi.ResultObj);
+
+            var resultlistDept = await _deptApiClient.GetAll();
+            var listDept = resultlistDept.ResultObj.Select(x => new SelectListItem()
+            {
+                Text = x.Name,
+                Value = x.Id.ToString()
+            });
+            ViewBag.listDept = listDept;
+            Console.WriteLine(listDept);
+
+            return View(result.ResultObj);
         }
 
         //Trang xem lịch sử
         [HttpPost]
-        public async Task<IActionResult> GetLogAfterExam(int? CategoryId, DateTime? Date, int? examResultId)
+        public async Task<IActionResult> Search(int? CategoryId, DateTime? Date, int? examResultId , int? boPhanId, string name, string? userName )
         {
-
-            Guid id = Guid.Empty;
-            var userIdString = User.FindFirstValue("UserId");
-            if (Guid.TryParse(userIdString, out var userId))
-            {
-                id = userId;
-            };
             var request = new ExamResultSearchRequest()
             {
-                UserId = id,
+                UserId = null,
                 CategoryId = CategoryId,
                 examResultId = examResultId,
-                Date = Date
+                Date = Date,
+                boPhanId = boPhanId,
+                name = name,
+                userName = userName,
             };
+
             var result = await _examResultApiClient.Search(request);
             if (examResultId == null)
             {
-                return PartialView("PageUser/_listLogExam", result.ResultObj);
+                var listResult = result.ResultObj;
+                List<string> ten = new List<string>();
+                List<float> diem = new List<float>();
+                foreach (var item in listResult)
+                {
+                    ten.Add(item.Hoten.ToString());
+                    diem.Add(item.Score);
+                }
+                ViewBag.dataTen = ten;
+                ViewBag.dataDiem = diem;
+                return PartialView("PageAdmin/_listLogExam", result.ResultObj);
             }
             else
             {
@@ -107,5 +116,10 @@ namespace WebAPP.Areas.User.Controllers
                 }
             }
         }
+
+
+
+
+
     }
 }

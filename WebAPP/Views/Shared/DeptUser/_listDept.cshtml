@@ -1,6 +1,10 @@
 ﻿@using ViewModels.Common
 @model IEnumerable<ViewModels.Dept.Response.DeptVm>
-
+<style>
+    .btn-group .btn {
+        margin-right: 2px; /* Điều chỉnh giá trị để thay đổi kích thước của khoảng trống */
+    }
+</style>
 <table id="tblDanhsachbophan" class="table table-hover" style="text-align:center; vertical-align:middle;width:100%">
     <thead style="font-size:small">
         <tr>
@@ -25,11 +29,11 @@
                 </td>
                 <td style="text-align:end">
                     <div class="btn-group" style=" white-space:nowrap">
-                        <btn class="btn btn-outline-secondary btn-sm btnSua" data-id="@item.Id" data-name="@item.Name">
+                        <btn class="btn btn-dark  btnSua" data-id="@item.Id" data-name="@item.Name">
                             <i class="bi-pencil"> </i>
                             Sửa tên
                         </btn>
-                        <btn class="btn btn-outline-danger btn-sm btnXoa" data-id="@item.Id" data-name="@item.Name">
+                        <btn class="btn btn-danger  btnXoa" data-id="@item.Id" data-name="@item.Name">
                             <i class="bi-trash"> </i>
                             Xoá
                         </btn>

@@ -403,7 +403,7 @@ namespace WebAPP.Areas.User.Controllers
             foreach (var group in groupListQuestionAndAnswerTrinhTuThaoTac)
             {
                 var cauhoituluan = listQuestionsTuLuan.FirstOrDefault(x => x.Id == group.First().CauHoiTuLuanId);
-                float scoreCauhoituluan = cauhoituluan.Score ?? 0;
+                float scoreCauhoituluan = cauhoituluan?.Score ?? 0;
                 totalScoreTuLuan += scoreCauhoituluan;
                 if (group.All(item => item.Answer == item.ThuTu))
                 {
