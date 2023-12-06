@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -72,6 +73,13 @@ namespace Application.ExamResult
                 DateTime requestDate = request.Date.Value.Date; // Lấy ngày tháng từ request.Date
                 resultQuery = resultQuery.Where(x => x.Date.Date == requestDate);
             }
+            if (request.boPhanId != null)
+                resultQuery = resultQuery.Where(x => x.AppUser.Dept.Id == request.boPhanId);
+            if (request.userName != null)
+                resultQuery = resultQuery.Where(x => x.AppUser.UserName.Contains(request.userName));
+            if (request.name != null)
+                resultQuery = resultQuery.Where(x => x.AppUser.Name.Contains(request.name));
+
             // Sử dụng ToListAsync() để thực hiện truy vấn
             var resultList = await resultQuery.ToListAsync();
             // Chuyển đổi danh sách kết quả thành danh sách ExamResultVm

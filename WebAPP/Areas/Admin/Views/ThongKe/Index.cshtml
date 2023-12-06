@@ -1,0 +1,102 @@
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@model List<ViewModels.ExamResult.Response.ExamResultVm>
+@{
+    var selectListPhongThi = ViewBag.SelectListPhongThi as List<SelectListItem>;
+}
+
+<div class="card mb-3">
+    <div class="card-header">
+        <i class="bi-funnel "> </i>
+        Lọc dữ liệu
+    </div>
+    <div class="card-body">
+        <div class="row gx-3 gy-2 align-items-center">
+            <div class="col-sm-12">
+                <label for="formGroupExampleInput" class="form-label">Theo bài thi</label>
+                <select id="PhongThi" asp-items="selectListPhongThi" class="form-select">
+                    <option value="" disabled selected>Nhấn để chọn</option>
+                </select>
+            </div>
+            <div class="col-sm-3">
+                <label for="formGroupExampleInput" class="form-label">Theo ngày thi</label>
+                <input type="text" id="datepicker" class="form-select " autocomplete="off" placeholder="Nhấn để chọn">
+            </div>
+            <div class="col-sm-3">
+                <label for="formGroupExampleInput" class="form-label">Theo bộ phận</label>
+                <select id="deptId" class="form-select">
+                    <option value="">Tất cả</option>
+
+                    @foreach (var item in ViewBag.listDept)
+                    {
+                        <option value="@item.Value">@item.Text</option>
+                    }
+                </select>
+            </div>
+            <div class="col-sm-3">
+                <label for="formGroupExampleInput" class="form-label">Theo mã nhân viên</label>
+                <input type="text" id="txtuserName" class="form-control " autocomplete="off" placeholder="Nhập mã nhân viên">
+            </div>
+            <div class="col-sm-3">
+                <label for="formGroupExampleInput" class="form-label">Theo tên nhân viên</label>
+                <input type="text" id="txtName" class="form-control " autocomplete="off" placeholder="Nhập mã nhân viên">
+            </div>
+           
+        </div>
+    </div>
+</div>
+<div id="ketquaTimkiem">
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        var picker = new Pikaday({
+            field: document.getElementById('datepicker'),
+            format: 'YYYY-MM-DD',
+            defaultDate: null,  // Đặt mặc định là ngày hiện tại
+            onSelect: function () {
+                loadDataTheoChuDe();
+            }
+        });
+        $('#PhongThi').on("change", function () {
+            loadDataTheoChuDe();
+        });
+        $('#deptId').on("change", function () {
+            loadDataTheoChuDe();
+        });
+        $('#txtuserName').on("keyup", function () {
+            loadDataTheoChuDe();
+        });
+        $('#txtName').on("keyup", function () {
+            loadDataTheoChuDe();
+        });
+        function loadDataTheoChuDe() {
+            var selectphongThiValue = $('#PhongThi').val();
+            var selectDate = $('#datepicker').val();
+            var selectboPhanId = $('#deptId').val();
+            var name = $('#txtName').val();
+            var userName = $('#txtuserName').val();
+
+            var intCategoryId = parseInt(selectphongThiValue);
+            var intboPhanId = parseInt(selectboPhanId);
+
+            $.ajax({
+                url: 'thongke/Search',
+                type: 'POST',
+                data: { 
+                    CategoryId: intCategoryId,
+                    Date: selectDate,
+                    boPhanId: intboPhanId,
+                    name: name,
+                    userName: userName
+                },
+                success: function (data) {
+                    $('#ketquaTimkiem').html(data);
+                },
+                error: function (error) {
+                    console.error(error);
+                }
+            });
+        }
+    });
+</script>

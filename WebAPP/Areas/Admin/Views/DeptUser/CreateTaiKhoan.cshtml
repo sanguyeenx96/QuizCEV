@@ -3,10 +3,10 @@
     ViewData["Active"] = "pageQuanLyTaiKhoan";
     ViewData["ActiveChild"] = "pageThemtaikhoanmoi";
 }
-<div class="d-flex">
-    <div class="form-group col-6 mb-3 me-3">
+<div class="row ">
+    <div class="form-group col-6 mb-2 ">
         <label class="form-label">Chọn loại tài khoản</label>
-        <select class="form-control" id="roleName" name="roleId" style="overflow: hidden;">
+        <select class="form-select form-select-lg" id="roleName" name="roleId" style="overflow: hidden;">
             @foreach (var item in ViewBag.listRoles)
             {
                 <option value="@item.Text">@item.Text</option>
@@ -14,9 +14,9 @@
         </select>
     </div>
 
-    <div class="form-group col-6  mb-3">
+    <div class="form-group col-6 mb-2">
         <label class="form-label">Chọn bộ phận</label>
-        <select name="deptId" id="deptId" class="form-control">
+        <select name="deptId" id="deptId" class="form-select form-select-lg">
             @foreach (var item in ViewBag.listDept)
             {
                 <option value="@item.Value">@item.Text</option>
@@ -25,15 +25,15 @@
     </div>
 </div>
 
-<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+<ul class="nav nav-tabs mb-3" id="pills-tab" role="tablist">
     <li class="nav-item" role="presentation">
-        <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-themthucong" type="button" role="tab" aria-controls="pills-themthucong" aria-selected="true">
+        <button class="nav-link active" id="pills-home-tab" data-coreui-toggle="pill" data-coreui-target="#pills-themthucong" type="button" role="tab" aria-controls="pills-themthucong" aria-selected="true">
             <i class="bi-file-plus"></i>
             Thêm thủ công
         </button>
     </li>
     <li class="nav-item" role="presentation">
-        <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-themtuexcel" type="button" role="tab" aria-controls="pills-themtuexcel" aria-selected="false">
+        <button class="nav-link" id="pills-profile-tab" data-coreui-toggle="pill" data-coreui-target="#pills-themtuexcel" type="button" role="tab" aria-controls="pills-themtuexcel" aria-selected="false">
             <i class="bi-file-earmark-spreadsheet"></i>
             Nhập từ file Excel
         </button>
@@ -44,7 +44,7 @@
         <div class="row">
             <div class="col-md-12">
                 <form id="myForm">
-                    <div class="form-group mb-3">
+                    <div class="form-group mb-2">
                         <label class="form-label"> Nhập thông tin tài khoản</label>
                         <div class="form-floating mb-1">
                             <input type="text" class="form-control" id="hoten" placeholder="" required autocomplete="off">
@@ -63,26 +63,22 @@
                             <label for="floatingInput">Xác nhận mật khẩu</label>
                         </div>
                     </div>
-                    <div class="col-12" style="text-align:center">
-                        <button id="btnXacNhanThemTaiKhoanThuCong" class="btn btn-outline-success" style="width:200px">
-                            <i class="bi-check-circle"> </i>Xác nhận
-                        </button>
-                    </div>
+                    <button id="btnXacNhanThemTaiKhoanThuCong" class="btn btn-success" style="width:200px">
+                        <i class="bi-check"> </i>Xác nhận
+                    </button>
                 </form>
             </div>
         </div>
     </div>
     <div class="tab-pane fade" id="pills-themtuexcel" role="tabpanel" aria-labelledby="pills-profile-tab">
-        <form id="excelUploadForm">
-            <div class="mb-3">
+        <form id="excelUploadFormTaiKhoan">
+            <div class="mb-2">
                 <label class="form-label">Chọn file Excel để upload</label>
                 <input type="file" name="file" id="file" class="form-control btn btn-outline-secondary btn-block" accept=".xlsx" required />
             </div>
-            <div class="col-12" style="text-align:center">
-                <button type="submit" id="btnXacNhanThemTuExcel" class="btn btn-outline-success" style="width:200px">
-                    <i class="bi-check-circle"> </i>Xác nhận
+                <button type="submit" id="btnXacNhanThemTaiKhoanTuExcel" class="btn btn-success" style="width:200px">
+                    <i class="bi-check"> </i>Xác nhận
                 </button>
-            </div>
         </form>
     </div>
 </div>
@@ -91,7 +87,7 @@
     $(document).ready(function () {
         $("#btnXacNhanThemTaiKhoanThuCong").click(function (e) {
             var form = $("#myForm")[0];
-            if (form.checkValidity()){
+            if (form.checkValidity()) {
                 e.preventDefault();
 
                 var roleName = $("#roleName").val();
@@ -146,7 +142,7 @@
                 }
             } else {
                 form.reportValidity();
-            }           
+            }
 
         })
     })
