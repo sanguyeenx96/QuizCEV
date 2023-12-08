@@ -1,0 +1,143 @@
+﻿@model List<ViewModels.Dept.Response.DeptVm>
+@{
+    ViewData["Active"] = "pageQuanLyTaiKhoan";
+    ViewData["ActiveChild"] = "pageThembophanmoi";
+}
+
+<h1 class="display-6">
+    Thêm bộ phận mới</h1>
+<form id="myForm" class="mb-3">
+    <div class="row g-2">
+        <div class="col-12">
+            <div class="input-group">
+                <input type="text" class="form-control form-control-lg" id="name" placeholder="Nhập tên tại đây" required="@true">
+                <button id="btnXacNhan" class="btn btn-success " style="display: flex; align-items: center">
+                    <i class="bi-check" style="margin-right: 5px;"></i>Xác nhận
+                </button>
+            </div>
+        </div>
+    </div>
+</form>
+<h1 class="display-6">
+    Danh sách bộ phận
+</h1>
+<div class="card mb-3">
+    <div class="card-body">
+        <div id="danhsachBophan"></div>
+    </div>
+</div>
+<h1 class="display-6">
+    Danh sách Model
+</h1>
+<div class="form-group mb-2">
+<label class="form-label">Chọn bộ phận để xem chi tiết</label>
+<select class="form-select form-select-lg " id="deptId" name="deptId" style="overflow: hidden;">
+    @foreach (var item in ViewBag.listDept)
+    {
+        <option value="@item.Value">@item.Text</option>
+    }
+</select>
+</div>
+<div class="card bg-dark text-light">
+    <div class="card-body">
+        <div id="danhsachmodel"></div>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+
+        $("#btnXacNhan").click(function (e) {
+            var form = $("#myForm")[0];
+            if (form.checkValidity()) {
+                e.preventDefault();
+                var name = $("#name").val();
+                var data = {
+                    Name: name
+                };
+                $.ajax({
+                    url: "CreateBophan",
+                    type: "POST",
+                    data: data,
+                    success: function (data) {
+                        if (data.success) {
+                            $("#name").val("");
+                            Swal.fire({
+                                icon: "success",
+                                title: "Tạo mới thành công",
+                                showConfirmButton: false,
+                                timer: 1500
+                            })
+                            $.ajax({
+                                url: "GetListBophan",
+                                type: "GET",
+                                success: function (data) {
+                                    $("#danhsachBophan").html(data)
+                                },
+                                error: function (xhr, t, error) {
+                                    Swal.fire("Thất bại!", "Lỗi máy chủ", "error");
+                                },
+                            });
+                        } else {
+                            Swal.fire("Thất bại!", data.message, "error");
+                        }
+                    },
+                    error: function (xhr, t, error) {
+                        Swal.fire("Thất bại!", "Lỗi máy chủ", "error");
+                    },
+                });
+            } else {
+                form.reportValidity();
+            }
+        });
+
+        $.ajax({
+            url: "GetListBophan",
+            type: "GET",
+            success: function (data) {
+                $("#danhsachBophan").html(data)
+            },
+            error: function (xhr, t, error) {
+                Swal.fire("Thất bại!", "Lỗi máy chủ", "error");
+            },
+        });
+
+
+        var deptId = $("#deptId").val();
+        $.ajax({
+            url: "GetListModel",
+            type: "POST",
+            data: {
+                id: deptId
+            },
+            success: function (result) {
+                $("#danhsachmodel").html(result)
+               
+            },
+            error: function () {
+                Swal.fire("Lỗi máy chủ!", "Không thành công", "error");
+            },
+        });
+
+        $("#deptId").on("change", function () {
+            deptId = $(this).val();
+            $.ajax({
+                url: "GetListModel",
+                type: "POST",
+                data: {
+                    id: deptId
+                },
+                success: function (result) {
+                    $("#danhsachmodel").html(result)
+                },
+                error: function () {
+                    Swal.fire("Lỗi máy chủ!", "Không thành công", "error");
+                },
+            });
+        })
+
+     
+    });
+
+</script>

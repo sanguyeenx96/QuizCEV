@@ -29,12 +29,12 @@ namespace WebAPI.Controllers
             return Ok(result);
         }
 
-        [HttpGet("paging")]
-        public async Task<IActionResult> GetAllPaging(int id, [FromQuery] GetUserPagingRequest request)
-        {
-            var result = await _usersService.GetUsetPaging(id, request);
-            return Ok(result);
-        }
+        //[HttpGet("paging")]
+        //public async Task<IActionResult> GetAllPaging(int id, [FromQuery] GetUserPagingRequest request)
+        //{
+        //    var result = await _usersService.GetUsetPaging(id, request);
+        //    return Ok(result);
+        //}
 
         [HttpPost("create")]
         public async Task<IActionResult> Create([FromBody] RegisterRequest request)

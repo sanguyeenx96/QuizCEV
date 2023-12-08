@@ -10,6 +10,6 @@ namespace ViewModels.Users.Request
     {
         public string UserName { get; set; }
         public string Name { get; set; }
-        public int DeptId { get; set; }
+        public int CellId { get; set; }
     }
 }

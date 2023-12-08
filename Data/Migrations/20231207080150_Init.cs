@@ -103,7 +103,8 @@ namespace Data.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DateCreate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     LastUpdate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Status = table.Column<bool>(type: "bit", nullable: false, defaultValue: true)
+                    Status = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
+                    Time = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -171,32 +172,19 @@ namespace Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AppUsers",
+                name: "Models",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    DeptId = table.Column<int>(type: "int", maxLength: 200, nullable: false),
-                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    NormalizedUserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    NormalizedEmail = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DeptId = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AppUsers", x => x.Id);
+                    table.PrimaryKey("PK_Models", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AppUsers_Depts_DeptId",
+                        name: "FK_Models_Depts_DeptId",
                         column: x => x.DeptId,
                         principalTable: "Depts",
                         principalColumn: "Id",
@@ -224,15 +212,71 @@ namespace Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Cells",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ModelId = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Cells", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Cells_Models_ModelId",
+                        column: x => x.ModelId,
+                        principalTable: "Models",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AppUsers",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    CellId = table.Column<int>(type: "int", maxLength: 200, nullable: false),
+                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AppUsers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AppUsers_Cells_CellId",
+                        column: x => x.CellId,
+                        principalTable: "Cells",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ExamResults",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    ThoiGianLamBai = table.Column<int>(type: "int", nullable: false),
+                    ThoiGianChoPhepLamBai = table.Column<int>(type: "int", nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Score = table.Column<int>(type: "int", nullable: false),
+                    Score = table.Column<float>(type: "real", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CategoryId = table.Column<int>(type: "int", nullable: false)
+                    CategoryId = table.Column<int>(type: "int", nullable: false),
+                    CategoryName = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -258,14 +302,16 @@ namespace Data.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ExamResultId = table.Column<int>(type: "int", nullable: false),
+                    LoaiCauHoi = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Cauhoi = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     QA = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     QB = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     QC = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     QD = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Cautraloi = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Dapandung = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    FinalScore = table.Column<int>(type: "int", nullable: false)
+                    Cautraloi = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Dapandung = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Score = table.Column<float>(type: "real", nullable: false),
+                    FinalScore = table.Column<float>(type: "real", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -278,13 +324,35 @@ namespace Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "LogExamTrinhtuthaotacs",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Text = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ThuTu = table.Column<int>(type: "int", nullable: false),
+                    Answer = table.Column<int>(type: "int", nullable: false),
+                    LogExamId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LogExamTrinhtuthaotacs", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_LogExamTrinhtuthaotacs_LogExams_LogExamId",
+                        column: x => x.LogExamId,
+                        principalTable: "LogExams",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.InsertData(
                 table: "AppRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Description", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { new Guid("470f4021-29d8-4c8e-a9de-527571683d86"), "678b5f6f-1cfb-4697-a3b5-d3a3181d11ef", "User role", "user", "user" },
-                    { new Guid("8d04dce2-969a-435d-bba4-df3f325983dc"), "bf3777c2-77b1-4af7-8771-38b8031f09b2", "Administrator role", "admin", "admin" }
+                    { new Guid("470f4021-29d8-4c8e-a9de-527571683d86"), "28594d93-1e36-4573-9230-4c3a44730d69", "User role", "user", "user" },
+                    { new Guid("8d04dce2-969a-435d-bba4-df3f325983dc"), "d40d9bbc-f5e7-4d88-987e-ae760653d3b6", "Administrator role", "admin", "admin" }
                 });
 
             migrationBuilder.InsertData(
@@ -298,14 +366,24 @@ namespace Data.Migrations
                 values: new object[] { 1, "MFE" });
 
             migrationBuilder.InsertData(
+                table: "Models",
+                columns: new[] { "Id", "DeptId", "Name" },
+                values: new object[] { 1, 1, "MFE 1" });
+
+            migrationBuilder.InsertData(
+                table: "Cells",
+                columns: new[] { "Id", "ModelId", "Name" },
+                values: new object[] { 1, 1, "None" });
+
+            migrationBuilder.InsertData(
                 table: "AppUsers",
-                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "DeptId", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "Name", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { new Guid("69bd714f-9576-45ba-b5b7-f00649be00de"), 0, "a68d357d-3c68-4712-bd16-57fd38c6d6cf", 1, "smt.ngocsang@gmail.com", true, false, null, "Nguyen Ngoc Sang", "smt.ngocsang@gmail.com", "admin", "AQAAAAEAACcQAAAAECEQivnk+CjhEBqP4xu8aLNMmt9fFvq64pCnIeCSSydX5GLcrf/jsEnwg7KVxQtu/Q==", null, false, "", false, "admin" });
+                columns: new[] { "Id", "AccessFailedCount", "CellId", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "Name", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                values: new object[] { new Guid("69bd714f-9576-45ba-b5b7-f00649be00de"), 0, 1, "6e2a38a9-5e7d-4244-8409-604801e2f955", "smt.ngocsang@gmail.com", true, false, null, "Nguyen Ngoc Sang", "smt.ngocsang@gmail.com", "admin", "AQAAAAEAACcQAAAAEOPOvnzxTgESvoW67Nt2UWABW2FNlPcHiUeBuQLK4Zq1jChH67Z343+kO8fdfNQX7A==", null, false, "", false, "admin" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AppUsers_DeptId",
+                name: "IX_AppUsers_CellId",
                 table: "AppUsers",
-                column: "DeptId");
+                column: "CellId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CauHoiTrinhTuThaoTac_CauHoiTuLuanId",
@@ -316,6 +394,11 @@ namespace Data.Migrations
                 name: "IX_CauHoiTuLuan_CategoryId",
                 table: "CauHoiTuLuan",
                 column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Cells_ModelId",
+                table: "Cells",
+                column: "ModelId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ExamResults_CategoryId",
@@ -331,6 +414,16 @@ namespace Data.Migrations
                 name: "IX_LogExams_ExamResultId",
                 table: "LogExams",
                 column: "ExamResultId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LogExamTrinhtuthaotacs_LogExamId",
+                table: "LogExamTrinhtuthaotacs",
+                column: "LogExamId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Models_DeptId",
+                table: "Models",
+                column: "DeptId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Questions_CategoryId",
@@ -362,13 +455,16 @@ namespace Data.Migrations
                 name: "CauHoiTrinhTuThaoTac");
 
             migrationBuilder.DropTable(
-                name: "LogExams");
+                name: "LogExamTrinhtuthaotacs");
 
             migrationBuilder.DropTable(
                 name: "Questions");
 
             migrationBuilder.DropTable(
                 name: "CauHoiTuLuan");
+
+            migrationBuilder.DropTable(
+                name: "LogExams");
 
             migrationBuilder.DropTable(
                 name: "ExamResults");
@@ -378,6 +474,12 @@ namespace Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Categories");
+
+            migrationBuilder.DropTable(
+                name: "Cells");
+
+            migrationBuilder.DropTable(
+                name: "Models");
 
             migrationBuilder.DropTable(
                 name: "Depts");

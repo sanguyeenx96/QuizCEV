@@ -41,6 +41,10 @@
     {
       "library": "pikaday@1.8.2",
       "destination": "wwwroot/pikaday/"
+    },
+    {
+      "library": "bootstrap-treeview@1.2.0",
+      "destination": "wwwroot/bootstrap-treeview/"
     }
   ]
 }

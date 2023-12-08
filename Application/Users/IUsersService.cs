@@ -13,7 +13,7 @@ namespace Application.Users
     {
         Task<ApiResult<string>> Authenticate(LoginRequest request);
         Task<ApiResult<bool>> Register(RegisterRequest request);
-        Task<ApiResult<PagedResult<UserVm>>> GetUsetPaging(int id, GetUserPagingRequest request);
+        //Task<ApiResult<PagedResult<UserVm>>> GetUsetPaging(int id, GetUserPagingRequest request);
         Task<ApiResult<List<UserVm>>> GetAllByDeptId(int id);
         Task<ApiResult<bool>> Create(RegisterRequest request);
         Task<ApiResult<UserVm>> GetById(Guid id);

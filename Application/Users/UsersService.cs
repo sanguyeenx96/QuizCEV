@@ -33,7 +33,9 @@ namespace Application.Users
         public async Task<ApiResult<string>> Authenticate(LoginRequest request)
         {
             var user = await _userManager.Users
-                        .Include(u => u.Dept) // Sử dụng Include để kèm theo thông tin từ bảng có khóa ngoại
+                        .Include(u => u.Cell) // Sử dụng Include để kèm theo thông tin từ bảng có khóa ngoại
+                        .ThenInclude(u => u.Model)
+                        .ThenInclude(u => u.Dept)
                         .FirstOrDefaultAsync(u => u.UserName == request.UserName);
             if (user == null)
                 return new ApiErrorResult<string>("Tài khoản không tồn tại");
@@ -48,7 +50,7 @@ namespace Application.Users
                 new Claim("UserId", user.Id.ToString()),
                 new Claim(ClaimTypes.Name,user.Name),
                 new Claim(ClaimTypes.Role, string.Join(";",roles)),
-                new Claim(ClaimTypes.Country,user.Dept.Name)
+                new Claim(ClaimTypes.Country,user.Cell.Model.Dept.Name)
             };
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Tokens:Key"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -75,7 +77,7 @@ namespace Application.Users
             {
                 UserName = request.UserName,
                 Name = request.Name,
-                DeptId = request.DeptId
+                CellId = request.CellId
             };
             var result = await _userManager.CreateAsync(user, request.Password);
             if (result.Succeeded)
@@ -90,44 +92,44 @@ namespace Application.Users
             }
         }
 
-        public async Task<ApiResult<PagedResult<UserVm>>> GetUsetPaging(int id, GetUserPagingRequest request)
-        {
-            var query = _userManager.Users;
-            if (id != 0)
-            {
-                query = query.Where(x => x.DeptId == id);
-            }
-            if (!string.IsNullOrEmpty(request.Keyword))
-            {
-                query = query.Where(x => x.UserName.Contains(request.Keyword) || x.Name.Contains(request.Keyword) || x.Dept.Name.Contains(request.Keyword));
-            }
-            int totalRow = await query.CountAsync();
-            var data = await query.Skip((request.PageIndex - 1) * request.PageSize)
-                .Take(request.PageSize)
-                .Select(x => new UserVm()
-                {
-                    Id = x.Id,
-                    UserName = x.UserName,
-                    Password = x.PasswordHash,
-                    Name = x.Name,
-                    Dept = x.Dept.Name
-                }).ToListAsync();
-            foreach (var item in data)
-            {
-                var user = await _userManager.FindByIdAsync(item.Id.ToString());
-                var roles = await _userManager.GetRolesAsync(user);
-                item.Roles = roles;
-            }
-            //4. Select and projection
-            var pagedResult = new PagedResult<UserVm>()
-            {
-                TotalRecords = totalRow,
-                PageIndex = request.PageIndex,
-                PageSize = request.PageSize,
-                Items = data
-            };
-            return new ApiSuccessResult<PagedResult<UserVm>>(pagedResult);
-        }
+        //public async Task<ApiResult<PagedResult<UserVm>>> GetUsetPaging(int id, GetUserPagingRequest request)
+        //{
+        //    var query = _userManager.Users;
+        //    if (id != 0)
+        //    {
+        //        query = query.Where(x => x.CellId == id);
+        //    }
+        //    if (!string.IsNullOrEmpty(request.Keyword))
+        //    {
+        //        query = query.Where(x => x.UserName.Contains(request.Keyword) || x.Name.Contains(request.Keyword) || x.Dept.Name.Contains(request.Keyword));
+        //    }
+        //    int totalRow = await query.CountAsync();
+        //    var data = await query.Skip((request.PageIndex - 1) * request.PageSize)
+        //        .Take(request.PageSize)
+        //        .Select(x => new UserVm()
+        //        {
+        //            Id = x.Id,
+        //            UserName = x.UserName,
+        //            Password = x.PasswordHash,
+        //            Name = x.Name,
+        //            Dept = x.Dept.Name
+        //        }).ToListAsync();
+        //    foreach (var item in data)
+        //    {
+        //        var user = await _userManager.FindByIdAsync(item.Id.ToString());
+        //        var roles = await _userManager.GetRolesAsync(user);
+        //        item.Roles = roles;
+        //    }
+        //    //4. Select and projection
+        //    var pagedResult = new PagedResult<UserVm>()
+        //    {
+        //        TotalRecords = totalRow,
+        //        PageIndex = request.PageIndex,
+        //        PageSize = request.PageSize,
+        //        Items = data
+        //    };
+        //    return new ApiSuccessResult<PagedResult<UserVm>>(pagedResult);
+        //}
 
         public async Task<ApiResult<bool>> Register(RegisterRequest request)
         {
@@ -135,7 +137,7 @@ namespace Application.Users
             {
                 UserName = request.UserName,
                 Name = request.Name,
-                DeptId = request.DeptId
+                CellId = request.CellId
             };
             var result = await _userManager.CreateAsync(user, request.Password);
             if (result.Succeeded)
@@ -154,7 +156,9 @@ namespace Application.Users
         public async Task<ApiResult<UserVm>> GetById(Guid id)
         {
             var user = await _userManager.Users
-                        .Include(u => u.Dept) // Sử dụng Include để kèm theo thông tin từ bảng có khóa ngoại
+                        .Include(u => u.Cell) // Sử dụng Include để kèm theo thông tin từ bảng có khóa ngoại
+                        .ThenInclude(u => u.Model)
+                        .ThenInclude(u => u.Dept)
                         .FirstOrDefaultAsync(u => u.Id == id);
             if (user == null)
             {
@@ -167,7 +171,9 @@ namespace Application.Users
                 Name = user.Name,
                 UserName = user.UserName,
                 Password = user.PasswordHash,
-                Dept = user.Dept.Name,
+                Dept = user.Cell.Model.Dept.Name,
+                Cell = user.Cell.Name,
+                Model =user.Cell.Model.Name,
                 Roles = roles
             };
             return new ApiSuccessResult<UserVm>(userVm);
@@ -200,7 +206,7 @@ namespace Application.Users
             var query = _userManager.Users;
             if (id != 0)
             {
-                query = query.Where(x => x.DeptId == id);
+                query = query.Where(x => x.Cell.Model.Dept.Id == id);
             }
             var data = await query
                 .Select(x => new UserVm()
@@ -209,7 +215,9 @@ namespace Application.Users
                     UserName = x.UserName,
                     Password = x.PasswordHash,
                     Name = x.Name,
-                    Dept = x.Dept.Name
+                    Dept = x.Cell.Model.Dept.Name,
+                    Cell = x.Cell.Name,
+                    Model = x.Cell.Model.Name,
                 }).ToListAsync();
             foreach (var item in data)
             {
@@ -249,7 +257,7 @@ namespace Application.Users
             }
             user.Name = request.Name;
             user.UserName = request.UserName;
-            user.DeptId = request.DeptId;
+            user.CellId = request.CellId;
 
             var result = await _userManager.UpdateAsync(user);
             if (result.Succeeded)
@@ -292,8 +300,8 @@ namespace Application.Users
 
         public async Task<ApiResult<int>> Count(int id)
         {
-            var result = await _userManager.Users.Where(x => x.DeptId == id).CountAsync();
-            return new ApiSuccessResult<int> (result);
+            var result = await _userManager.Users.Where(x => x.CellId == id).CountAsync();
+            return new ApiSuccessResult<int>(result);
         }
 
         public async Task<ApiResult<bool>> CheckPassWord(Guid id, UserCheckPasswordRequest request)

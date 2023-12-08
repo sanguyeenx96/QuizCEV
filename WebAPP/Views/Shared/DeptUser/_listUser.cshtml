@@ -6,17 +6,23 @@
         margin-right: 2px; /* Điều chỉnh giá trị để thay đổi kích thước của khoảng trống */
     }
 </style>
-<table id="tblDanhsachtaikhoan" class="table table-hover" style="text-align:center; vertical-align:middle;width:100%">
+<table id="tblDanhsachtaikhoan" class="table table-hover" style="vertical-align:middle;width:100%;font-size:small">
     <thead style="font-size:small">
         <tr>
-            <th style="text-align:start;font-weight: 350;">
-                Tên đăng nhập (Mã nhân viên)
+            <th style="text-align:center;font-weight: 350;">
+                Bộ phận
             </th>
+            <th style="text-align:center;font-weight: 350;">
+                Model
+            </th>
+            <th style="text-align:center;font-weight: 350;">
+                Cell
+            </th>            
             <th style="text-align:center;font-weight: 350;">
                 Họ tên
             </th>
-            <th style="text-align:center;font-weight: 350;">
-                Bộ phận
+            <th style="text-align:start;font-weight: 350;">
+                Tên đăng nhập (Mã nhân viên)
             </th>
             <th style="text-align:center;font-weight: 350;">
                 Phân quyền
@@ -28,25 +34,33 @@
         @foreach (var item in Model)
         {
             <tr>
-                <td style="text-align:start">
-                    @item.UserName
-                </td>
-                <td>
-                    @item.Name
-                </td>
                 <td>
                     @item.Dept
                 </td>
+                <td>
+                    @item.Model
+                </td>
+                <td>
+                    @item.Cell
+                </td>
+                <td style="white-space:nowrap">
+                    @item.Name
+                </td>
+                <td style="text-align:start">
+                    @item.UserName
+                </td>
+                
+                
                 <td>
                     @{
                         string rules = string.Join(",", item.Roles);
                         if (rules.Contains("user"))
                         {
-                                <span style="min-width:70px" class="badge rounded-pill bg-success"><i class="bi-person-fill"></i> USER</span>
+                                        <span style="min-width:70px" class="badge rounded-pill bg-success"><i class="bi-person-fill"></i> USER</span>
                         }
                         if (rules.Contains("admin"))
                         {
-                                <span style="min-width:70px" class="badge rounded-pill bg-warning"> <i class="bi-star-fill"></i> ADMIN</span>
+                                        <span style="min-width:70px" class="badge rounded-pill bg-warning"> <i class="bi-star-fill"></i> ADMIN</span>
                         }
                     }
 
@@ -55,16 +69,16 @@
                 <td style="text-align:end">
                     @*                    @Html.ActionLink("Gán quyền","RoleAssign",new{id=item.Id})
                 *@
-                    <div class="btn-group" style=" white-space:nowrap">
-                        <btn class="btn btn-dark btnResetMK" data-id="@item.Id" data-name="@item.Name">
+                    <div class="btn-group btn-group-sm" style=" white-space:nowrap">
+                        <btn class="btn btn-secondary btnResetMK" data-id="@item.Id" data-name="@item.Name">
                             <i class="bi-key"> </i>
                             Đổi mật khẩu
                         </btn>
-                        <btn class="btn btn-dark btnPhanQuyen" data-id="@item.Id" data-name="@item.Name">
+                        <btn class="btn btn-secondary btnPhanQuyen" data-id="@item.Id" data-name="@item.Name">
                             <i class="bi-person-lock"> </i>
                             Phân quyền
                         </btn>
-                        <btn class="btn btn-dark btnSua" data-id="@item.Id" data-name="@item.Name" data-dept="@item.Dept">
+                        <btn class="btn btn-secondary btnSua" data-id="@item.Id" data-name="@item.Name" data-dept="@item.Dept">
                             <i class="bi-pencil"> </i>
                             Sửa 
                         </btn>
@@ -202,9 +216,9 @@
             const { value: newPass } = await Swal.fire({
                 title: "Đổi mật khẩu",
                 input: "password",
-                inputLabel: "Nhập mật khẩu mới"
+                inputLabel: "Nhập mật khẩu mới (Tối thiểu 3 ký tự)"
             });
-            if (newPass) {
+            if (newPass.length > 2) {
                 $.ajax({
                     url: "ResetUserPassword",
                     type: "POST",
@@ -223,12 +237,19 @@
                         } else {
                             Swal.fire(
                                 "Không thành công!",
-                                data.message,
+                                result.message,
                                 "error"
                             );
                         }
                     },
                 });
+            }else{
+                Swal.fire({
+                    icon: "error",
+                    title: "Mất khẩu chứa ít nhất 3 ký tự",
+                    showConfirmButton: false,
+                    timer: 1500,
+                })
             }
 
            

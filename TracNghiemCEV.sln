@@ -5,7 +5,7 @@ VisualStudioVersion = 17.3.32901.215
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1. Infrastructure", "1. Infrastructure", "{D32E7BAC-7528-475D-A091-7FE82404126B}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2. Application Core", "2. Application Core", "{43281621-88FF-431B-8972-5E6FF0A17E06}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2. Application", "2. Application", "{43281621-88FF-431B-8972-5E6FF0A17E06}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3. Interface", "3. Interface", "{01BCDDC0-A575-46E3-8637-CA4F52E6B225}"
 EndProject

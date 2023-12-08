@@ -20,6 +20,20 @@ namespace Data.Extensions
                 Name = "MFE"
             });
 
+            modelBuilder.Entity<Model>().HasData(new Model
+            {
+                Id = 1,
+                Name = "MFE 1",
+                DeptId =1
+            });
+
+            modelBuilder.Entity<Cell>().HasData(new Cell
+            {
+                Id = 1,
+                Name = "None",
+                ModelId = 1
+            });
+
             // any guid
             var roleId = new Guid("8D04DCE2-969A-435D-BBA4-DF3F325983DC");
             var adminId = new Guid("69BD714F-9576-45BA-B5B7-F00649BE00DE");
@@ -43,7 +57,7 @@ namespace Data.Extensions
                 PasswordHash = hasher.HashPassword(null, "Abcd1234$"),
                 SecurityStamp = string.Empty,
                 Name = "Nguyen Ngoc Sang",
-                DeptId = 1,
+                CellId = 1
             });
 
             modelBuilder.Entity<IdentityUserRole<Guid>>().HasData(new IdentityUserRole<Guid>

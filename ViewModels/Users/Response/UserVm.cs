@@ -13,6 +13,9 @@ namespace ViewModels.Users.Response
         public string? Password { get; set; }
         public string? Name { get; set; }
         public string? Dept { get; set; }
+        public string? Model { get; set; }
+        public string? Cell { get; set; }
+
         public IList<string> Roles { get; set; }
     }
 }

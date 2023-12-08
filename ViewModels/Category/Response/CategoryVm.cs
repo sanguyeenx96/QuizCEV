@@ -14,8 +14,5 @@ namespace ViewModels.Category.Response
         public DateTime LastUpdate { get; set; }
         public bool Status { get; set; }
         public int Time { get; set; }
-
-
-
     }
 }

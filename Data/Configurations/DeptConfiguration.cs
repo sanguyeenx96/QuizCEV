@@ -20,7 +20,7 @@ namespace Data.Configurations
 
             builder.Property(x => x.Id).UseIdentityColumn();
 
-            builder.Property(x => x.Name).IsRequired(true);            
-        }
+            builder.Property(x => x.Name).IsRequired(true);
+        } 
     }
 }
