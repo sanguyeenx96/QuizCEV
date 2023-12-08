@@ -8,6 +8,8 @@
     {
     <partial name="PageUser/_sideBar" />
     }
+    <h1 class="display-6 mb-2">Thống kê chung</h1>
+
     <div class="row">
         <div class="col-6 col-lg-3">
             <div class="card mb-2">
@@ -63,9 +65,11 @@
         </div>
     </div>
     <hr />
+    <h1 class="display-6 mb-2">Xem chi tiết bài thi</h1>
+
     <div class="row gx-3 gy-2 align-items-center">
         <div class="col-sm-9">
-            <label for="formGroupExampleInput" class="form-label">Chọn bài thi</label>
+            <label for="formGroupExampleInput" class="form-label">Chọn bài thi cần xem </label>
             <select id="PhongThi" asp-items="selectListPhongThi" class="form-select">
                 <option value="" disabled selected>Nhấn để chọn</option>
             </select>
@@ -94,7 +98,7 @@
             function loadDataTheoChuDe() {
                 var selectphongThiValue = $('#PhongThi').val();
                 var selectDate = $('#datepicker').val();
-                var intId = parseInt(selectphongThiValue);                
+                var intId = parseInt(selectphongThiValue);
                 $.ajax({
                     url: 'logexam/GetLogAfterExam',
                     type: 'POST',

@@ -1,14 +1,16 @@
 ﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
-@model List<ViewModels.ExamResult.Response.ExamResultVm>
 @{
     var selectListPhongThi = ViewBag.SelectListPhongThi as List<SelectListItem>;
 }
+@{
+    ViewData["Active"] = "pageDiemsoThongke";
+}
+
+
+
+<h1 class="display-6 mb-2">Lọc dữ liệu</h1>
 
 <div class="card mb-3">
-    <div class="card-header">
-        <i class="bi-funnel "> </i>
-        Lọc dữ liệu
-    </div>
     <div class="card-body">
         <div class="row gx-3 gy-2 align-items-center">
             <div class="col-sm-12">
@@ -23,9 +25,8 @@
             </div>
             <div class="col-sm-3">
                 <label for="formGroupExampleInput" class="form-label">Theo bộ phận</label>
-                <select id="deptId" class="form-select">
+                <select id="sldeptId" class="form-select">
                     <option value="">Tất cả</option>
-
                     @foreach (var item in ViewBag.listDept)
                     {
                         <option value="@item.Value">@item.Text</option>
@@ -46,6 +47,11 @@
 </div>
 <div id="ketquaTimkiem">
 </div>
+<div id="anh" class="row col-12">
+    <img style="max-width:80%" src="~/comunicate.a45bc6d.png" />
+
+</div>
+
 
 
 <script>
@@ -61,7 +67,7 @@
         $('#PhongThi').on("change", function () {
             loadDataTheoChuDe();
         });
-        $('#deptId').on("change", function () {
+        $('#sldeptId').on("change", function () {
             loadDataTheoChuDe();
         });
         $('#txtuserName').on("keyup", function () {
@@ -73,20 +79,18 @@
         function loadDataTheoChuDe() {
             var selectphongThiValue = $('#PhongThi').val();
             var selectDate = $('#datepicker').val();
-            var selectboPhanId = $('#deptId').val();
+            var selectboPhanId = $('#sldeptId').val();
             var name = $('#txtName').val();
             var userName = $('#txtuserName').val();
-
             var intCategoryId = parseInt(selectphongThiValue);
-            var intboPhanId = parseInt(selectboPhanId);
-
+            var selectboPhanId = parseInt(selectboPhanId);
             $.ajax({
-                url: 'thongke/Search',
+                url: '/admin/thongke/Search',
                 type: 'POST',
                 data: { 
                     CategoryId: intCategoryId,
                     Date: selectDate,
-                    boPhanId: intboPhanId,
+                    boPhanId: selectboPhanId,
                     name: name,
                     userName: userName
                 },

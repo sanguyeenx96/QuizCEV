@@ -70,15 +70,15 @@
                         </td>
                         <td style="text-align:end">
                             <div class="btn-group" style=" white-space:nowrap">
-                                <btn class="btn btn-dark btnSuaThoiGian" data-id="@item.Id">
+                                <btn class="btn btn-secondary btnSuaThoiGian" data-id="@item.Id">
                                     <i class="bi-clock"> </i>
                                     Đổi thời gian thi
                                 </btn>
-                                <btn class="btn btn-dark btnSua" data-id="@item.Id">
+                                <btn class="btn btn-secondary btnSua" data-id="@item.Id">
                                     <i class="bi-pencil"> </i>
                                     Đổi tên
                                 </btn>
-                                <btn class="btn btn-danger text-light btnXoa" data-id="@item.Id" data-name="@item.Name">
+                                <btn class="btn btn-danger   btnXoa" data-id="@item.Id" data-name="@item.Name">
                                     <i class="bi-trash"> </i>
                                     Xoá
                                 </btn>
@@ -260,9 +260,9 @@
 
             swalWithBootstrapButtons
                 .fire({
-                    title: "Xoá phòng thi?",
-                    text: name,
-                    icon: "warning",
+                    title: "Xoá phòng thi " + name + "?",
+                    text: "Tất cả dữ liệu câu hỏi và lịch sử liên quan tới phòng thi sẽ bị xoá",
+                    icon: "error",
                     showCancelButton: true,
                     confirmButtonText: "Xác nhận",
                     cancelButtonText: "Huỷ bỏ"

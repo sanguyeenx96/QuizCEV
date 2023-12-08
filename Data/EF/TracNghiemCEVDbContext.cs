@@ -32,6 +32,9 @@ namespace Data.EF
             modelBuilder.ApplyConfiguration(new AppUserConfiguration());
             modelBuilder.ApplyConfiguration(new DeptConfiguration());
             modelBuilder.ApplyConfiguration(new LogExamTrinhtuthaotacConfiguration());
+            modelBuilder.ApplyConfiguration(new ModelConfiguration());
+            modelBuilder.ApplyConfiguration(new CellConfiguration());
+
 
 
             modelBuilder.Entity<IdentityUserClaim<Guid>>().ToTable("AppUserClaims");
@@ -61,6 +64,8 @@ namespace Data.EF
         public DbSet<CauHoiTrinhTuThaoTac> cauHoiTrinhTuThaoTacs { get; set; }
         public DbSet<Dept> Depts { get; set; }
         public DbSet<LogExamTrinhtuthaotac> logExamTrinhtuthaotacs { get; set; }
+        public DbSet<Model> Models { get; set; }
+        public DbSet<Cell> Cells { get; set; }
 
     }
 }

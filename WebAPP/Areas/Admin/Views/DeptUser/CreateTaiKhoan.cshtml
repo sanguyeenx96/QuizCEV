@@ -1,11 +1,13 @@
-﻿@model ViewModels.Question.Request.QuestionCreateRequest
-@{
+﻿@{
     ViewData["Active"] = "pageQuanLyTaiKhoan";
     ViewData["ActiveChild"] = "pageThemtaikhoanmoi";
 }
 <div class="row ">
-    <div class="form-group col-6 mb-2 ">
-        <label class="form-label">Chọn loại tài khoản</label>
+    <div class="form-group col-3 mb-2 ">
+        <label class="form-label">
+            <i class="bi-1-circle-fill "></i>
+            Chọn loại tài khoản
+        </label>
         <select class="form-select form-select-lg" id="roleName" name="roleId" style="overflow: hidden;">
             @foreach (var item in ViewBag.listRoles)
             {
@@ -13,14 +15,29 @@
             }
         </select>
     </div>
+    <div class="form-group col-3 mb-2">
+        <label class="form-label">
+            <i class="bi-2-circle-fill"></i>
+            Chọn bộ phận
+        </label>
+        <select id="deptSelectList" class="form-select form-select-lg">
+            <option value="" selected disabled>Nhấn để chọn</option>
 
-    <div class="form-group col-6 mb-2">
-        <label class="form-label">Chọn bộ phận</label>
-        <select name="deptId" id="deptId" class="form-select form-select-lg">
-            @foreach (var item in ViewBag.listDept)
-            {
-                <option value="@item.Value">@item.Text</option>
-            }
+        </select>
+    </div>
+    <div class="form-group col-3 mb-2">
+        <label class="form-label">
+            <i class="bi-3-circle-fill"></i>
+            Chọn Model
+        </label>
+        <select id="modelSelectList" class="form-select form-select-lg"></select>
+    </div>
+    <div class="form-group col-3 mb-2">
+        <label class="form-label">
+            <i class="bi-4-circle-fill"></i>
+            Chọn Cell
+        </label>
+        <select id="cellSelectList" class="form-select form-select-lg">
         </select>
     </div>
 </div>
@@ -45,7 +62,10 @@
             <div class="col-md-12">
                 <form id="myForm">
                     <div class="form-group mb-2">
-                        <label class="form-label"> Nhập thông tin tài khoản</label>
+                        <label class="form-label">
+                            <i class="bi-5-circle-fill"></i>
+                            Nhập thông tin tài khoản
+                        </label>
                         <div class="form-floating mb-1">
                             <input type="text" class="form-control" id="hoten" placeholder="" required autocomplete="off">
                             <label for="floatingInput">Họ tên</label>
@@ -73,32 +93,111 @@
     <div class="tab-pane fade" id="pills-themtuexcel" role="tabpanel" aria-labelledby="pills-profile-tab">
         <form id="excelUploadFormTaiKhoan">
             <div class="mb-2">
-                <label class="form-label">Chọn file Excel để upload</label>
+                <label class="form-label">
+                    <i class="bi-5-circle-fill"></i>
+                    Chọn file Excel để upload
+                </label>
                 <input type="file" name="file" id="file" class="form-control btn btn-outline-secondary btn-block" accept=".xlsx" required />
             </div>
-                <button type="submit" id="btnXacNhanThemTaiKhoanTuExcel" class="btn btn-success" style="width:200px">
-                    <i class="bi-check"> </i>Xác nhận
-                </button>
+            <button type="submit" id="btnXacNhanThemTaiKhoanTuExcel" class="btn btn-success" style="width:200px">
+                <i class="bi-check"> </i>Xác nhận
+            </button>
         </form>
     </div>
 </div>
 
 <script>
     $(document).ready(function () {
+        $.ajax({
+            url: 'GetSelectListDept',
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                var selectList = $('#deptSelectList');
+                $.each(data, function (index, item) {
+                    selectList.append($('<option>', {
+                        value: item.value,
+                        text: item.text
+                    }));
+                });
+            },
+            error: function () {
+                console.error('Failed to retrieve department options.');
+            }
+        });
+
+        $('#deptSelectList').on("change", function () {
+            var deptId = $(this).val();
+            deptId = parseInt(deptId);
+            $.ajax({
+                url: 'GetSelectListModel',
+                type: 'POST',
+                data: { deptId: deptId },
+                dataType: 'json',
+                success: function (data) {
+                    var selectList = $('#modelSelectList');
+                    selectList.empty()
+                    $.each(data, function (index, item) {
+                        selectList.append($('<option>', {
+                            value: item.value,
+                            text: item.text
+                        }));
+                    });
+                },
+                error: function () {
+                    console.error('Failed to retrieve department options.');
+                }
+            });
+        })
+
+        $('#modelSelectList').on("change", function () {
+            var modelId = $(this).val();
+            modelId = parseInt(modelId);
+            $.ajax({
+                url: 'GetSelectListCelll',
+                type: 'POST',
+                data: { modelId: modelId },
+                dataType: 'json',
+                success: function (data) {
+                    var selectList = $('#cellSelectList');
+                    selectList.empty()
+                    $.each(data, function (index, item) {
+                        selectList.append($('<option>', {
+                            value: item.value,
+                            text: item.text
+                        }));
+                    });
+                },
+                error: function () {
+                    console.error('Failed to retrieve department options.');
+                }
+            });
+        })
+
         $("#btnXacNhanThemTaiKhoanThuCong").click(function (e) {
             var form = $("#myForm")[0];
             if (form.checkValidity()) {
                 e.preventDefault();
-
                 var roleName = $("#roleName").val();
-
-                var deptId = $("#deptId").val();
+                var modelId = $("#modelSelectList").val();
+                var cellId = $("#cellSelectList").val();
                 var name = $("#hoten").val();
                 var username = $("#usn").val();
                 var password = $("#pwd").val();
                 var repassword = $("#repwd").val();
-
-                if (password != repassword) {
+                if (modelId == null) {
+                    Swal.fire(
+                        "Chưa chọn thông tin Model",
+                        "Hãy chọn đầy đủ thông tin",
+                        "error"
+                    );
+                } else if (cellId == null) {
+                    Swal.fire(
+                        "Chưa chọn thông tin Cell",
+                        "Hãy chọn đầy đủ thông tin",
+                        "error"
+                    );
+                } else if (password != repassword) {
                     Swal.fire(
                         "Mật khẩu xác nhận không trùng nhau",
                         "Hãy nhập lại mât khẩu",
@@ -107,7 +206,6 @@
                     $("#pwd").val("");
                     $("#repwd").val("");
                     $("#pwd").focus();
-
                 } else {
                     var data = {
                         Role: roleName,
@@ -115,22 +213,20 @@
                         Password: password,
                         ConfirmPassword: repassword,
                         Name: name,
-                        DeptId: deptId
+                        CellId: cellId
                     }
-
                     $.ajax({
                         url: "Create",
                         type: "POST",
                         data: data,
                         success: function (result) {
                             if (result.success) {
-                                Swal.fire(
-                                    "Thành công!",
-                                    "Bạn vừa thêm tài khoản mới thành công",
-                                    "success"
-                                ).then(function () {
-                                    window.location.reload();
-                                });
+                                Swal.fire({
+                                    icon: "success",
+                                    title: "Bạn vừa thêm tài khoản mới thành công",
+                                    showConfirmButton: false,
+                                    timer: 1500,
+                                })                                
                             } else {
                                 Swal.fire("Không thành công!", result.message, "error");
                             }
@@ -140,10 +236,15 @@
                         },
                     });
                 }
+
+
+
+
+
+
             } else {
                 form.reportValidity();
             }
-
         })
     })
 

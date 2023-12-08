@@ -1,11 +1,17 @@
 ﻿@model ViewModels.Users.Response.UserVm
 
+@{
+    string currentDeptName = ViewBag.currentDeptName;
+    string currentModelName = ViewBag.currentModelName;
+    string currentCellName = ViewBag.currentCellName;
+}
+
 <div class="modal-header">
     <h5 class="modal-title" id="staticBackdropLabel">
         <i class="bi-pencil"> </i>
         Sửa thông tin tài khoản
     </h5>
-    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <button type="button" class="btn-close" data-coreui-dismiss="modal" aria-label="Close"></button>
 </div>
 <div class="modal-body">
     <div class="row">
@@ -18,29 +24,23 @@
                 <input id="hovaten" type="text" class="form-control" placeholder="" value="@Model.Name">
                 <label for="floatingInput">Họ tên</label>
             </div>
-            <div class="form-group ">
+            <div class="form-group mb-2">
                 <label class="form-label">Bộ phận</label>
-                <select class="form-control " id="ssdeptId" name="ssdeptId" style="overflow: hidden;">
-                    @foreach (var item in ViewBag.listDept)
-                    {
-                        string value = item.Text;
-                        string thisDept = Model.Dept;
-                        if (value == thisDept)
-                        {
-                            <option value="@item.Value" selected>@item.Text</option>
-                        }
-                        else
-                        {
-                            <option value="@item.Value" >@item.Text</option>
-                        }
-                    }
-                </select>
+                <select class="form-select" id="ssdeptId" name="ssdeptId" style="overflow: hidden;"></select>
+            </div>
+            <div class="form-group mb-2">
+                <label class="form-label">Model</label>
+                <select class="form-select " id="ssmodelId" name="ssmodelId" style="overflow: hidden;"></select>
+            </div>
+            <div class="form-group mb-2">
+                <label class="form-label">Cell</label>
+                <select class="form-select " id="sscellId" name="sscellId" style="overflow: hidden;"></select>
             </div>
         </div>
     </div>
 </div>
 <div class="modal-footer">
-    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+    <button type="button" class="btn btn-secondary" data-coreui-dismiss="modal">
         Huỷ Bỏ
     </button>
     <button id="btnXacNhan" type="button" class="btn btn-success" data-id="@Model.Id" data>
@@ -51,17 +51,133 @@
 
 <script>
     $(document).ready(function () {
+        //Dept
+        $.ajax({
+            url: 'GetSelectListDept',
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                var selectListDept = $('#ssdeptId');
+                $.each(data, function (index, item) {
+                    selectListDept.append($('<option>', {
+                        value: item.value,
+                        text: item.text,
+                        selected: item.text === '@currentDeptName' // Chọn mục nếu giá trị trùng với currentDeptName
+                    }));
+                });
+                //Model
+                var deptId = $('#ssdeptId').val();
+                deptId = parseInt(deptId);
+                $.ajax({
+                    url: 'GetSelectListModel',
+                    type: 'POST',
+                    data: { deptId: deptId },
+                    dataType: 'json',
+                    success: function (data) {
+                        var selectListModel = $('#ssmodelId');
+                        selectListModel.empty();
+                        $.each(data, function (index, item) {
+                            selectListModel.append($('<option>', {
+                                value: item.value,
+                                text: item.text,
+                                selected: item.text === '@currentModelName' // Chọn mục nếu giá trị trùng với currentModelName
+                            }));
+                        });
+                        //Cell
+                        var modelId = $('#ssmodelId').val();
+                        modelId = parseInt(modelId);
+                        $.ajax({
+                            url: 'GetSelectListCelll',
+                            type: 'POST',
+                            data: { modelId: modelId },
+                            dataType: 'json',
+                            success: function (data) {
+                                var selectListCell = $('#sscellId');
+                                selectListCell.empty();
+                                $.each(data, function (index, item) {
+                                    selectListCell.append($('<option>', {
+                                        value: item.value,
+                                        text: item.text,
+                                        selected: item.text === '@currentCellName' // Chọn mục nếu giá trị trùng với currentCellName
+                                    }));
+                                });
+                            },
+                            error: function () {
+                                console.error('Failed to retrieve cell options.');
+                            }
+                        });
+                    },
+                    error: function () {
+                        console.error('Failed to retrieve model options.');
+                    }
+                });
+            },
+            error: function () {
+                console.error('Failed to retrieve department options.');
+            }
+        });
+
+        $('#ssdeptId').on("change", function () {
+            var deptId = $(this).val();
+            deptId = parseInt(deptId);
+            $.ajax({
+                url: 'GetSelectListModel',
+                type: 'POST',
+                data: { deptId: deptId },
+                dataType: 'json',
+                success: function (data) {
+                    var selectList = $('#ssmodelId');
+                    selectList.empty()
+                    $.each(data, function (index, item) {
+                        selectList.append($('<option>', {
+                            value: item.value,
+                            text: item.text
+                        }));
+                    });
+                },
+                error: function () {
+                    console.error('Failed to retrieve department options.');
+                }
+            });
+        })
+
+        $('#ssmodelId').on("change", function () {
+            var modelId = $(this).val();
+            modelId = parseInt(modelId);
+            $.ajax({
+                url: 'GetSelectListCelll',
+                type: 'POST',
+                data: { modelId: modelId },
+                dataType: 'json',
+                success: function (data) {
+                    var selectList = $('#sscellId');
+                    selectList.empty()
+                    $.each(data, function (index, item) {
+                        selectList.append($('<option>', {
+                            value: item.value,
+                            text: item.text
+                        }));
+                    });
+                },
+                error: function () {
+                    console.error('Failed to retrieve department options.');
+                }
+            });
+        })
+
+
+
         $("#btnXacNhan").click(function () {
             var tendangnhap = $("#tendangnhap").val();
             var hovaten = $("#hovaten").val();
-            var deptId = $("#ssdeptId").val();
-            var intdeptid = parseInt(deptId);
+            var cellId = $("#sscellId").val();
+            cellId = parseInt(cellId);
             var id = $(this).data("id");
             var data = {
                 id: id,
                 UserName: tendangnhap,
                 Name: hovaten,
-                DeptId: intdeptid
+                CellId: cellId
             };
             $.ajax({
                 url: "UpdateUserInfo",

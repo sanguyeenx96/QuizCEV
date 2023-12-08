@@ -1,116 +1,92 @@
 ﻿@model List<ViewModels.ExamResult.Response.ExamResultVm>
-
 @{
     var dataTen = Json.Serialize(ViewBag.dataTen);
     var dataDiem = Json.Serialize(ViewBag.dataDiem);
 }
-
-<div class="row">
-    <div class="col-sm-6 col-lg-3">
-        <div class="card mb-4 text-white bg-primary">
+<div class="row mb-2">
+    <div class="col-sm-6 col-lg-5">
+        <div class="card ">
             <div class="card-body pb-0 d-flex justify-content-between align-items-start">
                 <div>
-                    <div class="fs-4 fw-semibold">
-                        26K <span class="fs-6 fw-normal">
-                            (-12.4%
-                            <i class="bi-chevron-down"></i>)
-                        </span>
+                    <div class="fs-5 fw-semibold">
+                        <span id="countDiemTren6"></span>
                     </div>
-                    <div>Users</div>
-                </div>
-                <div class="dropdown">
-                    <button class="btn btn-transparent text-white p-0" type="button" data-coreui-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="bi-chevron-down"></i>
-                    </button>
-                    <div class="dropdown-menu dropdown-menu-end"><a class="dropdown-item" href="#">Action</a><a class="dropdown-item" href="#">Another action</a><a class="dropdown-item" href="#">Something else here</a></div>
+                    <div class="small text-medium-emphasis">Biểu đồ điểm số trên 6</div>
                 </div>
             </div>
             <div class="c-chart-wrapper mt-3 mx-3" style="height:70px;">
-                <canvas class="chart" id="card-chart1" height="73" style="display: block; box-sizing: border-box; height: 69.5238px; width: 196.19px;" width="206"></canvas>
-                
+                <canvas class="chart" id="card-chart-tren6" height="73" style="display: block; box-sizing: border-box; height: 69.5238px; width: 100%;"></canvas>
             </div>
         </div>
     </div>
-    <!-- /.col-->
-    <div class="col-sm-6 col-lg-3">
-        <div class="card mb-4 text-white bg-info">
+    <div class="col-sm-6 col-lg-5">
+        <div class="card ">
             <div class="card-body pb-0 d-flex justify-content-between align-items-start">
                 <div>
-                    <div class="fs-4 fw-semibold">
-                        $6.200 <span class="fs-6 fw-normal">
-                            (40.9%
-                            <i class="bi-chevron-down"></i>)
-                        </span>
+                    <div class="fs-5 fw-semibold">
+                        <span id="countDiemDuoi6"></span>
                     </div>
-                    <div>Income</div>
-                </div>
-                <div class="dropdown">
-                    <button class="btn btn-transparent text-white p-0" type="button" data-coreui-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="bi-chevron-down"></i>
-                    </button>
-                    <div class="dropdown-menu dropdown-menu-end"><a class="dropdown-item" href="#">Action</a><a class="dropdown-item" href="#">Another action</a><a class="dropdown-item" href="#">Something else here</a></div>
+                    <div class="small text-medium-emphasis">Biểu đồ điểm số dưới 6</div>
                 </div>
             </div>
             <div class="c-chart-wrapper mt-3 mx-3" style="height:70px;">
-                <canvas class="chart" id="card-chart2" height="73" style="display: block; box-sizing: border-box; height: 69.5238px; width: 196.19px;" width="206"></canvas>
+                <canvas class="chart" id="card-chart-duoi6" height="73" style="display: block; box-sizing: border-box; height: 69.5238px; width: 100%;"></canvas>
             </div>
         </div>
     </div>
-    <!-- /.col-->
-    <div class="col-sm-6 col-lg-3">
-        <div class="card mb-4 text-white bg-warning">
-            <div class="card-body pb-0 d-flex justify-content-between align-items-start">
-                <div>
-                    <div class="fs-4 fw-semibold">
-                        2.49% <span class="fs-6 fw-normal">
-                            (84.7%
-                            <i class="bi-chevron-down"></i>)
-                        </span>
-                    </div>
-                    <div>Conversion Rate</div>
-                </div>
-                <div class="dropdown">
-                    <button class="btn btn-transparent text-white p-0" type="button" data-coreui-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="bi-chevron-down"></i>
-                    </button>
-                    <div class="dropdown-menu dropdown-menu-end"><a class="dropdown-item" href="#">Action</a><a class="dropdown-item" href="#">Another action</a><a class="dropdown-item" href="#">Something else here</a></div>
-                </div>
-            </div>
-            <div class="c-chart-wrapper mt-3" style="height:70px;">
-                <canvas class="chart" id="card-chart3" height="73" style="display: block; box-sizing: border-box; height: 69.5238px; width: 228.571px;" width="240"></canvas>
-            </div>
-        </div>
-    </div>
-    <!-- /.col-->
-    <div class="col-sm-6 col-lg-3">
-        <div class="card mb-4 text-white bg-danger">
-            <div class="card-body pb-0 d-flex justify-content-between align-items-start">
-                <div>
-                    <div class="fs-4 fw-semibold">
-                        44K <span class="fs-6 fw-normal">
-                            (-23.6%
-                            <i class="bi-chevron-down"></i>)
-                        </span>
-                    </div>
-                    <div>Sessions</div>
-                </div>
-                <div class="dropdown">
-                    <button class="btn btn-transparent text-white p-0" type="button" data-coreui-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="bi-chevron-down"></i>
-                    </button>
-                    <div class="dropdown-menu dropdown-menu-end"><a class="dropdown-item" href="#">Action</a><a class="dropdown-item" href="#">Another action</a><a class="dropdown-item" href="#">Something else here</a></div>
-                </div>
-            </div>
-            <div class="c-chart-wrapper mt-3 mx-3" style="height:70px;">
-                <canvas class="chart" id="card-chart4" height="73" style="display: block; box-sizing: border-box; height: 69.5238px; width: 196.19px;" width="206"></canvas>
-            </div>
-        </div>
-    </div>
-    <!-- /.col-->
 </div>
-<canvas class="mb-3" id="myChart" width="400" height="100"></canvas>
+<div class="card mb-1">
+    <div class="card-body">
+        <div class="d-flex justify-content-between">
+            <div>
+                @{                    
+                    if (Model != null && Model.Any() && Model.DistinctBy(x => x.CategoryName).Count() == 1)
+                    {
+                        <h4 class="card-title mb-0">@Model.FirstOrDefault()?.CategoryName</h4>
+                    }
+                    else if (Model != null && Model.Any() && Model.DistinctBy(x => x.CategoryName).Count() > 1)
+                    {
 
-
+                        <h4 class="card-title mb-0">Biểu đồ tổng hợp @Model.DistinctBy(x => x.CategoryName).Count().ToString() bài thi </h4>
+                    }
+                    else
+                    {
+                        <p>No data available</p>
+                    }
+                }
+                <div class="small text-medium-emphasis">Biểu đồ kết quả tổng hợp</div>
+            </div>
+        </div>
+        <div class="c-chart-wrapper" style="height:300px;margin-top:40px;">
+            <canvas class="mb-3" id="myChart" height="314" style="width:100%"></canvas>
+        </div>
+    </div>
+    <div class="card-footer">
+        <div class="row row-cols-1 row-cols-md-12 text-center">
+            <div class="col-4 mb-sm-2 mb-0">
+                <div class="text-medium-emphasis">Điểm cao (Trên 8 điểm)</div>
+                <div class="fw-semibold" id="txtDiemsocao"></div>
+                <div class="progress progress-thin mt-2">
+                    <div id="barDiemcao" class="progress-bar bg-success" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+            </div>
+            <div class="col-4 mb-sm-2 mb-0">
+                <div class="text-medium-emphasis">Điểm trung bình (6 đến 8 điểm)</div>
+                <div class="fw-semibold" id="txtDiemsotrungbinh"></div>
+                <div class="progress progress-thin mt-2">
+                    <div id="barTrungbinh" class="progress-bar bg-warning" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+            </div>
+            <div class="col-4 mb-sm-2 mb-0">
+                <div class="text-medium-emphasis">Điểm thấp (Dưới 6 điểm)</div>
+                <div class="fw-semibold" id="txtDiemsothap"></div>
+                <div class="progress progress-thin mt-2">
+                    <div id="barDiemthap" class="progress-bar bg-danger" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="card my-2">
     <div class="card-body">
         <table id="tblDanhsachdulieu" class="table table-hover" style="vertical-align:middle;width:100%">
@@ -150,13 +126,54 @@
                             @item.Bophan
                         </td>
                         <td>
-                            @danhgia
+                            @{
+                                if (danhgia == "Kết quả tốt")
+                                {
+                                    <span class=" text-success">
+                                        @danhgia
+                                    </span>
+                                }
+                                if (danhgia == "Trung bình")
+                                {
+                                    <span class=" text-warning">
+                                        @danhgia
+                                    </span>
+                                }
+                                if (danhgia == "Không đạt")
+                                {
+                                    <span class=" text-danger">
+                                        @danhgia
+                                    </span>
+                                }
+                            }
                         </td>
                         <td>
-                            @item.Score
+                            @{
+                                if (danhgia == "Kết quả tốt")
+                                {
+                                    <span style="width:60px;vertical-align: text-bottom" class="badge text-bg-success">
+                                        @item.Score
+                                    </span>
+                                }
+                                if (danhgia == "Trung bình")
+                                {
+                                    <span style="width:60px;vertical-align: text-bottom" class="badge text-bg-warning">
+                                        @item.Score
+                                    </span>
+                                }
+                                if (danhgia == "Không đạt")
+                                {
+                                    <span style="width:60px;vertical-align: text-bottom" class="badge text-bg-danger">
+                                        @item.Score
+                                    </span>
+                                }
+                            }
                         </td>
-                        <td style="text-align:end">
-                            <button class="btn btn-primary">Xem chi tiết</button>
+                        <td style="text-align:end;white-space:nowrap">
+                            <button class="btn btn-secondary w-100 btnXemChiTietBaithi" data-idbaithi="@item.Id">
+                                <i class="bi-eye"></i>
+                                Xem chi tiết
+                            </button>
                         </td>
                     </tr>
                 }
@@ -165,8 +182,41 @@
     </div>
 </div>
 
+<div class="modal fade" id="staticBackdrop2" data-coreui-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div id="noidungbaithi2" style="width:100%"></div>
+    </div>
+</div>
+
+
 <script>
     $(document).ready(function () {
+        $(".btnXemChiTietBaithi").click(function () {
+            var id = $(this).attr("data-idbaithi");
+            $.ajax({
+                url: '/admin/thongke/Search',
+                type: 'POST',
+                data: {
+                    examResultId: id
+                },
+                success: function (data) {
+                    $('#noidungbaithi2').html(data);
+                    $('#staticBackdrop2').modal("show")
+                },
+                error: function (error) {
+                    console.log(error)
+                    Swal.fire({
+                        icon: "error",
+                        width: 300,
+                        text: "Không tải được dữ liệu bài thi",
+                        showConfirmButton: false,
+                        timer: 1000,
+
+                    })
+                }
+            });
+        })
+
         $("#tblDanhsachdulieu").DataTable({
             "paging": true,
             "searching": true,
@@ -178,51 +228,117 @@
         var dataTen = @Html.Raw(dataTen);
         var dataDiem = @Html.Raw(dataDiem);
 
-        // Tạo mảng dữ liệu cho điểm số dưới 6
-        var dataDiemDuoi6 = dataDiem.map(function (score) {
-            return score < 6 ? score : null;
-        });
+        // Đếm số lượng điểm
+        var countTotal = dataDiem.length;
 
-        // Loại bỏ các phần tử null từ mảng
-        dataDiemDuoi6 = dataDiemDuoi6.filter(function (score) {
-            return score !== null;
-        });
+        var countDiemTren8 = dataDiem
+            .filter(function (score) {
+                return score >= 8;
+            })
+            .length;
+        var percentTren8 = (countDiemTren8 / countTotal) * 100;
+        var intpercentTren8 = parseInt(percentTren8);
+        $('#txtDiemsocao').text(countDiemTren8 + " bài thi (~" + intpercentTren8 + "%)");
+        var barDiemcao = document.getElementById('barDiemcao');
+        if (barDiemcao) {
+            barDiemcao.style.width = intpercentTren8 + '%';
+        }
+
+        var countDiemTren6 = dataDiem
+            .filter(function (score) {
+                return (score >= 6 && score < 8);
+            })
+            .length;
+        var percentTren6 = (countDiemTren6 / countTotal) * 100;
+        var intpercentTren6 = parseInt(percentTren6)
+        $('#countDiemTren6').text(countDiemTren6 + " bài thi đạt (~" + intpercentTren6 + "%)")
+        $('#txtDiemsotrungbinh').text(countDiemTren6 + " bài thi (~" + intpercentTren6 + "%)");
+        var barTrungbinh = document.getElementById('barTrungbinh');
+        if (barTrungbinh) {
+            barTrungbinh.style.width = intpercentTren6 + '%';
+        }
+
+        var countDiemDuoi6 = dataDiem
+            .filter(function (score) {
+                return score < 6;
+            })
+            .length;
+        var percentDuoi6 = (countDiemDuoi6 / countTotal) * 100;
+        var intpercentDuoi6 = parseInt(percentDuoi6)
+        $('#countDiemDuoi6').text(countDiemDuoi6 + " bài thi không đạt (~" + intpercentDuoi6 + "%)");
+        $('#txtDiemsothap').text(countDiemDuoi6 + " bài thi (~" + intpercentDuoi6 + "%)");
+        var barDiemthap = document.getElementById('barDiemthap');
+        if (barDiemthap) {
+            barDiemthap.style.width = intpercentDuoi6 + '%';
+        }
+
+        // Tạo mảng dữ liệu cho điểm số
+        var dataDiemTotal = dataDiem
+            .filter(function (score) {
+                return score !== null;
+            })
+            .sort(function (a, b) {
+                return b - a; // Sắp xếp giảm dần
+            });
+
+        // Tạo mảng dữ liệu cho điểm số dưới 6
+        var dataDiemDuoi6 = dataDiem
+            .map(function (score) {
+                return score < 6 ? score : null;
+            })
+            .filter(function (score) {
+                return score !== null;
+            })
+            .sort(function (a, b) {
+                return b - a; // Sắp xếp giảm dần
+            });
 
         // Tạo mảng dữ liệu cho điểm số trên hoặc bằng 6
-        var dataDiemTren6 = dataDiem.map(function (score) {
-            return score >= 6 ? score : null;
-        });
+        var dataDiemTren6 = dataDiem
+            .map(function (score) {
+                return score >= 6 ? score : null;
+            })
+            .filter(function (score) {
+                return score !== null;
+            })
+            .sort(function (a, b) {
+                return b - a; // Sắp xếp giảm dần
+            });
 
-        // Loại bỏ các phần tử null từ mảng
-        dataDiemTren6 = dataDiemTren6.filter(function (score) {
-            return score !== null;
-        });
-
-        var ctx = document.getElementById('myChart').getContext('2d');
-        var myChart = new Chart(ctx, {
-            type: 'bar',
+        //BIểu đồ tổng
+        var ctxTotal = document.getElementById('myChart').getContext('2d');
+        var myChartTotal = new Chart(ctxTotal, {
+            type: 'line',
             data: {
                 labels: dataTen,
                 datasets: [
                     {
-                        label: 'Điểm số >= 6',
-                        data: dataDiemTren6,
+                        label: 'Điểm số',
+                        data: dataDiemTotal,
                         backgroundColor: 'rgba(75, 192, 192, 0.2)',
                         borderColor: 'rgba(75, 192, 192, 1)',
-                        borderWidth: 1
+                        borderWidth: 1,
+                        tension: 0.4 // Độ căng của đường
+
                     },
                     {
-                        label: 'Điểm số < 6',
-                        data: dataDiemDuoi6,
+                        label: 'Ngưỡng điểm đạt',
+                        data: Array(dataTen.length).fill(6), // Mảng chứa giá trị 6 với chiều dài bằng chiều dài của dataTen
                         backgroundColor: 'rgba(255, 0, 0, 0.2)',
                         borderColor: 'rgba(255, 0, 0, 1)',
-                        borderWidth: 1
+                        borderWidth: 1,
+                        borderDash: [5, 5], // Điểm đứt để phân biệt đường trung bình
+                        pointRadius: 0 // Đặt kích thước của điểm trung bình là 0
+
                     }
                 ]
             },
             options: {
                 responsive: true,
                 scales: {
+                    x: {
+                        display: false // Ẩn trục x
+                    },
                     yAxes: [{
                         ticks: {
                             beginAtZero: true,
@@ -233,44 +349,82 @@
             }
         });
 
+        //BIểu đồ trên 6
+        var ctxAbove6 = document.getElementById('card-chart-tren6').getContext('2d');
+        var myChartAbove6 = new Chart(ctxAbove6, {
+            type: 'line',
+            data: {
+                labels: dataTen,
+                datasets: [
+                    {
+                        label: 'Điểm số',
+                        data: dataDiemTren6,
 
+                        borderColor: 'rgba(135, 211, 134, 1)',
 
+                        borderWidth: 1,
+                        tension: 0.4 // Độ căng của đường
 
-
-       
+                    }
+                ]
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    title: {
+                        display: false
+                    }
+                },
+                responsive: true,
+                scales: {
+                    x: {
+                        display: false // Ẩn trục x
+                    },
+                    y: {
+                        display: false // Ẩn trục y
+                    }
+                }
+            }
+        });
+        //BIểu đồ dưới 6
+        var ctxBelow6 = document.getElementById('card-chart-duoi6').getContext('2d');
+        var myChartBelow6 = new Chart(ctxBelow6, {
+            type: 'line',
+            data: {
+                labels: dataTen,
+                datasets: [
+                    {
+                        label: 'Điểm số',
+                        data: dataDiemDuoi6,
+                        backgroundColor: 'rgba(255, 0, 0, 0.2)',
+                        borderColor: 'rgba(255, 0, 0, 1)',
+                        borderWidth: 1,
+                        tension: 0.4 // Độ căng của đường
+                    }
+                ]
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    title: {
+                        display: false
+                    }
+                },
+                responsive: true,
+                scales: {
+                    x: {
+                        display: false // Ẩn trục x
+                    },
+                    y: {
+                        display: false // Ẩn trục y
+                    }
+                }
+            }
+        });
     })
-
-
 </script>
 
-@*@*
-<div class="modal fade" id="staticBackdrop" data-coreui-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-xl">
-        <div id="noidungbaithi"></div>
-    </div>
-</div>
-
-
-
-<script>
-    $(document).ready(function () {
-        $('.btnXemchitietlichsu').click(function () {
-            var idBaithi = $(this).data("idbaithi");
-            var intIdBaithi = parseInt(idBaithi)
-            $.ajax({
-                url: 'logexam/GetLogAfterExam',
-                type: 'POST',
-                data: { examResultId: intIdBaithi },
-                success: function (data) {
-                    //$('#ketquaTimkiem').html(data);
-                    $('#noidungbaithi').html(data);
-                    $('#staticBackdrop').modal("show")
-                },
-                error: function (error) {
-                    // Xử lý lỗi nếu có
-                    console.error(error);
-                }
-            });
-        })
-    })
-</script>*@

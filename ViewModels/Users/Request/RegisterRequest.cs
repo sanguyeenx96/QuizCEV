@@ -12,7 +12,7 @@ namespace ViewModels.Users.Request
         public string Password { get; set; }
         public string ConfirmPassword { get; set; }
         public string Name { get; set; }
-        public int DeptId { get; set; }
+        public int CellId { get; set; }
         public string Role { get; set; }
     }
 }

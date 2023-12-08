@@ -1,15 +1,14 @@
 ﻿@using ViewModels.Common
 @model IEnumerable<ViewModels.Dept.Response.DeptVm>
-<style>
-    .btn-group .btn {
-        margin-right: 2px; /* Điều chỉnh giá trị để thay đổi kích thước của khoảng trống */
-    }
-</style>
-<table id="tblDanhsachbophan" class="table table-hover" style="text-align:center; vertical-align:middle;width:100%">
+
+<table id="tblDanhsachbophan" class="table table-hover " style="text-align:center; vertical-align:middle;width:100%">
     <thead style="font-size:small">
         <tr>
             <th style="text-align:center;font-weight: 350;">
                 Tên bộ phận
+            </th>
+            <th style="text-align:center;font-weight: 350;">
+                Số lượng Model
             </th>
             <th style="text-align:center;font-weight: 350;">
                 Số lượng tài khoản
@@ -21,17 +20,24 @@
         @foreach (var item in Model)
         {
             <tr>
-                <td class="col-4">
+                <td >
                     @item.Name
                 </td>
-                <td class="col-4">
+                <td>
+                    @item.Models.Count
+                </td>         
+                <td >
                     @item.Soluongtaikhoan
                 </td>
                 <td style="text-align:end">
                     <div class="btn-group" style=" white-space:nowrap">
-                        <btn class="btn btn-dark  btnSua" data-id="@item.Id" data-name="@item.Name">
+                        <btn class="btn btn-secondary  btnThemModel" data-id="@item.Id" data-name="@item.Name">
+                            <i class="bi-plus"> </i>
+                            Thêm Model
+                        </btn>
+                        <btn class="btn btn-secondary  btnSua" data-id="@item.Id" data-name="@item.Name">
                             <i class="bi-pencil"> </i>
-                            Sửa tên
+                            Sửa tên bộ phận
                         </btn>
                         <btn class="btn btn-danger  btnXoa" data-id="@item.Id" data-name="@item.Name">
                             <i class="bi-trash"> </i>
@@ -51,7 +57,7 @@
             "searching": true,
             "info": true,
             "responsive": true,
-            "ordering": false
+            "ordering": true
         });
 
         const swalWithBootstrapButtons = Swal.mixin({
@@ -60,6 +66,67 @@
                 cancelButton: "btn btn-danger",
             },
             buttonsStyling: true,
+        });
+
+        $(".btnThemModel").click(async function (e) {
+            var id = $(this).data("id");
+            var name = $(this).data("name");
+            const { value: newModel } = await swalWithBootstrapButtons.fire({
+                input: "text",
+                inputLabel: "Nhập tên Model cần thêm",
+                showCancelButton: true,
+                confirmButtonText: "Xác nhận",
+                cancelButtonText: "Huỷ bỏ",
+                reverseButtons: true,
+            });
+            if (newModel) {
+                $.ajax({
+                    url: "CreateModel",
+                    type: "POST",
+                    data: { id: id, Name: newModel },
+                    success: function (data) {
+                        if (data.success) {
+                            Swal.fire({
+                                icon: "success",
+                                title: "Thêm Model mới thành công",
+                                showConfirmButton: false,
+                                timer: 1500,
+                            })
+                            $.ajax({
+                                url: "GetListBophan",
+                                type: "GET",
+                                success: function (data) {
+                                    $("#danhsachBophan").html(data)
+                                },
+                                error: function (xhr, t, error) {
+                                    Swal.fire("Thất bại!", "Lỗi máy chủ", "error");
+                                },
+                            });
+                            var deptId = $("#deptId").val();
+                            $.ajax({
+                                url: "GetListModel",
+                                type: "POST",
+                                data: {
+                                    id: deptId
+                                },
+                                success: function (result) {
+                                    $("#danhsachmodel").html(result)
+                                },
+                                error: function () {
+                                    Swal.fire("Lỗi máy chủ!", "Không thành công", "error");
+                                },
+                            });
+
+                           
+                        } else {
+                            Swal.fire("Thất bại!", data.message, "error");
+                        }
+                    },
+                    error: function (xhr, t, error) {
+                        Swal.fire("Thất bại!", "Lỗi máy chủ", "error");
+                    },
+                });
+            }
         });
 
         $(".btnSua").click(async function (e) {

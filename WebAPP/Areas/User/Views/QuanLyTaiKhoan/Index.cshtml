@@ -3,14 +3,8 @@
     {
     <partial name="PageUser/_sideBar" />
     }
-
-
-
+    <h1 class="display-6 mb-2">Thông tin tài khoản</h1>
     <div class="card">
-        <h5 class="card-header">
-            <i class="bi-folder2-open"></i>
-            Thông tin tài khoản
-        </h5>
         <div class="card-body">
             <table class="table">
                 <tbody>
@@ -21,6 +15,14 @@
                     <tr>
                         <td>Bộ phận</td>
                         <td>@Model.Dept</td>
+                    </tr>
+                    <tr>
+                        <td>Model</td>
+                        <td>@Model.Model</td>
+                    </tr>
+                    <tr>
+                        <td>Cell</td>
+                        <td>@Model.Cell</td>
                     </tr>
                     <tr>
                         <td>Tên đăng nhập (Mã nhân viên)</td>
@@ -78,50 +80,50 @@
                     }
                 }
 
-        
 
 
-                    const steps = ['1', '2']
-        const Queue = Swal.mixin({
-            progressSteps: steps,
-            confirmButtonText: 'Tiếp tục',
-            // optional classes to avoid backdrop blinking between steps
-            showClass: { backdrop: 'swal2-noanimation' },
-            hideClass: { backdrop: 'swal2-noanimation' },
-        })
-            ; (async () => {
-                const { value: currentMK } = await Queue.fire({
-                    currentProgressStep: 0,
-                    input: "password",
-                    inputLabel: "Nhập mật khẩu hiện tại",
-                    inputPlaceholder: "Mật khẩu hiện tại của bạn"
-                });
-                if (currentMK) {
-                    $.ajax({
-                        url: 'Quanlytaikhoan/CheckPassword',
-                        type: 'POST',
-                        data: { password: currentMK },
-                        success: function (result) {
-                            if (result.success) {
-                                Step2()
-                            }
-                            else {
-                                Swal.fire({
-                                    icon: "error",
-                                    width: 300,
-                                    text: "Sai mật khẩu",
-                                    showConfirmButton: false,
-                                    timer: 1000,
-                                })
-                            }
-                        },
-                        error: function (error) {
-                            console.error(error);
-                        }
-                    });
-                }
-            })()
 
+                const steps = ['1', '2']
+                const Queue = Swal.mixin({
+                    progressSteps: steps,
+                    confirmButtonText: 'Tiếp tục',
+                    // optional classes to avoid backdrop blinking between steps
+                    showClass: { backdrop: 'swal2-noanimation' },
+                    hideClass: { backdrop: 'swal2-noanimation' },
                 })
-                        })
+                    ; (async () => {
+                        const { value: currentMK } = await Queue.fire({
+                            currentProgressStep: 0,
+                            input: "password",
+                            inputLabel: "Nhập mật khẩu hiện tại",
+                            inputPlaceholder: "Mật khẩu hiện tại của bạn"
+                        });
+                        if (currentMK) {
+                            $.ajax({
+                                url: 'Quanlytaikhoan/CheckPassword',
+                                type: 'POST',
+                                data: { password: currentMK },
+                                success: function (result) {
+                                    if (result.success) {
+                                        Step2()
+                                    }
+                                    else {
+                                        Swal.fire({
+                                            icon: "error",
+                                            width: 300,
+                                            text: "Sai mật khẩu",
+                                            showConfirmButton: false,
+                                            timer: 1000,
+                                        })
+                                    }
+                                },
+                                error: function (error) {
+                                    console.error(error);
+                                }
+                            });
+                        }
+                    })()
+
+            })
+        })
     </script>

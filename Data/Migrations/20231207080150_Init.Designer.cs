@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(TracNghiemCEVDbContext))]
-    [Migration("20231205032021_ThemCotThoiGian")]
-    partial class ThemCotThoiGian
+    [Migration("20231207080150_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -52,7 +52,7 @@ namespace Data.Migrations
                         new
                         {
                             Id = new Guid("8d04dce2-969a-435d-bba4-df3f325983dc"),
-                            ConcurrencyStamp = "9c7d7828-5b56-480a-b51d-23cb5bbc9544",
+                            ConcurrencyStamp = "d40d9bbc-f5e7-4d88-987e-ae760653d3b6",
                             Description = "Administrator role",
                             Name = "admin",
                             NormalizedName = "admin"
@@ -60,7 +60,7 @@ namespace Data.Migrations
                         new
                         {
                             Id = new Guid("470f4021-29d8-4c8e-a9de-527571683d86"),
-                            ConcurrencyStamp = "893ba1aa-0655-42b7-a3ff-76aa5a4afc86",
+                            ConcurrencyStamp = "28594d93-1e36-4573-9230-4c3a44730d69",
                             Description = "User role",
                             Name = "user",
                             NormalizedName = "user"
@@ -76,12 +76,12 @@ namespace Data.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<string>("ConcurrencyStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("DeptId")
+                    b.Property<int>("CellId")
                         .HasMaxLength(200)
                         .HasColumnType("int");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
@@ -126,7 +126,7 @@ namespace Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DeptId");
+                    b.HasIndex("CellId");
 
                     b.ToTable("AppUsers", (string)null);
 
@@ -135,15 +135,15 @@ namespace Data.Migrations
                         {
                             Id = new Guid("69bd714f-9576-45ba-b5b7-f00649be00de"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "5fb73bcf-9248-4c5e-8ba2-e5279f24cd94",
-                            DeptId = 1,
+                            CellId = 1,
+                            ConcurrencyStamp = "6e2a38a9-5e7d-4244-8409-604801e2f955",
                             Email = "smt.ngocsang@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             Name = "Nguyen Ngoc Sang",
                             NormalizedEmail = "smt.ngocsang@gmail.com",
                             NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAEJYJybz5+zMwsn19SAdIDh9mOEIW5YTme20M1W8jBDjwSTjn3bpN1HP/Q6aHbXlxkA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEOPOvnzxTgESvoW67Nt2UWABW2FNlPcHiUeBuQLK4Zq1jChH67Z343+kO8fdfNQX7A==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -228,6 +228,36 @@ namespace Data.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("CauHoiTuLuan", (string)null);
+                });
+
+            modelBuilder.Entity("Data.Entities.Cell", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("ModelId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ModelId");
+
+                    b.ToTable("Cells", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            ModelId = 1,
+                            Name = "None"
+                        });
                 });
 
             modelBuilder.Entity("Data.Entities.Dept", b =>
@@ -369,6 +399,36 @@ namespace Data.Migrations
                     b.HasIndex("LogExamId");
 
                     b.ToTable("LogExamTrinhtuthaotacs", (string)null);
+                });
+
+            modelBuilder.Entity("Data.Entities.Model", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("DeptId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DeptId");
+
+                    b.ToTable("Models", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            DeptId = 1,
+                            Name = "MFE 1"
+                        });
                 });
 
             modelBuilder.Entity("Data.Entities.Question", b =>
@@ -517,13 +577,13 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Data.Entities.AppUser", b =>
                 {
-                    b.HasOne("Data.Entities.Dept", "Dept")
+                    b.HasOne("Data.Entities.Cell", "Cell")
                         .WithMany("AppUsers")
-                        .HasForeignKey("DeptId")
+                        .HasForeignKey("CellId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Dept");
+                    b.Navigation("Cell");
                 });
 
             modelBuilder.Entity("Data.Entities.CauHoiTrinhTuThaoTac", b =>
@@ -546,6 +606,17 @@ namespace Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("Data.Entities.Cell", b =>
+                {
+                    b.HasOne("Data.Entities.Model", "Model")
+                        .WithMany("Cells")
+                        .HasForeignKey("ModelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Model");
                 });
 
             modelBuilder.Entity("Data.Entities.ExamResult", b =>
@@ -589,6 +660,17 @@ namespace Data.Migrations
                     b.Navigation("LogExam");
                 });
 
+            modelBuilder.Entity("Data.Entities.Model", b =>
+                {
+                    b.HasOne("Data.Entities.Dept", "Dept")
+                        .WithMany("Models")
+                        .HasForeignKey("DeptId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Dept");
+                });
+
             modelBuilder.Entity("Data.Entities.Question", b =>
                 {
                     b.HasOne("Data.Entities.Category", "Category")
@@ -619,9 +701,14 @@ namespace Data.Migrations
                     b.Navigation("cauHoiTrinhTuThaoTacs");
                 });
 
-            modelBuilder.Entity("Data.Entities.Dept", b =>
+            modelBuilder.Entity("Data.Entities.Cell", b =>
                 {
                     b.Navigation("AppUsers");
+                });
+
+            modelBuilder.Entity("Data.Entities.Dept", b =>
+                {
+                    b.Navigation("Models");
                 });
 
             modelBuilder.Entity("Data.Entities.ExamResult", b =>
@@ -632,6 +719,11 @@ namespace Data.Migrations
             modelBuilder.Entity("Data.Entities.LogExam", b =>
                 {
                     b.Navigation("LogExamTrinhtuthaotacs");
+                });
+
+            modelBuilder.Entity("Data.Entities.Model", b =>
+                {
+                    b.Navigation("Cells");
                 });
 #pragma warning restore 612, 618
         }

@@ -14,32 +14,25 @@ namespace WebAPP.Areas.Admin.Controllers
     {
         private readonly IExamResultApiClient _examResultApiClient;
         private readonly IDeptApiClient _deptApiClient;
+        private readonly ICategoryApiClient _categoryApiClient;
 
-        public ThongKeController(IExamResultApiClient examResultApiClient, IDeptApiClient deptApiClient)
+
+        public ThongKeController(IExamResultApiClient examResultApiClient, IDeptApiClient deptApiClient, ICategoryApiClient categoryApiClient)
         {
             _examResultApiClient = examResultApiClient;
             _deptApiClient = deptApiClient;
+            _categoryApiClient = categoryApiClient;
         }
 
         public async Task<IActionResult> Index()
         {
-            ViewBag.thisPage = "Thống kê dữ liệu lịch sử bài thi";
-            var request = new ExamResultSearchRequest()
-            {
-                UserId = null,
-                CategoryId = null,
-                examResultId = null,
-                Date = null,
-                boPhanId = null,
-                name = null,
-                userName = null,
-            };
-            var result = await _examResultApiClient.Search(request);
-            var listPhongthi = result.ResultObj.DistinctBy(x => x.CategoryId).ToList();
+            ViewBag.thisPage = "Thống kê dữ liệu lịch sử bài thi";       
+            var result = await _categoryApiClient.GetAll();
+            var listPhongthi = result.ResultObj;
             var selectListPhongThi = listPhongthi.Select(item => new SelectListItem
             {
-                Value = item.CategoryId.ToString(),
-                Text = item.CategoryName
+                Value = item.Id.ToString(),
+                Text = item.Name
             }).ToList();
             ViewBag.SelectListPhongThi = selectListPhongThi;
 
@@ -50,9 +43,7 @@ namespace WebAPP.Areas.Admin.Controllers
                 Value = x.Id.ToString()
             });
             ViewBag.listDept = listDept;
-            Console.WriteLine(listDept);
-
-            return View(result.ResultObj);
+            return View();
         }
 
         //Trang xem lịch sử
@@ -71,6 +62,12 @@ namespace WebAPP.Areas.Admin.Controllers
             };
 
             var result = await _examResultApiClient.Search(request);
+            if (!result.ResultObj.Any())
+            {
+                ViewBag.dataTen = new List<string>();
+                ViewBag.dataDiem = new List<float>();
+                return PartialView("PageAdmin/_listLogExam", result.ResultObj);
+            }
             if (examResultId == null)
             {
                 var listResult = result.ResultObj;
@@ -112,7 +109,7 @@ namespace WebAPP.Areas.Admin.Controllers
                     ViewBag.totalScoreTL = totalScoreTL;
                     ViewBag.scoreTL = scoreTL;
 
-                    return PartialView("PageUser/_logExam", log);
+                    return PartialView("PageAdmin/_logExam", log);
                 }
             }
         }

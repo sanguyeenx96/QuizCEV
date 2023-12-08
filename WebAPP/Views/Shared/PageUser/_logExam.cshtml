@@ -76,7 +76,7 @@
                         }
                     }
                 </div>
-                <canvas id="myChart"></canvas>
+                <canvas style="width:100%" id="myChart3"></canvas>
             </div>
 
 
@@ -378,7 +378,7 @@
 <script>
     $(document).ready(function () {
         Chart.register(ChartDataLabels); // Enable plugin
-        const ctx = document.getElementById('myChart').getContext('2d');
+        const ctx = document.getElementById('myChart3').getContext('2d');
         var tracnghiemScore = @scoreTN;
         var tuluanScore = @scoreTL;
         var totalScore = tracnghiemScore + tuluanScore;

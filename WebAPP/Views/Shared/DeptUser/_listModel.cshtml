@@ -1,0 +1,322 @@
+﻿@model IEnumerable<ViewModels.Model.Response.ModelVm>
+<style>
+    .btn-group .btn {
+        margin-right: 2px; /* Điều chỉnh giá trị để thay đổi kích thước của khoảng trống */
+    }
+
+</style>
+<table id="tblDanhsachmodel" class="table table-hover text-light" style="text-align:center; vertical-align:middle;width:100%">
+    <thead style="font-size:small">
+        <tr>
+            <th style="text-align:center;font-weight: 350;">
+                Tên Model
+            </th>
+            <th style="text-align:center;font-weight: 350;">
+                Số lượng Cell
+            </th>
+            <th style="text-align:center;font-weight: 350;">
+                Số lượng tài khoản
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @item.Name
+                </td>
+                <td>
+                    @item.Cells.Count()
+                </td>
+                <td>
+                    @item.Soluongtaikhoan
+                </td>
+                <td style="text-align:end">
+                    <div class="btn-group" style=" white-space:nowrap">
+                        <btn class="btn btn-secondary  btnThemcell" data-id="@item.Id" data-name="@item.Name">
+                            <i class="bi-plus"> </i>
+                            Thêm Cell
+                        </btn>
+                        <btn class="btn btn-secondary  btnSuatenModel" data-id="@item.Id" data-name="@item.Name">
+                            <i class="bi-pencil"> </i>
+                            Sửa tên Model
+                        </btn>
+                        <btn class="btn btn-danger  btnXoaModel" data-id="@item.Id" data-name="@item.Name">
+                            <i class="bi-trash"> </i>
+                            Xoá
+                        </btn>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+<hr />
+<h1 class="display-6">
+    <i class="bi-dot"></i>
+    Danh sách Cell
+</h1>
+<div class="form-group mb-2">
+    <label class="form-label">Chọn Model để xem chi tiết</label>
+    <select class="form-select form-select-lg " id="modelselectlist" name="modelselectlist" style="overflow: hidden;">
+        @foreach (var item in ViewBag.selectmodellist)
+        {
+            <option value="@item.Value">@item.Text</option>
+        }
+    </select>
+</div>
+<div class="card">
+    <div class="card-body">
+        <div id="danhsachcell"></div>
+    </div>
+</div>
+
+
+
+
+
+
+
+<script>
+    $(document).ready(function () {
+        var modelId = $("#modelselectlist").val();
+        $.ajax({
+            url: "GetListCell",
+            type: "POST",
+            data: {
+                id: modelId
+            },
+            success: function (result) {
+                $("#danhsachcell").html(result)
+            },
+            error: function () {
+                Swal.fire("Lỗi máy chủ!", "Không thành công", "error");
+            },
+        });
+
+        $("#modelselectlist").on("change", function () {
+            modelId = $(this).val();
+            $.ajax({
+                url: "GetListCell",
+                type: "POST",
+                data: {
+                    id: modelId
+                },
+                success: function (result) {
+                    $("#danhsachcell").html(result)
+                },
+                error: function () {
+                    Swal.fire("Lỗi máy chủ!", "Không thành công", "error");
+                },
+            });
+        })
+
+        $("#tblDanhsachmodel").DataTable({
+            "paging": true,
+            "searching": true,
+            "info": true,
+            "responsive": true,
+            "ordering": true
+        });
+
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+                confirmButton: "btn btn-success",
+                cancelButton: "btn btn-danger",
+            },
+            buttonsStyling: true,
+        });
+
+        $(".btnSuatenModel").click(async function (e) {
+            var id = $(this).data("id");
+            var name = $(this).data("name");
+            const { value: newName } = await swalWithBootstrapButtons.fire({
+                input: "text",
+                inputLabel: "Nhập tên mới cho bộ phận",
+                inputValue: name,
+                showCancelButton: true,
+                confirmButtonText: "Xác nhận",
+                cancelButtonText: "Huỷ bỏ",
+                reverseButtons: true,
+            });
+            if (newName) {
+                $.ajax({
+                    url: "EditModelName",
+                    type: "POST",
+                    data: { id: id, Name: newName },
+                    success: function (data) {
+                        if (data.success) {
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: "top-end",
+                                showConfirmButton: false,
+                                timer: 800,
+                                timerProgressBar: true,
+                                didOpen: (toast) => {
+                                    toast.onmouseenter = Swal.stopTimer;
+                                    toast.onmouseleave = Swal.resumeTimer;
+                                }
+                            });
+                            Toast.fire({
+                                icon: "success",
+                                title: "Đang xử lý..."
+                            }).then(function () {
+                                var deptId = $("#deptId").val();
+                                $.ajax({
+                                    url: "GetListModel",
+                                    type: "POST",
+                                    data: {
+                                        id: deptId
+                                    },
+                                    success: function (result) {
+                                        $("#danhsachmodel").html(result)
+                                    },
+                                    error: function () {
+                                        Swal.fire("Lỗi máy chủ!", "Không thành công", "error");
+                                    },
+                                });
+                            });
+                        } else {
+                            Swal.fire("Thất bại!", data.message, "error");
+                        }
+                    },
+                    error: function (xhr, t, error) {
+                        Swal.fire("Thất bại!", "Lỗi máy chủ", "error");
+                    },
+                });
+            }
+        });
+
+        $(".btnXoaModel").click(async function (e) {
+            var id = $(this).data("id");
+            var name = $(this).data("name");
+
+            swalWithBootstrapButtons
+                .fire({
+                    title: "Xoá dữ liệu Model " + name + " ?",
+                    text: "Toàn bộ dữ liệu và tài khoản liên quan tới Model " + name + " sẽ bị xoá",
+                    icon: "error",
+                    showCancelButton: true,
+                    confirmButtonText: "Xác nhận",
+                    cancelButtonText: "Huỷ bỏ",
+                    reverseButtons: true,
+                })
+                .then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: "DeleteModel",
+                            type: "POST",
+                            data: {
+                                id: id
+                            },
+                            success: function (data) {
+                                if (data.success) {
+                                    const Toast = Swal.mixin({
+                                        toast: true,
+                                        position: "top-end",
+                                        showConfirmButton: false,
+                                        timer: 800,
+                                        timerProgressBar: true,
+                                        didOpen: (toast) => {
+                                            toast.onmouseenter = Swal.stopTimer;
+                                            toast.onmouseleave = Swal.resumeTimer;
+                                        }
+                                    });
+                                    Toast.fire({
+                                        icon: "success",
+                                        title: "Đang xử lý..."
+                                    }).then(function () {
+                                        var deptId = $("#deptId").val();
+                                        $.ajax({
+                                            url: "GetListModel",
+                                            type: "POST",
+                                            data: {
+                                                id: deptId
+                                            },
+                                            success: function (result) {
+                                                $("#danhsachmodel").html(result)
+                                            },
+                                            error: function () {
+                                                Swal.fire("Lỗi máy chủ!", "Không thành công", "error");
+                                            },
+                                        });
+                                    });
+                                } else {
+                                    Swal.fire(
+                                        "Không thành công!",
+                                        data.message,
+                                        "error"
+                                    );
+                                }
+                            },
+                        });
+                    }
+                });
+        });
+
+        $(".btnThemcell").click(async function (e) {
+            var id = $(this).data("id");
+            const { value: newCell } = await swalWithBootstrapButtons.fire({
+                input: "text",
+                inputLabel: "Nhập tên Cell cần thêm",
+                showCancelButton: true,
+                confirmButtonText: "Xác nhận",
+                cancelButtonText: "Huỷ bỏ",
+                reverseButtons: true,
+            });
+            if (newCell) {
+                $.ajax({
+                    url: "CreateCell",
+                    type: "POST",
+                    data: { id: id, Name: newCell },
+                    success: function (data) {
+                        if (data.success) {
+                            Swal.fire({
+                                icon: "success",
+                                title: "Thêm Cell mới thành công",
+                                showConfirmButton: false,
+                                timer: 1500,
+                            })
+                            $.ajax({
+                                url: "GetListBophan",
+                                type: "GET",
+                                success: function (data) {
+                                    $("#danhsachBophan").html(data)
+                                },
+                                error: function (xhr, t, error) {
+                                    Swal.fire("Thất bại!", "Lỗi máy chủ", "error");
+                                },
+                            });
+                            var deptId = $("#deptId").val();
+                            $.ajax({
+                                url: "GetListModel",
+                                type: "POST",
+                                data: {
+                                    id: deptId
+                                },
+                                success: function (result) {
+                                    $("#danhsachmodel").html(result)
+                                },
+                                error: function () {
+                                    Swal.fire("Lỗi máy chủ!", "Không thành công", "error");
+                                },
+                            });
+
+
+                        } else {
+                            Swal.fire("Thất bại!", data.message, "error");
+                        }
+                    },
+                    error: function (xhr, t, error) {
+                        Swal.fire("Thất bại!", "Lỗi máy chủ", "error");
+                    },
+                });
+            }
+        });
+    });
+</script>
+
