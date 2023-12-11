@@ -13,6 +13,9 @@ namespace ViewModels.ExamResult.Request
         public int? CategoryId { get; set; }
         public DateTime? Date { get; set; }
         public int? boPhanId { get; set; }
+        public int? modelId { get; set; }
+        public int? cellId { get; set; }
+
         public string? userName { get; set; }
         public string? name { get; set; }
 

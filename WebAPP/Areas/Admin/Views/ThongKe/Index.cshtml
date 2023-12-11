@@ -7,10 +7,8 @@
 }
 
 
-
 <h1 class="display-6 mb-2">Lọc dữ liệu</h1>
-
-<div class="card mb-3">
+<div class="card mb-3 text-bg-dark">
     <div class="card-body">
         <div class="row gx-3 gy-2 align-items-center">
             <div class="col-sm-12">
@@ -24,38 +22,67 @@
                 <input type="text" id="datepicker" class="form-select " autocomplete="off" placeholder="Nhấn để chọn">
             </div>
             <div class="col-sm-3">
-                <label for="formGroupExampleInput" class="form-label">Theo bộ phận</label>
-                <select id="sldeptId" class="form-select">
-                    <option value="">Tất cả</option>
-                    @foreach (var item in ViewBag.listDept)
-                    {
-                        <option value="@item.Value">@item.Text</option>
-                    }
+                <label for="formGroupExampleInput" class="form-label">
+                    <i class="bi-1-circle-fill"></i>
+                    Theo bộ phận
+                </label>
+                <select id="deptSelectList" class="form-select">
+                    <option value="" disabled selected>Nhấn để chọn</option>
                 </select>
             </div>
             <div class="col-sm-3">
+                <label for="formGroupExampleInput" class="form-label">
+                    <i class="bi-2-circle-fill"></i>
+                    Theo Model
+                </label>
+                <select id="modelSelectList" class="form-select">
+                    <option value="" disabled selected>Nhấn để chọn</option>
+                </select>
+            </div>
+            <div class="col-sm-3">
+                <label for="formGroupExampleInput" class="form-label">
+                    <i class="bi-3-circle-fill"></i>
+                    Theo Cell
+                </label>
+                <select id="cellSelectList" class="form-select">
+                    <option value="" disabled selected>Nhấn để chọn</option>
+                </select>
+            </div>
+            <div class="col-sm-6">
                 <label for="formGroupExampleInput" class="form-label">Theo mã nhân viên</label>
                 <input type="text" id="txtuserName" class="form-control " autocomplete="off" placeholder="Nhập mã nhân viên">
             </div>
-            <div class="col-sm-3">
+            <div class="col-sm-6">
                 <label for="formGroupExampleInput" class="form-label">Theo tên nhân viên</label>
                 <input type="text" id="txtName" class="form-control " autocomplete="off" placeholder="Nhập mã nhân viên">
             </div>
-           
         </div>
     </div>
 </div>
 <div id="ketquaTimkiem">
 </div>
-<div id="anh" class="row col-12">
-    <img style="max-width:80%" src="~/comunicate.a45bc6d.png" />
-
-</div>
-
 
 
 <script>
     $(document).ready(function () {
+        $.ajax({
+            url: '/Admin/DeptUser/GetSelectListDept',
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                var selectList = $('#deptSelectList');
+                $.each(data, function (index, item) {
+                    selectList.append($('<option>', {
+                        value: item.value,
+                        text: item.text
+                    }));
+                });
+            },
+            error: function () {
+                console.error('Failed to retrieve department options.');
+            }
+        });
+
         var picker = new Pikaday({
             field: document.getElementById('datepicker'),
             format: 'YYYY-MM-DD',
@@ -67,9 +94,67 @@
         $('#PhongThi').on("change", function () {
             loadDataTheoChuDe();
         });
-        $('#sldeptId').on("change", function () {
+        $('#deptSelectList').on("change", function () {
             loadDataTheoChuDe();
+            var deptId = $(this).val();
+            deptId = parseInt(deptId);
+            $.ajax({
+                url: '/Admin/DeptUser/GetSelectListModel',
+                type: 'POST',
+                data: { deptId: deptId },
+                dataType: 'json',
+                success: function (data) {
+                    var selectList = $('#modelSelectList');
+                    selectList.empty()
+                    selectList.append($('<option>', {
+                        value: null,
+                        text: "Nhấn để chọn"
+                    }))
+                    $.each(data, function (index, item) {
+                        selectList.append($('<option>', {
+                            value: item.value,
+                            text: item.text
+                        }));
+                    });
+                },
+                error: function () {
+                    console.error('Failed to retrieve department options.');
+                }
+            });
         });
+
+        $('#modelSelectList').on("change", function () {
+            loadDataTheoChuDe();
+            var modelId = $(this).val();
+            modelId = parseInt(modelId);
+            $.ajax({
+                url: '/Admin/DeptUser/GetSelectListCelll',
+                type: 'POST',
+                data: { modelId: modelId },
+                dataType: 'json',
+                success: function (data) {
+                    var selectList = $('#cellSelectList');
+                    selectList.empty()
+                    selectList.append($('<option>', {
+                        value: null,
+                        text: "Nhấn để chọn"
+                    }))
+                    $.each(data, function (index, item) {
+                        selectList.append($('<option>', {
+                            value: item.value,
+                            text: item.text
+                        }));
+                    });
+                },
+                error: function () {
+                    console.error('Failed to retrieve department options.');
+                }
+            });
+        })
+        $('#cellSelectList').on("change", function () {
+            loadDataTheoChuDe();          
+        })
+
         $('#txtuserName').on("keyup", function () {
             loadDataTheoChuDe();
         });
@@ -79,18 +164,28 @@
         function loadDataTheoChuDe() {
             var selectphongThiValue = $('#PhongThi').val();
             var selectDate = $('#datepicker').val();
-            var selectboPhanId = $('#sldeptId').val();
+            var selectboPhanId = $('#deptSelectList').val();
+            var selectmodelId = $('#modelSelectList').val();
+            var selectcellId = $('#cellSelectList').val();
+
             var name = $('#txtName').val();
             var userName = $('#txtuserName').val();
+
             var intCategoryId = parseInt(selectphongThiValue);
-            var selectboPhanId = parseInt(selectboPhanId);
+            var intboPhanId = parseInt(selectboPhanId);
+            var intmodelId = parseInt(selectmodelId);
+            var intcellId = parseInt(selectcellId);
+
+
             $.ajax({
                 url: '/admin/thongke/Search',
                 type: 'POST',
-                data: { 
+                data: {
                     CategoryId: intCategoryId,
                     Date: selectDate,
                     boPhanId: selectboPhanId,
+                    modelId: intmodelId,
+                    cellId: intcellId,
                     name: name,
                     userName: userName
                 },

@@ -6,23 +6,50 @@
     {
     <partial name="PageUser/_sideBar" />
     }
-    <h1 class="display-6 mb-2">Chọn phòng thi</h1>
 
-    <ul class="nav nav-pills mb-2 " id="pills-tab" role="tablist">
-        <li class="nav-item" role="presentation">
-            <button class="nav-link active" id="pills-open-tab" data-coreui-toggle="pill" data-coreui-target="#pills-open" type="button" role="tab" aria-controls="pills-open" aria-selected="true">
-                Phòng thi đang mở
-            </button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="pills-close-tab" data-coreui-toggle="pill" data-coreui-target="#pills-close" type="button" role="tab" aria-controls="pills-close" aria-selected="false">
-                Phòng thi đang đóng
-            </button>
-        </li>
-        
-    </ul>
-    <div class="tab-content" id="pills-tabContent">
-        <div class="tab-pane fade show active" id="pills-open" role="tabpanel" aria-labelledby="pills-open-tab" tabindex="0">
+    <style>
+        .center-pills {
+            display: flex;
+            justify-content: center;
+        }
+    </style>
+    @{
+    if (ViewBag.settingRetest == false)
+    {
+    <small>
+                    <span class="badge bg-danger">
+                        <i class="bi-exclamation-triangle-fill"></i>
+                        Không cho phép thi lại
+                    </span>
+    </small>
+    }
+    else
+    {
+    <small>
+                    <span class="badge bg-success">
+                        <i class="bi-exclamation-triangle-fill"></i>
+                        Cho phép thi lại
+                    </span>
+    </small>
+
+    }
+}
+<h1 class="display-6">Chọn phòng thi </h1>
+
+<ul class="nav nav-pills center-pills my-2" id="pills-tab" role="tablist">
+    <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="pills-open-tab" data-coreui-toggle="pill" data-coreui-target="#pills-open" type="button" role="tab" aria-controls="pills-open" aria-selected="true">
+            Phòng thi đang mở
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="pills-close-tab" data-coreui-toggle="pill" data-coreui-target="#pills-close" type="button" role="tab" aria-controls="pills-close" aria-selected="false">
+            Phòng thi đang đóng
+        </button>
+    </li>
+</ul>
+<div class="tab-content" id="pills-tabContent">
+    <div class="tab-pane fade show active" id="pills-open" role="tabpanel" aria-labelledby="pills-open-tab" tabindex="0">
         @foreach (var item in Model.Where(x => x.Status == true))
         {
             <div class="card mb-2">
@@ -55,7 +82,7 @@
                 </div>
             </div>
         }
-    </div>    
+    </div>
 </div>
 
 
@@ -86,17 +113,31 @@
                         $.ajax({
                             url: "SelectRoom", // Đường dẫn đến action
                             method: "POST",
-                            data: { idPhong: idPhong }, // Dữ liệu gửi đi
+                            data: { idPhong: idPhong
+                                , categoryName: tenPhong
+                            }, // Dữ liệu gửi đi
                             success: function (response) {
-                                var url = "Test";
-                                window.location.href = url;
+                                if (response.success){
+                                    var url = "Test";
+                                    window.location.href = url;
+                                }
+                                else{
+                                    Swal.fire({
+                                        icon: "error",
+                                        width: 300,
+                                        text: response.message,
+                                        showConfirmButton: false,
+                                        timer: 2000,
+                                    });
+                                }        
+
                             },
                             error: function (error) {
                                 // Xử lý lỗi nếu có
                                 console.error("Error:", error);
                             }
                         });
-                    } 
+                    }
                 });
         });
     });

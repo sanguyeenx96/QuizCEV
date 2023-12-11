@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ViewModels.Common;
 using ViewModels.ExamResult.Request;
 
 namespace WebAPI.Controllers
@@ -36,6 +37,13 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> Create(ExamResultCreateRequest request)
         {
             var result = await _examResultService.Create(request);
+            return Ok(result);
+        }
+
+        [HttpPost("checkretest")]
+        public async Task<IActionResult> CheckRetest(ExamResultCheckRetestRequest request)
+        {
+            var result = await _examResultService.CheckReTest(request);
             return Ok(result);
         }
 

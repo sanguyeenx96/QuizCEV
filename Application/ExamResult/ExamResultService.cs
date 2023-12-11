@@ -22,6 +22,16 @@ namespace Application.ExamResult
             _context = context;
         }
 
+        public async Task<ApiResult<bool>> CheckReTest(ExamResultCheckRetestRequest request)
+        {
+            var result = await _context.ExamResults.Where(x=>(x.UserId == request.UserId && x.CategoryName == request.CategoryName)).AnyAsync();
+            if (!result)
+            {
+                return new ApiErrorResult<bool>();
+            }
+            return new ApiSuccessResult<bool>();
+        }
+
         public async Task<ApiResult<int>> Create(ExamResultCreateRequest request)
         {
             var newExamResult = new Data.Entities.ExamResult
@@ -79,6 +89,10 @@ namespace Application.ExamResult
                 }
                 if (request.boPhanId != null)
                     resultQuery = resultQuery.Where(x => x.AppUser.Cell.Model.Dept.Id == request.boPhanId);
+                if (request.modelId != null )
+                    resultQuery = resultQuery.Where(x => x.AppUser.Cell.Model.Id == request.modelId);
+                if (request.cellId != null)
+                    resultQuery = resultQuery.Where(x => x.AppUser.Cell.Id == request.cellId);
                 if (request.userName != null)
                     resultQuery = resultQuery.Where(x => x.AppUser.UserName.Contains(request.userName));
                 if (request.name != null)
@@ -93,12 +107,14 @@ namespace Application.ExamResult
                     ThoiGianLamBai = result.ThoiGianLamBai,
                     ThoiGianChoPhepLamBai = result.ThoiGianChoPhepLamBai,
                     Hoten = result.AppUser.Name,
-                    Bophan = result.AppUser.Cell.Model.Dept.Name,
                     CategoryName = result.CategoryName,
                     UserId = result.UserId,
                     CategoryId = result.CategoryId,
                     Date = result.Date,
                     Score = result.Score,
+                    Model = result.AppUser.Cell.Model.Name,
+                    Cell = result.AppUser.Cell.Name,
+                    Bophan = result.AppUser.Cell.Model.Dept.Name,
                     LogExams = result.LogExams != null
                     ? result.LogExams.Select(logExam => new LogExamVm
                     {

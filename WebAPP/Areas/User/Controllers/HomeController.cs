@@ -1,5 +1,6 @@
 ﻿using Humanizer.Localisation.TimeToClockNotation;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.Options;
 using Newtonsoft.Json;
@@ -29,10 +30,12 @@ namespace WebAPP.Areas.User.Controllers
         private readonly IExamResultApiClient _examResultApiClient;
         private readonly ILogExamApiClient _logExamApiClient;
         private readonly ILogExamTrinhtuthaotacApiClient _logExamTrinhtuthaotacApiClient;
+        private readonly ISettingApiClient _settingApiClient;
 
         public HomeController(ICategoryApiClient categoryApiClient, IQuestionApiClient questionApiClient,
-            ICauHoiTuLuanApiClient cauHoiTuLuanApiClient, ICauHoiTrinhTuThaoTacApiClient cauHoiTrinhTuThaoTacApiClient, 
-            IExamResultApiClient examResultApiClient, ILogExamApiClient logExamApiClient, ILogExamTrinhtuthaotacApiClient logExamTrinhtuthaotacApiClient)
+            ICauHoiTuLuanApiClient cauHoiTuLuanApiClient, ICauHoiTrinhTuThaoTacApiClient cauHoiTrinhTuThaoTacApiClient,
+            IExamResultApiClient examResultApiClient, ILogExamApiClient logExamApiClient,
+            ILogExamTrinhtuthaotacApiClient logExamTrinhtuthaotacApiClient, ISettingApiClient settingApiClient)
         {
             _categoryApiClient = categoryApiClient;
             _questionApiClient = questionApiClient;
@@ -41,12 +44,48 @@ namespace WebAPP.Areas.User.Controllers
             _examResultApiClient = examResultApiClient;
             _logExamApiClient = logExamApiClient;
             _logExamTrinhtuthaotacApiClient = logExamTrinhtuthaotacApiClient;
+            _settingApiClient = settingApiClient;
+        }
+
+        //Check setting re-test
+        private async Task<bool> CheckRetest()
+        {
+            var result = await _settingApiClient.GetAll();
+            var listSetting = result.ResultObj;
+            var rerestSetting = listSetting.Where(x => x.Name == "Retest").FirstOrDefault();
+            return rerestSetting.Status;
+        }
+        private async Task<bool> CheckBaithiRetest(string categoryName)
+        {
+            Guid id = Guid.Empty;
+            var userIdString = User.FindFirstValue("UserId");
+            if (Guid.TryParse(userIdString, out var userId))
+            {
+                id = userId;
+            };
+            var request = new ExamResultCheckRetestRequest()
+            {
+                UserId = id,
+                CategoryName = categoryName
+            };
+
+            var result = await _examResultApiClient.CheckRetest(request);
+            if (result.IsSuccessed)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         //Chọn phòng thi:
         [HttpGet]
         public async Task<IActionResult> SelectRoom()
         {
+            bool modeCheck = CheckRetest().Result;
+            ViewBag.settingRetest = modeCheck;
             ViewBag.hoten = User.FindFirst(ClaimTypes.Name).Value.ToString();
             ViewBag.bophan = User.FindFirst(ClaimTypes.Country).Value.ToString();
             ViewBag.thisPage = "Bắt đầu kiểm tra";
@@ -58,62 +97,131 @@ namespace WebAPP.Areas.User.Controllers
 
         //Lấy dữ liệu câu hỏi từ phòng thi:
         [HttpPost]
-        public async Task<IActionResult> SelectRoom(int idPhong)
+        public async Task<IActionResult> SelectRoom(int idPhong, string categoryName)
         {
-            //Trắc nghiệm
-            List<QuestionAndAnswerVm> listQuestionAndAnswerTracNghiem = new List<QuestionAndAnswerVm>();
-            TempData["QuestionAndAnswerTracNghiem"] = JsonConvert.SerializeObject(listQuestionAndAnswerTracNghiem);
-            var listTracNghiem = await _questionApiClient.GetAllByCategory(idPhong);
-            var dsCauHoiTracNghiem = listTracNghiem.ResultObj;
-            var random = new Random();
-            dsCauHoiTracNghiem = dsCauHoiTracNghiem.OrderBy(x => random.Next()).ToList();
-            List<QuestionVm> listQuestionTracNghiem = dsCauHoiTracNghiem;
-            TempData["danhsachcauhoiTracNghiem"] = JsonConvert.SerializeObject(listQuestionTracNghiem);
-            TempData["soluongcauhoiTracNghiem"] = listQuestionTracNghiem.Count();
-            Queue<QuestionVm> queue = new Queue<QuestionVm>();
-            foreach (QuestionVm a in listQuestionTracNghiem)
+            bool modeCheck = CheckRetest().Result;
+            if (modeCheck == false) //Nếu không cho thi lại
             {
-                queue.Enqueue(a);
+                var check = await CheckBaithiRetest(categoryName);
+                if (check)
+                {
+                    return Json(new { success = false, message = "Bạn đã làm bài thi này rồi!" });
+                }
+                else
+                {
+                    //Trắc nghiệm
+                    List<QuestionAndAnswerVm> listQuestionAndAnswerTracNghiem = new List<QuestionAndAnswerVm>();
+                    TempData["QuestionAndAnswerTracNghiem"] = JsonConvert.SerializeObject(listQuestionAndAnswerTracNghiem);
+                    var listTracNghiem = await _questionApiClient.GetAllByCategory(idPhong);
+                    var dsCauHoiTracNghiem = listTracNghiem.ResultObj;
+                    var random = new Random();
+                    dsCauHoiTracNghiem = dsCauHoiTracNghiem.OrderBy(x => random.Next()).ToList();
+                    List<QuestionVm> listQuestionTracNghiem = dsCauHoiTracNghiem;
+                    TempData["danhsachcauhoiTracNghiem"] = JsonConvert.SerializeObject(listQuestionTracNghiem);
+                    TempData["soluongcauhoiTracNghiem"] = listQuestionTracNghiem.Count();
+                    Queue<QuestionVm> queue = new Queue<QuestionVm>();
+                    foreach (QuestionVm a in listQuestionTracNghiem)
+                    {
+                        queue.Enqueue(a);
+                    }
+                    TempData["questionsTracNghiem"] = JsonConvert.SerializeObject(queue);
+
+
+                    //Tự luận:
+                    List<QuestionAndAnswerTrinhTuThaoTacVm> listQuestionAndAnswerTrinhTuThaoTac = new List<QuestionAndAnswerTrinhTuThaoTacVm>();
+                    TempData["QuestionAndAnswerTrinhTuThaoTac"] = JsonConvert.SerializeObject(listQuestionAndAnswerTrinhTuThaoTac);
+
+                    var listTuLuan = await _cauHoiTuLuanApiClient.GetAllByCategory(idPhong);
+                    var dsCauHoiTuLuan = listTuLuan.ResultObj;
+                    dsCauHoiTuLuan = dsCauHoiTuLuan.OrderBy(x => random.Next()).ToList();
+                    List<CauHoiTuLuanVm> listQuestionTuLuan = dsCauHoiTuLuan;
+                    TempData["dsCauHoiTL"] = JsonConvert.SerializeObject(listQuestionTuLuan);
+
+                    TempData["danhsachcauhoiTuLuan"] = JsonConvert.SerializeObject(listQuestionTuLuan);
+                    TempData["soluongcauhoiTuLuan"] = listQuestionTuLuan.Count();
+                    Queue<CauHoiTuLuanVm> queueTuluan = new Queue<CauHoiTuLuanVm>();
+                    foreach (CauHoiTuLuanVm a in listQuestionTuLuan)
+                    {
+                        queueTuluan.Enqueue(a);
+                    }
+                    TempData["questionsTuLuan"] = JsonConvert.SerializeObject(queueTuluan);
+
+
+                    //Common:
+                    var phongThi = await _categoryApiClient.GetById(idPhong);
+                    int thoiGianThi = phongThi.ResultObj.Time;
+                    int totalQuestion = listQuestionTracNghiem.Count() + listQuestionTuLuan.Count();
+                    TempData["totalQuestion"] = totalQuestion;
+                    TempData["idPhong"] = idPhong;
+                    TempData["thoiGianThi"] = thoiGianThi;
+
+                    TempData["score"] = 0;
+                    TempData["numQuestionTracnghiem"] = 0;
+                    TempData["numQuestionTuLuan"] = 0;
+                    TempData["StatusTN"] = 0;
+                    TempData["StatusTL"] = 0;
+
+                    TempData.Keep();
+                    return Json(new { success = true });
+                }
             }
-            TempData["questionsTracNghiem"] = JsonConvert.SerializeObject(queue);
-
-
-            //Tự luận:
-            List<QuestionAndAnswerTrinhTuThaoTacVm> listQuestionAndAnswerTrinhTuThaoTac = new List<QuestionAndAnswerTrinhTuThaoTacVm>();
-            TempData["QuestionAndAnswerTrinhTuThaoTac"] = JsonConvert.SerializeObject(listQuestionAndAnswerTrinhTuThaoTac);
-
-            var listTuLuan = await _cauHoiTuLuanApiClient.GetAllByCategory(idPhong);
-            var dsCauHoiTuLuan = listTuLuan.ResultObj;
-            dsCauHoiTuLuan = dsCauHoiTuLuan.OrderBy(x => random.Next()).ToList();
-            List<CauHoiTuLuanVm> listQuestionTuLuan = dsCauHoiTuLuan;
-            TempData["dsCauHoiTL"] = JsonConvert.SerializeObject(listQuestionTuLuan);
-
-            TempData["danhsachcauhoiTuLuan"] = JsonConvert.SerializeObject(listQuestionTuLuan);
-            TempData["soluongcauhoiTuLuan"] = listQuestionTuLuan.Count();
-            Queue<CauHoiTuLuanVm> queueTuluan = new Queue<CauHoiTuLuanVm>();
-            foreach (CauHoiTuLuanVm a in listQuestionTuLuan)
+            else
             {
-                queueTuluan.Enqueue(a);
+                //Trắc nghiệm
+                List<QuestionAndAnswerVm> listQuestionAndAnswerTracNghiem = new List<QuestionAndAnswerVm>();
+                TempData["QuestionAndAnswerTracNghiem"] = JsonConvert.SerializeObject(listQuestionAndAnswerTracNghiem);
+                var listTracNghiem = await _questionApiClient.GetAllByCategory(idPhong);
+                var dsCauHoiTracNghiem = listTracNghiem.ResultObj;
+                var random = new Random();
+                dsCauHoiTracNghiem = dsCauHoiTracNghiem.OrderBy(x => random.Next()).ToList();
+                List<QuestionVm> listQuestionTracNghiem = dsCauHoiTracNghiem;
+                TempData["danhsachcauhoiTracNghiem"] = JsonConvert.SerializeObject(listQuestionTracNghiem);
+                TempData["soluongcauhoiTracNghiem"] = listQuestionTracNghiem.Count();
+                Queue<QuestionVm> queue = new Queue<QuestionVm>();
+                foreach (QuestionVm a in listQuestionTracNghiem)
+                {
+                    queue.Enqueue(a);
+                }
+                TempData["questionsTracNghiem"] = JsonConvert.SerializeObject(queue);
+
+
+                //Tự luận:
+                List<QuestionAndAnswerTrinhTuThaoTacVm> listQuestionAndAnswerTrinhTuThaoTac = new List<QuestionAndAnswerTrinhTuThaoTacVm>();
+                TempData["QuestionAndAnswerTrinhTuThaoTac"] = JsonConvert.SerializeObject(listQuestionAndAnswerTrinhTuThaoTac);
+
+                var listTuLuan = await _cauHoiTuLuanApiClient.GetAllByCategory(idPhong);
+                var dsCauHoiTuLuan = listTuLuan.ResultObj;
+                dsCauHoiTuLuan = dsCauHoiTuLuan.OrderBy(x => random.Next()).ToList();
+                List<CauHoiTuLuanVm> listQuestionTuLuan = dsCauHoiTuLuan;
+                TempData["dsCauHoiTL"] = JsonConvert.SerializeObject(listQuestionTuLuan);
+
+                TempData["danhsachcauhoiTuLuan"] = JsonConvert.SerializeObject(listQuestionTuLuan);
+                TempData["soluongcauhoiTuLuan"] = listQuestionTuLuan.Count();
+                Queue<CauHoiTuLuanVm> queueTuluan = new Queue<CauHoiTuLuanVm>();
+                foreach (CauHoiTuLuanVm a in listQuestionTuLuan)
+                {
+                    queueTuluan.Enqueue(a);
+                }
+                TempData["questionsTuLuan"] = JsonConvert.SerializeObject(queueTuluan);
+
+
+                //Common:
+                var phongThi = await _categoryApiClient.GetById(idPhong);
+                int thoiGianThi = phongThi.ResultObj.Time;
+                int totalQuestion = listQuestionTracNghiem.Count() + listQuestionTuLuan.Count();
+                TempData["totalQuestion"] = totalQuestion;
+                TempData["idPhong"] = idPhong;
+                TempData["thoiGianThi"] = thoiGianThi;
+
+                TempData["score"] = 0;
+                TempData["numQuestionTracnghiem"] = 0;
+                TempData["numQuestionTuLuan"] = 0;
+                TempData["StatusTN"] = 0;
+                TempData["StatusTL"] = 0;
+
+                TempData.Keep();
+                return Json(new { success = true });
             }
-            TempData["questionsTuLuan"] = JsonConvert.SerializeObject(queueTuluan);
-
-
-            //Common:
-            var phongThi = await _categoryApiClient.GetById(idPhong);
-            int thoiGianThi = phongThi.ResultObj.Time;
-            int totalQuestion = listQuestionTracNghiem.Count() + listQuestionTuLuan.Count();
-            TempData["totalQuestion"] = totalQuestion;
-            TempData["idPhong"] = idPhong;
-            TempData["thoiGianThi"] = thoiGianThi;
-
-            TempData["score"] = 0;
-            TempData["numQuestionTracnghiem"] = 0;
-            TempData["numQuestionTuLuan"] = 0;
-            TempData["StatusTN"] = 0;
-            TempData["StatusTL"] = 0;
-
-            TempData.Keep();
-            return Json(new { success = true });
         }
 
         //Trang làm bài thi:
@@ -363,7 +471,7 @@ namespace WebAPP.Areas.User.Controllers
         {
             int thoiGianChoPhepLamBai = Convert.ToInt32(TempData["thoiGianThi"].ToString());
             int thoiGianConLai = Convert.ToInt32(time);
-            int thoiGianLamBai = thoiGianChoPhepLamBai - (thoiGianConLai/60/1000);
+            int thoiGianLamBai = thoiGianChoPhepLamBai - (thoiGianConLai / 60 / 1000);
             TempData["thoiGianLamBai"] = thoiGianLamBai;
             Guid id = Guid.Empty;
             var userIdString = User.FindFirstValue("UserId");
@@ -398,7 +506,7 @@ namespace WebAPP.Areas.User.Controllers
 
             string jsonlistQuestionAndAnswerTrinhTuThaoTac = TempData["QuestionAndAnswerTrinhTuThaoTac"].ToString();
             List<QuestionAndAnswerTrinhTuThaoTacVm> listQuestionAndAnswerTrinhTuThaoTac = JsonConvert.DeserializeObject<List<QuestionAndAnswerTrinhTuThaoTacVm>>(jsonlistQuestionAndAnswerTrinhTuThaoTac);
-            
+
             var groupListQuestionAndAnswerTrinhTuThaoTac = listQuestionAndAnswerTrinhTuThaoTac.GroupBy(x => x.CauHoiTuLuanId);
             foreach (var group in groupListQuestionAndAnswerTrinhTuThaoTac)
             {
@@ -496,7 +604,7 @@ namespace WebAPP.Areas.User.Controllers
                     return Json(new { success = false });
                 }
                 List<LogExamTrinhtuthaotacCreateRequest> listlogtttt = new List<LogExamTrinhtuthaotacCreateRequest>();
-                foreach(var itemTTTT in group)
+                foreach (var itemTTTT in group)
                 {
                     var requestTTTT = new LogExamTrinhtuthaotacCreateRequest()
                     {

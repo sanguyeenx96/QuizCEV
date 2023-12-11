@@ -1,0 +1,91 @@
+﻿@model List<ViewModels.Setting.Response.SettingVm>
+<h1 class="display-6 mb-2">Cài đặt</h1>
+<div class="card">
+    <div class="card-body ">
+        <table id="tblDongmophongthi" class="table table-hover" style="text-align:center; vertical-align:middle;width:100%">
+            <thead style="font-size:small">
+                <tr>
+                    <th style="text-align:start;font-weight: 350;">
+                        Chức năng
+                    </th>
+                    <th style="text-align:center;font-weight: 350;">
+                        Trạng thái
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td style="text-align:left">
+                            @if (item.Name == "Retest")
+                            {
+                                <text>Cho phép thi lại</text>
+                            }
+                            else
+                            {
+                                @Html.DisplayFor(modelItem => item.Name)
+                            }
+                        </td>
+                        <td>
+                            @if (item.Status == true)
+                            {
+                                <div><i class="bi-toggle2-on" style="color:green"></i> On</div>
+                            }
+                            else
+                            {
+                                <div><i class="bi-toggle2-off" style="color:red"></i> Off</div>
+                            }
+                        </td>
+                        <td style="text-align:end">
+                            <btn class="btn btn-secondary btnChangeStatus" data-id="@item.Id">
+                                <i class="bi-transparency"> </i>
+                                Đổi trạng thái
+                            </btn>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $(".btnChangeStatus").click(function (e) {
+            var id = $(this).data("id");
+            $.ajax({
+                url: "/Admin/Setting/ChangeSetting",
+                type: "POST",
+                data: { id: id },
+                success: function (data) {
+                    if (data.success) {
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: "top-end",
+                            showConfirmButton: false,
+                            timer: 800,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.onmouseenter = Swal.stopTimer;
+                                toast.onmouseleave = Swal.resumeTimer;
+                            }
+                        });
+                        Toast.fire({
+                            icon: "success",
+                            title: "Đang xử lý..."
+                        }).then(function () {
+                            window.location.reload();
+                        });
+                    } else {
+                        Swal.fire("Thất bại!", data.message, "error");
+                    }
+                },
+                error: function (xhr, t, error) {
+                    Swal.fire("Thất bại!", "Lỗi máy chủ", "error");
+                },
+            });
+        });
+    });
+</script>

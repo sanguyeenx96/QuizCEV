@@ -77,6 +77,13 @@ namespace Data.Extensions
                 Description = "User role"
             });
 
+            //Thêm Setting
+            modelBuilder.Entity<Setting>().HasData(new Setting
+            {
+                Id = 1,
+                Name = "Retest",
+                Status = true
+            });
 
         }
     }
