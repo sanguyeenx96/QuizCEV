@@ -7,11 +7,11 @@
 - Token, Tempdata, Session
 - DI
 
+![111](https://github.com/sanguyeenx96/QuizCEV/assets/103011257/831889c2-66ec-4632-9897-d6fbb33309db)
+![2222](https://github.com/sanguyeenx96/QuizCEV/assets/103011257/ecfd9a93-8560-4b76-91c8-1270652f7485)
 ![1](https://github.com/sanguyeenx96/QuizCEV/assets/103011257/d1d2bbac-d513-494e-9d7b-527e997593af)
 ![1](https://github.com/sanguyeenx96/QuizCEV/assets/103011257/f6418438-ffe9-4032-99e3-1c9fa4bdfba2)
 ![2](https://github.com/sanguyeenx96/QuizCEV/assets/103011257/21ad1946-ac63-4bac-8bc9-c2164d0cf1f1)
-
-![1](https://github.com/sanguyeenx96/QuizCEV/assets/103011257/9782e131-0f85-4958-b0fb-3e813941a2d0)
 ![2](https://github.com/sanguyeenx96/QuizCEV/assets/103011257/43919a34-8aca-41ed-aa09-7a3d0bd132f2)
 ![3](https://github.com/sanguyeenx96/QuizCEV/assets/103011257/0660911b-3522-4bfe-838e-f8631823bd99)
 ![4](https://github.com/sanguyeenx96/QuizCEV/assets/103011257/52c0da1a-8208-47b9-9ca0-2ccd38d5d208)
