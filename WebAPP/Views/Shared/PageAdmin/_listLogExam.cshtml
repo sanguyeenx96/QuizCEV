@@ -3,8 +3,8 @@
     var dataTen = Json.Serialize(ViewBag.dataTen);
     var dataDiem = Json.Serialize(ViewBag.dataDiem);
 }
-<div class="row mb-2">
-    <div class="col-sm-6 col-lg-5">
+<div class="row mb-2">    
+    <div class="col-sm-5 col-lg-5">
         <div class="card ">
             <div class="card-body pb-0 d-flex justify-content-between align-items-start">
                 <div>
@@ -19,7 +19,7 @@
             </div>
         </div>
     </div>
-    <div class="col-sm-6 col-lg-5">
+    <div class="col-sm-5 col-lg-5">
         <div class="card ">
             <div class="card-body pb-0 d-flex justify-content-between align-items-start">
                 <div>
@@ -31,6 +31,20 @@
             </div>
             <div class="c-chart-wrapper mt-3 mx-3" style="height:70px;">
                 <canvas class="chart" id="card-chart-duoi6" height="73" style="display: block; box-sizing: border-box; height: 69.5238px; width: 100%;"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-2 col-lg-2">
+        <div class="card ">
+            <div class="card-body pb-0 d-flex justify-content-between align-items-start">
+                <div>
+                    <div class="fs-5 fw-semibold">
+                        <span id="txtcountTotal"></span>
+                    </div>
+                    <div class="small text-medium-emphasis">Tổng số bài thi</div>
+                </div>
+            </div>
+            <div class="c-chart-wrapper mt-3 mx-3" style="height:70px;">
             </div>
         </div>
     </div>
@@ -102,6 +116,12 @@
                         Bộ phận
                     </th>
                     <th style="font-weight: 350;">
+                        Model
+                    </th>
+                    <th style="font-weight: 350;">
+                        Cell
+                    </th>
+                    <th style="font-weight: 350;">
                         Kết quả
                     </th>
                     <th style="font-weight: 350;">
@@ -110,7 +130,7 @@
                     <th></th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody style="font-size:smaller">
                 @foreach (var item in Model)
                 {
                     float totalScore = item.Score;
@@ -124,6 +144,12 @@
                         </td>
                         <td>
                             @item.Bophan
+                        </td>
+                        <td>
+                            @item.Model
+                        </td>
+                        <td>
+                            @item.Cell
                         </td>
                         <td>
                             @{
@@ -148,29 +174,12 @@
                             }
                         </td>
                         <td>
-                            @{
-                                if (danhgia == "Kết quả tốt")
-                                {
-                                    <span style="width:60px;vertical-align: text-bottom" class="badge text-bg-success">
-                                        @item.Score
-                                    </span>
-                                }
-                                if (danhgia == "Trung bình")
-                                {
-                                    <span style="width:60px;vertical-align: text-bottom" class="badge text-bg-warning">
-                                        @item.Score
-                                    </span>
-                                }
-                                if (danhgia == "Không đạt")
-                                {
-                                    <span style="width:60px;vertical-align: text-bottom" class="badge text-bg-danger">
-                                        @item.Score
-                                    </span>
-                                }
-                            }
+                            <span style="width:60px;vertical-align: text-bottom" class="badge text-bg-light">
+                                @item.Score điểm
+                            </span>
                         </td>
                         <td style="text-align:end;white-space:nowrap">
-                            <button class="btn btn-secondary w-100 btnXemChiTietBaithi" data-idbaithi="@item.Id">
+                            <button class="btn btn-outline-primary w-100 btnXemChiTietBaithi" data-idbaithi="@item.Id">
                                 <i class="bi-eye"></i>
                                 Xem chi tiết
                             </button>
@@ -230,6 +239,8 @@
 
         // Đếm số lượng điểm
         var countTotal = dataDiem.length;
+        $('#txtcountTotal').text(countTotal + " bài thi");
+
 
         var countDiemTren8 = dataDiem
             .filter(function (score) {

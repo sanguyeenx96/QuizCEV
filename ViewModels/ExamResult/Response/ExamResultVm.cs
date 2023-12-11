@@ -18,6 +18,9 @@ namespace ViewModels.ExamResult.Response
         public Guid UserId { get; set; }
         public string? Hoten { get; set; }
         public string? Bophan { get; set; }
+        public string? Model { get; set; }
+        public string? Cell { get; set; }
+
 
         public int CategoryId { get; set; }
         public List<LogExamVm>? LogExams { get; set; }

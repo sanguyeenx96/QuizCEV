@@ -11,5 +11,8 @@ namespace WebAPP.Services
         Task<ApiResult<List<ExamResultVm>>> Search(ExamResultSearchRequest request);
 
         Task<ApiResult<int>> Create(ExamResultCreateRequest request);
+
+        Task<ApiResult<bool>> CheckRetest(ExamResultCheckRetestRequest request);
+
     }
 }

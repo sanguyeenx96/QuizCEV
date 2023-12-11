@@ -34,8 +34,7 @@ namespace Data.EF
             modelBuilder.ApplyConfiguration(new LogExamTrinhtuthaotacConfiguration());
             modelBuilder.ApplyConfiguration(new ModelConfiguration());
             modelBuilder.ApplyConfiguration(new CellConfiguration());
-
-
+            modelBuilder.ApplyConfiguration(new SettingConfiguration());
 
             modelBuilder.Entity<IdentityUserClaim<Guid>>().ToTable("AppUserClaims");
             modelBuilder.Entity<IdentityUserRole<Guid>>().ToTable("AppUserRoles")
@@ -66,6 +65,6 @@ namespace Data.EF
         public DbSet<LogExamTrinhtuthaotac> logExamTrinhtuthaotacs { get; set; }
         public DbSet<Model> Models { get; set; }
         public DbSet<Cell> Cells { get; set; }
-
+        public DbSet<Setting> Settings { get; set; }
     }
 }

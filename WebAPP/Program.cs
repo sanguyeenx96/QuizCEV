@@ -32,6 +32,7 @@ builder.Services.AddTransient<IRoleApiClient, RoleApiClient>();
 builder.Services.AddTransient<IExamResultApiClient, ExamResultApiClient>();
 builder.Services.AddTransient<ILogExamApiClient, LogExamApiClient>();
 builder.Services.AddTransient<ILogExamTrinhtuthaotacApiClient, LogExamTrinhtuthaotacApiClient>();
+builder.Services.AddScoped<ISettingApiClient, SettingApiClient>();
 
 
 var app = builder.Build();

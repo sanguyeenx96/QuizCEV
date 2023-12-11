@@ -48,7 +48,7 @@ namespace WebAPP.Areas.Admin.Controllers
 
         //Trang xem lịch sử
         [HttpPost]
-        public async Task<IActionResult> Search(int? CategoryId, DateTime? Date, int? examResultId , int? boPhanId, string name, string? userName )
+        public async Task<IActionResult> Search(int? CategoryId, DateTime? Date, int? examResultId , int? boPhanId, string name, string? userName , int? modelId, int? cellId)
         {
             var request = new ExamResultSearchRequest()
             {
@@ -59,6 +59,8 @@ namespace WebAPP.Areas.Admin.Controllers
                 boPhanId = boPhanId,
                 name = name,
                 userName = userName,
+                modelId = modelId,
+                cellId = cellId
             };
 
             var result = await _examResultApiClient.Search(request);

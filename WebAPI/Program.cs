@@ -7,6 +7,7 @@ using Application.LogExam;
 using Application.LogExamTrinhtuthaotac;
 using Application.Question;
 using Application.Role;
+using Application.Setting;
 using Application.Users;
 using Data.EF;
 using Data.Entities;
@@ -59,6 +60,8 @@ builder.Services.AddTransient<IDeptService, DeptService>();
 builder.Services.AddTransient<IRoleService, RoleService>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddTransient<ILogExamTrinhtuthaotacService, LogExamTrinhtuthaotacService>();
+builder.Services.AddScoped<ISettingService, SettingSevice>();
+
 
 
 builder.Services.AddControllers();

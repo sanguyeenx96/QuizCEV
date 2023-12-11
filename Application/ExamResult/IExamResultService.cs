@@ -17,6 +17,8 @@ namespace Application.ExamResult
 
         Task<ApiResult<int>> Create(ExamResultCreateRequest request);
 
+        Task<ApiResult<bool>> CheckReTest(ExamResultCheckRetestRequest request);
+
         //Task<ApiResult<int>> Update(int id, ExamResultUpdateRequest request);
 
         //Task<ApiResult<bool>> Delete(int id);

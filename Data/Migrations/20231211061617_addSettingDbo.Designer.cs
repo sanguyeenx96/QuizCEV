@@ -4,6 +4,7 @@ using Data.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(TracNghiemCEVDbContext))]
-    partial class TracNghiemCEVDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231211061617_addSettingDbo")]
+    partial class addSettingDbo
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,7 +52,7 @@ namespace Data.Migrations
                         new
                         {
                             Id = new Guid("8d04dce2-969a-435d-bba4-df3f325983dc"),
-                            ConcurrencyStamp = "b324ee1c-970e-4ab7-b48e-150b0391c765",
+                            ConcurrencyStamp = "fe2254d1-d25b-429e-9fb4-5a371cf4d89d",
                             Description = "Administrator role",
                             Name = "admin",
                             NormalizedName = "admin"
@@ -58,7 +60,7 @@ namespace Data.Migrations
                         new
                         {
                             Id = new Guid("470f4021-29d8-4c8e-a9de-527571683d86"),
-                            ConcurrencyStamp = "5dacf20d-3aea-4826-aacf-bfc13ba85e3e",
+                            ConcurrencyStamp = "6eb44768-efe7-4e85-9cdb-162f42d563bf",
                             Description = "User role",
                             Name = "user",
                             NormalizedName = "user"
@@ -134,14 +136,14 @@ namespace Data.Migrations
                             Id = new Guid("69bd714f-9576-45ba-b5b7-f00649be00de"),
                             AccessFailedCount = 0,
                             CellId = 1,
-                            ConcurrencyStamp = "24a6f462-3bb3-4c8f-9056-aa9f71a54066",
+                            ConcurrencyStamp = "4cfb7c76-f3d7-417c-9cc3-c948edb951c0",
                             Email = "smt.ngocsang@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             Name = "Nguyen Ngoc Sang",
                             NormalizedEmail = "smt.ngocsang@gmail.com",
                             NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAEG2VPbQ5OltG36FTSvQqdFQyMJRwX2VNkzQy2BiDRsETButdraQ9hI7RtKQtKBA1FA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEIsmdH6liJf9ea1BbuAm6ILQCZGvKSm7t7oTbFqQGBnz42+ygc7R1fa470Bk6c8/yQ==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -487,14 +489,6 @@ namespace Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Settings", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Retest",
-                            Status = true
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
