@@ -14,6 +14,7 @@ namespace WebAPP.Services
         Task<ApiResult<int>> Count(int id);
         Task<ApiResult<bool>> ChangeOrder(List<CauHoiTrinhTuThaoTacChangeOrderRequest> request);
         Task<ApiResult<bool>> UpdateText(Guid id, CauHoiTrinhTuThaoTacUpdateTextRequest request);
+        Task<ApiResult<ImportExcelResult>> ImportExcel(Stream file, int cauhoituluanId);
 
     }
 }

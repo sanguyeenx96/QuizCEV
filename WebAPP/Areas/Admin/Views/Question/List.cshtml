@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewData["Active"] = "pageQuanLyCauHoi";
     ViewData["ActiveChild"] = "pageDanhsachcauhoi";
 }
@@ -9,6 +8,14 @@
     }
 </style>
 <div class="row">
+    <div class="col-12">
+        <div class="alert alert-danger d-flex align-items-center" role="alert">
+            <div>
+                <i class="bi-exclamation-triangle me-1"> </i>
+                Chú ý phải gán điểm số cho toàn bộ câu hỏi và gán đủ 10 điểm. 
+            </div>
+        </div>
+    </div>
     <div class="col-sm-6 col-md-3 mb-2">
         <div class="card">
             <div class="card-body">
@@ -34,14 +41,26 @@
         </div>
     </div>
     <div class="col-sm-6 col-md-3 mb-2">
-        <div class="card">
+        <div id="theThongBao" class="card">
             <div class="card-body">
                 <div class="text-medium-emphasis text-end">
                     <i class="bi-folder2-open"></i>
                 </div>
                 <div class="fs-4 fw-semibold">
-                    <span id="countDiemso"></span>/10 
-                </div><small class="text-medium-emphasis text-uppercase fw-semibold">điểm số đã gán</small>
+                    <span id="countDiemso"></span>/10
+                </div><small class="text-medium-emphasis text-uppercase fw-semibold">điểm đã gán</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-md-3 mb-2">
+        <div id="theThongBaoChuaGan" class="card">
+            <div class="card-body">
+                <div class="text-medium-emphasis text-end">
+                    <i class="bi-folder2-open"></i>
+                </div>
+                <div class="fs-4 fw-semibold">
+                    <span id="countChuaGan">0</span>
+                </div><small class="text-medium-emphasis text-uppercase fw-semibold">chưa gán điểm</small>
             </div>
         </div>
     </div>
@@ -61,15 +80,15 @@
     <li class="nav-item" role="presentation">
         <button class="nav-link active" id="pills-tracnghiem-tab" data-coreui-toggle="pill" data-coreui-target="#pills-tracnghiem" type="button" role="tab" aria-controls="pills-tracnghiem" aria-selected="true">
             <i class="bi-folder2-open"></i>
-            Phần trắc nghiệm  
+            Phần trắc nghiệm
         </button>
     </li>
     <li class="nav-item" role="presentation">
         <button class="nav-link" id="pills-tuluan-tab" data-coreui-toggle="pill" data-coreui-target="#pills-tuluan" type="button" role="tab" aria-controls="pills-tuluan" aria-selected="false">
-             <i class="bi-folder2-open"></i>
-           Phần tự luận
+            <i class="bi-folder2-open"></i>
+            Phần tự luận
         </button>
-    </li>    
+    </li>
 </ul>
 <div class="tab-content" id="pills-tabContent">
     <div class="tab-pane fade show active" id="pills-tracnghiem" role="tabpanel" aria-labelledby="pills-tracnghiem-tab">
@@ -133,8 +152,30 @@
             },
             success: function (result) {
                 $("#countDiemso").html(result.result);
+                if (result.result != 10) {
+                    $("#theThongBao").addClass("text-bg-danger")
+                }else{
+                    $("#theThongBao").addClass("text-bg-success")
+                }
             },
         });
+        $.ajax({
+            url: "GetCauHoiNullScore",
+            type: "POST",
+            data: {
+                id: firstselect,
+            },
+            success: function (result) {
+                $("#countChuaGan").html(result.sl);
+                if (result.sl != 0) {
+                    $("#theThongBaoChuaGan").addClass("text-bg-danger")
+                } else {
+                    $("#theThongBaoChuaGan").addClass("text-bg-success")
+                }
+            },
+        });
+
+        //CHANGING SELECT LIST
 
         $('#categoryId').on('change', function () {
             var id = $(this).val();
@@ -187,6 +228,28 @@
                 },
                 success: function (result) {
                     $("#countDiemso").html(result.result);
+                    if (result.result != 10) {
+                        $("#theThongBao").addClass("text-bg-danger")
+                    } else {
+                        $("#theThongBao").addClass("text-bg-success")
+                    }
+                },
+            });
+            $.ajax({
+                url: "GetCauHoiNullScore",
+                type: "POST",
+                data: {
+                    id: id,
+                },
+                success: function (result) {
+                    $("#countChuaGan").html(result.sl);
+                    if (result.sl != 0) {
+                        $("#theThongBaoChuaGan").removeClass("text-bg-success")
+                        $("#theThongBaoChuaGan").addClass("text-bg-danger")
+                    } else {
+                        $("#theThongBaoChuaGan").removeClass("text-bg-danger")
+                        $("#theThongBaoChuaGan").addClass("text-bg-success")
+                    }
                 },
             });
         })

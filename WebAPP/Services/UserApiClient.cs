@@ -250,5 +250,34 @@ namespace WebAPP.Services
             }
             return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
         }
+
+        public async Task<ApiResult<ImportExcelResult>> ImportExcel(Stream file, string role, int cellId)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAdress"]);
+
+            var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
+
+            var requestContent = new MultipartFormDataContent();
+            // Tạo ByteArrayContent từ Stream
+            var fileBytes = new byte[file.Length];
+            await file.ReadAsync(fileBytes, 0, (int)file.Length);
+            var fileContent = new ByteArrayContent(fileBytes);
+            fileContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
+            {
+                Name = "file",
+                FileName = "excelfile.xlsx"
+            };
+            requestContent.Add(fileContent);
+
+            var response = await client.PostAsync($"/api/users/importexcel/{role}/{cellId}", requestContent);
+            var result = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                return JsonConvert.DeserializeObject<ApiSuccessResult<ImportExcelResult>>(result);
+            }
+            return JsonConvert.DeserializeObject<ApiErrorResult<ImportExcelResult>>(result);
+        }
     }
 }

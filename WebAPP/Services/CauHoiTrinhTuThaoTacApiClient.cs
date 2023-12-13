@@ -2,6 +2,7 @@
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using ViewModels.Category.Response;
 using ViewModels.CauHoiTrinhTuThaoTac.Request;
 using ViewModels.CauHoiTrinhTuThaoTac.Response;
 using ViewModels.CauHoiTuLuan.Response;
@@ -130,6 +131,8 @@ namespace WebAPP.Services
             return JsonConvert.DeserializeObject<ApiErrorResult<CauHoiTrinhTuThaoTacVm>>(result);
         }
 
+      
+
         public async Task<ApiResult<bool>> UpdateText(Guid id, CauHoiTrinhTuThaoTacUpdateTextRequest request)
         {
             var client = _httpClientFactory.CreateClient();
@@ -147,6 +150,34 @@ namespace WebAPP.Services
                 return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
             }
             return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
+        }
+        public async Task<ApiResult<ImportExcelResult>> ImportExcel(Stream file, int cauhoituluanId)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAdress"]);
+
+            var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
+
+            var requestContent = new MultipartFormDataContent();
+            // Tạo ByteArrayContent từ Stream
+            var fileBytes = new byte[file.Length];
+            await file.ReadAsync(fileBytes, 0, (int)file.Length);
+            var fileContent = new ByteArrayContent(fileBytes);
+            fileContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
+            {
+                Name = "file",
+                FileName = "excelfile.xlsx"
+            };
+            requestContent.Add(fileContent);
+
+            var response = await client.PostAsync($"/api/cauhoitrinhtuthaotac/importexcel/{cauhoituluanId}", requestContent);
+            var result = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                return JsonConvert.DeserializeObject<ApiSuccessResult<ImportExcelResult>>(result);
+            }
+            return JsonConvert.DeserializeObject<ApiErrorResult<ImportExcelResult>>(result);
         }
     }
 }

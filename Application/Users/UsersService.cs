@@ -1,17 +1,23 @@
 ﻿using Data.Entities;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
+using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Utilities.Constants;
+using ViewModels.Category.Response;
 using ViewModels.Common;
+using ViewModels.Question.Request;
 using ViewModels.Users.Request;
 using ViewModels.Users.Response;
 
@@ -92,46 +98,7 @@ namespace Application.Users
             }
         }
 
-        //public async Task<ApiResult<PagedResult<UserVm>>> GetUsetPaging(int id, GetUserPagingRequest request)
-        //{
-        //    var query = _userManager.Users;
-        //    if (id != 0)
-        //    {
-        //        query = query.Where(x => x.CellId == id);
-        //    }
-        //    if (!string.IsNullOrEmpty(request.Keyword))
-        //    {
-        //        query = query.Where(x => x.UserName.Contains(request.Keyword) || x.Name.Contains(request.Keyword) || x.Dept.Name.Contains(request.Keyword));
-        //    }
-        //    int totalRow = await query.CountAsync();
-        //    var data = await query.Skip((request.PageIndex - 1) * request.PageSize)
-        //        .Take(request.PageSize)
-        //        .Select(x => new UserVm()
-        //        {
-        //            Id = x.Id,
-        //            UserName = x.UserName,
-        //            Password = x.PasswordHash,
-        //            Name = x.Name,
-        //            Dept = x.Dept.Name
-        //        }).ToListAsync();
-        //    foreach (var item in data)
-        //    {
-        //        var user = await _userManager.FindByIdAsync(item.Id.ToString());
-        //        var roles = await _userManager.GetRolesAsync(user);
-        //        item.Roles = roles;
-        //    }
-        //    //4. Select and projection
-        //    var pagedResult = new PagedResult<UserVm>()
-        //    {
-        //        TotalRecords = totalRow,
-        //        PageIndex = request.PageIndex,
-        //        PageSize = request.PageSize,
-        //        Items = data
-        //    };
-        //    return new ApiSuccessResult<PagedResult<UserVm>>(pagedResult);
-        //}
-
-        public async Task<ApiResult<bool>> Register(RegisterRequest request)
+        public async Task<ApiResult<bool>> Register(RegisterRequest request) //Dùng cái này
         {
             var user = new AppUser()
             {
@@ -173,7 +140,7 @@ namespace Application.Users
                 Password = user.PasswordHash,
                 Dept = user.Cell.Model.Dept.Name,
                 Cell = user.Cell.Name,
-                Model =user.Cell.Model.Name,
+                Model = user.Cell.Model.Name,
                 Roles = roles
             };
             return new ApiSuccessResult<UserVm>(userVm);
@@ -319,6 +286,87 @@ namespace Application.Users
             else
             {
                 return new ApiErrorResult<bool>("Mật khẩu không đúng");
+            }
+        }
+
+        private string GetCellValue(ExcelWorksheet worksheet, int row, int column)
+        {
+            var cellValue = worksheet.Cells[row, column].Value?.ToString();
+            if (string.IsNullOrEmpty(cellValue))
+            {
+                throw new Exception($"Missing value data at row {row}, column {column}");
+            }
+            return cellValue;
+        }
+
+        public async Task<List<UserImportExcelRequest>> ReadExcelFile(Stream fileStream)
+        {
+            try
+            {
+                using (var package = new ExcelPackage(fileStream))
+                {
+                    var worksheet = package.Workbook.Worksheets[0];
+                    var danhsachUser = new List<UserImportExcelRequest>();
+                    for (int row = 2; row <= worksheet.Dimension.End.Row; row++)
+                    {
+                        var newUser = new UserImportExcelRequest
+                        {
+                            Name = GetCellValue(worksheet, row, 1),
+                            UserName = GetCellValue(worksheet, row, 2),
+                            Password = GetCellValue(worksheet, row, 3).ToUpper(),
+                        };
+                        danhsachUser.Add(newUser);
+                    }
+                    return danhsachUser;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error while processing Excel file: " + ex.Message);
+            }
+        }
+
+
+
+        public async Task<ApiResult<ImportExcelResult>> ImportExcelFile(List<UserImportExcelRequest> request, string role, int cellId)
+        {
+            try
+            {
+                int lineupdate = 0;
+                int linetrung = 0;
+                foreach (var item in request)
+                {
+                    var checkDuplicate = await _userManager.FindByNameAsync(item.UserName);
+                    if (checkDuplicate != null)
+                    {
+                        linetrung++;
+                    }
+                    else
+                    {
+                        var user = new AppUser()
+                        {
+                            UserName = item.UserName,
+                            Name = item.Name,
+                            CellId = cellId
+                        };
+                        var result = await _userManager.CreateAsync(user, item.Password);
+                        if (result.Succeeded)
+                        {
+                            var addRole = await _userManager.AddToRoleAsync(user, role);
+                            lineupdate++;
+                        }
+                    }               
+                }
+                var ketqua = new ImportExcelResult()
+                {
+                    sodongtrung = linetrung,
+                    sodongupdate = lineupdate
+                };
+                return new ApiSuccessResult<ImportExcelResult>(ketqua);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error while processing insert to SQL: " + ex.Message);
             }
         }
     }

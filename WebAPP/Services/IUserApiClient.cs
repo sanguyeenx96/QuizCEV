@@ -18,7 +18,6 @@ namespace WebAPP.Services
         Task<ApiResult<bool>> Delete(Guid id);
         Task<ApiResult<int>> Count(int id);
         Task<ApiResult<bool>> CheckPassWord(Guid id, UserCheckPasswordRequest request);
-
-
+        Task<ApiResult<ImportExcelResult>> ImportExcel(Stream file, string role, int cellId);
     }
 }

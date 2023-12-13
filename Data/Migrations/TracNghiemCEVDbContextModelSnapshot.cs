@@ -50,7 +50,7 @@ namespace Data.Migrations
                         new
                         {
                             Id = new Guid("8d04dce2-969a-435d-bba4-df3f325983dc"),
-                            ConcurrencyStamp = "b324ee1c-970e-4ab7-b48e-150b0391c765",
+                            ConcurrencyStamp = "b31fe942-67ad-4699-a73d-0058cec54285",
                             Description = "Administrator role",
                             Name = "admin",
                             NormalizedName = "admin"
@@ -58,7 +58,7 @@ namespace Data.Migrations
                         new
                         {
                             Id = new Guid("470f4021-29d8-4c8e-a9de-527571683d86"),
-                            ConcurrencyStamp = "5dacf20d-3aea-4826-aacf-bfc13ba85e3e",
+                            ConcurrencyStamp = "1b4522b2-05e2-496d-bf8d-09c2f95ec672",
                             Description = "User role",
                             Name = "user",
                             NormalizedName = "user"
@@ -134,14 +134,14 @@ namespace Data.Migrations
                             Id = new Guid("69bd714f-9576-45ba-b5b7-f00649be00de"),
                             AccessFailedCount = 0,
                             CellId = 1,
-                            ConcurrencyStamp = "24a6f462-3bb3-4c8f-9056-aa9f71a54066",
+                            ConcurrencyStamp = "fc622787-d2ca-4df7-8683-a800325ed8d3",
                             Email = "smt.ngocsang@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             Name = "Nguyen Ngoc Sang",
                             NormalizedEmail = "smt.ngocsang@gmail.com",
                             NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAEG2VPbQ5OltG36FTSvQqdFQyMJRwX2VNkzQy2BiDRsETButdraQ9hI7RtKQtKBA1FA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEK9SftGOSgB4nivQVAYDZHuncPuP8lo1TJX6uODGY3jwyQZleYLv0+Mn1Kmp9y+vew==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,

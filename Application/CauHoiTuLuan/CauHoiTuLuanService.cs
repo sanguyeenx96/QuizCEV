@@ -61,7 +61,6 @@ namespace Application.CauHoiTuLuan
             return new ApiSuccessResult<bool> { Message = "Đã xoá thành công!" };
         } 
 
-
         public async Task<ApiResult<List<CauHoiTuLuanVm>>> GetAllByCategory(int id)
         {
             var listquestions = await _context.CauHoiTuLuans.Where(x => x.CategoryId == id).Select(x => new CauHoiTuLuanVm

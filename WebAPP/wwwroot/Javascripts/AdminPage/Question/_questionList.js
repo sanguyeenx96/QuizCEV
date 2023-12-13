@@ -157,6 +157,42 @@ async function showScoreInputDialog(id, intCategoryId, remainScore, thisScore) {
                             $("#listQuestion").html(result);
                         },
                     });
+                    $.ajax({
+                        url: "GetTotalScore",
+                        type: "POST",
+                        data: {
+                            categoryId: intCategoryId,
+                        },
+                        success: function (result) {
+                            $("#countDiemso").html(result.result);
+                            if (result.result != 10) {
+                                $("#theThongBao").removeClass(
+                                    "text-bg-success"
+                                );
+                                $("#theThongBao").addClass("text-bg-danger");
+                            } else {
+                                $("#theThongBao").removeClass("text-bg-danger");
+                                $("#theThongBao").addClass("text-bg-success");
+                            }
+                        },
+                    });
+                    $.ajax({
+                        url: "GetCauHoiNullScore",
+                        type: "POST",
+                        data: {
+                            id: intCategoryId,
+                        },
+                        success: function (result) {
+                            $("#countChuaGan").html(result.sl);
+                            if (result.sl != 0) {
+                                $("#theThongBaoChuaGan").removeClass("text-bg-success")
+                                $("#theThongBaoChuaGan").addClass("text-bg-danger")
+                            } else {
+                                $("#theThongBaoChuaGan").removeClass("text-bg-danger")
+                                $("#theThongBaoChuaGan").addClass("text-bg-success")
+                            }
+                        },
+                    });
                 } else {
                     Swal.fire(
                         "Lỗi máy chủ",

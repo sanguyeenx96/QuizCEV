@@ -125,6 +125,20 @@ namespace Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Settings",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Status = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Settings", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "CauHoiTuLuan",
                 columns: table => new
                 {
@@ -351,8 +365,8 @@ namespace Data.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Description", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { new Guid("470f4021-29d8-4c8e-a9de-527571683d86"), "28594d93-1e36-4573-9230-4c3a44730d69", "User role", "user", "user" },
-                    { new Guid("8d04dce2-969a-435d-bba4-df3f325983dc"), "d40d9bbc-f5e7-4d88-987e-ae760653d3b6", "Administrator role", "admin", "admin" }
+                    { new Guid("470f4021-29d8-4c8e-a9de-527571683d86"), "1b4522b2-05e2-496d-bf8d-09c2f95ec672", "User role", "user", "user" },
+                    { new Guid("8d04dce2-969a-435d-bba4-df3f325983dc"), "b31fe942-67ad-4699-a73d-0058cec54285", "Administrator role", "admin", "admin" }
                 });
 
             migrationBuilder.InsertData(
@@ -364,6 +378,11 @@ namespace Data.Migrations
                 table: "Depts",
                 columns: new[] { "Id", "Name" },
                 values: new object[] { 1, "MFE" });
+
+            migrationBuilder.InsertData(
+                table: "Settings",
+                columns: new[] { "Id", "Name", "Status" },
+                values: new object[] { 1, "Retest", true });
 
             migrationBuilder.InsertData(
                 table: "Models",
@@ -378,7 +397,7 @@ namespace Data.Migrations
             migrationBuilder.InsertData(
                 table: "AppUsers",
                 columns: new[] { "Id", "AccessFailedCount", "CellId", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "Name", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { new Guid("69bd714f-9576-45ba-b5b7-f00649be00de"), 0, 1, "6e2a38a9-5e7d-4244-8409-604801e2f955", "smt.ngocsang@gmail.com", true, false, null, "Nguyen Ngoc Sang", "smt.ngocsang@gmail.com", "admin", "AQAAAAEAACcQAAAAEOPOvnzxTgESvoW67Nt2UWABW2FNlPcHiUeBuQLK4Zq1jChH67Z343+kO8fdfNQX7A==", null, false, "", false, "admin" });
+                values: new object[] { new Guid("69bd714f-9576-45ba-b5b7-f00649be00de"), 0, 1, "fc622787-d2ca-4df7-8683-a800325ed8d3", "smt.ngocsang@gmail.com", true, false, null, "Nguyen Ngoc Sang", "smt.ngocsang@gmail.com", "admin", "AQAAAAEAACcQAAAAEK9SftGOSgB4nivQVAYDZHuncPuP8lo1TJX6uODGY3jwyQZleYLv0+Mn1Kmp9y+vew==", null, false, "", false, "admin" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AppUsers_CellId",
@@ -459,6 +478,9 @@ namespace Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Questions");
+
+            migrationBuilder.DropTable(
+                name: "Settings");
 
             migrationBuilder.DropTable(
                 name: "CauHoiTuLuan");

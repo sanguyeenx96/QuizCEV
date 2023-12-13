@@ -42,7 +42,7 @@ namespace Application.Question
                 QB = request.QB,
                 QC = request.QC,
                 QD = request.QD,
-                QCorrectAns = request.QCorrectAns
+                QCorrectAns = request.QCorrectAns.ToUpper()
             };
             _context.Questions.Add(newQuestion);
             await _context.SaveChangesAsync();
@@ -157,10 +157,10 @@ namespace Application.Question
                         {
                             qd = worksheet.Cells[row, 5].Value.ToString();
                         }
-                        string? qcans = null;
+                        string? qcans = "A";
                         if (worksheet.Cells[row, 6].Value != null)
                         {
-                            qcans = worksheet.Cells[row, 6].Value.ToString();
+                            qcans = worksheet.Cells[row, 6].Value.ToString().ToUpper();
                         }
                         var newquestion = new QuestionImportExcelRequest
                         {
@@ -238,7 +238,6 @@ namespace Application.Question
             {
                 throw new Exception("Error while processing insert to SQL: " + ex.Message);
             }
-
         }
 
         public async Task<ApiResult<int>> Update(int id, QuestionUpdateRequest request)
@@ -251,7 +250,7 @@ namespace Application.Question
             question.QB = request.QB;
             question.QC = request.QC;
             question.QD = request.QD;
-            question.QCorrectAns = request.QCorrectAns;
+            question.QCorrectAns = request.QCorrectAns.ToUpper();
             _context.Questions.Update(question);
             await _context.SaveChangesAsync();
             return new ApiSuccessResult<int> { Id = question.Id };

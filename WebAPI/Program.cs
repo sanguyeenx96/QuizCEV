@@ -156,6 +156,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Swagger eExam V1");
+});
 
 app.UseHttpsRedirection(); //Middleware này chuyển hướng các yêu cầu HTTP sang HTTPS, đảm bảo rằng các yêu cầu được thực hiện qua kênh an toàn.
 

@@ -343,5 +343,20 @@ namespace WebAPP.Areas.Admin.Controllers
             return PartialView("DeptUser/_userInfoById", result.ResultObj);
         }
 
+
+        [HttpPost]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> ImportExcel([FromForm] IFormFile file, string role, int cellId)
+        {
+            using (var fileStream = file.OpenReadStream())
+            {
+                var result = await _userApiClient.ImportExcel(fileStream, role, cellId);
+                if (result.IsSuccessed)
+                {
+                    return Json(new { success = true, data = result.ResultObj });
+                }
+                return Json(new { success = false, message = result.Message });
+            }
+        }
     }
 }

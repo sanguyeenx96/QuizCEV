@@ -43,9 +43,22 @@
         </div>
     </div>
     <div class="tab-pane fade" id="pills-themtuexcel" role="tabpanel" aria-labelledby="pills-profile-tab">
+        <div class="form-group mb-2">
+            <label class="form-label">Chọn câu hỏi tự luận</label>
+            <select class="form-select form-select-lg " id="categoryId" name="categoryId" style="overflow: hidden;">
+                @foreach (var item in ViewBag.listcat)
+                {
+                    <option value="@item.Value">@item.Text</option>
+                }
+            </select>
+        </div>
+
+
+
         @*        <form id="excelUploadFormTL">
-        *@            <div class="mb-2">
-            <label class="form-label">Chọn file Excel để upload</label>
+        *@
+        <div class="mb-2">
+            <label class="form-label">Chọn file Excel để upload các câu hỏi trình tự thao tác</label>
             <input type="file" name="file" id="file" class="form-control btn btn-outline-secondary btn-block" accept=".xlsx" required />
         </div>
         <button type="submit" id="btnXacNhanThemTLTuExcel" class="btn btn-success" style="width:200px">

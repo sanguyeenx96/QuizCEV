@@ -70,5 +70,34 @@ namespace WebAPI.Controllers
             return Ok(result);
         }
 
+        [HttpPost("importexcel/{cauhoituluanId}")]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> ImportExcel([FromForm] IFormFile file, int cauhoituluanId)
+        {
+            try
+            {
+                if (file == null || file.Length == 0)
+                {
+                    return BadRequest("Tệp Excel không được gửi.");
+                }
+                using (var fileStream = file.OpenReadStream())
+                {
+                    var danhsachlinhkiens = await _cauHoiTrinhTuThaoTacService.ReadExcelFile(fileStream);
+                    var result = await _cauHoiTrinhTuThaoTacService.ImportExcelFile(danhsachlinhkiens, cauhoituluanId);
+                    if (result.IsSuccessed)
+                    {
+                        return Ok(result);
+                    }
+                    else
+                    {
+                        return BadRequest(result.Message);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Lỗi xử lý tệp Excel: " + ex.Message);
+            }
+        }
     }
 }
