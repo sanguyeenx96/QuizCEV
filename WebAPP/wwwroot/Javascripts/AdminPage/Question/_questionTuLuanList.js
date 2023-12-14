@@ -52,20 +52,10 @@ $(document).ready(function () {
                             },
                             success: function (result) {
                                 $("#countDiemso").html(result.result);
-                                if (result.result != 10) {
-                                    $("#theThongBao").removeClass(
-                                        "text-bg-success"
-                                    );
-                                    $("#theThongBao").addClass(
-                                        "text-bg-danger"
-                                    );
+                                if (result.result !== 10) {
+                                    $("#logoDiemdagan i").html('<i class="bi-x-circle-fill" style="color:red"></i>');
                                 } else {
-                                    $("#theThongBao").removeClass(
-                                        "text-bg-danger"
-                                    );
-                                    $("#theThongBao").addClass(
-                                        "text-bg-success"
-                                    );
+                                    $("#logoDiemdagan i").html('<i class="bi-check-circle-fill" style="color:green"></i>');
                                 }
                             },
                         });
@@ -77,20 +67,12 @@ $(document).ready(function () {
                             },
                             success: function (result) {
                                 $("#countChuaGan").html(result.sl);
-                                if (result.sl != 0) {
-                                    $("#theThongBaoChuaGan").removeClass(
-                                        "text-bg-success"
-                                    );
-                                    $("#theThongBaoChuaGan").addClass(
-                                        "text-bg-danger"
-                                    );
+                                if (result.sl !== 0) {
+                                    $("#logoChuagandiem i").html('<i class="bi-x-circle-fill" style="color:red"></i>');
+
                                 } else {
-                                    $("#theThongBaoChuaGan").removeClass(
-                                        "text-bg-danger"
-                                    );
-                                    $("#theThongBaoChuaGan").addClass(
-                                        "text-bg-success"
-                                    );
+                                    $("#logoChuagandiem i").html('<i class="bi-check-circle-fill" style="color:green"></i>');
+
                                 }
                             },
                         });

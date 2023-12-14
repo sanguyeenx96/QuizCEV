@@ -1,4 +1,7 @@
 ﻿using Application.CauHoiTrinhTuThaoTac;
+using Application.CauHoiTrinhTuThaoTac.DiemChuY;
+using Application.CauHoiTrinhTuThaoTac.LoiTaiCongDoan;
+using Application.CauHoiTrinhTuThaoTac.LoiTaiCongDoan.DoiSach;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,14 +14,14 @@ namespace WebAPI.Controllers
     [ApiController]
     [Authorize]
 
-    public class CauHoiTrinhTuThaoTacController : ControllerBase
+    public class CauHoiTrinhTuThaoTacController : ControllerBase 
     {
+
         private readonly ICauHoiTrinhTuThaoTacService _cauHoiTrinhTuThaoTacService;
         public CauHoiTrinhTuThaoTacController(ICauHoiTrinhTuThaoTacService cauHoiTrinhTuThaoTacService)
         {
             _cauHoiTrinhTuThaoTacService = cauHoiTrinhTuThaoTacService;
         }
-
 
         [HttpGet("GetAllByCauHoiTuLuan/{id}")]
         public async Task<IActionResult> GetAllByCauHoiTuLuan(int id)

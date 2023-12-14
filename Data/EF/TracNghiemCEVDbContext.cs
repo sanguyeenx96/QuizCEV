@@ -36,6 +36,10 @@ namespace Data.EF
             modelBuilder.ApplyConfiguration(new CellConfiguration());
             modelBuilder.ApplyConfiguration(new SettingConfiguration());
 
+            modelBuilder.ApplyConfiguration(new TTTTDiemChuYConfiguration());
+            modelBuilder.ApplyConfiguration(new TTTTLoiTaiCongDoanConfiguration());
+            modelBuilder.ApplyConfiguration(new LoiTaiCongDoanDoiSachConfiguration());
+
             modelBuilder.Entity<IdentityUserClaim<Guid>>().ToTable("AppUserClaims");
             modelBuilder.Entity<IdentityUserRole<Guid>>().ToTable("AppUserRoles")
                 .HasKey(x => new
@@ -51,7 +55,6 @@ namespace Data.EF
 
             //Data seeding
             modelBuilder.Seed();
-
             //base.OnModelCreating(modelBuilder);
         }
 
@@ -66,5 +69,8 @@ namespace Data.EF
         public DbSet<Model> Models { get; set; }
         public DbSet<Cell> Cells { get; set; }
         public DbSet<Setting> Settings { get; set; }
+        public DbSet<TTTTDiemChuY> DiemChuYs { get; set; }
+        public DbSet<TTTTLoiTaiCongDoan> LoiTaiCongDoans { get; set; }
+        public DbSet<LoiTaiCongDoanDoiSach> LoiTaiCongDoanDoiSaches { get; set; }
     }
 }

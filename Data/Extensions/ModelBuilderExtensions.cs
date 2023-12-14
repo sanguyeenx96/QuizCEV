@@ -54,7 +54,7 @@ namespace Data.Extensions
                 Email = "smt.ngocsang@gmail.com",
                 NormalizedEmail = "smt.ngocsang@gmail.com",
                 EmailConfirmed = true,
-                PasswordHash = hasher.HashPassword(null, "Abcd1234$"),
+                PasswordHash = hasher.HashPassword(null, "123"),
                 SecurityStamp = string.Empty,
                 Name = "Nguyen Ngoc Sang",
                 CellId = 1

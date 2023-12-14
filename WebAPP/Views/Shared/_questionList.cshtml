@@ -9,16 +9,16 @@
                     @{
                         if (item.Score != null && item.Score != 0)
                         {
-                            <btn class="btn btn-success btn-sm" style="min-width:80px; margin-right:10px;font-weight: 600">
-                                @item.Score<small> điểm</small>
-                            </btn>                            
+                                <btn class="btn btn-light btn-sm" style="min-width:80px; margin-right:10px;font-weight: 600">
+                                    @item.Score<small> điểm</small>
+                                </btn>                            
                         }
                         else
                         {
-                            <btn class="btn btn-warning btn-sm" style="min-width:80px; margin-right:10px;font-weight: 600">
-                                <i class="bi-exclamation-triangle-fill"></i>
-                                <small>Chưa gán điểm</small>
-                            </btn>
+                                <btn class="btn btn-warning btn-sm" style="min-width:80px; margin-right:10px;font-weight: 600">
+                                    <i class="bi-exclamation-triangle-fill"></i>
+                                    <small>Chưa gán điểm</small>
+                                </btn>
                         }
                     }                   
                     @item.Text

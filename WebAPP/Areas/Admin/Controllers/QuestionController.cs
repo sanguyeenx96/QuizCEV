@@ -133,7 +133,7 @@ namespace WebAPP.Areas.Admin.Controllers
             return Json(new { success = true });
         }
 
-        [HttpPost]
+        [HttpPost] 
         public async Task<IActionResult> CreateManual(QuestionCreateRequest request)
         {
             var result = await _questionApiClient.Create(request);
@@ -142,6 +142,20 @@ namespace WebAPP.Areas.Admin.Controllers
                 return Json(new { success = false, message = result.Message });
             }
             return Json(new { success = true, message = result.Message });
+        }
+
+
+        //IMPORT TRINH TU THAO TAC FROM EXCEL
+        [HttpPost]
+        public async Task<IActionResult> GetListQuestionTuLuanToSelect(int id)
+        {
+            var dschtl = await _cauHoiTuLuanApiClient.GetAllByCategory(id);
+            var result = dschtl.ResultObj.Select(x => new SelectListItem()
+            {
+                Text = x.Text,
+                Value = x.Id.ToString()
+            });
+            return Json(result);
         }
 
         [HttpPost]
