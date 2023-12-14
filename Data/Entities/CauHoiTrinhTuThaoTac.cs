@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,5 +14,8 @@ namespace Data.Entities
         public int ThuTu { get; set; }
         public int CauHoiTuLuanId { get; set; }
         public CauHoiTuLuan CauHoiTuLuan { get; set; }
+        public List<TTTTDiemChuY>? TTTTDiemChuYs { get; set; }
+        public List<TTTTLoiTaiCongDoan>? TTTTLoiTaiCongDoans { get; set; }
+
     }
 }

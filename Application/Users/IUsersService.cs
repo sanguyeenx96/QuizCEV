@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ViewModels.Common;
+using ViewModels.Question.Request;
 using ViewModels.Users.Request;
 using ViewModels.Users.Response;
 
@@ -24,6 +25,7 @@ namespace Application.Users
         Task<ApiResult<bool>> Delete(Guid id);
         Task<ApiResult<int>> Count(int id);
         Task<ApiResult<bool>> CheckPassWord(Guid id, UserCheckPasswordRequest request);
-
+        Task<List<UserImportExcelRequest>> ReadExcelFile(Stream fileStream);
+        Task<ApiResult<ImportExcelResult>> ImportExcelFile(List<UserImportExcelRequest> request, string role, int cellId);
     }
 }

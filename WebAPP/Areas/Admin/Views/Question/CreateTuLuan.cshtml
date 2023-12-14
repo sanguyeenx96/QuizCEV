@@ -15,14 +15,14 @@
 <ul class="nav nav-tabs mb-2" id="pills-tab" role="tablist">
     <li class="nav-item" role="presentation">
         <button class="nav-link active" id="pills-home-tab" data-coreui-toggle="pill" data-coreui-target="#pills-themthucong" type="button" role="tab" aria-controls="pills-themthucong" aria-selected="true">
-            <i class="bi-file-plus"></i>
-            Thêm thủ công
+            <i class="bi-1-circle-fill"></i>
+            Thêm câu hỏi tự luận
         </button>
     </li>
     <li class="nav-item" role="presentation">
         <button class="nav-link" id="pills-profile-tab" data-coreui-toggle="pill" data-coreui-target="#pills-themtuexcel" type="button" role="tab" aria-controls="pills-themtuexcel" aria-selected="false">
-            <i class="bi-file-earmark-spreadsheet"></i>
-            Nhập từ file Excel
+            <i class="bi-2-circle-fill"></i>
+            Nhập trình tự thao tác từ file Excel
         </button>
     </li>
 </ul>
@@ -43,20 +43,130 @@
         </div>
     </div>
     <div class="tab-pane fade" id="pills-themtuexcel" role="tabpanel" aria-labelledby="pills-profile-tab">
-        @*        <form id="excelUploadFormTL">
-        *@            <div class="mb-2">
-            <label class="form-label">Chọn file Excel để upload</label>
-            <input type="file" name="file" id="file" class="form-control btn btn-outline-secondary btn-block" accept=".xlsx" required />
+        <div class="form-group mb-2">
+            <label class="form-label">Chọn câu hỏi tự luận</label>
+            <select class="form-select form-select-lg " id="cauhoitlId" name="cauhoitlId" style="overflow: hidden;">
+            </select>
         </div>
-        <button type="submit" id="btnXacNhanThemTLTuExcel" class="btn btn-success" style="width:200px">
-            <i class="bi-check"> </i>Xác nhận
-        </button>
-        @*        </form>
-        *@
+        <form id="excelUploadFormTL">
+            <div class="mb-2">
+                <label class="form-label">Chọn file Excel để upload danh sách trình tự thao tác</label>
+                <input type="file" name="file" id="file" class="form-control btn btn-outline-secondary btn-block" accept=".xlsx" required />
+            </div>
+            <button type="submit" id="btnXacNhanThemTLTuExcel" class="btn btn-success" style="width:200px">
+                <i class="bi-check"> </i>Xác nhận
+            </button>
+        </form>
     </div>
 </div>
 <script>
     $(document).ready(function () {
+        $("#categoryId").on("change", function () {
+            var categoryId = $(this).val();
+            var catid = parseInt(categoryId);
+            $.ajax({
+                url: "GetListQuestionTuLuanToSelect",
+                type: "POST",
+                data: {
+                    id: catid
+                },
+                success: function (data) {
+                    var selectList = $('#cauhoitlId');
+                    selectList.empty()
+                    $.each(data, function (index, item) {
+                        selectList.append($('<option>', {
+                            value: item.value,
+                            text: item.text
+                        }));
+                    });
+                },
+                error: function () {
+                    Swal.fire("Lỗi máy chủ!", "Không thành công", "error");
+                },
+            })
+        })
+
+        $("#pills-profile-tab").click(function () {
+            var categoryId = $("select[name='categoryId']").val();
+            var catid = parseInt(categoryId);
+            $.ajax({
+                url: "GetListQuestionTuLuanToSelect",
+                type: "POST",
+                data: {
+                    id: catid
+                },
+                success: function (data) {
+                    var selectList = $('#cauhoitlId');
+                    selectList.empty()
+                    $.each(data, function (index, item) {
+                        selectList.append($('<option>', {
+                            value: item.value,
+                            text: item.text
+                        }));
+                    });
+                },
+                error: function () {
+                    Swal.fire("Lỗi máy chủ!", "Không thành công", "error");
+                },
+            })
+        })
+
+        $('#excelUploadFormTL').submit(function (e) {
+            e.preventDefault();
+            var cauhoituluanId = $("select[name='cauhoitlId']").val();
+            cauhoituluanId = parseInt(cauhoituluanId);
+            let formData = new FormData();
+            formData.append("cauhoituluanId", cauhoituluanId);
+            formData.append("file", file.files[0]);
+            $.ajax({
+                url: 'ImportExcelTTTT',
+                type: 'POST',
+                data: formData,
+                processData: false, // Không xử lý dữ liệu gửi đi
+                contentType: false, // Không đặt kiểu dữ liệu
+                success: function (result) {
+                    if (result.success) {
+                        if (result.data.sodongupdate == 0) {
+                            Swal.fire({
+                                title: 'Nhập dữ liệu không thành công!',
+                                html: `<div class="col-12">
+                                        <span class="badge bg-success animate__animated animate__fadeIn"> Thêm mới : ${result.data.sodongupdate} </span>
+                                        <span class="badge bg-danger animate__animated animate__fadeIn"> Bị trùng : ${result.data.sodongtrung}</span>
+                                        </div>`,
+                                icon: 'error',
+                                showConfirmButton: false
+                            })
+                        } else {
+                            Swal.fire({
+                                title: 'Nhập dữ liệu thành công!',
+                                html: `<div class="col-12">
+                                        <span class="badge bg-success animate__animated animate__fadeIn"> Thêm mới : ${result.data.sodongupdate} </span>
+                                        <span class="badge bg-danger animate__animated animate__fadeIn"> Bị trùng : ${result.data.sodongtrung}</span>
+                                        </div>`,
+                                icon: 'success',
+                                showConfirmButton: false
+                            })
+                        }
+                    }
+                    else {
+                        Swal.fire(
+                            "Lỗi máy chủ",
+                            "Thao tác đã được huỷ bỏ!",
+                            "error"
+                        );
+                    }
+                },
+                error: function (xhr, status, error) {
+                    Swal.fire(
+                        "Lỗi máy chủ",
+                        "Thao tác đã được huỷ bỏ!",
+                        "error"
+                    );
+                }
+            });
+        });
+
+
         $("#btnXacNhanThemThuCong").click(function (e) {
             var form = $("#myForm")[0];
             if (form.checkValidity()) {
@@ -95,12 +205,6 @@
             }
         });
 
-        $("#btnXacNhanThemTLTuExcel").click(function () {
-            Swal.fire(
-                "Coming soon...",
-                "Chức năng chưa được mở",
-                "warning"
-            )
-        })
+
     })
 </script>

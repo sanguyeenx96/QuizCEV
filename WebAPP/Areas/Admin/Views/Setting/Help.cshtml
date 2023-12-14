@@ -1,0 +1,78 @@
+﻿<h1 class="display-6 mb-2">Hỗ trợ</h1>
+<div class="card">
+    <div class="card-body ">
+        <table id="tblDongmophongthi" class="table table-hover" style="text-align:center; vertical-align:middle;width:100%">
+            <thead style="font-size:small">
+                <tr>
+                    <th style="text-align:start;font-weight: 350;">
+                        Tiêu đề
+                    </th>
+                    <th>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="text-align:left">
+                        <i class="bi-1-circle-fill  "></i>
+                        Hướng dẫn sử dụng phần mềm
+                    </td>
+                    <td style="text-align:end">
+                        <btn class="btn btn-success" id="downloadHuongdansudung">
+                            <i class="bi-download"> </i>
+                            Tải xuống
+                        </btn>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align:left">
+                        <i class="bi-2-circle-fill  "></i>
+                        File Excel mẫu thêm câu hỏi trắc nghiệm
+                    </td>
+                    <td style="text-align:end">
+                        <btn class="btn btn-success" id="downloadExcelTracNghiem">
+                            <i class="bi-download"> </i>
+                            Tải xuống
+                        </btn>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align:left">
+                        <i class="bi-3-circle-fill  "></i>
+                        File Excel mẫu thêm câu hỏi tự luận
+                    </td>
+                    <td style="text-align:end">
+                        <btn class="btn btn-success" id="downloadExcelTuLuan">
+                            <i class="bi-download"> </i>
+                            Tải xuống
+                        </btn>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align:left">
+                        <i class="bi-4-circle-fill  "></i>
+                        File Excel mẫu thêm tài khoản
+                    </td>
+                    <td style="text-align:end">
+                        <btn class="btn btn-success" id="downloadExcelThemTaiKhoan">
+                            <i class="bi-download"> </i>
+                            Tải xuống
+                        </btn>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    document.getElementById('downloadExcelTracNghiem').addEventListener('click', function () {
+        window.location.href = '/Form/formNhapCauHoiTracNghiem.xlsx';
+    });
+    document.getElementById('downloadExcelTuLuan').addEventListener('click', function () {
+        window.location.href = '/Form/formNhapCauHoiTuLuan.xlsx';
+    });
+    document.getElementById('downloadExcelThemTaiKhoan').addEventListener('click', function () {
+        window.location.href = '/Form/formNhapUser.xlsx';
+    });
+</script>

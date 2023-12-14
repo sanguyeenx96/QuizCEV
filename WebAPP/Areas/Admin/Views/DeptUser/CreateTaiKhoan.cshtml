@@ -107,6 +107,78 @@
 
 <script>
     $(document).ready(function () {
+        $('#excelUploadFormTaiKhoan').submit(function (e) {
+            e.preventDefault();
+            var roleName = $("#roleName").val();
+            var modelId = $("#modelSelectList").val();
+            var cellId = $("#cellSelectList").val();
+            cellId = parseInt(cellId);
+            if (modelId == null) {
+                Swal.fire(
+                    "Chưa chọn thông tin Model",
+                    "Hãy chọn đầy đủ thông tin",
+                    "error"
+                );
+            } else if (cellId == null) {
+                Swal.fire(
+                    "Chưa chọn thông tin Cell",
+                    "Hãy chọn đầy đủ thông tin",
+                    "error"
+                );
+            } else {
+                let formData = new FormData();
+                formData.append("role", roleName);
+                formData.append("cellId", cellId);
+                formData.append("file", file.files[0]);
+                $.ajax({
+                    url: 'ImportExcel',
+                    type: 'POST',
+                    data: formData,
+                    processData: false, // Không xử lý dữ liệu gửi đi
+                    contentType: false, // Không đặt kiểu dữ liệu
+                    success: function (result) {
+                        if (result.success) {
+                            if (result.data.sodongupdate == 0) {
+                                Swal.fire({
+                                    title: 'Nhập dữ liệu không thành công!',
+                                    html: `<div class="col-12">
+                                                                        <span class="badge bg-success animate__animated animate__fadeIn"> Thêm mới : ${result.data.sodongupdate} </span>
+                                                                        <span class="badge bg-danger animate__animated animate__fadeIn"> Bị trùng : ${result.data.sodongtrung}</span>
+                                                                        </div>`,
+                                    icon: 'error',
+                                    showConfirmButton: false
+                                })
+                            } else {
+                                Swal.fire({
+                                    title: 'Nhập dữ liệu thành công!',
+                                    html: `<div class="col-12">
+                                                                        <span class="badge bg-success animate__animated animate__fadeIn"> Thêm mới : ${result.data.sodongupdate} </span>
+                                                                        <span class="badge bg-danger animate__animated animate__fadeIn"> Bị trùng : ${result.data.sodongtrung}</span>
+                                                                        </div>`,
+                                    icon: 'success',
+                                    showConfirmButton: false
+                                })
+                            }
+                        }
+                        else {
+                            Swal.fire(
+                                "Lỗi máy chủ",
+                                "Thao tác đã được huỷ bỏ!",
+                                "error"
+                            );
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        Swal.fire(
+                            "Lỗi máy chủ",
+                            "Thao tác đã được huỷ bỏ!",
+                            "error"
+                        );
+                    }
+                });
+            }
+        });
+
         $.ajax({
             url: 'GetSelectListDept',
             type: 'GET',
@@ -141,6 +213,27 @@
                             value: item.value,
                             text: item.text
                         }));
+                    });
+                    var modelId = $('#modelSelectList').val();
+                    modelId = parseInt(modelId);
+                    $.ajax({
+                        url: 'GetSelectListCelll',
+                        type: 'POST',
+                        data: { modelId: modelId },
+                        dataType: 'json',
+                        success: function (data) {
+                            var selectList = $('#cellSelectList');
+                            selectList.empty()
+                            $.each(data, function (index, item) {
+                                selectList.append($('<option>', {
+                                    value: item.value,
+                                    text: item.text
+                                }));
+                            });
+                        },
+                        error: function () {
+                            console.error('Failed to retrieve department options.');
+                        }
                     });
                 },
                 error: function () {
@@ -225,7 +318,7 @@
                                     title: "Bạn vừa thêm tài khoản mới thành công",
                                     showConfirmButton: false,
                                     timer: 1500,
-                                })                                
+                                })
                             } else {
                                 Swal.fire("Không thành công!", result.message, "error");
                             }
@@ -235,12 +328,6 @@
                         },
                     });
                 }
-
-
-
-
-
-
             } else {
                 form.reportValidity();
             }

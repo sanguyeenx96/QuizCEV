@@ -1,15 +1,26 @@
-﻿using Data.EF;
+﻿using Application.CauHoiTuLuan;
+using Data.EF;
 using Data.Entities;
+using Data.Enums;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ViewModels.CauHoiTrinhTuThaoTac.DiemChuY;
+using ViewModels.CauHoiTrinhTuThaoTac.LoiTaiCongDoan;
+using ViewModels.CauHoiTrinhTuThaoTac.LoiTaiCongDoan.DoiSach;
 using ViewModels.CauHoiTrinhTuThaoTac.Request;
 using ViewModels.CauHoiTrinhTuThaoTac.Response;
+using ViewModels.CauHoiTuLuan.Request;
 using ViewModels.CauHoiTuLuan.Response;
+using ViewModels.Cell.Response;
 using ViewModels.Common;
+using ViewModels.Question.Request;
+using ViewModels.Users.Request;
 
 namespace Application.CauHoiTrinhTuThaoTac
 {
@@ -50,12 +61,12 @@ namespace Application.CauHoiTrinhTuThaoTac
             return new ApiSuccessResult<int> { ResultObj = total };
         }
 
-        public async  Task<ApiResult<bool>> Create(CauHoiTrinhTuThaoTacCreateRequest request)
+        public async Task<ApiResult<bool>> Create(CauHoiTrinhTuThaoTacCreateRequest request)
         {
             var checkDuplicateQuestion = await _context.cauHoiTrinhTuThaoTacs.Where(x => (x.Text == request.Text && x.CauHoiTuLuanId == request.CauHoiTuLuanId)).FirstOrDefaultAsync();
             if (checkDuplicateQuestion != null)
                 return new ApiErrorResult<bool> { Message = "Câu hỏi đã bị trùng" };
-            int num = _context.cauHoiTrinhTuThaoTacs.Where(x => x.CauHoiTuLuanId == request.CauHoiTuLuanId).Any() ? _context.cauHoiTrinhTuThaoTacs.Where(x=>x.CauHoiTuLuanId == request.CauHoiTuLuanId).Max(x => x.ThuTu) + 1 : 1;
+            int num = _context.cauHoiTrinhTuThaoTacs.Where(x => x.CauHoiTuLuanId == request.CauHoiTuLuanId).Any() ? _context.cauHoiTrinhTuThaoTacs.Where(x => x.CauHoiTuLuanId == request.CauHoiTuLuanId).Max(x => x.ThuTu) + 1 : 1;
 
             var newQuestion = new Data.Entities.CauHoiTrinhTuThaoTac()
             {
@@ -90,16 +101,43 @@ namespace Application.CauHoiTrinhTuThaoTac
             return new ApiSuccessResult<bool> { Message = "Đã xoá thành công!" };
         }
 
-
         public async Task<ApiResult<List<CauHoiTrinhTuThaoTacVm>>> GetAllByCauHoiTuLuan(int id)
         {
-            var listquestions = await _context.cauHoiTrinhTuThaoTacs.Where(x => x.CauHoiTuLuanId == id).Select(x => new CauHoiTrinhTuThaoTacVm
-            {
-                Id = x.Id,
-                Text = x.Text,
-                ThuTu = x.ThuTu,
-                CauHoiTuLuanId = x.CauHoiTuLuanId
-            }).ToListAsync();
+            var listquestions = await _context.cauHoiTrinhTuThaoTacs
+                .Include(x => x.TTTTDiemChuYs)
+                .Include(x => x.TTTTLoiTaiCongDoans)
+                .ThenInclude(x => x.LoiTaiCongDoanDoiSachs)
+                .Where(x => x.CauHoiTuLuanId == id).Select(y => new CauHoiTrinhTuThaoTacVm
+                {
+                    Id = y.Id,
+                    Text = y.Text,
+                    ThuTu = y.ThuTu,
+                    CauHoiTuLuanId = y.CauHoiTuLuanId,
+                    diemChuYs = y.TTTTDiemChuYs != null
+                                    ? y.TTTTDiemChuYs.Select(z => new DiemChuYVm
+                                    {
+                                        Text = z.Text,
+                                        CauhoitrinhtuthaotacId = z.CauhoitrinhtuthaotacId,
+                                        Id = z.Id
+                                    }).ToList()
+                                    : new List<DiemChuYVm>(),
+                    loiTaiCongDoans = y.TTTTLoiTaiCongDoans != null
+                                    ? y.TTTTLoiTaiCongDoans.Select(t => new LoiTaiCongDoanVm
+                                    {
+                                        Text = t.Text,
+                                        CauhoitrinhtuthaotacId = t.CauhoitrinhtuthaotacId,
+                                        Id = t.Id,
+                                        doiSaches = t.LoiTaiCongDoanDoiSachs != null
+                                        ? t.LoiTaiCongDoanDoiSachs.Select(d => new DoiSachVm
+                                        {
+                                            Text = d.Text,
+                                            LoiTaiCongDoanId = d.LoiTaiCongDoanId,
+                                            Id = d.Id
+                                        }).ToList()
+                                        : new List<DoiSachVm>()
+                                    }).ToList()
+                                    : new List<LoiTaiCongDoanVm>()
+                }).ToListAsync();
             return new ApiSuccessResult<List<CauHoiTrinhTuThaoTacVm>>(listquestions);
         }
 
@@ -127,6 +165,81 @@ namespace Application.CauHoiTrinhTuThaoTac
             _context.cauHoiTrinhTuThaoTacs.Update(cauhoi);
             await _context.SaveChangesAsync();
             return new ApiSuccessResult<bool>();
+        }
+
+        private string GetCellValue(ExcelWorksheet worksheet, int row, int column)
+        {
+            var cellValue = worksheet.Cells[row, column].Value?.ToString();
+            if (string.IsNullOrEmpty(cellValue))
+            {
+                throw new Exception($"Missing value data at row {row}, column {column}");
+            }
+            return cellValue;
+        }
+
+        public async Task<List<CauHoiTrinhThuThaoTacImportExcelRequest>> ReadExcelFile(Stream fileStream)
+        {
+            try
+            {
+                using (var package = new ExcelPackage(fileStream))
+                {
+                    var worksheet = package.Workbook.Worksheets[0];
+                    var danhsachthututhaotac = new List<CauHoiTrinhThuThaoTacImportExcelRequest>();
+                    for (int row = 2; row <= worksheet.Dimension.End.Row; row++)
+                    {
+                        var newThututhaotac = new CauHoiTrinhThuThaoTacImportExcelRequest
+                        {
+                            Text = GetCellValue(worksheet, row, 1)
+                        };
+                        danhsachthututhaotac.Add(newThututhaotac);
+                    }
+                    return danhsachthututhaotac;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error while processing Excel file: " + ex.Message);
+            }
+        }
+
+        public async Task<ApiResult<ImportExcelResult>> ImportExcelFile(List<CauHoiTrinhThuThaoTacImportExcelRequest> request, int cauhoituluanId)
+        {
+            try
+            {
+                int lineupdate = 0;
+                int linetrung = 0;
+                foreach (var item in request)
+                {
+                    var checkDuplicate = await _context.cauHoiTrinhTuThaoTacs.Where(x => (x.CauHoiTuLuanId == cauhoituluanId && x.Text == item.Text)).FirstOrDefaultAsync();
+                    if (checkDuplicate != null)
+                    {
+                        linetrung++;
+                    }
+                    else
+                    {
+                        var requestTTTT = new CauHoiTrinhTuThaoTacCreateRequest()
+                        {
+                            CauHoiTuLuanId = cauhoituluanId,
+                            Text = item.Text
+                        };
+                        var result = await Create(requestTTTT);
+                        if (result.IsSuccessed)
+                        {
+                            lineupdate++;
+                        }
+                    }
+                }
+                var ketqua = new ImportExcelResult()
+                {
+                    sodongtrung = linetrung,
+                    sodongupdate = lineupdate
+                };
+                return new ApiSuccessResult<ImportExcelResult>(ketqua);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error while processing insert to SQL: " + ex.Message);
+            }
         }
     }
 }

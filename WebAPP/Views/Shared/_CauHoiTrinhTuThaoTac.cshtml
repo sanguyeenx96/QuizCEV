@@ -13,10 +13,10 @@
             <th hidden>
                 Id
             </th>
-            <th class="col-8">
-                Nội dung thao tác
+            <th class="col-8" style="text-align:center">
+                Nội dung 
             </th>
-            <th class="col-2" style="text-align:center">
+            <th class="col-1" style="text-align:center">
             </th>
         </tr>
     </thead>
@@ -31,15 +31,61 @@
                     @item.Id
                 </td>
                 <td style="text-align:start">
-                    @item.Text
+                    <table class="table table-secondary table-bordered" style="font-size:small;vertical-align:middle">
+                        <tbody>
+                            <tr>
+                                <td class="col-2" style="vertical-align:middle;font-size:x-small">
+                                    <i class="bi-dot"></i>
+                                    Nội dung thao tác
+                                </td>
+                                <td>
+                                    @item.Text
+                                </td>  
+                                <td class="col-2">
+                                    <btn class="btn btn-sm btn-secondary btnSuaCauHoiTrinhTuThaoTac w-100" data-abc="@item.CauHoiTuLuanId" data-id="@item.Id" data-noidungcauhoi="@item.Text">
+                                        <i class="bi-pencil"> </i>
+                                        Sửa
+                                    </btn>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="vertical-align:middle;font-size:x-small">
+                                    <i class="bi-dot"></i>
+                                    Điểm chú ý
+                                </td>
+                                <td>
+                                    @item.Text
+                                </td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td style="vertical-align:middle;font-size:x-small">
+                                    <i class="bi-dot"></i>
+                                    Lỗi tại công đoạn
+                                </td>
+                                <td>
+                                    @item.Text
+                                </td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td style="vertical-align:middle;font-size:x-small">
+                                    <i class="bi-dot"></i>
+                                    Đối sách
+                                </td>
+                                <td>
+                                    @item.Text
+                                </td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    
                 </td>
                 <td>
                     <div class="btn-group" style=" white-space:nowrap;">
-                        <btn class="btn btn-light btnSuaCauHoiTrinhTuThaoTac" data-abc="@item.CauHoiTuLuanId" data-id="@item.Id" data-noidungcauhoi="@item.Text">
-                            <i class="bi-pencil"> </i>
-                            Sửa
-                        </btn>
-                        <btn class="btn btn-danger   btnXoaCauHoiTrinhTuThaoTac" data-abc="@item.CauHoiTuLuanId" data-id="@item.Id" data-noidungcauhoi="@item.Text">
+                        <btn class="btn btn-danger  btnXoaCauHoiTrinhTuThaoTac w-100" data-abc="@item.CauHoiTuLuanId" data-id="@item.Id" data-noidungcauhoi="@item.Text">
                             <i class="bi-trash"> </i>
                             Xoá
                         </btn>

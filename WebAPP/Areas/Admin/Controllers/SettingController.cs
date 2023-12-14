@@ -14,12 +14,14 @@ namespace WebAPP.Areas.Admin.Controllers
         {
             _settingApiClient = settingApiClient;
         }
+
         public async Task<IActionResult> Index()
         {
             ViewBag.thisPage = "Cài đặt chức năng";
             var listSetting = await _settingApiClient.GetAll();
             return View(listSetting.ResultObj);
         }
+
         [HttpPost]
         public async Task<IActionResult> ChangeSetting(int id)
         {
@@ -30,5 +32,12 @@ namespace WebAPP.Areas.Admin.Controllers
             }
             return Json(new { success = true });
         }
+
+        [HttpGet]
+        public IActionResult Help()
+        {
+            return View();
+        }
+
     }
 }

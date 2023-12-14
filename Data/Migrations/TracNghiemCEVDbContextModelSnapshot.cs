@@ -50,7 +50,7 @@ namespace Data.Migrations
                         new
                         {
                             Id = new Guid("8d04dce2-969a-435d-bba4-df3f325983dc"),
-                            ConcurrencyStamp = "b324ee1c-970e-4ab7-b48e-150b0391c765",
+                            ConcurrencyStamp = "5dd9d449-d170-4495-9b26-587cfbfc0a94",
                             Description = "Administrator role",
                             Name = "admin",
                             NormalizedName = "admin"
@@ -58,7 +58,7 @@ namespace Data.Migrations
                         new
                         {
                             Id = new Guid("470f4021-29d8-4c8e-a9de-527571683d86"),
-                            ConcurrencyStamp = "5dacf20d-3aea-4826-aacf-bfc13ba85e3e",
+                            ConcurrencyStamp = "30446434-f6b8-4c4f-83d0-dab46b05f460",
                             Description = "User role",
                             Name = "user",
                             NormalizedName = "user"
@@ -134,14 +134,14 @@ namespace Data.Migrations
                             Id = new Guid("69bd714f-9576-45ba-b5b7-f00649be00de"),
                             AccessFailedCount = 0,
                             CellId = 1,
-                            ConcurrencyStamp = "24a6f462-3bb3-4c8f-9056-aa9f71a54066",
+                            ConcurrencyStamp = "c20b5b31-af48-4f09-bbf9-f035e55b32df",
                             Email = "smt.ngocsang@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             Name = "Nguyen Ngoc Sang",
                             NormalizedEmail = "smt.ngocsang@gmail.com",
                             NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAEG2VPbQ5OltG36FTSvQqdFQyMJRwX2VNkzQy2BiDRsETButdraQ9hI7RtKQtKBA1FA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEC7OIuWXh1KJsatyYKu5F3fQD6s6fha7/sk7XpH4XMCAQC9UN/QA4yCGrMKL3Wo25A==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -399,6 +399,28 @@ namespace Data.Migrations
                     b.ToTable("LogExamTrinhtuthaotacs", (string)null);
                 });
 
+            modelBuilder.Entity("Data.Entities.LoiTaiCongDoanDoiSach", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("LoiTaiCongDoanId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LoiTaiCongDoanId");
+
+                    b.ToTable("LoiTaiCongDoanDoiSach", (string)null);
+                });
+
             modelBuilder.Entity("Data.Entities.Model", b =>
                 {
                     b.Property<int>("Id")
@@ -495,6 +517,50 @@ namespace Data.Migrations
                             Name = "Retest",
                             Status = true
                         });
+                });
+
+            modelBuilder.Entity("Data.Entities.TTTTDiemChuY", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<Guid>("CauhoitrinhtuthaotacId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CauhoitrinhtuthaotacId");
+
+                    b.ToTable("TTTTDiemChuY", (string)null);
+                });
+
+            modelBuilder.Entity("Data.Entities.TTTTLoiTaiCongDoan", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<Guid>("CauhoitrinhtuthaotacId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CauhoitrinhtuthaotacId");
+
+                    b.ToTable("TTTTLoiTaiCongDoan", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -686,6 +752,17 @@ namespace Data.Migrations
                     b.Navigation("LogExam");
                 });
 
+            modelBuilder.Entity("Data.Entities.LoiTaiCongDoanDoiSach", b =>
+                {
+                    b.HasOne("Data.Entities.TTTTLoiTaiCongDoan", "TTTTLoiTaiCongDoans")
+                        .WithMany("LoiTaiCongDoanDoiSachs")
+                        .HasForeignKey("LoiTaiCongDoanId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("TTTTLoiTaiCongDoans");
+                });
+
             modelBuilder.Entity("Data.Entities.Model", b =>
                 {
                     b.HasOne("Data.Entities.Dept", "Dept")
@@ -708,6 +785,28 @@ namespace Data.Migrations
                     b.Navigation("Category");
                 });
 
+            modelBuilder.Entity("Data.Entities.TTTTDiemChuY", b =>
+                {
+                    b.HasOne("Data.Entities.CauHoiTrinhTuThaoTac", "CauHoiTrinhTuThaoTac")
+                        .WithMany("TTTTDiemChuYs")
+                        .HasForeignKey("CauhoitrinhtuthaotacId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CauHoiTrinhTuThaoTac");
+                });
+
+            modelBuilder.Entity("Data.Entities.TTTTLoiTaiCongDoan", b =>
+                {
+                    b.HasOne("Data.Entities.CauHoiTrinhTuThaoTac", "CauHoiTrinhTuThaoTac")
+                        .WithMany("TTTTLoiTaiCongDoans")
+                        .HasForeignKey("CauhoitrinhtuthaotacId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CauHoiTrinhTuThaoTac");
+                });
+
             modelBuilder.Entity("Data.Entities.AppUser", b =>
                 {
                     b.Navigation("ExamResults");
@@ -720,6 +819,13 @@ namespace Data.Migrations
                     b.Navigation("Questions");
 
                     b.Navigation("cauHoiTuLuans");
+                });
+
+            modelBuilder.Entity("Data.Entities.CauHoiTrinhTuThaoTac", b =>
+                {
+                    b.Navigation("TTTTDiemChuYs");
+
+                    b.Navigation("TTTTLoiTaiCongDoans");
                 });
 
             modelBuilder.Entity("Data.Entities.CauHoiTuLuan", b =>
@@ -750,6 +856,11 @@ namespace Data.Migrations
             modelBuilder.Entity("Data.Entities.Model", b =>
                 {
                     b.Navigation("Cells");
+                });
+
+            modelBuilder.Entity("Data.Entities.TTTTLoiTaiCongDoan", b =>
+                {
+                    b.Navigation("LoiTaiCongDoanDoiSachs");
                 });
 #pragma warning restore 612, 618
         }

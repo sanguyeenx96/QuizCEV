@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(TracNghiemCEVDbContext))]
-    [Migration("20231207080150_Init")]
+    [Migration("20231212013023_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -52,7 +52,7 @@ namespace Data.Migrations
                         new
                         {
                             Id = new Guid("8d04dce2-969a-435d-bba4-df3f325983dc"),
-                            ConcurrencyStamp = "d40d9bbc-f5e7-4d88-987e-ae760653d3b6",
+                            ConcurrencyStamp = "b31fe942-67ad-4699-a73d-0058cec54285",
                             Description = "Administrator role",
                             Name = "admin",
                             NormalizedName = "admin"
@@ -60,7 +60,7 @@ namespace Data.Migrations
                         new
                         {
                             Id = new Guid("470f4021-29d8-4c8e-a9de-527571683d86"),
-                            ConcurrencyStamp = "28594d93-1e36-4573-9230-4c3a44730d69",
+                            ConcurrencyStamp = "1b4522b2-05e2-496d-bf8d-09c2f95ec672",
                             Description = "User role",
                             Name = "user",
                             NormalizedName = "user"
@@ -136,14 +136,14 @@ namespace Data.Migrations
                             Id = new Guid("69bd714f-9576-45ba-b5b7-f00649be00de"),
                             AccessFailedCount = 0,
                             CellId = 1,
-                            ConcurrencyStamp = "6e2a38a9-5e7d-4244-8409-604801e2f955",
+                            ConcurrencyStamp = "fc622787-d2ca-4df7-8683-a800325ed8d3",
                             Email = "smt.ngocsang@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             Name = "Nguyen Ngoc Sang",
                             NormalizedEmail = "smt.ngocsang@gmail.com",
                             NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAEOPOvnzxTgESvoW67Nt2UWABW2FNlPcHiUeBuQLK4Zq1jChH67Z343+kO8fdfNQX7A==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEK9SftGOSgB4nivQVAYDZHuncPuP8lo1TJX6uODGY3jwyQZleYLv0+Mn1Kmp9y+vew==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -469,6 +469,34 @@ namespace Data.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("Questions", (string)null);
+                });
+
+            modelBuilder.Entity("Data.Entities.Setting", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Settings", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Retest",
+                            Status = true
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>

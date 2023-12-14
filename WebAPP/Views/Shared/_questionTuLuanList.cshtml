@@ -7,9 +7,21 @@
         <div class="accordion-item">
             <h2 class="accordion-header">
                 <button class="accordion-button collapsed btnXemchitiet " type="button" data-coreui-toggle="collapse" data-coreui-target="#@speId" aria-expanded="false" data-id="@item.Id">
-                    <btn class="btn btn-light btn-sm " style="min-width:80px; margin-right:10px;font-weight: 600">
-                        @(item.Score ?? 0)<small> điểm</small>
-                    </btn>
+                    @{
+                        if (item.Score != null && item.Score != 0)
+                        {
+                            <btn class="btn btn-light btn-sm" style="min-width:80px; margin-right:10px;font-weight: 600">
+                                @item.Score<small> điểm</small>
+                            </btn>
+                        }
+                        else
+                        {
+                            <btn class="btn btn-warning btn-sm" style="min-width:80px; margin-right:10px;font-weight: 600">
+                                <i class="bi-exclamation-triangle-fill"></i>
+                                <small>Chưa gán điểm</small>
+                            </btn>
+                        }
+                    }
                     @item.Text
                 </button>
             </h2>
@@ -36,7 +48,6 @@
                         </div>
                     </div>
                     <div id="@item.Id"></div>
-
                 </div>
             </div>
         </div>
@@ -44,4 +55,7 @@
 </div>
 
 <script src="~/javascripts/adminpage/question/_questiontuluanlist.js"></script>
+
+
+
 

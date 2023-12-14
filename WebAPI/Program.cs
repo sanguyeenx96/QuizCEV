@@ -1,5 +1,8 @@
 ﻿using Application.Category;
 using Application.CauHoiTrinhTuThaoTac;
+using Application.CauHoiTrinhTuThaoTac.DiemChuY;
+using Application.CauHoiTrinhTuThaoTac.LoiTaiCongDoan;
+using Application.CauHoiTrinhTuThaoTac.LoiTaiCongDoan.DoiSach;
 using Application.CauHoiTuLuan;
 using Application.Dept;
 using Application.ExamResult;
@@ -20,7 +23,6 @@ using Microsoft.OpenApi.Models;
 using Utilities.Constants;
 
 var builder = WebApplication.CreateBuilder(args);
-
 
 //Cấu Hình Database và Identity:
 //Thêm dịch vụ DbContext để sử dụng Entity Framework Core với cơ sở dữ liệu SQL Server
@@ -43,7 +45,6 @@ builder.Services.Configure<IdentityOptions>(options => {
     options.Password.RequiredUniqueChars = 1; // Số ký tự riêng biệt
 });
 
-
 //Dependency Injection:
 //Đăng ký các dịch vụ ứng dụng (Category, Question, CauHoiTuLuan, CauHoiTrinhTuThaoTac, ExamResult, LogExam, Users).
 builder.Services.AddTransient<ICategoryService, CategoryService>();
@@ -62,6 +63,9 @@ builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddTransient<ILogExamTrinhtuthaotacService, LogExamTrinhtuthaotacService>();
 builder.Services.AddScoped<ISettingService, SettingSevice>();
 
+builder.Services.AddTransient<IDiemChuYService, DiemChuYService>();
+builder.Services.AddTransient<ILoiTaiCongDoanService, LoiTaiCongDoanService>();
+builder.Services.AddTransient<IDoiSachService, DoiSachService>();
 
 
 builder.Services.AddControllers();
@@ -156,6 +160,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Swagger eExam V1");
+});
 
 app.UseHttpsRedirection(); //Middleware này chuyển hướng các yêu cầu HTTP sang HTTPS, đảm bảo rằng các yêu cầu được thực hiện qua kênh an toàn.
 

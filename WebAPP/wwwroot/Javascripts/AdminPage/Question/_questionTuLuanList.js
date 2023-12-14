@@ -44,6 +44,38 @@ $(document).ready(function () {
                                 $("#listQuestionTuLuan").html(result);
                             },
                         });
+                        $.ajax({
+                            url: "GetTotalScore",
+                            type: "POST",
+                            data: {
+                                categoryId: intCategoryId,
+                            },
+                            success: function (result) {
+                                $("#countDiemso").html(result.result);
+                                if (result.result !== 10) {
+                                    $("#logoDiemdagan i").html('<i class="bi-x-circle-fill" style="color:red"></i>');
+                                } else {
+                                    $("#logoDiemdagan i").html('<i class="bi-check-circle-fill" style="color:green"></i>');
+                                }
+                            },
+                        });
+                        $.ajax({
+                            url: "GetCauHoiNullScore",
+                            type: "POST",
+                            data: {
+                                id: intCategoryId,
+                            },
+                            success: function (result) {
+                                $("#countChuaGan").html(result.sl);
+                                if (result.sl !== 0) {
+                                    $("#logoChuagandiem i").html('<i class="bi-x-circle-fill" style="color:red"></i>');
+
+                                } else {
+                                    $("#logoChuagandiem i").html('<i class="bi-check-circle-fill" style="color:green"></i>');
+
+                                }
+                            },
+                        });
                     }
                 },
             });

@@ -108,5 +108,36 @@ namespace WebAPI.Controllers
             var result = await _usersService.CheckPassWord(id,request);
             return Ok(result);
         }
+
+
+        [HttpPost("importexcel/{role}/{cellId}")]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> ImportExcel([FromForm] IFormFile file, string role, int cellId)
+        {
+            try
+            {
+                if (file == null || file.Length == 0)
+                {
+                    return BadRequest("Tệp Excel không được gửi.");
+                }
+                using (var fileStream = file.OpenReadStream())
+                {
+                    var danhsachuser = await _usersService.ReadExcelFile(fileStream);
+                    var result = await _usersService.ImportExcelFile(danhsachuser, role, cellId);
+                    if (result.IsSuccessed)
+                    {
+                        return Ok(result);
+                    }
+                    else
+                    {
+                        return BadRequest(result.Message);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Lỗi xử lý tệp Excel: " + ex.Message);
+            }
+        }
     }
 }

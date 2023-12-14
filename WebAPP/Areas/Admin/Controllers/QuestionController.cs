@@ -60,8 +60,17 @@ namespace WebAPP.Areas.Admin.Controllers
             return View();
         }
 
+        [HttpPost]
+        public async Task<IActionResult> GetCauHoiNullScore(int id)
+        {
+            var resultTN = await _questionApiClient.GetAllByCategory(id);
+            var nullScoreTN = resultTN.ResultObj.Where(x => (x.Score == null || x.Score == 0)).Count();
+            var resultTL = await _cauHoiTuLuanApiClient.GetAllByCategory(id);
+            var nullScoreTL = resultTL.ResultObj.Where(x => (x.Score == null || x.Score == 0)).Count();
+            int total = nullScoreTN + nullScoreTL;
+            return Json(new { success = true, sl = total });
+        }
 
-        //GET:
         [HttpPost]
         public async Task<IActionResult> GetCauHoiTracNghiemById(int id)
         {
@@ -123,7 +132,8 @@ namespace WebAPP.Areas.Admin.Controllers
             }
             return Json(new { success = true });
         }
-        [HttpPost]
+
+        [HttpPost] 
         public async Task<IActionResult> CreateManual(QuestionCreateRequest request)
         {
             var result = await _questionApiClient.Create(request);
@@ -133,6 +143,21 @@ namespace WebAPP.Areas.Admin.Controllers
             }
             return Json(new { success = true, message = result.Message });
         }
+
+
+        //IMPORT TRINH TU THAO TAC FROM EXCEL
+        [HttpPost]
+        public async Task<IActionResult> GetListQuestionTuLuanToSelect(int id)
+        {
+            var dschtl = await _cauHoiTuLuanApiClient.GetAllByCategory(id);
+            var result = dschtl.ResultObj.Select(x => new SelectListItem()
+            {
+                Text = x.Text,
+                Value = x.Id.ToString()
+            });
+            return Json(result);
+        }
+
         [HttpPost]
         [Consumes("multipart/form-data")]
         public async Task<IActionResult> ImportExcel([FromForm] IFormFile file, int categoryId)
@@ -147,6 +172,22 @@ namespace WebAPP.Areas.Admin.Controllers
                 return Json(new { success = false, message = result.Message });
             }
         }
+
+        [HttpPost]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> ImportExcelTTTT([FromForm] IFormFile file, int cauhoituluanId)
+        {
+            using (var fileStream = file.OpenReadStream())
+            {
+                var result = await _cauHoiTrinhTuThaoTacApiClient.ImportExcel(fileStream, cauhoituluanId);
+                if (result.IsSuccessed)
+                {
+                    return Json(new { success = true, data = result.ResultObj });
+                }
+                return Json(new { success = false, message = result.Message });
+            }
+        }
+
         [HttpPost]
         public async Task<IActionResult> CreateNoiDungTrinhTuThaoTac(CauHoiTrinhTuThaoTacCreateRequest request)
         {
@@ -246,12 +287,12 @@ namespace WebAPP.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> DeleteCauHoiTrinhTuThaoTac(Guid id, CauHoiTrinhTuThaoTacDeleteRequest request)
         {
-            var result = await _cauHoiTrinhTuThaoTacApiClient.Delete(id,request);
+            var result = await _cauHoiTrinhTuThaoTacApiClient.Delete(id, request);
             if (!result.IsSuccessed)
             {
                 return Json(new { success = false });
             }
             return Json(new { success = true });
-        }      
+        }
     }
 }
