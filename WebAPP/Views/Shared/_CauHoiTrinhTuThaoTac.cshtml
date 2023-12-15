@@ -4,8 +4,8 @@
     var randomid = GetHashCode();
 }
 
-<table id="@randomid" class="table table-dark table-hover " style="width:100%">
-    <thead style="vertical-align:middle;font-size:small">
+<table id="@randomid" class="table table-dark table-hover table-striped" style="width:100%;border-bottom:10px">
+    <thead class="bg-secondary" style="vertical-align:middle;font-size:small">
         <tr>
             <th class="col-2" style="text-align:center">
                 Thứ tự
@@ -13,88 +13,167 @@
             <th hidden>
                 Id
             </th>
-            <th class="col-8" style="text-align:center">
-                Nội dung 
+            <th class="col-10" style="text-align:center">
+                Nội dung
             </th>
-            <th class="col-1" style="text-align:center">
-            </th>
+
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
             <tr style="text-align:center;vertical-align:middle">
-                <td>
-                    <span class="badge text-bg-light">@item.ThuTu</span>
+                <td style="font-size: xxx-large;">
+                    @item.ThuTu
                 </td>
                 <td hidden>
                     @item.Id
                 </td>
                 <td style="text-align:start">
-                    <table class="table table-secondary table-bordered" style="font-size:small;vertical-align:middle">
+                    <table class="table table-secondary table-bordered mt-3" style="font-size:small;vertical-align:middle;margin-bottom: 5px;">
                         <tbody>
                             <tr>
                                 <td class="col-2" style="vertical-align:middle;font-size:x-small">
-                                    <i class="bi-dot"></i>
+                                    <i class="bi-1-circle-fill"></i>
                                     Nội dung thao tác
                                 </td>
                                 <td>
                                     @item.Text
-                                </td>  
-                                <td class="col-2">
-                                    <btn class="btn btn-sm btn-secondary btnSuaCauHoiTrinhTuThaoTac w-100" data-abc="@item.CauHoiTuLuanId" data-id="@item.Id" data-noidungcauhoi="@item.Text">
-                                        <i class="bi-pencil"> </i>
-                                        Sửa
-                                    </btn>
+                                </td>
+                                <td class="col-1" style="text-align:end">
+                                    <div class="btn-group" style=" white-space:nowrap;width:140px">
+                                        <btn class="btn btn-sm btn-secondary btnSuaCauHoiTrinhTuThaoTac w-100" data-abc="@item.CauHoiTuLuanId" data-id="@item.Id" data-noidungcauhoi="@item.Text">
+                                            <i class="bi-pencil"></i>
+                                            Sửa
+                                        </btn>
+                                        <btn class="btn btn-sm btn-outline-danger  btnXoaCauHoiTrinhTuThaoTac w-100" data-abc="@item.CauHoiTuLuanId" data-id="@item.Id" data-noidungcauhoi="@item.Text">
+                                            <i class="bi-trash"> </i>
+                                            Xoá
+                                        </btn>
+                                    </div>
                                 </td>
                             </tr>
                             <tr>
                                 <td style="vertical-align:middle;font-size:x-small">
-                                    <i class="bi-dot"></i>
+                                    <i class="bi-2-circle-fill"></i>
                                     Điểm chú ý
                                 </td>
                                 <td>
-                                    @item.Text
+                                    @if (item.diemChuYs.Any())
+                                    {
+                                        foreach (var dcy in item.diemChuYs.ToList())
+                                        {
+                                            <span style="font-size:smaller" class="badge text-bg-warning">  @dcy.Text</span>
+                                        }
+                                    }
                                 </td>
-                                <td></td>
+                                <td>
+                                    <div class="btn-group" style=" white-space:nowrap;width:140px">
+                                        <btn class="btn btn-sm btn-secondary btnThemDiemChuY w-100" data-abc="@item.CauHoiTuLuanId" data-cauhoittttId="@item.Id">
+                                            <i class="bi-plus"></i>
+                                            Thêm
+                                        </btn>
+                                        <btn class="btn btn-sm btn-secondary btnSuaDiemChuY w-100" data-id="@item.Id">
+                                            <i class="bi-pencil"></i>
+                                            Sửa
+                                        </btn>
+                                    </div>
+                                </td>
                             </tr>
+                        </tbody>
+                    </table>
+
+                    <table class="table table-secondary table-bordered" style="font-size:small;vertical-align:middle">
+                        <thead>
                             <tr>
-                                <td style="vertical-align:middle;font-size:x-small">
-                                    <i class="bi-dot"></i>
+                                <td class="col-5" style="text-align:center;font-size:x-small">
+                                    <i class="bi-3-circle-fill"></i>
                                     Lỗi tại công đoạn
                                 </td>
-                                <td>
-                                    @item.Text
-                                </td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td style="vertical-align:middle;font-size:x-small">
-                                    <i class="bi-dot"></i>
+                                <td class="col-6" style="text-align:center;font-size:x-small">
+                                    <i class="bi-4-circle-fill"></i>
                                     Đối sách
                                 </td>
-                                <td>
-                                    @item.Text
+                                <td class="col-1"></td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (item.loiTaiCongDoans.Any())
+                            {
+                                foreach (var ltcd in item.loiTaiCongDoans.ToList())
+                                {
+                                    <tr>
+                                        <td>
+                                            @ltcd.Text
+                                        </td>
+                                        <td>
+                                            @if (ltcd.doiSaches.Any())
+                                            {
+                                                foreach (var ds in ltcd.doiSaches.ToList())
+                                                {
+                                                    <span style="font-size:smaller" class="badge text-bg-primary">@ds.Text</span>
+                                                }
+                                            }
+                                        </td>
+                                        <td>
+                                            <div class="btn-group" style=" white-space:nowrap;width:140px">
+                                                <btn class="btn btn-sm btn-secondary btnSuaLoiDoiSach w-100" data-abc="@item.CauHoiTuLuanId" data-id="@ltcd.Id" data-noidungcauhoi="@item.Text">
+                                                    <i class="bi-pencil"></i>
+                                                    Sửa
+                                                </btn>
+                                                <btn class="btn btn-sm btn-outline-danger  btnXoaCauHoiTrinhTuThaoTac w-100" data-abc="@item.CauHoiTuLuanId" data-id="@item.Id" data-noidungcauhoi="@item.Text">
+                                                    <i class="bi-trash"> </i>
+                                                    Xoá
+                                                </btn>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            <tr>
+                                <td style="text-align:center">
+                                    <btn style="width:180px" class="btn btn-sm btn-secondary btnThemLoiCongDoan" data-abc="@item.CauHoiTuLuanId" data-cauhoittttId="@item.Id">
+                                        <i class="bi-plus"></i>
+                                        Thêm lỗi tại công đoạn
+                                    </btn>
+                                </td>
+                                <td style="text-align:center">
+                                    <btn style="width:180px" class="btn btn-sm btn-secondary btnThemDoiSachLoi" data-abc="@item.CauHoiTuLuanId" data-cauhoittttId="@item.Id">
+                                        <i class="bi-plus"></i>
+                                        Thêm đối sách
+                                    </btn>
                                 </td>
                                 <td></td>
                             </tr>
                         </tbody>
                     </table>
-
-                    
-                </td>
-                <td>
-                    <div class="btn-group" style=" white-space:nowrap;">
-                        <btn class="btn btn-danger  btnXoaCauHoiTrinhTuThaoTac w-100" data-abc="@item.CauHoiTuLuanId" data-id="@item.Id" data-noidungcauhoi="@item.Text">
-                            <i class="bi-trash"> </i>
-                            Xoá
-                        </btn>
-                    </div>
                 </td>
             </tr>
         }
     </tbody>
 </table>
+<div class="modal fade" id="modelEditDCY" data-coreui-modal="static" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div id="editDiemChuY"></div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modelCreateDoiSach" data-coreui-modal="static" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div id="createDoiSach"></div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modelSuaLoiDoiSach" data-coreui-modal="static" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div id="editLoiDoiSach"></div>
+        </div>
+    </div>
+</div>
+
 <script>
     $(document).ready(function () {
         var table = $("#@randomid").DataTable({
@@ -110,7 +189,7 @@
                     var rowData = table.row(i).data();
                     newOrder.push({ Id: rowData[1], ThuTu: rowData[0] });
                 }
-                var parsedNewOrder = newOrder.map(item => ({ Id: parseInt(item.Id), ThuTu: parseInt(item.ThuTu) }));
+                var parsedNewOrder = newOrder.map(item => ({ Id: item.Id, ThuTu: parseInt(item.ThuTu) }));
                 console.log(parsedNewOrder)
                 $.ajax({
                     url: 'UpdatePositions',
@@ -135,7 +214,7 @@
 
             const { value: text } = await Swal.fire({
                 input: "textarea",
-                inputLabel: "Sửa nội dung :",
+                inputLabel: "Sửa nội dung thao tác :",
                 inputValue: noidungcauhoi,
                 inputAttributes: {
                     "aria-label": "Type your message here",
@@ -191,8 +270,8 @@
             });
             swalWithBootstrapButtons
                 .fire({
-                    title: "Xoá câu hỏi?",
-                    text: "Dữ liệu liên quan tới câu hỏi sẽ bị xoá",
+                    title: "Xoá trình tự thao tác?",
+                    text: "Dữ liệu liên quan tới trình tự thao tác này sẽ bị xoá",
                     icon: "warning",
                     showCancelButton: true,
                     confirmButtonText: "Xác nhận",
@@ -245,6 +324,143 @@
                     }
                 });
         })
+
+        $(".btnThemDiemChuY").click(async function () {
+            var cauhoitrinhtuthaotacId = $(this).attr("data-cauhoittttId");
+            var cauhoituluanId = $(this).data("abc");
+            var intcauhoituluanId = parseInt(cauhoituluanId);
+            const { value: text } = await Swal.fire({
+                input: "textarea",
+                inputLabel: "Nhập nội dung điểm chú ý cần thêm :",
+                inputAttributes: {
+                    "aria-label": "Type your message here",
+                },
+                showCancelButton: true,
+                confirmButtonText: "Xác nhận",
+                cancelButtonText: "Huỷ bỏ",
+                reverseButtons: true,
+            });
+            if (text) {
+                $.ajax({
+                    type: "POST",
+                    url: "CreateDiemChuY",
+                    data: {
+                        cauhoitrinhtuthaotacId: cauhoitrinhtuthaotacId,
+                        Text: text,
+                    },
+                    success: function (result) {
+                        Swal.fire({
+                            icon: "success",
+                            title: "Thêm điểm chú ý thành công",
+                            showConfirmButton: false,
+                            timer: 1500,
+                        });
+
+                        $.ajax({
+                            url: "GetAllByCauHoiTuLuan",
+                            type: "POST",
+                            data: {
+                                id: intcauhoituluanId,
+                            },
+                            success: function (result) {
+                                $("#@randomid").html(result);
+                            },
+                        });
+                    },
+                });
+            }
+        });
+
+        $(".btnSuaDiemChuY").click(function () {
+            var id = $(this).attr("data-id");        
+            $.ajax({
+                url: "OpenModalEditDCY",
+                type: "POST",
+                data: {
+                    id: id,
+                },
+                success: function (result) {
+                    $("#editDiemChuY").html(result);
+                    $("#modelEditDCY").modal("show");
+                },
+            });
+        });
+
+        $(".btnThemLoiCongDoan").click(async function () {
+            var cauhoitrinhtuthaotacId = $(this).attr("data-cauhoittttId");
+            var cauhoituluanId = $(this).data("abc");
+            var intcauhoituluanId = parseInt(cauhoituluanId);
+            const { value: text } = await Swal.fire({
+                input: "textarea",
+                inputLabel: "Nhập nội dung lỗi tại công đoạn cần thêm :",
+                inputAttributes: {
+                    "aria-label": "Type your message here",
+                },
+                showCancelButton: true,
+                confirmButtonText: "Xác nhận",
+                cancelButtonText: "Huỷ bỏ",
+                reverseButtons: true,
+            });
+            if (text) {
+                $.ajax({
+                    type: "POST",
+                    url: "CreateLoiTaiCongDoan",
+                    data: {
+                        cauhoitrinhtuthaotacId: cauhoitrinhtuthaotacId,
+                        Text: text,
+                    },
+                    success: function (result) {
+                        Swal.fire({
+                            icon: "success",
+                            title: "Thêm điểm chú ý thành công",
+                            showConfirmButton: false,
+                            timer: 1500,
+                        });
+
+                        $.ajax({
+                            url: "GetAllByCauHoiTuLuan",
+                            type: "POST",
+                            data: {
+                                id: intcauhoituluanId,
+                            },
+                            success: function (result) {
+                                $("#@randomid").html(result);
+                            },
+                        });
+                    },
+                });
+            }
+        });
+
+        $(".btnThemDoiSachLoi").click(function(){
+            var id = $(this).attr("data-cauhoittttId");
+            $.ajax({
+                url: "OpenModalCreateDoiSach",
+                type: "POST",
+                data: {
+                    cauhoitrinhtuthaotacId: id,
+                },
+                success: function (result) {
+                    $("#createDoiSach").html(result);
+                    $("#modelCreateDoiSach").modal("show");
+                },
+            });
+        })
+
+        $(".btnSuaLoiDoiSach").click(function(){
+            var id = $(this).attr("data-id");
+            id = parseInt(id)
+            $.ajax({
+                url: "OpenModalEditLoiDoiSach",
+                type: "POST",
+                data: {
+                    loitaicongdoanId: id,
+                },
+                success: function (result) {
+                    $("#editLoiDoiSach").html(result);
+                    $("#modelSuaLoiDoiSach").modal("show");
+                },
+            });
+        })
     });
 </script>
-

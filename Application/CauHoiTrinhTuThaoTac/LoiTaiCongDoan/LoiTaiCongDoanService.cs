@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ViewModels.CauHoiTrinhTuThaoTac.DiemChuY;
 using ViewModels.CauHoiTrinhTuThaoTac.LoiTaiCongDoan;
+using ViewModels.CauHoiTrinhTuThaoTac.LoiTaiCongDoan.DoiSach;
 using ViewModels.Common;
 
 namespace Application.CauHoiTrinhTuThaoTac.LoiTaiCongDoan
@@ -57,6 +58,34 @@ namespace Application.CauHoiTrinhTuThaoTac.LoiTaiCongDoan
                 return new ApiErrorResult<List<LoiTaiCongDoanVm>> { Message = "Không tìm thấy dữ liệu" };
             return new ApiSuccessResult<List<LoiTaiCongDoanVm>>(result);
 
+        }
+
+        public async Task<ApiResult<LoiTaiCongDoanVm>> GetById(int id)
+        {
+            var result = await _context.LoiTaiCongDoans
+                                .Include(x=>x.LoiTaiCongDoanDoiSachs)
+                               .Where(x => x.Id == id)
+                               .FirstOrDefaultAsync();
+
+            if (result == null)
+                return new ApiErrorResult<LoiTaiCongDoanVm> { Message = "Không tìm thấy dữ liệu" };
+
+            var ltcd = new LoiTaiCongDoanVm
+            {
+                Id = result.Id,
+                Text = result.Text,
+                CauhoitrinhtuthaotacId = result.CauhoitrinhtuthaotacId,
+                doiSaches = result.LoiTaiCongDoanDoiSachs != null
+                                        ? result.LoiTaiCongDoanDoiSachs.Select(d => new DoiSachVm
+                                        {
+                                            Text = d.Text,
+                                            LoiTaiCongDoanId = d.LoiTaiCongDoanId,
+                                            Id = d.Id
+                                        }).ToList()
+                                        : new List<DoiSachVm>()
+            };
+
+            return new ApiSuccessResult<LoiTaiCongDoanVm>(ltcd);
         }
 
         public async Task<ApiResult<bool>> Update(int id, LoiTaiCongDoanUpdateRequest request)

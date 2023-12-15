@@ -39,7 +39,7 @@ namespace WebAPI.Controllers
             return Ok(result);
         }
 
-        [HttpPatch("Delete/{id}")]
+        [HttpDelete("Delete/{id}")]
         public async Task<IActionResult> Delete(int id)
         {
             var result = await _diemChuYService.Delete(id);

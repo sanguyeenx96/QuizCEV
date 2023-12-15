@@ -27,6 +27,13 @@ namespace WebAPI.Controllers
             return Ok(result);
         }
 
+        [HttpGet("GetById/{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            var result = await _loiTaiCongDoanService.GetById(id);
+            return Ok(result);
+        }
+
         [HttpPost("Create/{cauhoitrinhtuthaotacId}")]
         public async Task<IActionResult> Create(Guid cauhoitrinhtuthaotacId, LoiTaiCongDoanCreateRequest request)
         {
@@ -41,7 +48,7 @@ namespace WebAPI.Controllers
             return Ok(result);
         }
 
-        [HttpPatch("Delete/{id}")]
+        [HttpDelete("Delete/{id}")]
         public async Task<IActionResult> Delete(int id)
         {
             var result = await _loiTaiCongDoanService.Delete(id);

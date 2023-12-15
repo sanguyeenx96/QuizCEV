@@ -34,6 +34,10 @@ builder.Services.AddTransient<ILogExamApiClient, LogExamApiClient>();
 builder.Services.AddTransient<ILogExamTrinhtuthaotacApiClient, LogExamTrinhtuthaotacApiClient>();
 builder.Services.AddScoped<ISettingApiClient, SettingApiClient>();
 
+builder.Services.AddTransient<IDiemChuYApiClient, DiemChuYApiClient>();
+builder.Services.AddTransient<ILoiTaiCongDoanApiClient, LoiTaiCongDoanApiClient>();
+builder.Services.AddTransient<IDoiSachApiClient, DoiSachApiClient>();
+
 
 var app = builder.Build();
 // Configure the HTTP request pipeline.
