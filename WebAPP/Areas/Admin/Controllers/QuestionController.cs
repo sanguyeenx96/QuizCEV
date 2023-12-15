@@ -1,7 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using ViewModels.CauHoiTrinhTuThaoTac.DiemChuY;
+using ViewModels.CauHoiTrinhTuThaoTac.LoiTaiCongDoan;
+using ViewModels.CauHoiTrinhTuThaoTac.LoiTaiCongDoan.DoiSach;
 using ViewModels.CauHoiTrinhTuThaoTac.Request;
+using ViewModels.CauHoiTrinhTuThaoTac.Response;
 using ViewModels.CauHoiTuLuan.Request;
 using ViewModels.Question.Request;
 using WebAPP.Services;
@@ -16,13 +20,25 @@ namespace WebAPP.Areas.Admin.Controllers
         private readonly IQuestionApiClient _questionApiClient;
         private readonly ICauHoiTuLuanApiClient _cauHoiTuLuanApiClient;
         private readonly ICauHoiTrinhTuThaoTacApiClient _cauHoiTrinhTuThaoTacApiClient;
-        public QuestionController(ICategoryApiClient categoryApiClient, IQuestionApiClient questionApiClient, ICauHoiTuLuanApiClient cauHoiTuLuanApiClient, ICauHoiTrinhTuThaoTacApiClient cauHoiTrinhTuThaoTacApiClient)
+
+        private readonly IDiemChuYApiClient _diemChuYApiClient;
+        private readonly ILoiTaiCongDoanApiClient _loiTaiCongDoanApiClient;
+        private readonly IDoiSachApiClient _doiSachApiClient;
+
+        public QuestionController(ICategoryApiClient categoryApiClient, IQuestionApiClient questionApiClient,
+            ICauHoiTuLuanApiClient cauHoiTuLuanApiClient, ICauHoiTrinhTuThaoTacApiClient cauHoiTrinhTuThaoTacApiClient,
+            IDiemChuYApiClient diemChuYApiClient, ILoiTaiCongDoanApiClient loiTaiCongDoanApiClient,
+            IDoiSachApiClient doiSachApiClient)
         {
             _categoryApiClient = categoryApiClient;
             _questionApiClient = questionApiClient;
             _cauHoiTuLuanApiClient = cauHoiTuLuanApiClient;
             _cauHoiTrinhTuThaoTacApiClient = cauHoiTrinhTuThaoTacApiClient;
+            _diemChuYApiClient = diemChuYApiClient;
+            _loiTaiCongDoanApiClient = loiTaiCongDoanApiClient;
+            _doiSachApiClient = doiSachApiClient;
         }
+
 
         //PAGE:
         public async Task<IActionResult> List()
@@ -288,6 +304,106 @@ namespace WebAPP.Areas.Admin.Controllers
         public async Task<IActionResult> DeleteCauHoiTrinhTuThaoTac(Guid id, CauHoiTrinhTuThaoTacDeleteRequest request)
         {
             var result = await _cauHoiTrinhTuThaoTacApiClient.Delete(id, request);
+            if (!result.IsSuccessed)
+            {
+                return Json(new { success = false });
+            }
+            return Json(new { success = true });
+        }
+
+
+        //Điểm chú ý
+        [HttpPost]
+        public async Task<IActionResult> CreateDiemChuY(Guid cauhoitrinhtuthaotacId, DiemChuYCreateRequest request)
+        {
+            var result = await _diemChuYApiClient.Create(cauhoitrinhtuthaotacId, request);
+            if (!result.IsSuccessed)
+            {
+                return Json(new { success = false });
+            }
+            return Json(new { success = true });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> OpenModalEditDCY(Guid id)
+        {
+            var result = await _diemChuYApiClient.GetAllByCauHoiTrinhTuThaoTacId(id);
+            return PartialView("_editDiemChuY", result.ResultObj);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditDCY(int id, DiemChuYUpdateRequest request)
+        {
+            var result = await _diemChuYApiClient.Update(id,request);
+            if (!result.IsSuccessed)
+            {
+                return Json(new { success = false });
+            }
+            return Json(new { success = true });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteDCY(int id)
+        {
+            var result = await _diemChuYApiClient.Delete(id);
+            if (!result.IsSuccessed)
+            {
+                return Json(new { success = false });
+            }
+            return Json(new { success = true });
+        }
+
+        //Lỗi tại công đoạn
+        [HttpPost]
+        public async Task<IActionResult> CreateLoiTaiCongDoan(Guid cauhoitrinhtuthaotacId, LoiTaiCongDoanCreateRequest request)
+        {
+            var result = await _loiTaiCongDoanApiClient.Create(cauhoitrinhtuthaotacId, request);
+            if (!result.IsSuccessed)
+            {
+                return Json(new { success = false });
+            }
+            return Json(new { success = true });
+        }
+
+        //Đối sách
+        [HttpPost]
+        public async Task<IActionResult> OpenModalCreateDoiSach(Guid cauhoitrinhtuthaotacId)
+        {
+            var result = await _loiTaiCongDoanApiClient.GetAllByCauHoiTrinhTuThaoTacId(cauhoitrinhtuthaotacId);
+            return PartialView("_createDoiSach", result.ResultObj);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateDoiSach(int loitaicongdoanId, DoiSachCreateRequest request)
+        {
+            var result = await _doiSachApiClient.Create(loitaicongdoanId, request);
+            if (!result.IsSuccessed)
+            {
+                return Json(new { success = false });
+            }
+            return Json(new { success = true });
+        }
+        [HttpPost]
+        public async Task<IActionResult> OpenModalEditLoiDoiSach(int loitaicongdoanId)
+        {
+            var result = await _loiTaiCongDoanApiClient.GetById(loitaicongdoanId);
+            return PartialView("_editLoiDoiSach", result.ResultObj);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditDoiSach(int id, DoiSachUpdateRequest request)
+        {
+            var result = await _doiSachApiClient.Update(id, request);
+            if (!result.IsSuccessed)
+            {
+                return Json(new { success = false });
+            }
+            return Json(new { success = true });
+        }
+        [HttpPost]
+        public async Task<IActionResult> EditLTCD(int id, LoiTaiCongDoanUpdateRequest request)
+        {
+            var result = await _loiTaiCongDoanApiClient.Update(id, request);
             if (!result.IsSuccessed)
             {
                 return Json(new { success = false });

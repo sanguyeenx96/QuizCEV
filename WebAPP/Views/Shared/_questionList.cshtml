@@ -9,16 +9,16 @@
                     @{
                         if (item.Score != null && item.Score != 0)
                         {
-                                <btn class="btn btn-light btn-sm" style="min-width:80px; margin-right:10px;font-weight: 600">
-                                    @item.Score<small> điểm</small>
-                                </btn>                            
+                                    <btn class="btn btn-dark btn-sm" style="min-width:80px; margin-right:10px;font-weight: 600">
+                                        @item.Score<small> điểm</small>
+                                    </btn>                            
                         }
                         else
                         {
-                                <btn class="btn btn-warning btn-sm" style="min-width:80px; margin-right:10px;font-weight: 600">
-                                    <i class="bi-exclamation-triangle-fill"></i>
-                                    <small>Chưa gán điểm</small>
-                                </btn>
+                                    <btn class="btn btn-warning btn-sm" style="min-width:80px; margin-right:10px;font-weight: 600">
+                                        <i class="bi-exclamation-triangle-fill"></i>
+                                        <small>Chưa gán điểm</small>
+                                    </btn>
                         }
                     }                   
                     @item.Text
@@ -28,25 +28,25 @@
                 <div class="accordion-body">
                     <div style="text-align:start;margin-bottom:5px">
                         <div class="btn-group" style=" white-space:nowrap;">
-                            <btn class="btn btn-secondary  btnSuaDiem" data-abc="@item.CategoryId" data-id="@item.Id" data-this-score="@(item.Score ?? 0) ">
+                            <btn class="btn btn-sm  btn-secondary  btnSuaDiem" data-abc="@item.CategoryId" data-id="@item.Id" data-this-score="@(item.Score ?? 0) ">
                                 <i class="bi-plus-slash-minus"> </i>
                                 Sửa điểm
                             </btn>
-                            <btn class="btn btn-secondary  btnSuaCauHoi" data-id="@item.Id">
+                            <btn class="btn btn-sm  btn-secondary  btnSuaCauHoi" data-id="@item.Id">
                                 <i class="bi-pencil"> </i>
                                 Sửa câu hỏi
                             </btn>
-                            <btn class="btn btn-danger  btnXoaCauHoiTracNghiem" data-abc="@item.CategoryId" data-id="@item.Id">
+                            <btn class="btn btn-sm  btn-outline-danger  btnXoaCauHoiTracNghiem" data-abc="@item.CategoryId" data-id="@item.Id">
                                 <i class="bi-trash"> </i>
                                 Xoá
                             </btn>
                         </div>
                     </div>
-                    <table id="example" class=" table table-dark table-bordered table-hover" style="margin-bottom:auto">
+                    <table id="example" class=" table table-dark table-bordered table-hover" style="margin-bottom:auto;font-size:small">
                         <tbody>
                             <tr>
                                 <td class="col-sm-2" style="text-align:center">
-                                    A :
+                                    A 
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.QA)
@@ -54,7 +54,7 @@
                             </tr>
                             <tr>
                                 <td class="col-sm-2" style="text-align:center">
-                                    B :
+                                    B 
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.QB)
@@ -62,7 +62,7 @@
                             </tr>
                             <tr>
                                 <td class="col-sm-2" style="text-align:center">
-                                    C :
+                                    C 
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.QC)
@@ -70,7 +70,7 @@
                             </tr>
                             <tr>
                                 <td class="col-sm-2" style="text-align:center">
-                                    D :
+                                    D 
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.QD)
@@ -78,7 +78,7 @@
                             </tr>
                             <tr>
                                 <td class="col-sm-2" style="text-align:center">
-                                    Đáp án :
+                                    Đáp án 
                                 </td>
                                 <td>
                                     @(item.QCorrectAns.ToString().ToUpper())

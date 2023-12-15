@@ -73,6 +73,23 @@ namespace WebAPP.Services
             return JsonConvert.DeserializeObject<ApiErrorResult<List<LoiTaiCongDoanVm>>>(result);
         }
 
+        public async Task<ApiResult<LoiTaiCongDoanVm>> GetById(int id)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAdress"]);
+
+            var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
+
+            var response = await client.GetAsync($"/api/loitaicongdoan/GetById/{id}");
+            var result = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                return JsonConvert.DeserializeObject<ApiSuccessResult<LoiTaiCongDoanVm>>(result);
+            }
+            return JsonConvert.DeserializeObject<ApiErrorResult<LoiTaiCongDoanVm>>(result);
+        }
+
         public async Task<ApiResult<bool>> Update(int id, LoiTaiCongDoanUpdateRequest request)
         {
             var client = _httpClientFactory.CreateClient();

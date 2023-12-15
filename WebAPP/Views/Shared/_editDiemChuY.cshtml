@@ -1,0 +1,98 @@
+﻿@model List<ViewModels.CauHoiTrinhTuThaoTac.DiemChuY.DiemChuYVm>
+
+@{
+    // Tạo một danh sách SelectListItem từ danh sách ViewModel
+    var selectListItems = Model.Select(item => new SelectListItem
+            {
+                Text = item.Text,
+                Value = item.Id.ToString()  // Giả sử Id là trường chứa giá trị bạn muốn
+            }).ToList();
+}
+
+<div class="card">
+    <div class="card-body">
+        <div class="form-group mb-2">
+            <label class="form-label">Chọn điểm chú ý</label>
+            <select class="form-select form-select-lg " id="selectDCY" name="selectDCY" style="overflow: hidden;">
+                <option value="" selected disabled>Nhấn để chọn</option>
+                @foreach (var item in selectListItems)
+                {
+                    <option value="@item.Value">@item.Text</option>
+                }
+            </select>
+        </div>
+        <div class="form-group mb-2" id="noidung" hide>
+            <label class="form-label">Nội dung điểm chú ý</label>
+            <input id="textDCY" class="form-control" />
+        </div>
+    </div>
+    <div class="card-footer">
+        <button id="btnXoaDiemChuY" class="btn btn-outline-danger  " disabled="true">
+            <i class="bi-trash"></i>
+            Xoá điểm chú ý
+        </button>
+        <button id="btnSuaNoiDungDiemChuY" class="btn btn-secondary  " disabled="true">
+            <i class="bi-pencil"></i>
+            Sửa nội dung
+        </button>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#noidung").hide();
+        $("#selectDCY").on("change", function () {
+            $("#noidung").show();
+            $("#btnXoaDiemChuY").prop('disabled', false);
+            $("#btnSuaNoiDungDiemChuY").prop('disabled', false);
+
+
+            var idDCY = $("#selectDCY").val();
+            var textDCY = $("#selectDCY  option:selected ").text();
+            $("#textDCY").val(textDCY)
+        })
+        $("#btnXoaDiemChuY").click(function () {
+            var idDCY = $("#selectDCY").val();
+            idDCY = parseInt(idDCY)
+            $.ajax({
+                url: "DeleteDCY",
+                type: "POST",
+                data: {
+                    id: idDCY
+                },
+                success: function (result) {
+                    Swal.fire({
+                        icon: "success",
+                        title: "Xoá điểm chú ý thành công",
+                        showConfirmButton: false,
+                        timer: 1500,
+                    });
+                    $("#modelEditDCY").modal("hide");
+                },
+            });
+        })
+        $("#btnSuaNoiDungDiemChuY").click(function () {
+            var id = $("#selectDCY").val();
+            var text = $("#textDCY").val()
+            $.ajax({
+                url: "EditDCY",
+                type: "POST",
+                data: {
+                    id: id,
+                    text: text
+                },
+                success: function (result) {
+                    Swal.fire({
+                        icon: "success",
+                        title: "Sửa nội dung điểm chú ý thành công",
+                        showConfirmButton: false,
+                        timer: 1500,
+                    });
+                    $("#modelEditDCY").modal("hide");
+
+                },
+            });
+        })
+    })
+</script>
+

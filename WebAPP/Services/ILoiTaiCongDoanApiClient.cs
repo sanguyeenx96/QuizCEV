@@ -9,5 +9,7 @@ namespace WebAPP.Services
         Task<ApiResult<bool>> Create(Guid cauhoitrinhtuthaotacId, LoiTaiCongDoanCreateRequest request);
         Task<ApiResult<bool>> Update(int id, LoiTaiCongDoanUpdateRequest request);
         Task<ApiResult<bool>> Delete(int id);
+        Task<ApiResult<LoiTaiCongDoanVm>> GetById(int id);
+
     }
 }

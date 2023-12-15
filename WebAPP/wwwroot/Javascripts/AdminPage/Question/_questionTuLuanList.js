@@ -231,8 +231,8 @@ $(document).ready(function () {
         });
         swalWithBootstrapButtons
             .fire({
-                title: "Xoá câu hỏi?",
-                text: "Dữ liệu liên quan tới câu hỏi sẽ bị xoá",
+                title: "Xoá toàn bộ câu hỏi tự luận?",
+                text: "Toàn bộ dữ liệu liên quan tới câu hỏi sẽ bị xoá",
                 icon: "warning",
                 showCancelButton: true,
                 confirmButtonText: "Xác nhận",

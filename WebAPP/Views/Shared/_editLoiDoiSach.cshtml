@@ -1,0 +1,189 @@
+﻿@model ViewModels.CauHoiTrinhTuThaoTac.LoiTaiCongDoan.LoiTaiCongDoanVm
+
+@{
+    var selectListItems = Model.doiSaches.Select(item => new SelectListItem
+            {
+                Text = item.Text,
+                Value = item.Id.ToString()  // Giả sử Id là trường chứa giá trị bạn muốn
+            }).ToList();
+}
+
+<div class="card">
+    <div class="card-body">
+        <div class="form-group mb-2">
+            <label class="form-label">Nội dung lỗi</label>
+            <input id="noidungloi" class="form-control" value="@Model.Text" />
+        </div>
+        <div class="form-group mb-2">
+            <label class="form-label">Chọn đối sách cần sửa</label>
+            <select class="form-select form-select-lg " id="selectDS" name="selectDS" style="overflow: hidden;">
+                <option value="" selected disabled>Nhấn để chọn</option>
+                @foreach (var item in selectListItems)
+                {
+                    <option value="@item.Value">@item.Text</option>
+                }
+            </select>
+        </div>
+        <div class="form-group mb-2" id="noidung" hide>
+            <label class="form-label">Nội dung mới</label>
+            <input id="textDS" class="form-control" />
+        </div>
+    </div>
+    <div class="card-footer">
+        <button id="btnXacNhan" class="btn btn-success" data-ltcdId="@Model.Id">
+            <i class="bi-check"></i>
+            Xác nhận
+        </button>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#noidung").hide();
+        $("#selectDS").on("change", function () {
+            $("#noidung").show();
+
+            var idDS = $("#selectDS").val();
+            var textDS = $("#selectDS  option:selected ").text();
+            $("#textDS").val(textDS)
+        })
+        $("#btnXacNhan").click(function () {
+            var noidungloi = $("#noidungloi").val();
+
+            var newTextDS = $("#textDS").val();
+            var ltcdId = $(this).attr("data-ltcdId");
+            ltcdId = parseInt(ltcdId);
+            var idDS = $("#selectDS").val();
+            idDS = parseInt(idDS);
+            $.ajax({
+                url: "EditDoiSach",
+                type: "POST",
+                data: {
+                    id: idDS,
+                    text: newTextDS
+                },
+                success: function (result) {
+                    $.ajax({
+                        url: "EditLTCD",
+                        type: "POST",
+                        data: {
+                            id: ltcdId,
+                            text: noidungloi
+                        },
+                        success: function (result) {
+                            Swal.fire({
+                                icon: "success",
+                                title: "Sửa nội dung đối sách thành công",
+                                showConfirmButton: false,
+                                timer: 1500,
+                            });
+                            $("#modelSuaLoiDoiSach").modal("hide");
+                        },
+                    });                  
+                },
+            });
+        })
+    })
+</script>
+
+
+@*
+
+
+<div class="card">
+    <div class="card-body">
+        <div class="form-group mb-2">
+            <label class="form-label">Nội dung lỗi</label>
+            <input class="form-control" value="@Model.Text" />
+        </div>
+        <div class="form-group mb-2">
+            <label class="form-label">Nội dung các đối sách</label>
+            <table class="table table-bordered">
+                <tbody style="vertical-align:middle">
+                    @foreach (var item in Model.doiSaches.ToList())
+                    {
+                        <tr>
+                            <td class="col-10">
+                                @item.Text
+                            </td>
+                            <td class="col-2">
+                                <div class="btn-group" style=" white-space:nowrap;width:140px">
+                                    <btn class="btn btn-sm btn-secondary btnSuaDoiSach w-100" data-id="@item.Id" data-noidungcu="@item.Text" data-ltcdId="@Model.Id">
+                                        <i class="bi-pencil"></i>
+                                        Sửa
+                                    </btn>
+                                    <btn class="btn btn-sm btn-outline-danger btnXoaDoiSach w-100">
+                                        <i class="bi-trash"> </i>
+                                        Xoá
+                                    </btn>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="card-footer">
+        <button id="btnXacNhan" class="btn btn-success" disabled="true">
+            <i class="bi-check"></i>
+            Xác nhận
+        </button>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $(".btnSuaDoiSach").click( async function(){
+            var noidungcu = $(this).attr("data-noidungcu");
+            var ltcdId = $(this).attr("data-ltcdId");
+
+            var id = $(this).attr("data-id");
+            id = parseInt(id);
+
+            const { value: text } = await Swal.fire({
+                input: "textarea",
+                inputLabel: "Sửa nội dung đối sách :",
+                inputValue: noidungcu,
+                inputAttributes: {
+                    "aria-label": "Type your message here",
+                },
+                showCancelButton: true,
+                confirmButtonText: "Xác nhận",
+                cancelButtonText: "Huỷ bỏ",
+                reverseButtons: true,
+            });
+            if (text) {
+                $.ajax({
+                    url: "EditDoiSach",
+                    type: "POST",
+                    data: {
+                        id: id,
+                        text: text
+                    },
+                    success: function (result) {
+                        Swal.fire({
+                            icon: "success",
+                            title: "Sửa nội dung đối sách thành công",
+                            showConfirmButton: false,
+                            timer: 1500,
+                        });
+
+                        $.ajax({
+                            url: "OpenModalEditLoiDoiSach",
+                            type: "POST",
+                            data: {
+                                loitaicongdoanId: ltcdId,
+                            },
+                            success: function (result) {
+                                $("#editLoiDoiSach").html(result);
+                            },
+                        });
+                    },
+                });
+            }
+        })
+    })
+</script>
+
+*@

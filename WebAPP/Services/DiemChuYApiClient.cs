@@ -54,7 +54,6 @@ namespace WebAPP.Services
                 return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
             }
             return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
-
         }
 
         public async Task<ApiResult<List<DiemChuYVm>>> GetAllByCauHoiTrinhTuThaoTacId(Guid id)
@@ -72,7 +71,6 @@ namespace WebAPP.Services
                 return JsonConvert.DeserializeObject<ApiSuccessResult<List<DiemChuYVm>>>(result);
             }
             return JsonConvert.DeserializeObject<ApiErrorResult<List<DiemChuYVm>>>(result);
-
         }
 
         public async Task<ApiResult<bool>> Update(int id, DiemChuYUpdateRequest request)
@@ -92,7 +90,6 @@ namespace WebAPP.Services
                 return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
             }
             return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
-
         }
     }
 }

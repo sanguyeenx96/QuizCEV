@@ -1,0 +1,68 @@
+﻿@model List<ViewModels.CauHoiTrinhTuThaoTac.LoiTaiCongDoan.LoiTaiCongDoanVm>
+
+@{
+    // Tạo một danh sách SelectListItem từ danh sách ViewModel
+    var selectListItems = Model.Select(item => new SelectListItem
+            {
+                Text = item.Text,
+                Value = item.Id.ToString()  // Giả sử Id là trường chứa giá trị bạn muốn
+            }).ToList();
+}
+<div class="card">
+    <div class="card-body">
+        <div class="form-group mb-2">
+            <label class="form-label">Chọn lỗi tại công đoạn</label>
+            <select class="form-select form-select-lg " id="selectLTCD" name="selectLTCD" style="overflow: hidden;">
+                <option value="" selected disabled>Nhấn để chọn</option>
+                @foreach (var item in selectListItems)
+                {
+                    <option value="@item.Value">@item.Text</option>
+                }
+            </select>
+        </div>
+        <div class="form-group mb-2" id="noidung" hide>
+            <label class="form-label">Nhập nội dung đối sách cần thêm</label>
+            <input id="textDS" class="form-control" />
+        </div>
+    </div>
+    <div class="card-footer">
+        <button id="btnXacNhanThemDoiSach" class="btn btn-success" disabled="true">
+            <i class="bi-check"></i>
+            Xác nhận thêm
+        </button>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $("#noidung").hide();
+        $("#selectLTCD").on("change", function () {
+            $("#noidung").show();
+            $("#btnXacNhanThemDoiSach").prop('disabled', false);
+            var idLTCD = $("#selectLTCD").val();
+        })
+        $("#btnXacNhanThemDoiSach").click(function () {
+            var idLTCD = $("#selectLTCD").val();
+            idLTCD = parseInt(idLTCD);
+            var text = $("#textDS").val();
+
+            $.ajax({
+                url: "CreateDoiSach",
+                type: "POST",
+                data: {
+                    loitaicongdoanId: idLTCD,
+                    text: text
+                },
+                success: function (result) {
+                    Swal.fire({
+                        icon: "success",
+                        title: "Thêm đối sách thành công",
+                        showConfirmButton: false,
+                        timer: 1500,
+                    });
+                    $("#modelCreateDoiSach").modal("hide");
+                },
+            });
+        })
+    })
+</script>
+
