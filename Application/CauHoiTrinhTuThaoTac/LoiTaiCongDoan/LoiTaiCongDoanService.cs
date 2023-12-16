@@ -41,6 +41,13 @@ namespace Application.CauHoiTrinhTuThaoTac.LoiTaiCongDoan
             var loitaicongdoan = await _context.LoiTaiCongDoans.FindAsync(id);
             if (loitaicongdoan == null)
                 return new ApiErrorResult<bool> { Message = "Không tìm thấy dữ liệu" };
+
+            var doisachs = await _context.LoiTaiCongDoanDoiSaches.Where(x => x.LoiTaiCongDoanId == loitaicongdoan.Id).ToListAsync();
+            foreach (var ds in doisachs)
+            {
+                _context.Remove(ds);
+            }
+
             _context.Remove(loitaicongdoan);
             await _context.SaveChangesAsync();
             return new ApiSuccessResult<bool>();

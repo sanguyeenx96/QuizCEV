@@ -16,7 +16,9 @@
             <th class="col-10" style="text-align:center">
                 Nội dung
             </th>
+            <th>
 
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -37,7 +39,7 @@
                                     <i class="bi-1-circle-fill"></i>
                                     Nội dung thao tác
                                 </td>
-                                <td>
+                                <td class="bg-white">
                                     @item.Text
                                 </td>
                                 <td class="col-1" style="text-align:end">
@@ -58,7 +60,7 @@
                                     <i class="bi-2-circle-fill"></i>
                                     Điểm chú ý
                                 </td>
-                                <td>
+                                <td class="bg-white">
                                     @if (item.diemChuYs.Any())
                                     {
                                         foreach (var dcy in item.diemChuYs.ToList())
@@ -103,10 +105,10 @@
                                 foreach (var ltcd in item.loiTaiCongDoans.ToList())
                                 {
                                     <tr>
-                                        <td>
+                                        <td class="bg-white">
                                             @ltcd.Text
                                         </td>
-                                        <td>
+                                        <td class="bg-white">
                                             @if (ltcd.doiSaches.Any())
                                             {
                                                 foreach (var ds in ltcd.doiSaches.ToList())
@@ -121,7 +123,7 @@
                                                     <i class="bi-pencil"></i>
                                                     Sửa
                                                 </btn>
-                                                <btn class="btn btn-sm btn-outline-danger  btnXoaCauHoiTrinhTuThaoTac w-100" data-abc="@item.CauHoiTuLuanId" data-id="@item.Id" data-noidungcauhoi="@item.Text">
+                                                <btn class="btn btn-sm btn-outline-danger  btnXoaLoiTaiCongDoan w-100" data-abc="@item.CauHoiTuLuanId" data-id="@ltcd.Id">
                                                     <i class="bi-trash"> </i>
                                                     Xoá
                                                 </btn>
@@ -143,10 +145,22 @@
                                         Thêm đối sách
                                     </btn>
                                 </td>
-                                <td></td>
+                                <td style="text-align:center">
+                                    @*  
+                                        <btn style="width:140px" class="btn btn-sm btn-outline-success btnRefresh" data-abc="@item.CauHoiTuLuanId">
+                                            <i class="bi-arrow-clockwise"></i>
+                                            Tải lại dữ liệu
+                                        </btn>
+                                *@
+                                </td>
                             </tr>
                         </tbody>
                     </table>
+                </td>
+                <td>
+                    <btn class="btn btn-sm btn-success btnRefresh" data-abc="@item.CauHoiTuLuanId">
+                        <i class="bi-arrow-clockwise"></i>
+                    </btn>
                 </td>
             </tr>
         }
@@ -372,7 +386,7 @@
         });
 
         $(".btnSuaDiemChuY").click(function () {
-            var id = $(this).attr("data-id");        
+            var id = $(this).attr("data-id");
             $.ajax({
                 url: "OpenModalEditDCY",
                 type: "POST",
@@ -432,7 +446,7 @@
             }
         });
 
-        $(".btnThemDoiSachLoi").click(function(){
+        $(".btnThemDoiSachLoi").click(function () {
             var id = $(this).attr("data-cauhoittttId");
             $.ajax({
                 url: "OpenModalCreateDoiSach",
@@ -447,7 +461,7 @@
             });
         })
 
-        $(".btnSuaLoiDoiSach").click(function(){
+        $(".btnSuaLoiDoiSach").click(function () {
             var id = $(this).attr("data-id");
             id = parseInt(id)
             $.ajax({
@@ -459,6 +473,92 @@
                 success: function (result) {
                     $("#editLoiDoiSach").html(result);
                     $("#modelSuaLoiDoiSach").modal("show");
+                },
+            });
+        })
+
+        $(".btnXoaLoiTaiCongDoan").click(async function () {
+            var id = $(this).data("id");
+            var id = parseInt(id);
+            var cauhoituluanId = $(this).data("abc");
+            var intcauhoituluanId = parseInt(cauhoituluanId);
+
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: "btn btn-success",
+                    cancelButton: "btn btn-danger",
+                },
+                buttonsStyling: true,
+            });
+            swalWithBootstrapButtons
+                .fire({
+                    title: "Xoá lỗi tại công đoạn?",
+                    text: "Dữ liệu liên quan tới lỗi tại công đoạn này sẽ bị xoá",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: "Xác nhận",
+                    cancelButtonText: "Huỷ bỏ",
+                    reverseButtons: true,
+                })
+                .then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: "DeleteLTCD",
+                            type: "POST",
+                            data: {
+                                id: id,
+                            },
+                            success: function (result) {
+                                if (result.success) {
+                                    Swal.fire({
+                                        icon: "success",
+                                        title: "Xoá lỗi tại công đoạn thành công",
+                                        showConfirmButton: false,
+                                        timer: 1500,
+                                    });
+                                    $.ajax({
+                                        url: "GetAllByCauHoiTuLuan",
+                                        type: "POST",
+                                        data: {
+                                            id: intcauhoituluanId,
+                                        },
+                                        success: function (result) {
+                                            $("#@randomid").html(result);
+                                        },
+                                    });
+                                } else {
+                                    Swal.fire(
+                                        "Lỗi máy chủ",
+                                        "Thao tác đã được huỷ bỏ!",
+                                        "error"
+                                    );
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                                Swal.fire(
+                                    "Lỗi máy chủ",
+                                    "Thao tác đã được huỷ bỏ!",
+                                    "error"
+                                );
+                            },
+                        });
+                    }
+                });
+        })
+
+        $(".btnRefresh").click(function () {
+            var cauhoituluanId = $(this).data("abc");
+            var intcauhoituluanId = parseInt(cauhoituluanId);
+            $.ajax({
+                url: "GetAllByCauHoiTuLuan",
+                type: "POST",
+                data: {
+                    id: intcauhoituluanId,
+                },
+                success: function (result) {
+                    $("#@randomid").empty();
+
+                    $("#@randomid").html(result);
                 },
             });
         })
