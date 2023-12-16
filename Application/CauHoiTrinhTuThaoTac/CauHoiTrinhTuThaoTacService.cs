@@ -84,6 +84,22 @@ namespace Application.CauHoiTrinhTuThaoTac
             var question = await _context.cauHoiTrinhTuThaoTacs.FindAsync(id);
             if (question == null)
                 return new ApiErrorResult<bool> { Message = "Không tìm thấy câu hỏi" };
+
+            var diemchuys = await _context.DiemChuYs.Where(x => x.CauhoitrinhtuthaotacId == id).ToListAsync();
+            foreach(var dcy in diemchuys)
+            {
+                _context.Remove(dcy);
+            }
+            var loitaicongdoans = await _context.LoiTaiCongDoans.Where(x => x.CauhoitrinhtuthaotacId == id).ToListAsync();
+            foreach (var ltcd in loitaicongdoans)
+            {
+                var doisachs = await _context.LoiTaiCongDoanDoiSaches.Where(x => x.LoiTaiCongDoanId == ltcd.Id).ToListAsync();
+                foreach(var ds in doisachs)
+                {
+                    _context.Remove(ds);
+                }
+                _context.Remove(ltcd);
+            }
             _context.cauHoiTrinhTuThaoTacs.Remove(question);
             await _context.SaveChangesAsync();
             var remainingQuestions = await _context.cauHoiTrinhTuThaoTacs

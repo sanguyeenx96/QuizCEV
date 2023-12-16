@@ -410,5 +410,27 @@ namespace WebAPP.Areas.Admin.Controllers
             }
             return Json(new { success = true });
         }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteLTCD(int id)
+        {
+            var result = await _loiTaiCongDoanApiClient.Delete(id);
+            if (!result.IsSuccessed)
+            {
+                return Json(new { success = false });
+            }
+            return Json(new { success = true });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteDS(int id)
+        {
+            var result = await _doiSachApiClient.Delete(id);
+            if (!result.IsSuccessed)
+            {
+                return Json(new { success = false });
+            }
+            return Json(new { success = true });
+        }
     }
 }
