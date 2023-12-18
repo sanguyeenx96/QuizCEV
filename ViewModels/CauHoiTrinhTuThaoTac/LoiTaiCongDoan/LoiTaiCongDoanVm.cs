@@ -11,6 +11,8 @@ namespace ViewModels.CauHoiTrinhTuThaoTac.LoiTaiCongDoan
     {
         public int Id { get; set; }
         public string Text { get; set; }
+        public int ChooseNumber { get; set; }
+
         public Guid CauhoitrinhtuthaotacId { get; set; }
         public List<DoiSachVm>? doiSaches { get; set; }
 

@@ -142,6 +142,7 @@ namespace Application.CauHoiTrinhTuThaoTac
                                     {
                                         Text = t.Text,
                                         CauhoitrinhtuthaotacId = t.CauhoitrinhtuthaotacId,
+                                        ChooseNumber = t.ChooseNumber,
                                         Id = t.Id,
                                         doiSaches = t.LoiTaiCongDoanDoiSachs != null
                                         ? t.LoiTaiCongDoanDoiSachs.Select(d => new DoiSachVm

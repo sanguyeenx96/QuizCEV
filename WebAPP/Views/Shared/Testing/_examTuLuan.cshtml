@@ -28,25 +28,26 @@
         </div>
     </div>
 </div>
-<div class="card bg-white pt-1 animate__animated animate__zoomIn">
+
+<div class="card bg-white pt-1 border border-0" style="background-image: url('/paper.jpg'); background-size:cover; background-position: center;">
     <div class="card-body text-center">
         <form id="formTraLoiCauHoiTuLuan">
             <div>
                 <span class="badge rounded-pill text-bg-dark mb-3">@Model.Score điểm</span>
                 <h2>@Model.Text</h2>
-                <p>Sắp xếp theo đúng trình tự WSD</p>
+                <p class="mb-1" style="text-align:start;font-weight:600;"> I. Sắp xếp theo đúng trình tự WSD:</p>
                 <div class="card">
                     <div class="card-body">
                         <table id="trinhtuthaotac" class="table table-hover " style="width:100%">
                             <thead style="vertical-align:middle;font-size:small">
                                 <tr>
-                                    <th class="col-3" style="font-weight: 300;text-align:center">
+                                    <th class="col-2" style="font-weight: 300;text-align:center">
                                         Trình tự thao tác
                                     </th>
                                     <th hidden>
                                         Id
-                                    </th>                                 
-                                    <th class="col-9" style="font-weight: 300">
+                                    </th>
+                                    <th class="col-10" style="font-weight: 300">
                                         Nội dung thao tác
                                     </th>
                                 </tr>
@@ -55,13 +56,13 @@
                                 @foreach (var item in ViewBag.listTrinhTuThaoTac as List<ViewModels.CauHoiTrinhTuThaoTac.Response.CauHoiTrinhTuThaoTacVm>)
                                 {
                                     no++;
-                                    <tr style="text-align:center;vertical-align:middle" >
+                                    <tr style="text-align:center;vertical-align:middle">
                                         <th style="font-weight: 300">
                                             @no
                                         </th>
                                         <td hidden>
                                             @item.Id
-                                        </td>                                   
+                                        </td>
                                         <td style="text-align:start">
                                             @item.Text
                                         </td>
@@ -69,14 +70,175 @@
                                 }
                             </tbody>
                         </table>
-                        <button style="width:200px" class="btn btn-outline-primary mt-3" type="submit">
-                            <i class="bi-check"></i>
-                            Xác nhận
-                        </button>
+
                     </div>
                 </div>
             </div>
-        </form>
+            <div class="mt-3">
+                <p class="mb-1" style="text-align:start;font-weight:600;"> II. Điểm chú ý tại công đoạn / Spec tại công đoạn (Nếu có):</p>
+                <div class="card">
+                    <div class="card-body">
+                        <table id="tblDCY" class="table table-hover" style="width:100%">
+                            <thead style="vertical-align:middle;font-size:small">
+                                <tr>
+                                    <th class="col-2" style="font-weight: 300;text-align:center">
+                                        STT
+                                    </th>
+                                    <th >
+                                        Id
+                                    </th>
+                                    <th class="col-10" style="font-weight: 300;text-align:start">
+                                        Điểm chú ý
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    var listTTTT = ViewBag.listTrinhTuThaoTac as List<ViewModels.CauHoiTrinhTuThaoTac.Response.CauHoiTrinhTuThaoTacVm>;
+                                    var listDCY = new List<ViewModels.CauHoiTrinhTuThaoTac.DiemChuY.DiemChuYVm>();
+                                    foreach (var i in listTTTT)
+                                    {
+                                        if (i.diemChuYs.Any())
+                                        {
+                                            foreach (var it in i.diemChuYs)
+                                                listDCY.Add(it);
+                                        }
+                                    }
+                                    foreach (var dcy in listDCY.OrderBy(x => new Random().Next()))
+                                    {
+                                                <tr style="text-align:center;vertical-align:middle" data-id="@dcy.Id">
+                                                    <th style="font-weight: 300">
+                                                        <input class="form-control ansDCY" style="text-align:center" type="number" required>
+                                                    </th>
+                                                    <td >
+                                                        @dcy.Id
+                                                    </td>
+                                                    <td style="text-align:start">
+                                                        @dcy.Text
+                                                    </td>
+                                                </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-3">
+                <p class="mb-1" style="text-align:start;    font-weight: 600;"> III. Lỗi tại công đoạn (Nếu có):</p>
+                <div class="card">
+                    <div class="card-body">
+                        <table id="tblLTCD" class="table table-hover " style="width:100%">
+                            <thead style="vertical-align:middle;font-size:small">
+                                <tr>
+                                    <th class="col-2" style="font-weight: 300;text-align:center">
+                                        STT
+                                    </th>
+                                    <th hidden>
+                                        Id
+                                    </th>
+                                    <th class="col-10" style="font-weight: 300;text-align:start">
+                                        Lỗi tại công đoạn
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    var listLTCD = new List<ViewModels.CauHoiTrinhTuThaoTac.LoiTaiCongDoan.LoiTaiCongDoanVm>();
+                                    foreach (var itemTTTT in listTTTT)
+                                    {
+                                        if (itemTTTT.loiTaiCongDoans.Any())
+                                        {
+                                            foreach (var itemLTCT in itemTTTT.loiTaiCongDoans)
+                                                listLTCD.Add(itemLTCT);
+                                        }
+                                    }
+                                    foreach (var ltcd in listLTCD.OrderBy(x => new Random().Next()))
+                                    {
+                                                <tr style="text-align:center;vertical-align:middle" data-id="@ltcd.Id">
+                                                    <th style="font-weight: 300">
+                                                        <input class="form-control ansLTCD" style="text-align:center" type="number" required>
+                                                    </th>
+                                                    <td hidden>
+                                                        @ltcd.Id
+                                                    </td>
+                                                    <td style="text-align:start">
+                                                        @ltcd.Text
+                                                    </td>
+                                                </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-3">
+                <p class="mb-1" style="text-align:start;    font-weight: 600;"> IV. Đối sách (Nếu có):</p>
+                <div class="card">
+                    <div class="card-body">
+                        <table id="tblDS" class="table table-hover " style="width:100%">
+                            <thead style="vertical-align:middle;font-size:small">
+                                <tr>
+                                    <th class="col-2" style="font-weight: 300;text-align:center">
+                                        STT
+                                    </th>
+                                    <th hidden>
+                                        Id
+                                    </th>
+                                    <th class="col-10" style="font-weight: 300;text-align:start">
+                                        Đối sách
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    var listDS = new List<ViewModels.CauHoiTrinhTuThaoTac.LoiTaiCongDoan.DoiSach.DoiSachVm>();
+                                    foreach (var itemTTTT in listTTTT)
+                                    {
+                                        if (itemTTTT.loiTaiCongDoans.Any())
+                                        {
+                                            foreach (var itemLTCT in itemTTTT.loiTaiCongDoans)
+                                            {
+                                                if (itemLTCT.doiSaches.Any())
+                                                {
+                                                    foreach (var item in itemLTCT.doiSaches)
+                                                    {
+                                                        listDS.Add(item);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                    foreach (var ds in listDS.OrderBy(x => new Random().Next()))
+                                    {
+                                                <tr style="text-align:center;vertical-align:middle" data-id="@ds.Id">
+                                                    <th style="font-weight: 300">
+                                                        <input class="form-control ansDS" style="text-align:center" type="number" required>
+                                                    </th>
+                                                    <td hidden>
+                                                        @ds.Id
+                                                    </td>
+                                                    <td style="text-align:start">
+                                                        @ds.Text
+                                                    </td>
+                                                </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+            <button style="width:200px" class="btn btn-dark mt-3" id="btnTraLoiTL">
+                <i class="bi-check"></i>
+                Xác nhận
+            </button>
+        </form>     
     </div>
 </div>
 
@@ -97,7 +259,7 @@
                 snapX: 10
             }
         });
-    
+        
         table.on('row-reorder', function (e, diff, edit) {
             table.one('draw', function () {
                 newOrder = [];
@@ -109,41 +271,93 @@
                 console.log(parsedNewOrder)
             });
         });
-        $('#formTraLoiCauHoiTuLuan').submit(function (e) {
-            e.preventDefault();
-            if (parsedNewOrder.length === 0) {
-                Swal.fire({
-                    icon: "error",
-                    width: 400,
-                    text: "Hãy sắp xếp trước khi xác nhận",
-                    showConfirmButton: false,
-                    timer: 1000,
-                })
-            }
-            else {
-                $.ajax({
-                    url: 'TraloiTuLuan',
-                    type: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify(parsedNewOrder),
-                    success: function (response) {
-                        $.ajax({
-                            url: 'TestingTuLuan',
-                            type: 'GET',
-                            success: function (response) {
-                                $("#examTuluan").html(response);
-                            },
-                            error: function (error) {
-                                console.log(error);
-                            }
+
+        $("#btnTraLoiTL").click(function (e) {
+            var form = $("#formTraLoiCauHoiTuLuan")[0];
+            if (form.checkValidity()) {
+                e.preventDefault();
+                if (parsedNewOrder.length === 0) {
+                    Swal.fire({
+                        icon: "error",
+                        width: 400,
+                        text: "Hãy sắp xếp trước khi xác nhận",
+                        showConfirmButton: false,
+                        timer: 1000,
+                    })
+                }
+                else {
+                    //Start get values from tbl here:
+                    var dataDCY = [];
+                    var dataLTCD = [];
+                    var dataDS = [];
+                    $('#tblDCY tbody tr').each(function () {
+                        let inputValue = $(this).find('.ansDCY').val();
+                        let id = $(this).attr("data-id");
+                        id = parseInt(id)
+                        inputValue = parseInt(inputValue)
+                        dataDCY.push({
+                            Id: id,
+                            Answer: inputValue
                         });
-                    },
-                    error: function (error) {
-                        console.log(error);
-                    }
-                });
+                    });
+                    $('#tblLTCD tbody tr').each(function () {
+                        let inputValue = $(this).find('.ansLTCD').val();
+                        let id = $(this).attr("data-id");
+                        id = parseInt(id)
+                        inputValue = parseInt(inputValue)
+                        dataLTCD.push({
+                            Id: id,
+                            Answer: inputValue
+                        });
+                    });
+                    $('#tblDS tbody tr').each(function () {
+                        let inputValue = $(this).find('.ansDS').val();
+                        let id = $(this).attr("data-id");
+                        id = parseInt(id)
+                        inputValue = parseInt(inputValue)
+                        dataDS.push({
+                            Id: id,
+                            Answer: inputValue
+                        });
+                    });
+                    //Send all value to Controller:
+                    var dataToSend = {
+                        dataDCY: dataDCY,
+                        dataLTCD: dataLTCD,
+                        dataDS: dataDS,
+                        dataTTTT: parsedNewOrder
+                    };
+                    console.log(dataToSend)
+
+                    $.ajax({
+                        url: 'TraloiTuLuan',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify(dataToSend),
+                        dataType: 'json', // Add this line
+
+                        success: function (response) {
+                            $.ajax({
+                                url: 'TestingTuLuan',
+                                type: 'GET',
+                                success: function (response) {
+                                    $("#examTuluan").html(response);
+                                },
+                                error: function (error) {
+                                    console.log(error);
+                                }
+                            });
+                        },
+                        error: function (error) {
+                            console.log(error);
+                        }
+                    });
+                }
+            } else {
+                form.reportValidity();
             }
-        });
+        })
+
     });
 </script>
 

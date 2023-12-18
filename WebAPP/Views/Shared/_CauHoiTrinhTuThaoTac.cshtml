@@ -16,9 +16,6 @@
             <th class="col-10" style="text-align:center">
                 Nội dung
             </th>
-            <th>
-
-            </th>
         </tr>
     </thead>
     <tbody>
@@ -48,7 +45,7 @@
                                             <i class="bi-pencil"></i>
                                             Sửa
                                         </btn>
-                                        <btn class="btn btn-sm btn-outline-danger  btnXoaCauHoiTrinhTuThaoTac w-100" data-abc="@item.CauHoiTuLuanId" data-id="@item.Id" data-noidungcauhoi="@item.Text">
+                                        <btn class="btn btn-sm btn-outline-danger btnXoaCauHoiTrinhTuThaoTac w-100" data-abc="@item.CauHoiTuLuanId" data-id="@item.Id" data-noidungcauhoi="@item.Text">
                                             <i class="bi-trash"> </i>
                                             Xoá
                                         </btn>
@@ -146,21 +143,15 @@
                                     </btn>
                                 </td>
                                 <td style="text-align:center">
-                                    @*  
-                                        <btn style="width:140px" class="btn btn-sm btn-outline-success btnRefresh" data-abc="@item.CauHoiTuLuanId">
+                                    <div style="width:140px">
+                                        <btn class="btn btn-sm btn-success btnRefresh" data-abc="@item.CauHoiTuLuanId">
                                             <i class="bi-arrow-clockwise"></i>
-                                            Tải lại dữ liệu
                                         </btn>
-                                *@
+                                    </div>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
-                </td>
-                <td>
-                    <btn class="btn btn-sm btn-success btnRefresh" data-abc="@item.CauHoiTuLuanId">
-                        <i class="bi-arrow-clockwise"></i>
-                    </btn>
                 </td>
             </tr>
         }

@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace ViewModels.CauHoiTrinhTuThaoTac.Request
 {
-    public class AnswerTrinhTuThaoTacRequest
+    public class AnswerOthersRequest
     {
-        public Guid Id { get; set; }
-        public int ThuTu { get; set; }
-
+        public int Id { get; set; }
+        public int Answer { get; set; }
     }
 }

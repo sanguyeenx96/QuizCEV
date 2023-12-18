@@ -21,7 +21,7 @@
         </div>
     </div>
 </div>
-<div class="card bg-white pt-1  animate__animated animate__zoomIn ">
+<div class="card bg-white pt-1 border border-0" style="background-image: url('/paper.jpg'); background-size:cover; background-position: center;">
     <div class="card-body text-center">
         <form id="formTraLoiCauHoiTracNghiem">
             <div>
@@ -31,19 +31,19 @@
                 @{
                     if (!string.IsNullOrEmpty(Model.QA))
                     {
-                        <button style="width:200px" class="btn  btn-outline-primary mt-2" type="submit" name="answer" value="A">@Model.QA</button>
+                        <button style="width:200px" class="btn  btn-outline-dark mt-2" type="submit" name="answer" value="A">@Model.QA</button>
                     }
                     if (!string.IsNullOrEmpty(Model.QB))
                     {
-                        <button style="width:200px" class="btn  btn-outline-primary mt-2" type="submit" name="answer" value="B">@Model.QB</button>
+                        <button style="width:200px" class="btn  btn-outline-dark mt-2" type="submit" name="answer" value="B">@Model.QB</button>
                     }
                     if (!string.IsNullOrEmpty(Model.QC))
                     {
-                        <button style="width:200px" class="btn  btn-outline-primary mt-2" type="submit" name="answer" value="C">@Model.QC</button>
+                        <button style="width:200px" class="btn  btn-outline-dark mt-2" type="submit" name="answer" value="C">@Model.QC</button>
                     }
                     if (!string.IsNullOrEmpty(Model.QD))
                     {
-                        <button style="width:200px" class="btn  btn-outline-primary mt-2" type="submit" name="answer" value="D">@Model.QD</button>
+                        <button style="width:200px" class="btn  btn-outline-dark mt-2" type="submit" name="answer" value="D">@Model.QD</button>
                     }
                 }
             </div>

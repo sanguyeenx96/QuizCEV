@@ -4,15 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Data.Entities
+namespace ViewModels.CauHoiTrinhTuThaoTac.Response
 {
-    public class TTTTLoiTaiCongDoan
+    public class QuestionAndAnswerLoiTaiCongDoanVm
     {
         public int Id { get; set; }
-        public int ChooseNumber { get; set; }
         public string Text { get; set; }
         public Guid CauhoitrinhtuthaotacId { get; set; }
-        public CauHoiTrinhTuThaoTac CauHoiTrinhTuThaoTac { get; set; }
-        public List<LoiTaiCongDoanDoiSach>? LoiTaiCongDoanDoiSachs { get; set; }
+        public int Answer { get; set; }
+        public int CorrectAnswer { get; set; }
+
     }
+
 }

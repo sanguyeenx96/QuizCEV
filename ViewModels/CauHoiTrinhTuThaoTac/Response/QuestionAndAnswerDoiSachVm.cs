@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace ViewModels.CauHoiTrinhTuThaoTac.Response
 {
-    public class QuestionAndAnswerTrinhTuThaoTacVm
+    public class QuestionAndAnswerDoiSachVm
     {
-        public Guid Id { get; set; }
-        public string CauHoiTuLuanText { get; set; }
+        public int Id { get; set; }
         public string Text { get; set; }
-        public int ThuTu { get; set; }
-        public int CauHoiTuLuanId { get; set; }
+        public int LoiTaiCongDoanId { get; set; }
         public int Answer { get; set; }
+        public int CorrectAnswer { get; set; }
+
     }
 
 }

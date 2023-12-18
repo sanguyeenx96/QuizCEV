@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Security.Claims;
 using ViewModels.Category.Response;
+using ViewModels.CauHoiTrinhTuThaoTac.DiemChuY;
 using ViewModels.CauHoiTrinhTuThaoTac.Request;
 using ViewModels.CauHoiTrinhTuThaoTac.Response;
 using ViewModels.CauHoiTuLuan.Response;
@@ -131,12 +132,22 @@ namespace WebAPP.Areas.User.Controllers
                     List<QuestionAndAnswerTrinhTuThaoTacVm> listQuestionAndAnswerTrinhTuThaoTac = new List<QuestionAndAnswerTrinhTuThaoTacVm>();
                     TempData["QuestionAndAnswerTrinhTuThaoTac"] = JsonConvert.SerializeObject(listQuestionAndAnswerTrinhTuThaoTac);
 
+                    List<QuestionAndAnswerDiemChuYVm> listQuestionAndAnswerDiemChuY = new List<QuestionAndAnswerDiemChuYVm>();
+                    TempData["QuestionAndAnswerDiemChuY"] = JsonConvert.SerializeObject(listQuestionAndAnswerDiemChuY);
+
+                    List<QuestionAndAnswerLoiTaiCongDoanVm> listQuestionAndAnswerLoiTaiCongDoan= new List<QuestionAndAnswerLoiTaiCongDoanVm>();
+                    TempData["QuestionAndAnswerLoiTaiCongDoan"] = JsonConvert.SerializeObject(listQuestionAndAnswerLoiTaiCongDoan);
+
+                    List<QuestionAndAnswerDoiSachVm> listQuestionAndAnswerDoiSach = new List<QuestionAndAnswerDoiSachVm>();
+                    TempData["QuestionAndAnswerDoiSach"] = JsonConvert.SerializeObject(listQuestionAndAnswerDoiSach);
+
+
+
                     var listTuLuan = await _cauHoiTuLuanApiClient.GetAllByCategory(idPhong);
                     var dsCauHoiTuLuan = listTuLuan.ResultObj;
                     dsCauHoiTuLuan = dsCauHoiTuLuan.OrderBy(x => random.Next()).ToList();
                     List<CauHoiTuLuanVm> listQuestionTuLuan = dsCauHoiTuLuan;
                     TempData["dsCauHoiTL"] = JsonConvert.SerializeObject(listQuestionTuLuan);
-
                     TempData["danhsachcauhoiTuLuan"] = JsonConvert.SerializeObject(listQuestionTuLuan);
                     TempData["soluongcauhoiTuLuan"] = listQuestionTuLuan.Count();
                     Queue<CauHoiTuLuanVm> queueTuluan = new Queue<CauHoiTuLuanVm>();
@@ -145,7 +156,6 @@ namespace WebAPP.Areas.User.Controllers
                         queueTuluan.Enqueue(a);
                     }
                     TempData["questionsTuLuan"] = JsonConvert.SerializeObject(queueTuluan);
-
 
                     //Common:
                     var phongThi = await _categoryApiClient.GetById(idPhong);
@@ -188,6 +198,15 @@ namespace WebAPP.Areas.User.Controllers
                 //Tự luận:
                 List<QuestionAndAnswerTrinhTuThaoTacVm> listQuestionAndAnswerTrinhTuThaoTac = new List<QuestionAndAnswerTrinhTuThaoTacVm>();
                 TempData["QuestionAndAnswerTrinhTuThaoTac"] = JsonConvert.SerializeObject(listQuestionAndAnswerTrinhTuThaoTac);
+
+                List<QuestionAndAnswerDiemChuYVm> listQuestionAndAnswerDiemChuY = new List<QuestionAndAnswerDiemChuYVm>();
+                TempData["QuestionAndAnswerDiemChuY"] = JsonConvert.SerializeObject(listQuestionAndAnswerDiemChuY);
+
+                List<QuestionAndAnswerLoiTaiCongDoanVm> listQuestionAndAnswerLoiTaiCongDoan = new List<QuestionAndAnswerLoiTaiCongDoanVm>();
+                TempData["QuestionAndAnswerLoiTaiCongDoan"] = JsonConvert.SerializeObject(listQuestionAndAnswerLoiTaiCongDoan);
+
+                List<QuestionAndAnswerDoiSachVm> listQuestionAndAnswerDoiSach = new List<QuestionAndAnswerDoiSachVm>();
+                TempData["QuestionAndAnswerDoiSach"] = JsonConvert.SerializeObject(listQuestionAndAnswerDoiSach);
 
                 var listTuLuan = await _cauHoiTuLuanApiClient.GetAllByCategory(idPhong);
                 var dsCauHoiTuLuan = listTuLuan.ResultObj;
@@ -334,6 +353,7 @@ namespace WebAPP.Areas.User.Controllers
                 q = qlistTuLuan.Peek();
 
                 int id = q.Id;
+                //Lay ra duoc ca List<DiemChuYVm> va List<LoiTaiCongDoanVm> va List<DoiSachVm>:
                 var danhsachcauhoitrinhtuthaotac = await _cauHoiTrinhTuThaoTacApiClient.GetAllByCauHoiTuLuan(id);
                 List<CauHoiTrinhTuThaoTacVm> listdanhsachcauhoitrinhtuthaotac = danhsachcauhoitrinhtuthaotac.ResultObj;
                 var random = new Random();
@@ -352,34 +372,105 @@ namespace WebAPP.Areas.User.Controllers
         }
 
         //Trả lời tự luận:
+        public class TraloiTuLuanRequest
+        {
+            public List<AnswerTrinhTuThaoTacRequest> dataTTTT { get; set; }
+            public List<AnswerOthersRequest> DataDCY { get; set; }
+            public List<AnswerOthersRequest> DataLTCD { get; set; }
+            public List<AnswerOthersRequest> DataDS { get; set; }
+        }
+
         [HttpPost]
-        public async Task<IActionResult> TraloiTuLuan([FromBody] List<AnswerTrinhTuThaoTacRequest> request)
+        public async Task<IActionResult> TraloiTuLuan([FromBody] TraloiTuLuanRequest request)
         {
             string jsonlistQuestionAndAnswerTrinhTuThaoTac = TempData["QuestionAndAnswerTrinhTuThaoTac"].ToString();
             List<QuestionAndAnswerTrinhTuThaoTacVm> listQuestionAndAnswerTrinhTuThaoTac = JsonConvert.DeserializeObject<List<QuestionAndAnswerTrinhTuThaoTacVm>>(jsonlistQuestionAndAnswerTrinhTuThaoTac);
 
+            string jsonlistQuestionAndAnswerDiemChuY = TempData["QuestionAndAnswerDiemChuY"].ToString();
+            List<QuestionAndAnswerDiemChuYVm> listQuestionAndAnswerDiemChuY = JsonConvert.DeserializeObject<List<QuestionAndAnswerDiemChuYVm>>(jsonlistQuestionAndAnswerDiemChuY);
+
+            string jsonlistQuestionAndAnswerLoiTaiCongDoan = TempData["QuestionAndAnswerLoiTaiCongDoan"].ToString();
+            List<QuestionAndAnswerLoiTaiCongDoanVm> listQuestionAndAnswerLoiTaiCongDoan = JsonConvert.DeserializeObject<List<QuestionAndAnswerLoiTaiCongDoanVm>>(jsonlistQuestionAndAnswerLoiTaiCongDoan);
+
+            string jsonlistQuestionAndAnswerDoiSach= TempData["QuestionAndAnswerDoiSach"].ToString();
+            List<QuestionAndAnswerDoiSachVm> listQuestionAndAnswerDoiSach = JsonConvert.DeserializeObject<List<QuestionAndAnswerDoiSachVm>>(jsonlistQuestionAndAnswerDoiSach);
+
+            //Lấy ra câu hỏi tự luận đầu tiên trong Queue list và bỏ nó.
             string jsonQuestionsTuLuan = TempData["questionsTuLuan"].ToString();
             Queue<CauHoiTuLuanVm> qlistTuLuan = JsonConvert.DeserializeObject<Queue<CauHoiTuLuanVm>>(jsonQuestionsTuLuan);
             CauHoiTuLuanVm q = null;
             q = qlistTuLuan.Peek();
             int id = q.Id;
             string cauhoituluanText = q.Text;
+        
             var resultTrinhTuThaoTac = await _cauHoiTrinhTuThaoTacApiClient.GetAllByCauHoiTuLuan(id);
             List<CauHoiTrinhTuThaoTacVm> listTrinhTuThaoTac = resultTrinhTuThaoTac.ResultObj;
             foreach (var item in listTrinhTuThaoTac)
             {
-                var cauhoivacautraloiTuluan = new QuestionAndAnswerTrinhTuThaoTacVm()
+                var cauhoivacautraloiTTTT = new QuestionAndAnswerTrinhTuThaoTacVm()
                 {
                     Id = item.Id,
                     CauHoiTuLuanText = cauhoituluanText,
                     Text = item.Text,
                     ThuTu = item.ThuTu,
                     CauHoiTuLuanId = item.CauHoiTuLuanId,
-                    Answer = request.Where(x => x.Id == item.Id).FirstOrDefault().ThuTu
+                    Answer = request.dataTTTT.Where(x => x.Id == item.Id).FirstOrDefault().ThuTu
                 };
-                listQuestionAndAnswerTrinhTuThaoTac.Add(cauhoivacautraloiTuluan);
+                listQuestionAndAnswerTrinhTuThaoTac.Add(cauhoivacautraloiTTTT);
+
+                if (item.diemChuYs.Any())
+                {
+                    foreach(var dcy in item.diemChuYs)
+                    {
+                        var cauhoivacautraloiDCY = new QuestionAndAnswerDiemChuYVm()
+                        {
+                            Id = dcy.Id,
+                            CauhoitrinhtuthaotacId = item.Id,
+                            Text = dcy.Text,
+                            Answer = request.DataDCY.Where(x => x.Id == dcy.Id).FirstOrDefault().Answer,
+                            CorrectAnswer = item.ThuTu
+                        };
+                        listQuestionAndAnswerDiemChuY.Add(cauhoivacautraloiDCY);
+                    }
+                }
+
+                if (item.loiTaiCongDoans.Any())
+                {
+                    foreach (var ltcd in item.loiTaiCongDoans)
+                    {
+                        var cauhoivacautraloiLTCD = new QuestionAndAnswerLoiTaiCongDoanVm()
+                        {
+                            Id = ltcd.Id,
+                            CauhoitrinhtuthaotacId = item.Id,
+                            Text = ltcd.Text,
+                            Answer = request.DataLTCD.Where(x => x.Id == ltcd.Id).FirstOrDefault().Answer,
+                            CorrectAnswer = item.ThuTu
+                        };
+                        listQuestionAndAnswerLoiTaiCongDoan.Add(cauhoivacautraloiLTCD);
+
+                        if (ltcd.doiSaches.Any())
+                        {
+                            foreach(var ds in ltcd.doiSaches)
+                            {
+                                var cauhoivacautraloiDS = new QuestionAndAnswerDoiSachVm()
+                                {
+                                    Id = ds.Id,
+                                    LoiTaiCongDoanId = ltcd.Id,
+                                    Text = ds.Text,
+                                    Answer = request.DataDS.Where(x => x.Id == ds.Id).FirstOrDefault().Answer,
+                                    CorrectAnswer = item.ThuTu
+                                };
+                                listQuestionAndAnswerLoiTaiCongDoan.Add(cauhoivacautraloiLTCD);
+                            }                     
+                        }
+                    }
+                }
             }
             TempData["QuestionAndAnswerTrinhTuThaoTac"] = JsonConvert.SerializeObject(listQuestionAndAnswerTrinhTuThaoTac);
+            TempData["QuestionAndAnswerDiemChuY"] = JsonConvert.SerializeObject(listQuestionAndAnswerDiemChuY);
+            TempData["QuestionAndAnswerLoiTaiCongDoan"] = JsonConvert.SerializeObject(listQuestionAndAnswerLoiTaiCongDoan);
+
+
             qlistTuLuan.Dequeue(); // Loại bỏ phần tử ở đầu                                    
             TempData["questionsTuLuan"] = JsonConvert.SerializeObject(qlistTuLuan);
 
