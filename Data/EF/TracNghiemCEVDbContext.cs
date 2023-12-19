@@ -40,6 +40,11 @@ namespace Data.EF
             modelBuilder.ApplyConfiguration(new TTTTLoiTaiCongDoanConfiguration());
             modelBuilder.ApplyConfiguration(new LoiTaiCongDoanDoiSachConfiguration());
 
+            modelBuilder.ApplyConfiguration(new LogExamDiemChuYConfiguration());
+            modelBuilder.ApplyConfiguration(new LogExamLoiTaiCongDoanConfiguration());
+            modelBuilder.ApplyConfiguration(new LogExamDoiSachConfiguration());
+
+
             modelBuilder.Entity<IdentityUserClaim<Guid>>().ToTable("AppUserClaims");
             modelBuilder.Entity<IdentityUserRole<Guid>>().ToTable("AppUserRoles")
                 .HasKey(x => new
@@ -72,5 +77,10 @@ namespace Data.EF
         public DbSet<TTTTDiemChuY> DiemChuYs { get; set; }
         public DbSet<TTTTLoiTaiCongDoan> LoiTaiCongDoans { get; set; }
         public DbSet<LoiTaiCongDoanDoiSach> LoiTaiCongDoanDoiSaches { get; set; }
+
+        public DbSet<LogExamDiemChuY> logExamDiemChuYs { get; set; }
+        public DbSet<LogExamLoiTaiCongDoan> logExamLoiTaiCongDoans { get; set; }
+        public DbSet<LogExamDoiSach> logExamDoiSaches { get; set; }
+
     }
 }

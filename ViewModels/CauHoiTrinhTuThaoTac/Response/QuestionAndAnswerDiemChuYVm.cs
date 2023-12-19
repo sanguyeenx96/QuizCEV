@@ -13,6 +13,7 @@ namespace ViewModels.CauHoiTrinhTuThaoTac.Response
         public Guid CauhoitrinhtuthaotacId { get; set; }
         public int Answer { get; set; }
         public int CorrectAnswer { get; set; }
+        public int CauHoiTuLuanId { get; set; }
 
     }
 

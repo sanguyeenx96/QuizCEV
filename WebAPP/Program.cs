@@ -38,6 +38,10 @@ builder.Services.AddTransient<IDiemChuYApiClient, DiemChuYApiClient>();
 builder.Services.AddTransient<ILoiTaiCongDoanApiClient, LoiTaiCongDoanApiClient>();
 builder.Services.AddTransient<IDoiSachApiClient, DoiSachApiClient>();
 
+builder.Services.AddTransient<ILogExamDCYApiClient, LogExamDCYApiClient>();
+builder.Services.AddTransient<ILogExamLTCDApiClient, LogExamLTCDApiClient>();
+builder.Services.AddTransient<ILogExamDSApiClient, LogExamDSApiClient>();
+
 
 var app = builder.Build();
 // Configure the HTTP request pipeline.

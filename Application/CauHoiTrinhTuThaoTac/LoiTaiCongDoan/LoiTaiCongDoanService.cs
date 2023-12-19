@@ -26,13 +26,10 @@ namespace Application.CauHoiTrinhTuThaoTac.LoiTaiCongDoan
             if (checkDuplicate != null)
                 return new ApiErrorResult<bool> { Message = "Nội dung lỗi tại công đoạn này đã bị trùng" };
 
-            int num = _context.LoiTaiCongDoans.Where(x => x.CauhoitrinhtuthaotacId == cauhoitrinhtuthaotacId).Any() ? _context.LoiTaiCongDoans.Where(x => x.CauhoitrinhtuthaotacId == cauhoitrinhtuthaotacId).Max(x => x.ChooseNumber) + 1 : 1;
-
             var newLoiTaiCongDoan = new Data.Entities.TTTTLoiTaiCongDoan()
             {
                 Text = request.Text,
-                CauhoitrinhtuthaotacId = cauhoitrinhtuthaotacId,
-                ChooseNumber = num
+                CauhoitrinhtuthaotacId = cauhoitrinhtuthaotacId
             };
             _context.LoiTaiCongDoans.Add(newLoiTaiCongDoan);
             await _context.SaveChangesAsync();
@@ -62,7 +59,6 @@ namespace Application.CauHoiTrinhTuThaoTac.LoiTaiCongDoan
             {
                 Id = x.Id,
                 Text = x.Text,
-                ChooseNumber = x.ChooseNumber,
                 CauhoitrinhtuthaotacId = x.CauhoitrinhtuthaotacId
             }).ToListAsync();
             if (result == null)
@@ -85,7 +81,6 @@ namespace Application.CauHoiTrinhTuThaoTac.LoiTaiCongDoan
             {
                 Id = result.Id,
                 Text = result.Text,
-                ChooseNumber = result.ChooseNumber,
                 CauhoitrinhtuthaotacId = result.CauhoitrinhtuthaotacId,
                 doiSaches = result.LoiTaiCongDoanDoiSachs != null
                                         ? result.LoiTaiCongDoanDoiSachs.Select(d => new DoiSachVm

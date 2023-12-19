@@ -9,7 +9,6 @@ namespace Data.Entities
     public class TTTTLoiTaiCongDoan
     {
         public int Id { get; set; }
-        public int ChooseNumber { get; set; }
         public string Text { get; set; }
         public Guid CauhoitrinhtuthaotacId { get; set; }
         public CauHoiTrinhTuThaoTac CauHoiTrinhTuThaoTac { get; set; }

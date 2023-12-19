@@ -22,6 +22,10 @@ namespace Data.Entities
         public float FinalScore { get; set; }
         public ExamResult ExamResult { get; set; }
         public List<LogExamTrinhtuthaotac>? LogExamTrinhtuthaotacs { get; set; } //tl thì link tới bảng tttt
+        public List<LogExamDiemChuY>? logExamDiemChuYs { get; set; } //tl thì link tới bảng tttt
+        public List<LogExamLoiTaiCongDoan>? logExamLoiTaiCongDoans { get; set; } //tl thì link tới bảng tttt
+        public List<LogExamDoiSach>? logExamDoiSaches { get; set; } //tl thì link tới bảng tttt
+
 
     }
 }
