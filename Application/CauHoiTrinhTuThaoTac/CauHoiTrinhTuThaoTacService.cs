@@ -119,44 +119,50 @@ namespace Application.CauHoiTrinhTuThaoTac
 
         public async Task<ApiResult<List<CauHoiTrinhTuThaoTacVm>>> GetAllByCauHoiTuLuan(int id)
         {
-            var listquestions = await _context.cauHoiTrinhTuThaoTacs
+            // Selecting data with includes
+            var query = _context.cauHoiTrinhTuThaoTacs
                 .Include(x => x.TTTTDiemChuYs)
                 .Include(x => x.TTTTLoiTaiCongDoans)
                 .ThenInclude(x => x.LoiTaiCongDoanDoiSachs)
-                .Where(x => x.CauHoiTuLuanId == id).Select(y => new CauHoiTrinhTuThaoTacVm
-                {
-                    Id = y.Id,
-                    Text = y.Text,
-                    ThuTu = y.ThuTu,
-                    CauHoiTuLuanId = y.CauHoiTuLuanId,
-                    diemChuYs = y.TTTTDiemChuYs != null
-                                    ? y.TTTTDiemChuYs.Select(z => new DiemChuYVm
-                                    {
-                                        Text = z.Text,
-                                        CauhoitrinhtuthaotacId = z.CauhoitrinhtuthaotacId,
-                                        Id = z.Id
-                                    }).ToList()
-                                    : new List<DiemChuYVm>(),
-                    loiTaiCongDoans = y.TTTTLoiTaiCongDoans != null
-                                    ? y.TTTTLoiTaiCongDoans.Select(t => new LoiTaiCongDoanVm
-                                    {
-                                        Text = t.Text,
-                                        CauhoitrinhtuthaotacId = t.CauhoitrinhtuthaotacId,
-                                        ChooseNumber = t.ChooseNumber,
-                                        Id = t.Id,
-                                        doiSaches = t.LoiTaiCongDoanDoiSachs != null
-                                        ? t.LoiTaiCongDoanDoiSachs.Select(d => new DoiSachVm
-                                        {
-                                            Text = d.Text,
-                                            LoiTaiCongDoanId = d.LoiTaiCongDoanId,
-                                            Id = d.Id
-                                        }).ToList()
-                                        : new List<DoiSachVm>()
-                                    }).ToList()
-                                    : new List<LoiTaiCongDoanVm>()
-                }).ToListAsync();
+                .Where(x => x.CauHoiTuLuanId == id);
+
+            // Projecting the data into the desired ViewModel
+            var listquestions = await query.Select(y => new CauHoiTrinhTuThaoTacVm
+            {
+                Id = y.Id,
+                Text = y.Text,
+                ThuTu = y.ThuTu,
+                CauHoiTuLuanId = y.CauHoiTuLuanId,
+                diemChuYs = y.TTTTDiemChuYs != null
+                                ? y.TTTTDiemChuYs.Select(z => new DiemChuYVm
+                                {
+                                    Text = z.Text,
+                                    CauhoitrinhtuthaotacId = z.CauhoitrinhtuthaotacId,
+                                    Id = z.Id
+                                }).ToList()
+                                : new List<DiemChuYVm>(),
+
+                loiTaiCongDoans = y.TTTTLoiTaiCongDoans != null
+                                ? y.TTTTLoiTaiCongDoans.Select(t => new LoiTaiCongDoanVm
+                                {
+                                    Text = t.Text,
+                                    CauhoitrinhtuthaotacId = t.CauhoitrinhtuthaotacId,
+                                    Id = t.Id,
+                                    doiSaches = t.LoiTaiCongDoanDoiSachs != null
+                                                    ? t.LoiTaiCongDoanDoiSachs.Select(d => new DoiSachVm
+                                                    {
+                                                        Text = d.Text,
+                                                        LoiTaiCongDoanId = d.LoiTaiCongDoanId,
+                                                        Id = d.Id
+                                                    }).ToList()
+                                                    : new List<DoiSachVm>()
+                                }).ToList()
+                                : new List<LoiTaiCongDoanVm>()
+            }).ToListAsync();
+
             return new ApiSuccessResult<List<CauHoiTrinhTuThaoTacVm>>(listquestions);
         }
+
 
         public async Task<ApiResult<CauHoiTrinhTuThaoTacVm>> GetById(Guid id)
         {

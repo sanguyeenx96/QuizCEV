@@ -1,0 +1,153 @@
+﻿@model List<ViewModels.CauHoiTrinhTuThaoTac.Response.QuestionAndAnswerDoiSachVm>
+@{
+    var cauhoituluanId = Model.FirstOrDefault().CauHoiTuLuanId;
+}
+<style>
+    #tbl thead tr th {
+        pointer-events: none;
+    }
+
+    #tbl tbody > tr:last-child > td {
+        border-bottom: 0;
+    }
+</style>
+<div class="modal-header">
+    <h5 class="modal-title" id="staticBackdropLabel">
+        <i class="bi-arrow-clockwise"></i>
+        Thay đổi câu trả lời
+    </h5>
+    <button type="button" class="btn-close" data-coreui-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+    <div class="card">
+        <div class="card-header">
+            IV. Đối sách:
+        </div>
+        <div class="card-body text-end">
+            <table class="table table-hover" style="width:100%;margin-bottom:0px">
+                <thead style="vertical-align:middle;font-size:small">
+                    <tr>
+                        <th class="col-5" style="font-weight: 300;text-align:center">
+                            Lỗi tại công đoạn
+                        </th>
+                        <th hidden>
+                        </th>
+                        <th>
+
+                        </th>
+                        <th class="col-9" style="text-align:start;font-weight: 300">
+                            Đối sách
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        foreach (var item in Model.OrderBy(x => x.Answer))
+                        {
+                            <tr style="text-align:center;vertical-align:middle">
+                                <td>
+                                    <select class="form-select ansDS" style="text-align:center" type="number"
+                                        data-id="@item.Id" data-cauhoituluanId="@cauhoituluanId">
+                                        @foreach (var ltcd in ViewBag.selectListLTCDFromId)
+                                        {
+                                            if (ltcd.Text == item.Answer)
+                                            {
+                                                <option value="@ltcd.Text" selected>@ltcd.Text</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@ltcd.Text">@ltcd.Text</option>
+                                            }
+                                        }
+                                    </select>
+                                </td>
+                                <td hidden>
+                                    @item.Id
+                                </td>
+                                <td style="text-align:center">
+                                    <i class="bi-arrow-right"></i>
+                                </td>
+                                <td style="text-align:start">
+                                    @item.Text
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+            <button id="btnXacNhanThayDoiCauTraLoiDS" style="width:200px" class="btn btn-outline-primary mt-3">
+                <i class="bi-check"></i>
+                Xác nhận
+            </button>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    $(document).ready(function () {
+
+        $("#btnXacNhanThayDoiCauTraLoiDS").click(function () {
+            var dataToSend = [];
+            $('.ansDS').each(function () {
+                var input = $(this).val();
+                var id = $(this).attr("data-id");
+                var cauhoituluanId = $(this).attr("data-cauhoituluanId");
+
+                var data = {
+                    Id: id,
+                    Answer: input,
+                    CauHoiTuLuanId: cauhoituluanId
+                };
+                dataToSend.push(data);
+            });
+            console.log(dataToSend)
+
+            $.ajax({
+                url: 'PostChangeChooseDS',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(dataToSend),
+                success: function (response) {
+                    Swal.fire({
+                        icon: "success",
+                        width: 300,
+                        text: "Đổi câu trả lời thành công",
+                        showConfirmButton: false,
+                        timer: 1000,
+                    }).then(function () {
+                        $("#staticBackdropDS").modal("hide");
+                        $.ajax({
+                            url: 'GetLogQuestionAndAnswers',
+                            type: 'GET',
+                            success: function (response) {
+                                $("#accordionExample").html(response);
+                            },
+                            error: function (error) {
+                                Swal.fire({
+                                    icon: "error",
+                                    width: 300,
+                                    text: "Hãy thử lại...",
+                                    showConfirmButton: false,
+                                    timer: 1000,
+                                })
+                            }
+                        });
+                    });
+                },
+                error: function (error) {
+                    Swal.fire({
+                        icon: "error",
+                        width: 300,
+                        text: "Hãy thử lại...",
+                        showConfirmButton: false,
+                        timer: 1000,
+                    })
+                }
+            });
+
+        })
+    });
+</script>
+

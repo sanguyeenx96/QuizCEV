@@ -84,7 +84,7 @@
                                     <th class="col-2" style="font-weight: 300;text-align:center">
                                         STT
                                     </th>
-                                    <th >
+                                    <th hidden>
                                         Id
                                     </th>
                                     <th class="col-10" style="font-weight: 300;text-align:start">
@@ -106,17 +106,17 @@
                                     }
                                     foreach (var dcy in listDCY.OrderBy(x => new Random().Next()))
                                     {
-                                                <tr style="text-align:center;vertical-align:middle" data-id="@dcy.Id">
-                                                    <th style="font-weight: 300">
-                                                        <input class="form-control ansDCY" style="text-align:center" type="number" required>
-                                                    </th>
-                                                    <td >
-                                                        @dcy.Id
-                                                    </td>
-                                                    <td style="text-align:start">
-                                                        @dcy.Text
-                                                    </td>
-                                                </tr>
+                                        <tr style="text-align:center;vertical-align:middle" data-id="@dcy.Id" data-chtlId="@Model.Id">
+                                            <th style="font-weight: 300">
+                                                <input class="form-control ansDCY" style="text-align:center" type="number" required>
+                                            </th>
+                                            <td hidden>
+                                                @dcy.Id
+                                            </td>
+                                            <td style="text-align:start">
+                                                @dcy.Text
+                                            </td>
+                                        </tr>
                                     }
                                 }
                             </tbody>
@@ -127,7 +127,7 @@
             </div>
 
             <div class="mt-3">
-                <p class="mb-1" style="text-align:start;    font-weight: 600;"> III. Lỗi tại công đoạn (Nếu có):</p>
+                <p class="mb-1" style="text-align:start;    font-weight: 600;"> III. Lỗi tại công đoạn:</p>
                 <div class="card">
                     <div class="card-body">
                         <table id="tblLTCD" class="table table-hover " style="width:100%">
@@ -157,18 +157,19 @@
                                     }
                                     foreach (var ltcd in listLTCD.OrderBy(x => new Random().Next()))
                                     {
-                                                <tr style="text-align:center;vertical-align:middle" data-id="@ltcd.Id">
-                                                    <th style="font-weight: 300">
-                                                        <input class="form-control ansLTCD" style="text-align:center" type="number" required>
-                                                    </th>
-                                                    <td hidden>
-                                                        @ltcd.Id
-                                                    </td>
-                                                    <td style="text-align:start">
-                                                        @ltcd.Text
-                                                    </td>
-                                                </tr>
+                                        <tr style="text-align:center;vertical-align:middle" data-id="@ltcd.Id" data-chtlId="@Model.Id">
+                                            <th style="font-weight: 300">
+                                                <input class="form-control ansLTCD" style="text-align:center" type="number" required>
+                                            </th>
+                                            <td hidden>
+                                                @ltcd.Id
+                                            </td>
+                                            <td style="text-align:start">
+                                                @ltcd.Text
+                                            </td>
+                                        </tr>
                                     }
+                                    var selectListLTCD = new SelectList(listLTCD, "Id", "Text");
                                 }
                             </tbody>
                         </table>
@@ -177,19 +178,22 @@
             </div>
 
             <div class="mt-3">
-                <p class="mb-1" style="text-align:start;    font-weight: 600;"> IV. Đối sách (Nếu có):</p>
+                <p class="mb-1" style="text-align:start;    font-weight: 600;"> IV. Đối sách:</p>
                 <div class="card">
                     <div class="card-body">
                         <table id="tblDS" class="table table-hover " style="width:100%">
                             <thead style="vertical-align:middle;font-size:small">
                                 <tr>
-                                    <th class="col-2" style="font-weight: 300;text-align:center">
-                                        STT
+                                    <th class="col-5" style="font-weight: 300;text-align:center">
+                                        Lỗi tại công đoạn
                                     </th>
                                     <th hidden>
                                         Id
                                     </th>
-                                    <th class="col-10" style="font-weight: 300;text-align:start">
+                                    <th class="col-2">
+
+                                    </th>
+                                    <th class="col-5" style="font-weight: 300;text-align:start">
                                         Đối sách
                                     </th>
                                 </tr>
@@ -215,17 +219,26 @@
                                     }
                                     foreach (var ds in listDS.OrderBy(x => new Random().Next()))
                                     {
-                                                <tr style="text-align:center;vertical-align:middle" data-id="@ds.Id">
-                                                    <th style="font-weight: 300">
-                                                        <input class="form-control ansDS" style="text-align:center" type="number" required>
-                                                    </th>
-                                                    <td hidden>
-                                                        @ds.Id
-                                                    </td>
-                                                    <td style="text-align:start">
-                                                        @ds.Text
-                                                    </td>
-                                                </tr>
+                                        <tr style="text-align:center;vertical-align:middle" data-id="@ds.Id" data-chtlId="@Model.Id">
+                                            <th style="font-weight: 300">
+                                                <select class="form-select ansDS" style="text-align:center" type="number">
+                                                    <option selected disabled>Chọn lỗi tương ứng với đối sách</option>
+                                                    @foreach (var ltcd in selectListLTCD)
+                                                    {
+                                                        <option value="@ltcd.Text">@ltcd.Text</option>
+                                                    }
+                                                </select>
+                                            </th>
+                                            <td hidden>
+                                                @ds.Id
+                                            </td>
+                                            <td style="text-align:center">
+                                                <i class="bi-arrow-right"></i>
+                                            </td>
+                                            <td style="text-align:start">
+                                                @ds.Text
+                                            </td>
+                                        </tr>
                                     }
                                 }
                             </tbody>
@@ -238,7 +251,7 @@
                 <i class="bi-check"></i>
                 Xác nhận
             </button>
-        </form>     
+        </form>
     </div>
 </div>
 
@@ -259,7 +272,7 @@
                 snapX: 10
             }
         });
-        
+
         table.on('row-reorder', function (e, diff, edit) {
             table.one('draw', function () {
                 newOrder = [];
@@ -311,13 +324,12 @@
                         });
                     });
                     $('#tblDS tbody tr').each(function () {
-                        let inputValue = $(this).find('.ansDS').val();
+                        let selectText = $(this).find('.ansDS').val();
                         let id = $(this).attr("data-id");
                         id = parseInt(id)
-                        inputValue = parseInt(inputValue)
                         dataDS.push({
                             Id: id,
-                            Answer: inputValue
+                            Answer: selectText
                         });
                     });
                     //Send all value to Controller:

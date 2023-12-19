@@ -246,6 +246,46 @@ namespace Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "TTTTDiemChuY",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Text = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CauhoitrinhtuthaotacId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TTTTDiemChuY", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TTTTDiemChuY_CauHoiTrinhTuThaoTac_CauhoitrinhtuthaotacId",
+                        column: x => x.CauhoitrinhtuthaotacId,
+                        principalTable: "CauHoiTrinhTuThaoTac",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TTTTLoiTaiCongDoan",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Text = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CauhoitrinhtuthaotacId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TTTTLoiTaiCongDoan", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TTTTLoiTaiCongDoan_CauHoiTrinhTuThaoTac_CauhoitrinhtuthaotacId",
+                        column: x => x.CauhoitrinhtuthaotacId,
+                        principalTable: "CauHoiTrinhTuThaoTac",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AppUsers",
                 columns: table => new
                 {
@@ -274,6 +314,26 @@ namespace Data.Migrations
                         name: "FK_AppUsers_Cells_CellId",
                         column: x => x.CellId,
                         principalTable: "Cells",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "LoiTaiCongDoanDoiSach",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Text = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LoiTaiCongDoanId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LoiTaiCongDoanDoiSach", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_LoiTaiCongDoanDoiSach_TTTTLoiTaiCongDoan_LoiTaiCongDoanId",
+                        column: x => x.LoiTaiCongDoanId,
+                        principalTable: "TTTTLoiTaiCongDoan",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -339,6 +399,72 @@ namespace Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "LogExamDiemChuY",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Text = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Answer = table.Column<int>(type: "int", nullable: false),
+                    CorrectAnswer = table.Column<int>(type: "int", nullable: false),
+                    LogExamId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LogExamDiemChuY", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_LogExamDiemChuY_LogExams_LogExamId",
+                        column: x => x.LogExamId,
+                        principalTable: "LogExams",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "LogExamDoiSach",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Text = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Answer = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CorrectAnswer = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LogExamId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LogExamDoiSach", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_LogExamDoiSach_LogExams_LogExamId",
+                        column: x => x.LogExamId,
+                        principalTable: "LogExams",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "LogExamLoiTaiCongDoan",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Text = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Answer = table.Column<int>(type: "int", nullable: false),
+                    CorrectAnswer = table.Column<int>(type: "int", nullable: false),
+                    LogExamId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LogExamLoiTaiCongDoan", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_LogExamLoiTaiCongDoan_LogExams_LogExamId",
+                        column: x => x.LogExamId,
+                        principalTable: "LogExams",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "LogExamTrinhtuthaotacs",
                 columns: table => new
                 {
@@ -365,8 +491,8 @@ namespace Data.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Description", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { new Guid("470f4021-29d8-4c8e-a9de-527571683d86"), "1b4522b2-05e2-496d-bf8d-09c2f95ec672", "User role", "user", "user" },
-                    { new Guid("8d04dce2-969a-435d-bba4-df3f325983dc"), "b31fe942-67ad-4699-a73d-0058cec54285", "Administrator role", "admin", "admin" }
+                    { new Guid("470f4021-29d8-4c8e-a9de-527571683d86"), "f5c39777-6e98-480f-9276-bb315377e819", "User role", "user", "user" },
+                    { new Guid("8d04dce2-969a-435d-bba4-df3f325983dc"), "03f42a7e-88d7-4c6a-991a-650a83bbe74d", "Administrator role", "admin", "admin" }
                 });
 
             migrationBuilder.InsertData(
@@ -397,7 +523,7 @@ namespace Data.Migrations
             migrationBuilder.InsertData(
                 table: "AppUsers",
                 columns: new[] { "Id", "AccessFailedCount", "CellId", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "Name", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { new Guid("69bd714f-9576-45ba-b5b7-f00649be00de"), 0, 1, "fc622787-d2ca-4df7-8683-a800325ed8d3", "smt.ngocsang@gmail.com", true, false, null, "Nguyen Ngoc Sang", "smt.ngocsang@gmail.com", "admin", "AQAAAAEAACcQAAAAEK9SftGOSgB4nivQVAYDZHuncPuP8lo1TJX6uODGY3jwyQZleYLv0+Mn1Kmp9y+vew==", null, false, "", false, "admin" });
+                values: new object[] { new Guid("69bd714f-9576-45ba-b5b7-f00649be00de"), 0, 1, "da80ffdc-12de-4223-b8a3-4c17cc0c76d6", "smt.ngocsang@gmail.com", true, false, null, "Nguyen Ngoc Sang", "smt.ngocsang@gmail.com", "admin", "AQAAAAEAACcQAAAAEDVDlashnVFOKW03INKRI5eRh8b4dIwK3PD9a1LaRI5XG/ysNLc1E4lPd9dmtXEhmA==", null, false, "", false, "admin" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AppUsers_CellId",
@@ -430,6 +556,21 @@ namespace Data.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_LogExamDiemChuY_LogExamId",
+                table: "LogExamDiemChuY",
+                column: "LogExamId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LogExamDoiSach_LogExamId",
+                table: "LogExamDoiSach",
+                column: "LogExamId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LogExamLoiTaiCongDoan_LogExamId",
+                table: "LogExamLoiTaiCongDoan",
+                column: "LogExamId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_LogExams_ExamResultId",
                 table: "LogExams",
                 column: "ExamResultId");
@@ -440,6 +581,11 @@ namespace Data.Migrations
                 column: "LogExamId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_LoiTaiCongDoanDoiSach_LoiTaiCongDoanId",
+                table: "LoiTaiCongDoanDoiSach",
+                column: "LoiTaiCongDoanId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Models_DeptId",
                 table: "Models",
                 column: "DeptId");
@@ -448,6 +594,16 @@ namespace Data.Migrations
                 name: "IX_Questions_CategoryId",
                 table: "Questions",
                 column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TTTTDiemChuY_CauhoitrinhtuthaotacId",
+                table: "TTTTDiemChuY",
+                column: "CauhoitrinhtuthaotacId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TTTTLoiTaiCongDoan_CauhoitrinhtuthaotacId",
+                table: "TTTTLoiTaiCongDoan",
+                column: "CauhoitrinhtuthaotacId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -471,10 +627,19 @@ namespace Data.Migrations
                 name: "AppUserTokens");
 
             migrationBuilder.DropTable(
-                name: "CauHoiTrinhTuThaoTac");
+                name: "LogExamDiemChuY");
+
+            migrationBuilder.DropTable(
+                name: "LogExamDoiSach");
+
+            migrationBuilder.DropTable(
+                name: "LogExamLoiTaiCongDoan");
 
             migrationBuilder.DropTable(
                 name: "LogExamTrinhtuthaotacs");
+
+            migrationBuilder.DropTable(
+                name: "LoiTaiCongDoanDoiSach");
 
             migrationBuilder.DropTable(
                 name: "Questions");
@@ -483,22 +648,31 @@ namespace Data.Migrations
                 name: "Settings");
 
             migrationBuilder.DropTable(
-                name: "CauHoiTuLuan");
+                name: "TTTTDiemChuY");
 
             migrationBuilder.DropTable(
                 name: "LogExams");
 
             migrationBuilder.DropTable(
+                name: "TTTTLoiTaiCongDoan");
+
+            migrationBuilder.DropTable(
                 name: "ExamResults");
+
+            migrationBuilder.DropTable(
+                name: "CauHoiTrinhTuThaoTac");
 
             migrationBuilder.DropTable(
                 name: "AppUsers");
 
             migrationBuilder.DropTable(
-                name: "Categories");
+                name: "CauHoiTuLuan");
 
             migrationBuilder.DropTable(
                 name: "Cells");
+
+            migrationBuilder.DropTable(
+                name: "Categories");
 
             migrationBuilder.DropTable(
                 name: "Models");

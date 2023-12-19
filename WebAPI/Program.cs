@@ -7,6 +7,9 @@ using Application.CauHoiTuLuan;
 using Application.Dept;
 using Application.ExamResult;
 using Application.LogExam;
+using Application.LogExamDiemChuY;
+using Application.LogExamDoiSach;
+using Application.LogExamLoiTaiCongDoan;
 using Application.LogExamTrinhtuthaotac;
 using Application.Question;
 using Application.Role;
@@ -66,6 +69,11 @@ builder.Services.AddScoped<ISettingService, SettingSevice>();
 builder.Services.AddTransient<IDiemChuYService, DiemChuYService>();
 builder.Services.AddTransient<ILoiTaiCongDoanService, LoiTaiCongDoanService>();
 builder.Services.AddTransient<IDoiSachService, DoiSachService>();
+
+builder.Services.AddTransient<ILogExamDiemChuYService, LogExamDiemChuYService>();
+builder.Services.AddTransient<ILogExamLoiTaiCongDoanService, LogExamLoiTaiCongDoanService>();
+builder.Services.AddTransient<ILogExamDoiSachService, LogExamDoiSachService>();
+
 
 
 builder.Services.AddControllers();
