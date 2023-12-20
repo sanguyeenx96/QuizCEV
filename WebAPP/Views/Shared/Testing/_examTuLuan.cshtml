@@ -106,17 +106,17 @@
                                     }
                                     foreach (var dcy in listDCY.OrderBy(x => new Random().Next()))
                                     {
-                                        <tr style="text-align:center;vertical-align:middle" data-id="@dcy.Id" data-chtlId="@Model.Id">
-                                            <th style="font-weight: 300">
-                                                <input class="form-control ansDCY" style="text-align:center" type="number" required>
-                                            </th>
-                                            <td hidden>
-                                                @dcy.Id
-                                            </td>
-                                            <td style="text-align:start">
-                                                @dcy.Text
-                                            </td>
-                                        </tr>
+                                            <tr style="text-align:center;vertical-align:middle" data-id="@dcy.Id" data-chtlId="@Model.Id">
+                                                <th style="font-weight: 300">
+                                                    <input min="1" class="form-control ansDCY" style="text-align:center" type="number" required>
+                                                </th>
+                                                <td hidden>
+                                                    @dcy.Id
+                                                </td>
+                                                <td style="text-align:start">
+                                                    @dcy.Text
+                                                </td>
+                                            </tr>
                                     }
                                 }
                             </tbody>
@@ -157,17 +157,17 @@
                                     }
                                     foreach (var ltcd in listLTCD.OrderBy(x => new Random().Next()))
                                     {
-                                        <tr style="text-align:center;vertical-align:middle" data-id="@ltcd.Id" data-chtlId="@Model.Id">
-                                            <th style="font-weight: 300">
-                                                <input class="form-control ansLTCD" style="text-align:center" type="number" required>
-                                            </th>
-                                            <td hidden>
-                                                @ltcd.Id
-                                            </td>
-                                            <td style="text-align:start">
-                                                @ltcd.Text
-                                            </td>
-                                        </tr>
+                                            <tr style="text-align:center;vertical-align:middle" data-id="@ltcd.Id" data-chtlId="@Model.Id">
+                                                <th style="font-weight: 300">
+                                                <input min="1" class="form-control ansLTCD" style="text-align:center" type="number" required>
+                                                </th>
+                                                <td hidden>
+                                                    @ltcd.Id
+                                                </td>
+                                                <td style="text-align:start">
+                                                    @ltcd.Text
+                                                </td>
+                                            </tr>
                                     }
                                     var selectListLTCD = new SelectList(listLTCD, "Id", "Text");
                                 }
@@ -219,26 +219,26 @@
                                     }
                                     foreach (var ds in listDS.OrderBy(x => new Random().Next()))
                                     {
-                                        <tr style="text-align:center;vertical-align:middle" data-id="@ds.Id" data-chtlId="@Model.Id">
-                                            <th style="font-weight: 300">
-                                                <select class="form-select ansDS" style="text-align:center" type="number">
-                                                    <option selected disabled>Chọn lỗi tương ứng với đối sách</option>
-                                                    @foreach (var ltcd in selectListLTCD)
+                                            <tr style="text-align:center;vertical-align:middle" data-id="@ds.Id" data-chtlId="@Model.Id">
+                                                <th style="font-weight: 300">
+                                                    <select class="form-select ansDS" style="text-align:center" type="number">
+                                                        <option selected disabled></option>
+                                                        @foreach (var ltcd in selectListLTCD)
                                                     {
-                                                        <option value="@ltcd.Text">@ltcd.Text</option>
+                                                            <option value="@ltcd.Text">@ltcd.Text</option>
                                                     }
-                                                </select>
-                                            </th>
-                                            <td hidden>
-                                                @ds.Id
-                                            </td>
-                                            <td style="text-align:center">
-                                                <i class="bi-arrow-right"></i>
-                                            </td>
-                                            <td style="text-align:start">
-                                                @ds.Text
-                                            </td>
-                                        </tr>
+                                                    </select>
+                                                </th>
+                                                <td hidden>
+                                                    @ds.Id
+                                                </td>
+                                                <td style="text-align:center">
+                                                    <i class="bi-arrow-right"></i>
+                                                </td>
+                                                <td style="text-align:start">
+                                                    @ds.Text
+                                                </td>
+                                            </tr>
                                     }
                                 }
                             </tbody>
@@ -325,12 +325,24 @@
                     });
                     $('#tblDS tbody tr').each(function () {
                         let selectText = $(this).find('.ansDS').val();
-                        let id = $(this).attr("data-id");
-                        id = parseInt(id)
-                        dataDS.push({
-                            Id: id,
-                            Answer: selectText
-                        });
+                        if (!selectText) {
+                            // Prevent form submission
+                            event.preventDefault();
+                            // Display an alert or any other validation message
+                            Swal.fire({
+                                icon: "warning",
+                                title: "Vui lòng chọn lỗi tương ứng với đối sách",
+                                showConfirmButton: false,
+                                timer: 1000,
+                            });                            
+                        }else{
+                            let id = $(this).attr("data-id");
+                            id = parseInt(id)
+                            dataDS.push({
+                                Id: id,
+                                Answer: selectText
+                            });
+                        }
                     });
                     //Send all value to Controller:
                     var dataToSend = {

@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ViewModels.LogExamDiemChuY.Response;
+using ViewModels.LogExamDoiSach.Response;
+using ViewModels.LogExamLoiTaiCongDoan.Response;
 using ViewModels.LogExamTrinhtuthaotac.Response;
 
 namespace ViewModels.LogExam.Response
@@ -22,6 +25,10 @@ namespace ViewModels.LogExam.Response
         public float? Score { get; set; }
         public float? FinalScore { get; set; }
         public List<LogExamTrinhtuthaotacVm>? LogExamTrinhtuthaotacs { get; set; }
+        public List<LogExamDiemChuYVm>? logExamDiemChuYs { get; set; }
+        public List<LogExamLoiTaiCongDoanVm>? logExamLoiTaiCongDoans { get; set; }
+        public List<LogExamDoiSachVm>? logExamDoiSaches { get; set; }
+
 
     }
 }

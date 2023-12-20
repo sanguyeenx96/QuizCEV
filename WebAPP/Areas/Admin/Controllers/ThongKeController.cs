@@ -16,7 +16,6 @@ namespace WebAPP.Areas.Admin.Controllers
         private readonly IDeptApiClient _deptApiClient;
         private readonly ICategoryApiClient _categoryApiClient;
 
-
         public ThongKeController(IExamResultApiClient examResultApiClient, IDeptApiClient deptApiClient, ICategoryApiClient categoryApiClient)
         {
             _examResultApiClient = examResultApiClient;
