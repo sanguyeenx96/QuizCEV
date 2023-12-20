@@ -1035,6 +1035,11 @@ namespace WebAPP.Areas.User.Controllers
             ViewBag.chTL = listQuestionsTuLuan;
             ViewBag.dsTL = listQuestionAndAnswerTrinhTuThaoTac;
 
+            ViewBag.dsDCY = listQuestionAndAnswerDiemChuY;
+            ViewBag.dsLTCD = listQuestionAndAnswerLoiTaiCongDoan;
+            ViewBag.dsDS = listQuestionAndAnswerDoiSach;
+
+
             TempData.Keep();
             return View();
         }

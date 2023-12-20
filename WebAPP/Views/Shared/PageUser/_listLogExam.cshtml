@@ -1,5 +1,5 @@
 ﻿@model List<ViewModels.ExamResult.Response.ExamResultVm>
-@foreach (var item in Model)
+@foreach (var item in Model.OrderByDescending(x=>x.Date))
 {
     float totalScore = item.Score;
     string danhgia = (totalScore >= 8) ? "Kết quả tốt" : (totalScore >= 6) ? "Kết quả trung bình" : "Không đạt";
@@ -45,7 +45,7 @@
 }
 
 <div class="modal fade" id="staticBackdrop" data-coreui-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
         <div id="noidungbaithi"></div>
     </div>
 </div>

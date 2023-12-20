@@ -31,6 +31,7 @@ namespace WebAPP.Areas.User.Controllers
             {
                 id = userId;
             };
+
             var request = new ExamResultSearchRequest()
             {
                 UserId = id,
@@ -41,6 +42,7 @@ namespace WebAPP.Areas.User.Controllers
                 name =null,
                 userName =null
             };
+
             var resultPhongthi = await _examResultApiClient.Search(request);
             var listPhongthi = resultPhongthi.ResultObj.DistinctBy(x => x.CategoryId).ToList();
 
@@ -57,7 +59,6 @@ namespace WebAPP.Areas.User.Controllers
         [HttpPost]
         public async Task<IActionResult> GetLogAfterExam(int? CategoryId, DateTime? Date, int? examResultId)
         {
-
             Guid id = Guid.Empty;
             var userIdString = User.FindFirstValue("UserId");
             if (Guid.TryParse(userIdString, out var userId))
