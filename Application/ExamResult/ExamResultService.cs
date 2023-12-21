@@ -180,7 +180,6 @@ namespace Application.ExamResult
                                     LogExamId = LogExamDoiSach.LogExamId
                                 }).ToList()
                                 : new List<ViewModels.LogExamDoiSach.Response.LogExamDoiSachVm>()
-
                     }).ToList()
                     : new List<LogExamVm>()
                 }).ToList();
