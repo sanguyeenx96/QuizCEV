@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Drawing;
 using System.Security.Claims;
 using ViewModels.Category.Response;
 using ViewModels.CauHoiTrinhTuThaoTac.DiemChuY;
@@ -40,7 +41,6 @@ namespace WebAPP.Areas.User.Controllers
         private readonly ILogExamLTCDApiClient _logExamLTCDApiClient;
         private readonly ILogExamDCYApiClient _logExamDCYApiClient;
         private readonly ILogExamDSApiClient _logExamDSApiClient;
-
 
         public HomeController(ICategoryApiClient categoryApiClient, IQuestionApiClient questionApiClient,
             ICauHoiTuLuanApiClient cauHoiTuLuanApiClient, ICauHoiTrinhTuThaoTacApiClient cauHoiTrinhTuThaoTacApiClient,
@@ -427,6 +427,7 @@ namespace WebAPP.Areas.User.Controllers
                     CauHoiTuLuanText = cauhoituluanText,
                     Text = item.Text,
                     ThuTu = item.ThuTu,
+                    Score = item.Score,
                     CauHoiTuLuanId = item.CauHoiTuLuanId,
                     Answer = request.dataTTTT.Where(x => x.Id == item.Id).FirstOrDefault().ThuTu
                 };
@@ -678,6 +679,91 @@ namespace WebAPP.Areas.User.Controllers
             return Json(new { success = true });
         }
 
+
+        //Tự động lưu kết quả khi hết giờ:
+        [HttpPost]
+        public async Task<IActionResult> SaveHetGio(string time)
+        {
+            #region 1. Lấy dữ liệu cơ bản:
+            int thoiGianChoPhepLamBai = Convert.ToInt32(TempData["thoiGianThi"].ToString());
+            int thoiGianConLai = Convert.ToInt32(time);
+            int thoiGianLamBai = thoiGianChoPhepLamBai - (thoiGianConLai / 60 / 1000);
+            TempData["thoiGianLamBai"] = thoiGianLamBai;
+            Guid id = Guid.Empty;
+            var userIdString = User.FindFirstValue("UserId");
+            if (Guid.TryParse(userIdString, out var userId))
+            {
+                id = userId;
+            };
+            int idPhong = Convert.ToInt32(TempData["idPhong"].ToString());
+            string tenPhongthi = TempData["Tenphongthi"].ToString();
+            #endregion
+
+            #region 2. Tính điểm
+            //Tính điểm phần thi trắc nghiệm
+            float totalScoreTracNghiem = 0;
+            float scoreTracNghiem = 0;
+            int slTraLoiDungTracNghiem = 0;
+            string jsonlistQuestionAndAnswerTracNghiem = TempData.Peek("QuestionAndAnswerTracNghiem")?.ToString();
+            List<QuestionAndAnswerVm> listQuestionAndAnswerTracNghiem = JsonConvert.DeserializeObject<List<QuestionAndAnswerVm>>(jsonlistQuestionAndAnswerTracNghiem);
+            foreach (var item in listQuestionAndAnswerTracNghiem)
+            {
+                totalScoreTracNghiem += item.Score ?? 0;
+                if (item.Answer == item.QCorrectAns.ToUpper())
+                {
+                    scoreTracNghiem += item.Score ?? 0;
+                    slTraLoiDungTracNghiem++;
+                }
+            }
+
+            //Tính điểm phần thi tự luận
+            float totalScoreTuLuan = 0;
+            float scoreTuluan = 0;
+            int slTraLoiDungTuLuan = 0;
+            string jsonQuestionsTuLuan = TempData["dsCauHoiTL"].ToString();
+            List<CauHoiTuLuanVm> listQuestionsTuLuan = JsonConvert.DeserializeObject<List<CauHoiTuLuanVm>>(jsonQuestionsTuLuan);
+            //Trình tự thao tác
+            string jsonlistQuestionAndAnswerTrinhTuThaoTac = TempData["QuestionAndAnswerTrinhTuThaoTac"].ToString();
+            List<QuestionAndAnswerTrinhTuThaoTacVm> listQuestionAndAnswerTrinhTuThaoTac = JsonConvert.DeserializeObject<List<QuestionAndAnswerTrinhTuThaoTacVm>>(jsonlistQuestionAndAnswerTrinhTuThaoTac);
+            //Điểm chú ý
+            string jsonlistQuestionAndAnswerDiemChuY = TempData["QuestionAndAnswerDiemChuY"].ToString();
+            List<QuestionAndAnswerDiemChuYVm> listQuestionAndAnswerDiemChuY = JsonConvert.DeserializeObject<List<QuestionAndAnswerDiemChuYVm>>(jsonlistQuestionAndAnswerDiemChuY);
+            //Lỗi tại công đoạn
+            string jsonQuestionAndAnswerLoiTaiCongDoan = TempData["QuestionAndAnswerLoiTaiCongDoan"].ToString();
+            List<QuestionAndAnswerLoiTaiCongDoanVm> listQuestionAndAnswerLoiTaiCongDoan = JsonConvert.DeserializeObject<List<QuestionAndAnswerLoiTaiCongDoanVm>>(jsonQuestionAndAnswerLoiTaiCongDoan);
+            //Đối sách
+            string jsonQuestionAndAnswerDoiSach = TempData["QuestionAndAnswerDoiSach"].ToString();
+            List<QuestionAndAnswerDoiSachVm> listQuestionAndAnswerDoiSach = JsonConvert.DeserializeObject<List<QuestionAndAnswerDoiSachVm>>(jsonQuestionAndAnswerDoiSach);
+            var groupListQuestionAndAnswerTrinhTuThaoTac = listQuestionAndAnswerTrinhTuThaoTac.GroupBy(x => x.CauHoiTuLuanId); //Với mỗi câu hỏi tự luận:
+            foreach (var group in groupListQuestionAndAnswerTrinhTuThaoTac) 
+            {
+                var cauhoituluan = listQuestionsTuLuan.FirstOrDefault(x => x.Id == group.First().CauHoiTuLuanId);
+                float scoreCauhoituluan = cauhoituluan?.Score ?? 0;
+                totalScoreTuLuan += scoreCauhoituluan;
+                if (group.All(item => item.Answer == item.ThuTu))
+                {
+                    var listDCY = listQuestionAndAnswerDiemChuY.Where(x => x.CauHoiTuLuanId == cauhoituluan.Id).ToList();
+                    if (listDCY.All(item => item.Answer == item.CorrectAnswer))
+                    {
+                        var listLTCD = listQuestionAndAnswerLoiTaiCongDoan.Where(x => x.CauHoiTuLuanId == cauhoituluan.Id).ToList();
+                        if (listLTCD.All(item => item.Answer == item.CorrectAnswer))
+                        {
+                            var listDS = listQuestionAndAnswerDoiSach.Where(x => x.CauHoiTuLuanId == cauhoituluan.Id).ToList();
+                            if (listDS.All(item => item.Answer == item.CorrectAnswer))
+                            {
+                                scoreTuluan += scoreCauhoituluan;
+                                slTraLoiDungTuLuan++;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return Ok();
+        }
+
+
+
         //Lưu kết quả
         [HttpPost]
         public async Task<IActionResult> Save(string time)
@@ -718,42 +804,103 @@ namespace WebAPP.Areas.User.Controllers
             string jsonQuestionsTuLuan = TempData["dsCauHoiTL"].ToString();
             List<CauHoiTuLuanVm> listQuestionsTuLuan = JsonConvert.DeserializeObject<List<CauHoiTuLuanVm>>(jsonQuestionsTuLuan);
 
-        //Trình tự thao tác
+            //Trình tự thao tác
             string jsonlistQuestionAndAnswerTrinhTuThaoTac = TempData["QuestionAndAnswerTrinhTuThaoTac"].ToString();
             List<QuestionAndAnswerTrinhTuThaoTacVm> listQuestionAndAnswerTrinhTuThaoTac = JsonConvert.DeserializeObject<List<QuestionAndAnswerTrinhTuThaoTacVm>>(jsonlistQuestionAndAnswerTrinhTuThaoTac);
-        //Điểm chú ý
+            //Điểm chú ý
             string jsonlistQuestionAndAnswerDiemChuY = TempData["QuestionAndAnswerDiemChuY"].ToString();
             List<QuestionAndAnswerDiemChuYVm> listQuestionAndAnswerDiemChuY = JsonConvert.DeserializeObject<List<QuestionAndAnswerDiemChuYVm>>(jsonlistQuestionAndAnswerDiemChuY);
-        //Lỗi tại công đoạn
+            //Lỗi tại công đoạn
             string jsonQuestionAndAnswerLoiTaiCongDoan = TempData["QuestionAndAnswerLoiTaiCongDoan"].ToString();
             List<QuestionAndAnswerLoiTaiCongDoanVm> listQuestionAndAnswerLoiTaiCongDoan = JsonConvert.DeserializeObject<List<QuestionAndAnswerLoiTaiCongDoanVm>>(jsonQuestionAndAnswerLoiTaiCongDoan);
-        //Đối sách
+            //Đối sách
             string jsonQuestionAndAnswerDoiSach = TempData["QuestionAndAnswerDoiSach"].ToString();
             List<QuestionAndAnswerDoiSachVm> listQuestionAndAnswerDoiSach = JsonConvert.DeserializeObject<List<QuestionAndAnswerDoiSachVm>>(jsonQuestionAndAnswerDoiSach);
 
             var groupListQuestionAndAnswerTrinhTuThaoTac = listQuestionAndAnswerTrinhTuThaoTac.GroupBy(x => x.CauHoiTuLuanId);
             foreach (var group in groupListQuestionAndAnswerTrinhTuThaoTac)
-            {
-                var cauhoituluan = listQuestionsTuLuan.FirstOrDefault(x => x.Id == group.First().CauHoiTuLuanId);
-                float scoreCauhoituluan = cauhoituluan?.Score ?? 0;
-                totalScoreTuLuan += scoreCauhoituluan;
-                if (group.All(item => item.Answer == item.ThuTu))
+            {              
+                //Xử lý tính điểm:
+                foreach(var itemtttt in group)
                 {
-                    var listDCY = listQuestionAndAnswerDiemChuY.Where(x => x.CauHoiTuLuanId == cauhoituluan.Id).ToList();
-                    if (listDCY.All(item => item.Answer == item.CorrectAnswer))
+                    float scoreCauhoiTTTT = itemtttt?.Score != null ? itemtttt.Score : 0;
+                    totalScoreTuLuan += scoreCauhoiTTTT;
+
+                    if (itemtttt.Answer == itemtttt.ThuTu)
                     {
-                        var listLTCD = listQuestionAndAnswerLoiTaiCongDoan.Where(x => x.CauHoiTuLuanId == cauhoituluan.Id).ToList();
-                        if (listLTCD.All(item => item.Answer == item.CorrectAnswer))
+                        var listDCY = listQuestionAndAnswerDiemChuY.Where(x => x.CauhoitrinhtuthaotacId == itemtttt.Id).ToList();
+                        if (listDCY.All(item => item.Answer == item.CorrectAnswer))
                         {
-                            var listDS = listQuestionAndAnswerDoiSach.Where(x => x.CauHoiTuLuanId == cauhoituluan.Id).ToList();
-                            if (listDS.All(item => item.Answer == item.CorrectAnswer))
+                            var listLTCD = listQuestionAndAnswerLoiTaiCongDoan.Where(x => x.CauhoitrinhtuthaotacId == itemtttt.Id).ToList();
+                            if (listLTCD.All(item => item.Answer == item.CorrectAnswer))
                             {
-                                scoreTuluan += scoreCauhoituluan;
-                                slTraLoiDungTuLuan++;
+                                foreach(var itemLTCD in listLTCD)
+                                {
+                                    var listDS = listQuestionAndAnswerDoiSach.Where(x => x.CauHoiTuLuanId == itemLTCD.Id).ToList();
+                                    if (listDS.All(item => item.Answer == item.CorrectAnswer))
+                                    {
+                                        scoreTuluan += scoreCauhoiTTTT;
+                                        slTraLoiDungTuLuan++;
+                                    }
+
+                                }
+                                
                             }
                         }
-                    }                       
+                    }
                 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                /////CHƯA XONG!!!!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                //if (group.All(item => item.Answer == item.ThuTu))
+                //{
+                //    var listDCY = listQuestionAndAnswerDiemChuY.Where(x => x.CauHoiTuLuanId == cauhoituluan.Id).ToList();
+                //    if (listDCY.All(item => item.Answer == item.CorrectAnswer))
+                //    {
+                //        var listLTCD = listQuestionAndAnswerLoiTaiCongDoan.Where(x => x.CauHoiTuLuanId == cauhoituluan.Id).ToList();
+                //        if (listLTCD.All(item => item.Answer == item.CorrectAnswer))
+                //        {
+                //            var listDS = listQuestionAndAnswerDoiSach.Where(x => x.CauHoiTuLuanId == cauhoituluan.Id).ToList();
+                //            if (listDS.All(item => item.Answer == item.CorrectAnswer))
+                //            {
+                //                scoreTuluan += scoreCauhoituluan;
+                //                slTraLoiDungTuLuan++;
+                //            }
+                //        }
+                //    }                       
+                //}
             }
 
             //Lưu lịch sử bài thi
@@ -779,6 +926,7 @@ namespace WebAPP.Areas.User.Controllers
             {
                 return Json(new { success = false });
             }
+
             //Lưu lịch sử chi tiết các câu hỏi và đáp án
             //Phần trắc nghiệm
             List<LogExamCreateRequest> listlichsuTN = new List<LogExamCreateRequest>();

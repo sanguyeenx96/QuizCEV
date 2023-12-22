@@ -14,6 +14,6 @@ namespace ViewModels.CauHoiTrinhTuThaoTac.Response
         public int ThuTu { get; set; }
         public int CauHoiTuLuanId { get; set; }
         public int Answer { get; set; }
+        public float Score  { get; set; }
     }
-
 }

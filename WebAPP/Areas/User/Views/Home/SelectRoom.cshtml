@@ -6,7 +6,6 @@
     {
     <partial name="PageUser/_sideBar" />
     }
-
     <style>
         .center-pills {
             display: flex;
@@ -17,23 +16,23 @@
     if (ViewBag.settingRetest == false)
     {
     <small>
-                    <span class="badge bg-danger">
-                        <i class="bi-exclamation-triangle-fill"></i>
-                        Không cho phép thi lại
-                    </span>
+        <span class="badge bg-danger">
+            <i class="bi-exclamation-triangle-fill"></i>
+            Không cho phép thi lại
+        </span>
     </small>
     }
     else
     {
     <small>
-                    <span class="badge bg-success">
-                        <i class="bi-exclamation-triangle-fill"></i>
-                        Cho phép thi lại
-                    </span>
+        <span class="badge bg-success">
+            <i class="bi-exclamation-triangle-fill"></i>
+            Cho phép thi lại
+        </span>
     </small>
-
     }
 }
+
 <h1 class="display-6">Chọn phòng thi </h1>
 
 <ul class="nav nav-pills center-pills my-2" id="pills-tab" role="tablist">
@@ -99,46 +98,46 @@
             var idPhong = $(this).attr("data-idPhong");
             var tenPhong = $(this).attr("data-tenPhong");
 
-            swalWithBootstrapButtons
-                .fire({
-                    title: "Bắt đầu?",
-                    text: "Phòng thi " + tenPhong,
-                    showCancelButton: true,
-                    confirmButtonText: "Xác nhận",
-                    cancelButtonText: "Huỷ bỏ",
-                    reverseButtons: true,
-                })
-                .then((result) => {
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            url: "SelectRoom", // Đường dẫn đến action
-                            method: "POST",
-                            data: { idPhong: idPhong
-                                , categoryName: tenPhong
-                            }, // Dữ liệu gửi đi
-                            success: function (response) {
-                                if (response.success){
-                                    var url = "Test";
-                                    window.location.href = url;
-                                }
-                                else{
-                                    Swal.fire({
-                                        icon: "error",
-                                        width: 300,
-                                        text: response.message,
-                                        showConfirmButton: false,
-                                        timer: 2000,
-                                    });
-                                }        
-
-                            },
-                            error: function (error) {
-                                // Xử lý lỗi nếu có
-                                console.error("Error:", error);
+        swalWithBootstrapButtons
+            .fire({
+                title: "Bắt đầu?",
+                text: "Phòng thi " + tenPhong,
+                showCancelButton: true,
+                confirmButtonText: "Xác nhận",
+                cancelButtonText: "Huỷ bỏ",
+                reverseButtons: true,
+            })
+            .then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "SelectRoom", // Đường dẫn đến action
+                        method: "POST",
+                        data: { idPhong: idPhong
+                            , categoryName: tenPhong
+                        }, // Dữ liệu gửi đi
+                        success: function (response) {
+                            if (response.success){
+                                var url = "Test";
+                                window.location.href = url;
                             }
-                        });
-                    }
-                });
+                            else{
+                                Swal.fire({
+                                    icon: "error",
+                                    width: 300,
+                                    text: response.message,
+                                    showConfirmButton: false,
+                                    timer: 2000,
+                                });
+                            }        
+
+                        },
+                        error: function (error) {
+                            // Xử lý lỗi nếu có
+                            console.error("Error:", error);
+                        }
+                    });
+                }
+            });
         });
     });
 </script>

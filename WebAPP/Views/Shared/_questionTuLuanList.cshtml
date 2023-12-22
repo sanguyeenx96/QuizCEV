@@ -1,12 +1,12 @@
 ﻿@model IEnumerable<ViewModels.CauHoiTuLuan.Response.CauHoiTuLuanVm>
 
-<div class="accordion" id="accordionFlushExample">
+<div class="accordion" id="accordionFlushExample" data-catId="@Model.FirstOrDefault().CategoryId">
     @foreach (var item in Model)
     {
         string speId = "newTL" + item.Id;
         <div class="accordion-item">
             <h2 class="accordion-header">
-                <button class="accordion-button collapsed btnXemchitiet " type="button" data-coreui-toggle="collapse" data-coreui-target="#@speId" aria-expanded="false" data-id="@item.Id">
+                <button class="accordion-button collapsed btnXemchitiet " type="button" data-coreui-toggle="collapse" data-coreui-target="#@speId" aria-expanded="false" data-id="@item.Id" data-catId="@item.CategoryId">
                     @{
                         if (item.Score != null && item.Score != 0)
                         {
@@ -28,7 +28,7 @@
             <div id="@speId" class="accordion-collapse collapse" data-coreui-parent="#accordionFlushExample">
                 <div class="accordion-body">
                     <div style="text-align:start;margin-bottom:5px">
-                        <div class="btn-group" style=" white-space:nowrap;">
+                        <div class="btn-group" style=" white-space:nowrap;font-size:small">
                             <btn class="btn btn-sm btn-secondary btnThemNoiDungThaoTac" data-abc="@item.CategoryId" data-id="@item.Id" data-this-score="@(item.Score ?? 0) ">
                                 <i class="bi-file-earmark-plus"> </i>
                                 Thêm nội dung thao tác
@@ -47,7 +47,7 @@
                             </btn>
                         </div>
                     </div>
-                    <div id="@item.Id"></div>
+                    <div id="@item.Id" ></div>
                 </div>
             </div>
         </div>

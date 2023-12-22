@@ -1,6 +1,7 @@
 ﻿using Data.EF;
 using Data.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,7 +37,7 @@ namespace Application.CauHoiTuLuan
             var newQuestion = new Data.Entities.CauHoiTuLuan()
             {
                 CategoryId = request.CategoryId,
-                Text = request.Text,           
+                Text = request.Text,
             };
             _context.CauHoiTuLuans.Add(newQuestion);
             await _context.SaveChangesAsync();
@@ -51,7 +52,7 @@ namespace Application.CauHoiTuLuan
             var cacCauHoiTrinhTuThaoTac = await _context.cauHoiTrinhTuThaoTacs.Where(x => x.CauHoiTuLuanId == id).ToListAsync();
             if (cacCauHoiTrinhTuThaoTac.Any())
             {
-                foreach(var item in cacCauHoiTrinhTuThaoTac)
+                foreach (var item in cacCauHoiTrinhTuThaoTac)
                 {
                     _context.cauHoiTrinhTuThaoTacs.Remove(item);
                 }
@@ -59,15 +60,18 @@ namespace Application.CauHoiTuLuan
             _context.CauHoiTuLuans.Remove(question);
             await _context.SaveChangesAsync();
             return new ApiSuccessResult<bool> { Message = "Đã xoá thành công!" };
-        } 
+        }
 
         public async Task<ApiResult<List<CauHoiTuLuanVm>>> GetAllByCategory(int id)
         {
-            var listquestions = await _context.CauHoiTuLuans.Where(x => x.CategoryId == id).Select(x => new CauHoiTuLuanVm
+            var listquestions = await _context.CauHoiTuLuans
+                .Include(x => x.cauHoiTrinhTuThaoTacs)
+                .Where(x => x.CategoryId == id)
+            .Select(x => new CauHoiTuLuanVm
             {
                 Id = x.Id,
                 Text = x.Text,
-                Score = x.Score,
+                Score = x.cauHoiTrinhTuThaoTacs.Sum(x=>x.Score),
                 CategoryId = x.CategoryId
             }).ToListAsync();
             return new ApiSuccessResult<List<CauHoiTuLuanVm>>(listquestions);
@@ -75,14 +79,17 @@ namespace Application.CauHoiTuLuan
 
         public async Task<ApiResult<CauHoiTuLuanVm>> GetById(int id)
         {
-            var result = await _context.CauHoiTuLuans.FindAsync(id);
+            var result = await _context.CauHoiTuLuans.Include(x => x.cauHoiTrinhTuThaoTacs).Where(x => x.Id == id).FirstOrDefaultAsync();
             if (result == null)
                 return new ApiErrorResult<CauHoiTuLuanVm> { Message = "Không tìm thấy câu hỏi" };
+
+            float? totalScore = result.cauHoiTrinhTuThaoTacs.Sum(x => x.Score);
+
             var question = new CauHoiTuLuanVm
             {
                 Id = result.Id,
                 Text = result.Text,
-                Score = result.Score,
+                Score = totalScore,
                 CategoryId = result.CategoryId
             };
             return new ApiSuccessResult<CauHoiTuLuanVm>(question);
@@ -96,7 +103,7 @@ namespace Application.CauHoiTuLuan
             question.Score = request.Score;
             _context.CauHoiTuLuans.Update(question);
             await _context.SaveChangesAsync();
-            return new ApiSuccessResult<bool> ();
+            return new ApiSuccessResult<bool>();
         }
 
         public async Task<ApiResult<bool>> UpdateText(int id, CauHoiTuLuanUpdateTextRequest request)
@@ -104,7 +111,7 @@ namespace Application.CauHoiTuLuan
             var cauhoi = await _context.CauHoiTuLuans.FindAsync(id);
             if (cauhoi == null)
                 return new ApiErrorResult<bool> { Message = "Không tìm thấy câu hỏi" };
-            cauhoi.Text = request.Text;            
+            cauhoi.Text = request.Text;
             _context.CauHoiTuLuans.Update(cauhoi);
             await _context.SaveChangesAsync();
             return new ApiSuccessResult<bool>();

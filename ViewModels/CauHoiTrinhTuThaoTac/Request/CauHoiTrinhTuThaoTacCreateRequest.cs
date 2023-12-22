@@ -10,6 +10,6 @@ namespace ViewModels.CauHoiTrinhTuThaoTac.Request
     {
         public string Text { get; set; }
         public int CauHoiTuLuanId { get; set; }
-
+        public float? Score { get; set; }
     }
 }

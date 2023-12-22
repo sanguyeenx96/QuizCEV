@@ -21,6 +21,8 @@ namespace Application.CauHoiTrinhTuThaoTac
         Task<ApiResult<int>> Count(int id);
         Task<ApiResult<bool>> ChangeOrder(List<CauHoiTrinhTuThaoTacChangeOrderRequest> request);
         Task<ApiResult<bool>> UpdateText(Guid id, CauHoiTrinhTuThaoTacUpdateTextRequest request);
+        Task<ApiResult<bool>> UpdateScore(Guid id, CauHoiTrinhTuThaoTacUpdateScoreRequest request);
+
 
         //UploadExcel
         Task<List<CauHoiTrinhThuThaoTacImportExcelRequest>> ReadExcelFile(Stream fileStream);

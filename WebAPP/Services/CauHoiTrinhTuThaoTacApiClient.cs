@@ -23,6 +23,7 @@ namespace WebAPP.Services
             _httpContextAccessor = httpContextAccessor;
         }
 
+
         public async Task<ApiResult<bool>> ChangeOrder(List<CauHoiTrinhTuThaoTacChangeOrderRequest> request)
         {
             var client = _httpClientFactory.CreateClient();
@@ -130,9 +131,7 @@ namespace WebAPP.Services
             }
             return JsonConvert.DeserializeObject<ApiErrorResult<CauHoiTrinhTuThaoTacVm>>(result);
         }
-
-      
-
+    
         public async Task<ApiResult<bool>> UpdateText(Guid id, CauHoiTrinhTuThaoTacUpdateTextRequest request)
         {
             var client = _httpClientFactory.CreateClient();
@@ -178,6 +177,25 @@ namespace WebAPP.Services
                 return JsonConvert.DeserializeObject<ApiSuccessResult<ImportExcelResult>>(result);
             }
             return JsonConvert.DeserializeObject<ApiErrorResult<ImportExcelResult>>(result);
+        }
+
+        public async Task<ApiResult<bool>> UpdateScore(Guid id, CauHoiTrinhTuThaoTacUpdateScoreRequest request)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAdress"]);
+
+            var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
+
+            var json = JsonConvert.SerializeObject(request);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+            var response = await client.PutAsync($"/api/cauhoitrinhtuthaotac/updatescore/{id}", httpContent);
+            var result = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
+            }
+            return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
         }
     }
 }

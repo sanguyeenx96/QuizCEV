@@ -293,11 +293,14 @@ $(document).ready(function () {
 
     $(".btnXemchitiet").click(function () {
         var id = $(this).data("id");
+        var catId = $(this).attr("data-catId");
+        catId = parseInt(catId);
         $.ajax({
             url: "GetAllByCauHoiTuLuan",
             type: "POST",
             data: {
                 id: id,
+                catId:catId
             },
             success: function (result) {
                 $("#" + id).html(result);

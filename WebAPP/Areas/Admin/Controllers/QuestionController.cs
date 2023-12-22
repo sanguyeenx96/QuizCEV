@@ -39,7 +39,6 @@ namespace WebAPP.Areas.Admin.Controllers
             _doiSachApiClient = doiSachApiClient;
         }
 
-
         //PAGE:
         public async Task<IActionResult> List()
         {
@@ -130,12 +129,12 @@ namespace WebAPP.Areas.Admin.Controllers
             return Json(new { success = true, result = result.Score });
         }
         [HttpPost]
-        public async Task<IActionResult> GetAllByCauHoiTuLuan(int id)
+        public async Task<IActionResult> GetAllByCauHoiTuLuan(int id,int catId)
         {
             var result = await _cauHoiTrinhTuThaoTacApiClient.GetAllByCauHoiTuLuan(id);
+            ViewBag.catId = catId;
             return PartialView("_CauHoiTrinhTuThaoTac", result.ResultObj);
         }
-
 
         //CREATE:
         [HttpPost]
@@ -159,7 +158,6 @@ namespace WebAPP.Areas.Admin.Controllers
             }
             return Json(new { success = true, message = result.Message });
         }
-
 
         //IMPORT TRINH TU THAO TAC FROM EXCEL
         [HttpPost]
@@ -215,7 +213,6 @@ namespace WebAPP.Areas.Admin.Controllers
             return Json(new { success = true });
         }
 
-
         //UPDATE:
         [HttpPost]
         public async Task<IActionResult> UpdateScore(int id, QuestionUpdateScoreRequest request)
@@ -227,16 +224,18 @@ namespace WebAPP.Areas.Admin.Controllers
             }
             return Json(new { success = true });
         }
+
         [HttpPost]
-        public async Task<IActionResult> UpdateScoreTuluan(int id, CauHoiTuLuanUpdateScoreRequest request)
-        {
-            var result = await _cauHoiTuLuanApiClient.UpdateScore(id, request);
+        public async Task<IActionResult> UpdateScoreTTTT(Guid id, CauHoiTrinhTuThaoTacUpdateScoreRequest request)
+        { 
+            var result = await _cauHoiTrinhTuThaoTacApiClient.UpdateScore(id, request);
             if (!result.IsSuccessed)
             {
                 return Json(new { success = false });
             }
             return Json(new { success = true });
         }
+
         [HttpPost]
         public async Task<ActionResult> UpdatePositions([FromBody] List<CauHoiTrinhTuThaoTacChangeOrderRequest> parsedNewOrder)
         {
@@ -278,7 +277,6 @@ namespace WebAPP.Areas.Admin.Controllers
             return Json(new { success = true });
         }
 
-
         //DELETE:
         [HttpPost]
         public async Task<IActionResult> DeleteTracNghiem(int id)
@@ -310,7 +308,6 @@ namespace WebAPP.Areas.Admin.Controllers
             }
             return Json(new { success = true });
         }
-
 
         //Điểm chú ý
         [HttpPost]

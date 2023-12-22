@@ -102,5 +102,12 @@ namespace WebAPI.Controllers
                 return BadRequest("Lỗi xử lý tệp Excel: " + ex.Message);
             }
         }
+
+        [HttpPut("updatescore/{id}")]
+        public async Task<IActionResult> UpdateScore(Guid id, CauHoiTrinhTuThaoTacUpdateScoreRequest request)
+        {
+            var result = await _cauHoiTrinhTuThaoTacService.UpdateScore(id, request);
+            return Ok(result);
+        }
     }
 }
