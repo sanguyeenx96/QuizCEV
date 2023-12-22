@@ -12,6 +12,7 @@ namespace Data.Entities
         public Guid Id { get; set; } = Guid.NewGuid();
         public string Text { get; set; }
         public int ThuTu { get; set; }
+        public float? Score { get; set; }
         public int CauHoiTuLuanId { get; set; }
         public CauHoiTuLuan CauHoiTuLuan { get; set; }
         public List<TTTTDiemChuY>? TTTTDiemChuYs { get; set; }

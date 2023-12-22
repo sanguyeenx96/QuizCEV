@@ -122,7 +122,6 @@ namespace WebAPP.Services
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_configuration["BaseAdress"]);
 
-
             var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
 

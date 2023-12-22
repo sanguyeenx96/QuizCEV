@@ -277,7 +277,8 @@ namespace Application.Question
         public async Task<ApiResult<float>> GetTotalScore(int categoryId)
         {
             var result1 = await _context.Questions.Where(x => x.CategoryId == categoryId).ToListAsync();
-            var result2 = await _context.CauHoiTuLuans.Where(x => x.CategoryId == categoryId).ToListAsync();
+            //var result2 = await _context.CauHoiTuLuans.Where(x => x.CategoryId == categoryId).ToListAsync();
+            var result2 = await _context.cauHoiTrinhTuThaoTacs.Include(x=>x.CauHoiTuLuan).Where(x => x.CauHoiTuLuan.CategoryId == categoryId).ToListAsync();
             float totalScore = 0;
             foreach(var item in result1)
             {

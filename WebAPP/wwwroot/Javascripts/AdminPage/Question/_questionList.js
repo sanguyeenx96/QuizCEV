@@ -13,7 +13,7 @@ $(document).ready(function () {
             success: function (result) {
                 if (result.success) {
                     let nowTotalScore = result.result;
-                    let remainScore = 10 - nowTotalScore;
+                    let remainScore = 100 - nowTotalScore;
                     showScoreInputDialog(
                         id,
                         intCategoryId,
@@ -125,8 +125,8 @@ async function showScoreInputDialog(id, intCategoryId, remainScore, thisScore) {
         inputLabel: "Số điểm chưa gán còn lại: " + remainScore + " điểm",
         inputAttributes: {
             min: "0",
-            max: "10",
-            step: "0.25",
+            max: "100",
+            step: "1",
         },
         inputValue: parseFloat(thisScore),
     });

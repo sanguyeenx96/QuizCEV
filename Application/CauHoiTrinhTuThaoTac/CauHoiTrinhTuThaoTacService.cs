@@ -72,7 +72,8 @@ namespace Application.CauHoiTrinhTuThaoTac
             {
                 CauHoiTuLuanId = request.CauHoiTuLuanId,
                 Text = request.Text,
-                ThuTu = num
+                ThuTu = num,
+                Score = request.Score
             };
             _context.cauHoiTrinhTuThaoTacs.Add(newQuestion);
             await _context.SaveChangesAsync();
@@ -132,6 +133,7 @@ namespace Application.CauHoiTrinhTuThaoTac
                 Id = y.Id,
                 Text = y.Text,
                 ThuTu = y.ThuTu,
+                Score = y.Score != null ? y.Score : 0,
                 CauHoiTuLuanId = y.CauHoiTuLuanId,
                 diemChuYs = y.TTTTDiemChuYs != null
                                 ? y.TTTTDiemChuYs.Select(z => new DiemChuYVm
@@ -163,7 +165,6 @@ namespace Application.CauHoiTrinhTuThaoTac
             return new ApiSuccessResult<List<CauHoiTrinhTuThaoTacVm>>(listquestions);
         }
 
-
         public async Task<ApiResult<CauHoiTrinhTuThaoTacVm>> GetById(Guid id)
         {
             var result = await _context.cauHoiTrinhTuThaoTacs.FindAsync(id);
@@ -174,6 +175,7 @@ namespace Application.CauHoiTrinhTuThaoTac
                 Id = result.Id,
                 Text = result.Text,
                 ThuTu = result.ThuTu,
+                Score = result.Score,
                 CauHoiTuLuanId = result.CauHoiTuLuanId
             };
             return new ApiSuccessResult<CauHoiTrinhTuThaoTacVm>(question);
@@ -263,6 +265,17 @@ namespace Application.CauHoiTrinhTuThaoTac
             {
                 throw new Exception("Error while processing insert to SQL: " + ex.Message);
             }
+        }
+
+        public async Task<ApiResult<bool>> UpdateScore(Guid id, CauHoiTrinhTuThaoTacUpdateScoreRequest request)
+        {
+            var question = await _context.cauHoiTrinhTuThaoTacs.FindAsync(id);
+            if (question == null)
+                return new ApiErrorResult<bool> { Message = "Không tìm thấy câu hỏi" };
+            question.Score = request.Score;
+            _context.cauHoiTrinhTuThaoTacs.Update(question);
+            await _context.SaveChangesAsync();
+            return new ApiSuccessResult<bool>();
         }
     }
 }

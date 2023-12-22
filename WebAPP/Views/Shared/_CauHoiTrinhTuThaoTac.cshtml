@@ -2,9 +2,10 @@
 
 @{
     var randomid = GetHashCode();
+    var catId = ViewBag.catId;
 }
 
-<table id="@randomid" class="table table-dark table-hover table-striped" style="width:100%;border-bottom:10px">
+<table id="@randomid" class="table table-dark table-hover table-striped table-responsive" style="width:100%;border-bottom:10px">
     <thead class="bg-secondary" style="vertical-align:middle;font-size:small">
         <tr>
             <th class="col-2" style="text-align:center">
@@ -13,8 +14,11 @@
             <th hidden>
                 Id
             </th>
-            <th class="col-10" style="text-align:center">
+            <th class="col-9" style="text-align:center">
                 Nội dung
+            </th>
+            <th class="col-1" style="text-align:center">
+                Điểm số
             </th>
         </tr>
     </thead>
@@ -67,7 +71,7 @@
                                     }
                                 </td>
                                 <td>
-                                    <div class="btn-group" style=" white-space:nowrap;width:140px">
+                                    <div class="btn-group" style=" white-space:nowrap;width:140px;font-size:small">
                                         <btn class="btn btn-sm btn-secondary btnThemDiemChuY w-100" data-abc="@item.CauHoiTuLuanId" data-cauhoittttId="@item.Id">
                                             <i class="bi-plus"></i>
                                             Thêm
@@ -115,7 +119,7 @@
                                             }
                                         </td>
                                         <td>
-                                            <div class="btn-group" style=" white-space:nowrap;width:140px">
+                                            <div class="btn-group" style=" white-space:nowrap;width:140px;font-size:small">
                                                 <btn class="btn btn-sm btn-secondary btnSuaLoiDoiSach w-100" data-abc="@item.CauHoiTuLuanId" data-id="@ltcd.Id" data-noidungcauhoi="@item.Text">
                                                     <i class="bi-pencil"></i>
                                                     Sửa
@@ -131,20 +135,20 @@
                             }
                             <tr>
                                 <td style="text-align:center">
-                                    <btn style="width:180px" class="btn btn-sm btn-secondary btnThemLoiCongDoan" data-abc="@item.CauHoiTuLuanId" data-cauhoittttId="@item.Id">
+                                    <btn style="width:180px;font-size:small" class="btn btn-sm btn-secondary btnThemLoiCongDoan" data-abc="@item.CauHoiTuLuanId" data-cauhoittttId="@item.Id">
                                         <i class="bi-plus"></i>
                                         Thêm lỗi tại công đoạn
                                     </btn>
                                 </td>
                                 <td style="text-align:center">
-                                    <btn style="width:180px" class="btn btn-sm btn-secondary btnThemDoiSachLoi" data-abc="@item.CauHoiTuLuanId" data-cauhoittttId="@item.Id">
+                                    <btn style="width:180px;font-size:small" class="btn btn-sm btn-secondary btnThemDoiSachLoi" data-abc="@item.CauHoiTuLuanId" data-cauhoittttId="@item.Id">
                                         <i class="bi-plus"></i>
                                         Thêm đối sách
                                     </btn>
                                 </td>
                                 <td style="text-align:center">
                                     <div style="width:140px">
-                                        <btn class="btn btn-sm btn-success btnRefresh" data-abc="@item.CauHoiTuLuanId">
+                                        <btn class="btn btn-sm btn-success btnRefresh" style=";font-size:small" data-abc="@item.CauHoiTuLuanId">
                                             <i class="bi-arrow-clockwise"></i>
                                         </btn>
                                     </div>
@@ -152,6 +156,18 @@
                             </tr>
                         </tbody>
                     </table>
+                </td>
+                <td style="font-size: large;">
+                    <span class="badge text-bg-light">
+                        @item.Score điểm
+                    </span>
+                    <hr>
+                    <button class="btn btn-light shadow btnSuaDiemCauHoiTTTT" style="font-size:small"
+                    data-idTTTT="@item.Id" data-nowScoreTTTT="@item.Score" data-catId="">
+                        <i class="bi-plus-slash-minus"></i>
+                        <br>
+                        Sửa điểm
+                    </button>
                 </td>
             </tr>
         }
@@ -181,6 +197,7 @@
 
 <script>
     $(document).ready(function () {
+
         var table = $("#@randomid").DataTable({
             "paging": false,
             "searching": false,
@@ -553,5 +570,128 @@
                 },
             });
         })
+
+        $(".btnSuaDiemCauHoiTTTT").click(function () {
+            var catId = @catId;
+            var id = $(this).attr("data-idTTTT");
+            var intCategoryId = parseInt(catId);
+            var thisScore = $(this).attr("data-nowScoreTTTT");
+            $.ajax({
+                url: "GetTotalScore",
+                type: "POST",
+                data: {
+                    categoryId: intCategoryId,
+                },
+                success: function (result) {
+                    if (result.success) {
+                        let nowTotalScore = result.result;
+                        let remainScore = 100 - nowTotalScore;
+                        showScoreInputDialog(
+                            id,
+                            intCategoryId,
+                            remainScore,
+                            thisScore
+                        );
+                    } else {
+                        Swal.fire(
+                            "Lỗi máy chủ",
+                            "Thao tác đã được huỷ bỏ!",
+                            "error"
+                        );
+                    }
+                },
+                error: function (xhr, status, error) {
+                    Swal.fire("Lỗi máy chủ", "Thao tác đã được huỷ bỏ!", "error");
+                },
+            });
+        });
+        async function showScoreInputDialog(id, intCategoryId, remainScore, thisScore) {
+            const { value: soDiem } = await Swal.fire({
+                title: "Chọn điểm số cho câu hỏi",
+                icon: "question",
+                input: "range",
+                inputLabel: "Số điểm chưa gán còn lại: " + remainScore + " điểm",
+                inputAttributes: {
+                    min: "0",
+                    max: "100",
+                    step: "1",
+                },
+                inputValue: parseFloat(thisScore),
+            });
+            var diemSoSanh = parseFloat(remainScore) + parseFloat(thisScore);
+            if (soDiem <= diemSoSanh) {
+                $.ajax({
+                    url: "UpdateScoreTTTT",
+                    type: "POST",
+                    data: {
+                        id: id,
+                        Score: soDiem,
+                    },
+                    success: function (result) {
+                        if (result.success) {
+                            Swal.fire({
+                                icon: "success",
+                                title: "Sửa điểm số thành công",
+                                showConfirmButton: false,
+                                timer: 1500,
+                            });
+                            $.ajax({
+                                url: "GetAllTuLuanByCategoryId",
+                                type: "POST",
+                                data: {
+                                    id: intCategoryId,
+                                },
+                                success: function (result) {
+                                    $("#listQuestionTuLuan").html(result);
+                                },
+                            });
+                            $.ajax({
+                                url: "GetTotalScore",
+                                type: "POST",
+                                data: {
+                                    categoryId: intCategoryId,
+                                },
+                                success: function (result) {
+                                    $("#countDiemso").html(result.result);
+                                    if (result.result !== 100) {
+                                        $("#logoDiemdagan i").html('<i class="bi-x-circle-fill" style="color:red"></i>');
+                                    } else {
+                                        $("#logoDiemdagan i").html('<i class="bi-check-circle-fill" style="color:green"></i>');
+                                    }
+                                },
+                            });
+                            $.ajax({
+                                url: "GetCauHoiNullScore",
+                                type: "POST",
+                                data: {
+                                    id: intCategoryId,
+                                },
+                                success: function (result) {
+                                    $("#countChuaGan").html(result.sl);
+                                    if (result.sl !== 0) {
+                                        $("#logoChuagandiem i").html('<i class="bi-x-circle-fill" style="color:red"></i>');
+
+                                    } else {
+                                        $("#logoChuagandiem i").html('<i class="bi-check-circle-fill" style="color:green"></i>');
+
+                                    }
+                                },
+                            });
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        Swal.fire("Lỗi máy chủ", "Thao tác đã được huỷ bỏ!", "error");
+                    },
+                });
+            }
+            if (soDiem > diemSoSanh) {
+                Swal.fire(
+                    "Điểm số không phù hợp",
+                    "Bạn chỉ được gán thêm tối đa: " + remainScore + " điểm",
+                    "error"
+                );
+            }
+        }
+
     });
 </script>

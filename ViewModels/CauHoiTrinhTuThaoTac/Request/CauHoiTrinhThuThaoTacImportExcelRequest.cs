@@ -9,5 +9,7 @@ namespace ViewModels.CauHoiTrinhTuThaoTac.Request
     public class CauHoiTrinhThuThaoTacImportExcelRequest
     {
         public string Text { get; set; }
+        public float? Score { get; set; }
+
     }
 }
