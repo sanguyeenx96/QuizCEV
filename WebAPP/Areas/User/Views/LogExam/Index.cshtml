@@ -1,16 +1,12 @@
 ﻿@model List<ViewModels.ExamResult.Response.ExamResultVm>
 @{
     var selectListPhongThi = ViewBag.SelectListPhongThi as List<SelectListItem>;
-
 }
-
-
 @section SideBar
     {
     <partial name="PageUser/_sideBar" />
     }
     <h1 class="display-6 mb-2">Thống kê chung</h1>
-
     <div class="row">
         <div class="col-6 col-lg-3">
             <div class="card mb-2">
@@ -32,8 +28,8 @@
                         <i class="bi-hand-thumbs-up"></i>
                     </div>
                     <div>
-                        <div class="fs-6 fw-semibold text-success text-medium-emphasis">@Model.Where(x=>x.Score >= 8).Count() bài thi</div>
-                        <div class="text-medium-emphasis text-uppercase fw-semibold small">Kết quả tốt</div>
+                        <div class="fs-6 fw-semibold text-success text-medium-emphasis">@Model.Where(x=>x.Score >= 80).Count() bài thi</div>
+                        <div class="text-medium-emphasis text-uppercase fw-semibold small">Trên 80 điểm</div>
                     </div>
                 </div>
             </div>
@@ -45,8 +41,8 @@
                         <i class="bi bi-align-middle"></i>
                     </div>
                     <div>
-                        <div class="fs-6 fw-semibold text-medium-emphasis">@Model.Where(x=>(x.Score >= 6) &&(x.Score < 8)).Count() bài thi</div>
-                        <div class="text-medium-emphasis text-uppercase fw-semibold small">Trung bình</div>
+                        <div class="fs-6 fw-semibold text-medium-emphasis">@Model.Where(x=>(x.Score >= 60) &&(x.Score < 80)).Count() bài thi</div>
+                        <div class="text-medium-emphasis text-uppercase fw-semibold small">60 đến 80 điểm</div>
                     </div>
                 </div>
             </div>
@@ -58,8 +54,8 @@
                         <i class="bi-hand-thumbs-down"></i>
                     </div>
                     <div>
-                        <div class="fs-6 fw-semibold text-danger text-medium-emphasis">@Model.Where(x=>x.Score <6).Count() bài thi</div>
-                        <div class="text-medium-emphasis text-uppercase fw-semibold small">Không đạt</div>
+                        <div class="fs-6 fw-semibold text-danger text-medium-emphasis">@Model.Where(x=>x.Score <60).Count() bài thi</div>
+                        <div class="text-medium-emphasis text-uppercase fw-semibold small">Dưới 60 điểm</div>
                     </div>
                 </div>
             </div>

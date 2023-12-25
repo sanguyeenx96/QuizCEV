@@ -149,7 +149,7 @@ namespace WebAPP.Areas.User.Controllers
                     List<QuestionAndAnswerDiemChuYVm> listQuestionAndAnswerDiemChuY = new List<QuestionAndAnswerDiemChuYVm>();
                     TempData["QuestionAndAnswerDiemChuY"] = JsonConvert.SerializeObject(listQuestionAndAnswerDiemChuY);
 
-                    List<QuestionAndAnswerLoiTaiCongDoanVm> listQuestionAndAnswerLoiTaiCongDoan= new List<QuestionAndAnswerLoiTaiCongDoanVm>();
+                    List<QuestionAndAnswerLoiTaiCongDoanVm> listQuestionAndAnswerLoiTaiCongDoan = new List<QuestionAndAnswerLoiTaiCongDoanVm>();
                     TempData["QuestionAndAnswerLoiTaiCongDoan"] = JsonConvert.SerializeObject(listQuestionAndAnswerLoiTaiCongDoan);
 
                     List<QuestionAndAnswerDoiSachVm> listQuestionAndAnswerDoiSach = new List<QuestionAndAnswerDoiSachVm>();
@@ -406,7 +406,7 @@ namespace WebAPP.Areas.User.Controllers
             string jsonlistQuestionAndAnswerLoiTaiCongDoan = TempData["QuestionAndAnswerLoiTaiCongDoan"].ToString();
             List<QuestionAndAnswerLoiTaiCongDoanVm> listQuestionAndAnswerLoiTaiCongDoan = JsonConvert.DeserializeObject<List<QuestionAndAnswerLoiTaiCongDoanVm>>(jsonlistQuestionAndAnswerLoiTaiCongDoan);
 
-            string jsonlistQuestionAndAnswerDoiSach= TempData["QuestionAndAnswerDoiSach"].ToString();
+            string jsonlistQuestionAndAnswerDoiSach = TempData["QuestionAndAnswerDoiSach"].ToString();
             List<QuestionAndAnswerDoiSachVm> listQuestionAndAnswerDoiSach = JsonConvert.DeserializeObject<List<QuestionAndAnswerDoiSachVm>>(jsonlistQuestionAndAnswerDoiSach);
 
             //Lấy ra câu hỏi tự luận đầu tiên trong Queue list và bỏ nó.
@@ -416,7 +416,7 @@ namespace WebAPP.Areas.User.Controllers
             q = qlistTuLuan.Peek();
             int id = q.Id;
             string cauhoituluanText = q.Text;
-        
+
             var resultTrinhTuThaoTac = await _cauHoiTrinhTuThaoTacApiClient.GetAllByCauHoiTuLuan(id);
             List<CauHoiTrinhTuThaoTacVm> listTrinhTuThaoTac = resultTrinhTuThaoTac.ResultObj;
             foreach (var item in listTrinhTuThaoTac)
@@ -427,7 +427,7 @@ namespace WebAPP.Areas.User.Controllers
                     CauHoiTuLuanText = cauhoituluanText,
                     Text = item.Text,
                     ThuTu = item.ThuTu,
-                    Score = item.Score,
+                    Score = (float)(item.Score != null ? item.Score : 0),
                     CauHoiTuLuanId = item.CauHoiTuLuanId,
                     Answer = request.dataTTTT.Where(x => x.Id == item.Id).FirstOrDefault().ThuTu
                 };
@@ -435,7 +435,7 @@ namespace WebAPP.Areas.User.Controllers
 
                 if (item.diemChuYs.Any())
                 {
-                    foreach(var dcy in item.diemChuYs)
+                    foreach (var dcy in item.diemChuYs)
                     {
                         var cauhoivacautraloiDCY = new QuestionAndAnswerDiemChuYVm()
                         {
@@ -468,11 +468,11 @@ namespace WebAPP.Areas.User.Controllers
 
                         if (ltcd.doiSaches.Any())
                         {
-                            foreach(var ds in ltcd.doiSaches)
+                            foreach (var ds in ltcd.doiSaches)
                             {
                                 string doisach = ltcd.doiSaches.Where(x => x.Id == ds.Id).FirstOrDefault().Text;
                                 string cautraloi = request.DataDS.Where(x => x.Id == ds.Id).FirstOrDefault().Answer;
-                                string dapandung = ltcd.Text;  
+                                string dapandung = ltcd.Text;
                                 var cauhoivacautraloiDS = new QuestionAndAnswerDoiSachVm()
                                 {
                                     Id = ds.Id,
@@ -483,7 +483,7 @@ namespace WebAPP.Areas.User.Controllers
                                     CorrectAnswer = dapandung
                                 };
                                 listQuestionAndAnswerDoiSach.Add(cauhoivacautraloiDS);
-                            }                     
+                            }
                         }
                     }
                 }
@@ -509,7 +509,7 @@ namespace WebAPP.Areas.User.Controllers
         {
             string jsonlistQuestionAndAnswerTracNghiem = TempData["QuestionAndAnswerTracNghiem"].ToString();
             List<QuestionAndAnswerVm> listQuestionAndAnswerTracNghiem = JsonConvert.DeserializeObject<List<QuestionAndAnswerVm>>(jsonlistQuestionAndAnswerTracNghiem);
-            
+
             string jsonlistQuestionAndAnswerTrinhTuThaoTac = TempData["QuestionAndAnswerTrinhTuThaoTac"].ToString();
             List<QuestionAndAnswerTrinhTuThaoTacVm> listQuestionAndAnswerTrinhTuThaoTac = JsonConvert.DeserializeObject<List<QuestionAndAnswerTrinhTuThaoTacVm>>(jsonlistQuestionAndAnswerTrinhTuThaoTac);
 
@@ -574,7 +574,7 @@ namespace WebAPP.Areas.User.Controllers
         {
             string jsonlistQuestionAndAnswerDiemChuY = TempData["QuestionAndAnswerDiemChuY"].ToString();
             List<QuestionAndAnswerDiemChuYVm> listQuestionAndAnswerDiemChuY = JsonConvert.DeserializeObject<List<QuestionAndAnswerDiemChuYVm>>(jsonlistQuestionAndAnswerDiemChuY);
-           
+
             var listToChange = listQuestionAndAnswerDiemChuY.Where(x => x.CauHoiTuLuanId == request.FirstOrDefault().CauHoiTuLuanId).ToList();
             foreach (var item in listToChange)
             {
@@ -617,7 +617,7 @@ namespace WebAPP.Areas.User.Controllers
         {
             string jsonQuestionAndAnswerLoiTaiCongDoan = TempData["QuestionAndAnswerLoiTaiCongDoan"].ToString();
             List<QuestionAndAnswerLoiTaiCongDoanVm> listQuestionAndAnswerLoiTaiCongDoan = JsonConvert.DeserializeObject<List<QuestionAndAnswerLoiTaiCongDoanVm>>(jsonQuestionAndAnswerLoiTaiCongDoan);
-            var getSelectListLTCDFromId = listQuestionAndAnswerLoiTaiCongDoan.Where(x=>x.CauHoiTuLuanId == cauhoituluanId).ToList();
+            var getSelectListLTCDFromId = listQuestionAndAnswerLoiTaiCongDoan.Where(x => x.CauHoiTuLuanId == cauhoituluanId).ToList();
             var selectListLTCD = new SelectList(getSelectListLTCDFromId, "Id", "Text");
             ViewBag.selectListLTCDFromId = selectListLTCD;
 
@@ -699,7 +699,6 @@ namespace WebAPP.Areas.User.Controllers
             string tenPhongthi = TempData["Tenphongthi"].ToString();
             #endregion
 
-            #region 2. Tính điểm
             //Tính điểm phần thi trắc nghiệm
             float totalScoreTracNghiem = 0;
             float scoreTracNghiem = 0;
@@ -735,7 +734,7 @@ namespace WebAPP.Areas.User.Controllers
             string jsonQuestionAndAnswerDoiSach = TempData["QuestionAndAnswerDoiSach"].ToString();
             List<QuestionAndAnswerDoiSachVm> listQuestionAndAnswerDoiSach = JsonConvert.DeserializeObject<List<QuestionAndAnswerDoiSachVm>>(jsonQuestionAndAnswerDoiSach);
             var groupListQuestionAndAnswerTrinhTuThaoTac = listQuestionAndAnswerTrinhTuThaoTac.GroupBy(x => x.CauHoiTuLuanId); //Với mỗi câu hỏi tự luận:
-            foreach (var group in groupListQuestionAndAnswerTrinhTuThaoTac) 
+            foreach (var group in groupListQuestionAndAnswerTrinhTuThaoTac)
             {
                 var cauhoituluan = listQuestionsTuLuan.FirstOrDefault(x => x.Id == group.First().CauHoiTuLuanId);
                 float scoreCauhoituluan = cauhoituluan?.Score ?? 0;
@@ -761,7 +760,6 @@ namespace WebAPP.Areas.User.Controllers
 
             return Ok();
         }
-
 
 
         //Lưu kết quả
@@ -819,89 +817,76 @@ namespace WebAPP.Areas.User.Controllers
 
             var groupListQuestionAndAnswerTrinhTuThaoTac = listQuestionAndAnswerTrinhTuThaoTac.GroupBy(x => x.CauHoiTuLuanId);
             foreach (var group in groupListQuestionAndAnswerTrinhTuThaoTac)
-            {              
-                //Xử lý tính điểm:
-                foreach(var itemtttt in group)
+            {
+                foreach (var itemtttt in group)
                 {
                     float scoreCauhoiTTTT = itemtttt?.Score != null ? itemtttt.Score : 0;
                     totalScoreTuLuan += scoreCauhoiTTTT;
-
                     if (itemtttt.Answer == itemtttt.ThuTu)
                     {
                         var listDCY = listQuestionAndAnswerDiemChuY.Where(x => x.CauhoitrinhtuthaotacId == itemtttt.Id).ToList();
-                        if (listDCY.All(item => item.Answer == item.CorrectAnswer))
+                        if (listDCY.Count > 0)
                         {
-                            var listLTCD = listQuestionAndAnswerLoiTaiCongDoan.Where(x => x.CauhoitrinhtuthaotacId == itemtttt.Id).ToList();
-                            if (listLTCD.All(item => item.Answer == item.CorrectAnswer))
+                            if (listDCY.All(item => item.Answer == item.CorrectAnswer))
                             {
-                                foreach(var itemLTCD in listLTCD)
+                                var listLTCD = listQuestionAndAnswerLoiTaiCongDoan.Where(x => x.CauhoitrinhtuthaotacId == itemtttt.Id).ToList();
+                                if (listLTCD.Count > 0)
                                 {
-                                    var listDS = listQuestionAndAnswerDoiSach.Where(x => x.CauHoiTuLuanId == itemLTCD.Id).ToList();
-                                    if (listDS.All(item => item.Answer == item.CorrectAnswer))
+                                    if (listLTCD.All(item => item.Answer == item.CorrectAnswer))
                                     {
-                                        scoreTuluan += scoreCauhoiTTTT;
-                                        slTraLoiDungTuLuan++;
+                                        foreach (var itemLTCD in listLTCD)
+                                        {
+                                            var listDS = listQuestionAndAnswerDoiSach.Where(x => x.LoiTaiCongDoanId == itemLTCD.Id).ToList();
+                                            if (listDS.Count > 0)
+                                            {
+                                                if (listDS.All(item => item.Answer == item.CorrectAnswer))
+                                                {
+                                                    scoreTuluan += scoreCauhoiTTTT;
+                                                    slTraLoiDungTuLuan++;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                scoreTuluan += scoreCauhoiTTTT;
+                                                slTraLoiDungTuLuan++;
+                                            }
+                                        }
                                     }
-
                                 }
-                                
+                                else
+                                {
+                                    scoreTuluan += scoreCauhoiTTTT;
+                                    slTraLoiDungTuLuan++;
+                                }
                             }
+                        }
+                        else
+                        {
+                            scoreTuluan += scoreCauhoiTTTT;
+                            slTraLoiDungTuLuan++;
                         }
                     }
                 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                /////CHƯA XONG!!!!
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                //if (group.All(item => item.Answer == item.ThuTu))
-                //{
-                //    var listDCY = listQuestionAndAnswerDiemChuY.Where(x => x.CauHoiTuLuanId == cauhoituluan.Id).ToList();
-                //    if (listDCY.All(item => item.Answer == item.CorrectAnswer))
-                //    {
-                //        var listLTCD = listQuestionAndAnswerLoiTaiCongDoan.Where(x => x.CauHoiTuLuanId == cauhoituluan.Id).ToList();
-                //        if (listLTCD.All(item => item.Answer == item.CorrectAnswer))
-                //        {
-                //            var listDS = listQuestionAndAnswerDoiSach.Where(x => x.CauHoiTuLuanId == cauhoituluan.Id).ToList();
-                //            if (listDS.All(item => item.Answer == item.CorrectAnswer))
-                //            {
-                //                scoreTuluan += scoreCauhoituluan;
-                //                slTraLoiDungTuLuan++;
-                //            }
-                //        }
-                //    }                       
-                //}
             }
+            #region old code
+            //if (group.All(item => item.Answer == item.ThuTu))
+            //{
+            //    var listDCY = listQuestionAndAnswerDiemChuY.Where(x => x.CauHoiTuLuanId == cauhoituluan.Id).ToList();
+            //    if (listDCY.All(item => item.Answer == item.CorrectAnswer))
+            //    {
+            //        var listLTCD = listQuestionAndAnswerLoiTaiCongDoan.Where(x => x.CauHoiTuLuanId == cauhoituluan.Id).ToList();
+            //        if (listLTCD.All(item => item.Answer == item.CorrectAnswer))
+            //        {
+            //            var listDS = listQuestionAndAnswerDoiSach.Where(x => x.CauHoiTuLuanId == cauhoituluan.Id).ToList();
+            //            if (listDS.All(item => item.Answer == item.CorrectAnswer))
+            //            {
+            //                scoreTuluan += scoreCauhoituluan;
+            //                slTraLoiDungTuLuan++;
+            //            }
+            //        }
+            //    }                       
+            //}
+            #endregion
 
             //Lưu lịch sử bài thi
             float totalScore = scoreTuluan + scoreTracNghiem;
@@ -963,24 +948,52 @@ namespace WebAPP.Areas.User.Controllers
             foreach (var item in listQuestionsTuLuan) // Voi moi cau hoi trong list thi:
             {
                 float diem = 0;
-
+                float cauhoituluanScore = 0;
                 //Dung het thi tinh diem:
                 List<QuestionAndAnswerTrinhTuThaoTacVm> group = listQuestionAndAnswerTrinhTuThaoTac.Where(x => x.CauHoiTuLuanId == item.Id).ToList();
-                if (group.All(item => item.Answer == item.ThuTu))
+                foreach (var itemtttt in group)
                 {
-                    var listDCY = listQuestionAndAnswerDiemChuY.Where(x => x.CauHoiTuLuanId == item.Id).ToList();
-                    if (listDCY.All(item => item.Answer == item.CorrectAnswer))
+                    cauhoituluanScore += itemtttt.Score;
+                    if (itemtttt.Answer == itemtttt.ThuTu)
                     {
-                        var listLTCD = listQuestionAndAnswerLoiTaiCongDoan.Where(x => x.CauHoiTuLuanId == item.Id).ToList();
-                        if (listLTCD.All(item => item.Answer == item.CorrectAnswer))
+                        var listDCY = listQuestionAndAnswerDiemChuY.Where(x => x.CauhoitrinhtuthaotacId == itemtttt.Id).ToList();
+                        if (listDCY.Count > 0)
                         {
-                            var listDS = listQuestionAndAnswerDoiSach.Where(x => x.CauHoiTuLuanId == item.Id).ToList();
-                            if (listDS.All(item => item.Answer == item.CorrectAnswer))
+                            if (listDCY.All(item => item.Answer == item.CorrectAnswer))
                             {
-                                diem = item.Score ?? 0;
+                                var listLTCD = listQuestionAndAnswerLoiTaiCongDoan.Where(x => x.CauhoitrinhtuthaotacId == itemtttt.Id).ToList();
+                                if (listLTCD.Count > 0)
+                                {
+                                    if (listLTCD.All(item => item.Answer == item.CorrectAnswer))
+                                    {
+                                        foreach (var itemLTCD in listLTCD)
+                                        {
+                                            var listDS = listQuestionAndAnswerDoiSach.Where(x => x.LoiTaiCongDoanId == itemLTCD.Id).ToList();
+                                            if (listDS.Count > 0)
+                                            {
+                                                if (listDS.All(item => item.Answer == item.CorrectAnswer))
+                                                {
+                                                    diem += itemtttt.Score;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                diem += itemtttt.Score;
+                                            }
+                                        }                                           
+                                    }
+                                }
+                                else
+                                {
+                                    diem += itemtttt.Score;
+                                }
                             }
                         }
-                    }
+                        else
+                        {
+                            diem += itemtttt.Score;
+                        }
+                    }                     
                 }
 
                 var requestCauHoiTuLuan = new LogExamCreateRequest()
@@ -988,7 +1001,7 @@ namespace WebAPP.Areas.User.Controllers
                     ExamResultId = examResultId,
                     LoaiCauHoi = "TL",
                     Cauhoi = item.Text,
-                    Score = item.Score ?? 0,
+                    Score = cauhoituluanScore,
                     FinalScore = diem
                 };
                 var resultluucauhoiTL = await _logExamApiClient.CreateSingle(requestCauHoiTuLuan);
@@ -1008,12 +1021,56 @@ namespace WebAPP.Areas.User.Controllers
                 List<LogExamTrinhtuthaotacCreateRequest> listlogtttt = new List<LogExamTrinhtuthaotacCreateRequest>();
                 foreach (var itemTTTT in group)
                 {
+                    float finalScr = 0;
+                    if (itemTTTT.Answer == itemTTTT.ThuTu)
+                    {
+                        var listDCY = listQuestionAndAnswerDiemChuY.Where(x => x.CauhoitrinhtuthaotacId == itemTTTT.Id).ToList();
+                        if (listDCY.Count > 0)
+                        {
+                            if (listDCY.All(item => item.Answer == item.CorrectAnswer))
+                            {
+                                var listLTCD = listQuestionAndAnswerLoiTaiCongDoan.Where(x => x.CauhoitrinhtuthaotacId == itemTTTT.Id).ToList();
+                                if (listLTCD.Count > 0)
+                                {
+                                    if (listLTCD.All(item => item.Answer == item.CorrectAnswer))
+                                    {
+                                        foreach (var itemLTCD in listLTCD)
+                                        {
+                                            var listDS = listQuestionAndAnswerDoiSach.Where(x => x.LoiTaiCongDoanId == itemLTCD.Id).ToList();
+                                            if (listDS.Count > 0)
+                                            {
+                                                if (listDS.All(item => item.Answer == item.CorrectAnswer))
+                                                {
+                                                    finalScr = itemTTTT.Score;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                finalScr = itemTTTT.Score;
+                                            }
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    finalScr = itemTTTT.Score;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            finalScr = itemTTTT.Score;
+                        }
+                    }
+
                     var requestTTTT = new LogExamTrinhtuthaotacCreateRequest()
                     {
                         LogExamId = logEId,
                         Text = itemTTTT.Text,
                         Answer = itemTTTT.Answer,
-                        ThuTu = itemTTTT.ThuTu
+                        ThuTu = itemTTTT.ThuTu,
+                        Score = itemTTTT.Score,
+                        FinalScore = finalScr
                     };
                     listlogtttt.Add(requestTTTT);
                 }
@@ -1080,12 +1137,12 @@ namespace WebAPP.Areas.User.Controllers
                     };
                     listlogDS.Add(requestDS);
                 }
-                var resultluulistcauhoiDS= await _logExamDSApiClient.CreateList(listlogDS);
+                var resultluulistcauhoiDS = await _logExamDSApiClient.CreateList(listlogDS);
                 if (!resultluulistcauhoiDS.IsSuccessed)
                 {
                     return Json(new { success = false });
                 }
-                            }
+            }
             TempData.Keep();
             return Json(new { success = true });
         }
@@ -1094,6 +1151,7 @@ namespace WebAPP.Areas.User.Controllers
         [HttpGet]
         public async Task<IActionResult> ConfirmEndExam()
         {
+            int thoiGianChoPhepLamBai = Convert.ToInt32(TempData["thoiGianThi"].ToString());
             ViewBag.tenPhongthi = TempData["Tenphongthi"].ToString();
             int idPhong = Convert.ToInt32(TempData["idPhong"].ToString());
             var phongThi = await _categoryApiClient.GetById(idPhong);
@@ -1102,6 +1160,7 @@ namespace WebAPP.Areas.User.Controllers
             ViewBag.thisPage = phongThi.ResultObj.Name.ToString();
             ViewBag.totalQuestion = TempData["totalQuestion"];
             ViewBag.thoiGianLamBai = TempData["thoiGianLamBai"];
+            ViewBag.thoiGianChoPhepLamBai = thoiGianChoPhepLamBai;
 
             //Tính điểm phần thi trắc nghiệm
             float totalScoreTracNghiem = 0;
@@ -1120,49 +1179,78 @@ namespace WebAPP.Areas.User.Controllers
                 }
             }
 
-//Tính điểm phần thi tự luận
-        //Trình tự thao tác
-            string jsonlistQuestionAndAnswerTrinhTuThaoTac = TempData["QuestionAndAnswerTrinhTuThaoTac"].ToString();
-            List<QuestionAndAnswerTrinhTuThaoTacVm> listQuestionAndAnswerTrinhTuThaoTac = JsonConvert.DeserializeObject<List<QuestionAndAnswerTrinhTuThaoTacVm>>(jsonlistQuestionAndAnswerTrinhTuThaoTac);
-        //Điểm chú ý
-            string jsonlistQuestionAndAnswerDiemChuY = TempData["QuestionAndAnswerDiemChuY"].ToString();
-            List<QuestionAndAnswerDiemChuYVm> listQuestionAndAnswerDiemChuY = JsonConvert.DeserializeObject<List<QuestionAndAnswerDiemChuYVm>>(jsonlistQuestionAndAnswerDiemChuY);
-        //Lỗi tại công đoạn
-            string jsonQuestionAndAnswerLoiTaiCongDoan = TempData["QuestionAndAnswerLoiTaiCongDoan"].ToString();
-            List<QuestionAndAnswerLoiTaiCongDoanVm> listQuestionAndAnswerLoiTaiCongDoan = JsonConvert.DeserializeObject<List<QuestionAndAnswerLoiTaiCongDoanVm>>(jsonQuestionAndAnswerLoiTaiCongDoan);
-        //Đối sách
-            string jsonQuestionAndAnswerDoiSach = TempData["QuestionAndAnswerDoiSach"].ToString();
-            List<QuestionAndAnswerDoiSachVm> listQuestionAndAnswerDoiSach = JsonConvert.DeserializeObject<List<QuestionAndAnswerDoiSachVm>>(jsonQuestionAndAnswerDoiSach);
-
+            //Tính điểm phần thi tự luận
             float totalScoreTuLuan = 0;
             float scoreTuluan = 0;
             int slTraLoiDungTuLuan = 0;
+
             string jsonQuestionsTuLuan = TempData["dsCauHoiTL"].ToString();
             List<CauHoiTuLuanVm> listQuestionsTuLuan = JsonConvert.DeserializeObject<List<CauHoiTuLuanVm>>(jsonQuestionsTuLuan);
 
-
+            //Trình tự thao tác
+            string jsonlistQuestionAndAnswerTrinhTuThaoTac = TempData["QuestionAndAnswerTrinhTuThaoTac"].ToString();
+            List<QuestionAndAnswerTrinhTuThaoTacVm> listQuestionAndAnswerTrinhTuThaoTac = JsonConvert.DeserializeObject<List<QuestionAndAnswerTrinhTuThaoTacVm>>(jsonlistQuestionAndAnswerTrinhTuThaoTac);
+            //Điểm chú ý
+            string jsonlistQuestionAndAnswerDiemChuY = TempData["QuestionAndAnswerDiemChuY"].ToString();
+            List<QuestionAndAnswerDiemChuYVm> listQuestionAndAnswerDiemChuY = JsonConvert.DeserializeObject<List<QuestionAndAnswerDiemChuYVm>>(jsonlistQuestionAndAnswerDiemChuY);
+            //Lỗi tại công đoạn
+            string jsonQuestionAndAnswerLoiTaiCongDoan = TempData["QuestionAndAnswerLoiTaiCongDoan"].ToString();
+            List<QuestionAndAnswerLoiTaiCongDoanVm> listQuestionAndAnswerLoiTaiCongDoan = JsonConvert.DeserializeObject<List<QuestionAndAnswerLoiTaiCongDoanVm>>(jsonQuestionAndAnswerLoiTaiCongDoan);
+            //Đối sách
+            string jsonQuestionAndAnswerDoiSach = TempData["QuestionAndAnswerDoiSach"].ToString();
+            List<QuestionAndAnswerDoiSachVm> listQuestionAndAnswerDoiSach = JsonConvert.DeserializeObject<List<QuestionAndAnswerDoiSachVm>>(jsonQuestionAndAnswerDoiSach);
             var groupListQuestionAndAnswerTrinhTuThaoTac = listQuestionAndAnswerTrinhTuThaoTac.GroupBy(x => x.CauHoiTuLuanId);
             foreach (var group in groupListQuestionAndAnswerTrinhTuThaoTac)
             {
-                var cauhoituluan = listQuestionsTuLuan.FirstOrDefault(x => x.Id == group.First().CauHoiTuLuanId);
-                float scoreCauhoituluan = cauhoituluan.Score ?? 0;
-                totalScoreTuLuan += scoreCauhoituluan;
-                if (group.All(item => item.Answer == item.ThuTu))
+                //Xử lý tính điểm:
+                foreach (var itemtttt in group)
                 {
-                    var listDCY = listQuestionAndAnswerDiemChuY.Where(x => x.CauHoiTuLuanId == cauhoituluan.Id).ToList();
-                    if (listDCY.All(item => item.Answer == item.CorrectAnswer))
+                    float scoreCauhoiTTTT = itemtttt?.Score != null ? itemtttt.Score : 0;
+                    totalScoreTuLuan += scoreCauhoiTTTT;
+                    if (itemtttt.Answer == itemtttt.ThuTu)
                     {
-                        var listLTCD = listQuestionAndAnswerLoiTaiCongDoan.Where(x => x.CauHoiTuLuanId == cauhoituluan.Id).ToList();
-                        if (listLTCD.All(item => item.Answer == item.CorrectAnswer))
+                        var listDCY = listQuestionAndAnswerDiemChuY.Where(x => x.CauhoitrinhtuthaotacId == itemtttt.Id).ToList();
+                        if (listDCY.Count > 0)
                         {
-                            var listDS = listQuestionAndAnswerDoiSach.Where(x => x.CauHoiTuLuanId == cauhoituluan.Id).ToList();
-                            if (listDS.All(item => item.Answer == item.CorrectAnswer))
+                            if (listDCY.All(item => item.Answer == item.CorrectAnswer))
                             {
-                                scoreTuluan += scoreCauhoituluan;
-                                slTraLoiDungTuLuan++;
+                                var listLTCD = listQuestionAndAnswerLoiTaiCongDoan.Where(x => x.CauhoitrinhtuthaotacId == itemtttt.Id).ToList();
+                                if (listLTCD.Count > 0)
+                                {
+                                    if (listLTCD.All(item => item.Answer == item.CorrectAnswer))
+                                    {
+                                        foreach (var itemLTCD in listLTCD)
+                                        {
+                                            var listDS = listQuestionAndAnswerDoiSach.Where(x => x.LoiTaiCongDoanId == itemLTCD.Id).ToList();
+                                            if (listDS.Count > 0)
+                                            {
+                                                if (listDS.All(item => item.Answer == item.CorrectAnswer))
+                                                {
+                                                    scoreTuluan += scoreCauhoiTTTT;
+                                                    slTraLoiDungTuLuan++;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                scoreTuluan += scoreCauhoiTTTT;
+                                                slTraLoiDungTuLuan++;
+                                            }
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    scoreTuluan += scoreCauhoiTTTT;
+                                    slTraLoiDungTuLuan++;
+                                }
                             }
                         }
-                    }                    
+                        else
+                        {
+                            scoreTuluan += scoreCauhoiTTTT;
+                            slTraLoiDungTuLuan++;
+                        }
+                    }
                 }
             }
 
@@ -1186,7 +1274,6 @@ namespace WebAPP.Areas.User.Controllers
             ViewBag.dsDCY = listQuestionAndAnswerDiemChuY;
             ViewBag.dsLTCD = listQuestionAndAnswerLoiTaiCongDoan;
             ViewBag.dsDS = listQuestionAndAnswerDoiSach;
-
 
             TempData.Keep();
             return View();

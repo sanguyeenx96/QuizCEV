@@ -13,5 +13,8 @@ namespace ViewModels.LogExamTrinhtuthaotac.Response
         public int ThuTu { get; set; }
         public int Answer { get; set; }
         public int LogExamId { get; set; }
+        public float Score { get; set; }
+        public float FinalScore { get; set; }
+
     }
 }

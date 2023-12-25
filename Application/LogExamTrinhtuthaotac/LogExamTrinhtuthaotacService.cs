@@ -26,7 +26,9 @@ namespace Application.LogExamTrinhtuthaotac
                     Text = item.Text,
                     ThuTu = item.ThuTu,
                     Answer = item.Answer,
-                    LogExamId = item.LogExamId
+                    LogExamId = item.LogExamId,
+                    Score = item.Score,
+                    FinalScore = item.FinalScore
                 };
                 _context.logExamTrinhtuthaotacs.Add(logExam);
             }
