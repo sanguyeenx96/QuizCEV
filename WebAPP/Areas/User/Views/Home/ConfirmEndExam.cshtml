@@ -3,7 +3,7 @@
     string tenPhongthi = ViewBag.tenPhongthi.ToString();
     string hoten = ViewBag.hoten.ToString();
     float totalScore = ViewBag.totalScore;
-    string danhgia = (totalScore >= 8) ? "tốt" : (totalScore >= 6) ? "trung bình" : "không đạt";
+    string danhgia = (totalScore >= 80) ? "điểm cao" : (totalScore >= 60) ? "điểm số trung bình" : "điểm thấp";
     int demtn = 0;
     int demtl = 0;
 
@@ -13,6 +13,7 @@
     float totalScoreTuLuan = ViewBag.totalTuLuanScore;
 
     int thoiGianLamBai = ViewBag.thoiGianLamBai;
+    int thoiGianChoPhepLamBai = ViewBag.thoiGianChoPhepLamBai;
 
     var chTL = ViewBag.chTL as List<ViewModels.CauHoiTuLuan.Response.CauHoiTuLuanVm>;
     var dsTL = ViewBag.dsTL as List<ViewModels.CauHoiTrinhTuThaoTac.Response.QuestionAndAnswerTrinhTuThaoTacVm>;
@@ -32,135 +33,102 @@
     <hr />
     <div class="row">
         <div class="col-md-12">
-            <div class="card mb-3
-             @{
-                 if (danhgia == "tốt")
-                 {
-                                                    <text>border-top-success border-top-3 mb-3</text>
-                }
-                if (danhgia == "trung bình")
-                {
-                                                    <text>border-top-warning border-top-3 mb-3</text>
-                }
-                if (danhgia == "không đạt")
-                {
-                                                    <text>border-top-danger border-top-3 mb-3</text>
-                }
-            }">
+            @{
+            var borderClass = danhgia switch
+            {
+                "điểm cao" => "border-top-success border-top-3 mb-3",
+                "điểm số trung bình" => "border-top-warning border-top-3 mb-3",
+                "điểm thấp" => "border-top-danger border-top-3 mb-3",
+                _ => ""
+            };
+
+            var textClass = danhgia switch
+            {
+                "điểm cao" => "text-success",
+                "điểm số trung bình" => "text-warning",
+                "điểm thấp" => "text-danger",
+                _ => ""
+            };
+
+            var iconClass = danhgia switch
+            {
+                "điểm cao" => "OK",
+                "điểm số trung bình" => "OK",
+                "điểm thấp" => "NG",
+                _ => ""
+            };
+        }
+
+        <div class="card mb-3 @borderClass">
             <div class="card-body">
-                <h5 class="card-title">Điểm số @totalScore/10 điểm</h5>
-                <p class="card-text"><small>Đánh giá: <b
-                    @{
-                        if (danhgia == "tốt")
-                        {
-                                                            <text>class="text-success</text>
-                        }
-                        if (danhgia == "trung bình")
-                        {
-                                                            <text>class="text-warning</text>
-                        }
-                        if (danhgia == "không đạt")
-                        {
-                                                            <text>class="text-danger</text>
-                        }
-                    }
-                    ">@danhgia</b> </small></p>
-                 <hr>
-            <div style="position: relative; text-align: center;">
-                <div style="width: 100%; position: absolute; top: 50%; left: 0; transform: translateY(-50%); z-index: 999999999999999">
-                    @{
-                        if (danhgia == "tốt")
-                        {
-                                                    <h1 class="display-6 text-success animate__animated animate__rotateIn">OK</h1>
-                        }
-                        if (danhgia == "trung bình")
-                        {
-                                                    <h1 class="display-6 text-warning animate__animated animate__rotateIn">OK</h1>
-                        }
-                        if (danhgia == "không đạt")
-                        {
-                                                    <h1 class="display-6 text-danger animate__animated animate__rotateIn">NG</h1>
-                        }
-                    }
+                <h5 class="card-title">Điểm số @totalScore/100 điểm</h5>
+                <p class="card-text">
+                    <small>Đánh giá: <b class="@textClass">@danhgia</b></small>
+                </p>
+                <hr>
+                <div style="position: relative; text-align: center;">
+                   @* <div style="width: 100%; position: absolute; top: 50%; left: 0; transform: translateY(-50%); ">
+                        <h1 class="display-6 text-@textClass animate__animated animate__rotateIn">@iconClass</h1>
+                    </div>*@
+                    <canvas id="myChart"></canvas>
                 </div>
-                <canvas id="myChart"></canvas>
-            </div>
             </div>
         </div>
     </div>
-    <div class="col-md-12">
-        <div class="card mb-4">
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-4">
-                        <div class="border-start border-start-4 border-start-info px-3 mb-3">
-                            <small class="text-medium-emphasis">Thời gian làm bài</small>
-                            <div class="fs-7">@thoiGianLamBai phút</div>
-                            <span class="badge bg-light me-2 text-dark"> Cho phép</span>
-                        </div>
-                    </div>
-                    <div class="col-4">
-                        <div class="border-start border-start-4 border-start-info px-3 mb-3">
-                            <small class="text-medium-emphasis">Trắc nghiệm</small>
-                            <div class="fs-7">Đúng @ViewBag.slTraLoiDungTracNghiem/@ViewBag.slTotalTracNghiem câu </div>
-                            <span class="badge bg-light me-2 text-dark"> @scoreTracNghiem/@totalScoreTracNghiem điểm</span>
-                        </div>
-                    </div>
-                    <div class="col-4">
-                        <div class="border-start border-start-4 border-start-info px-3 mb-3">
-                            <small class="text-medium-emphasis">Tự luận</small>
-                            <div class="fs-7">Đúng @ViewBag.slTraLoiDungTuLuan/@ViewBag.slTotalTuLuan câu</div>
-                            <span class="badge bg-light me-2 text-dark">@scoreTuLuan/@totalScoreTuLuan điểm</span>
-
-                        </div>
+</div>
+<div class="col-md-12">
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-4">
+                    <div class="border-start border-start-4 border-start-info px-3 mb-3">
+                        <small class="text-medium-emphasis">Thời gian làm bài</small>
+                        <div class="fs-7">@thoiGianLamBai phút</div>
                     </div>
                 </div>
-                <nav>
-                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                        <button class="nav-link active" id="nav-home-tab" data-coreui-toggle="tab" data-coreui-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">
-                            <i class="bi-dot"></i>
-                            Phần thi trắc nghiệm
-                        </button>
-                        <button class="nav-link" id="nav-profile-tab" data-coreui-toggle="tab" data-coreui-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">
-                            <i class="bi-dot"></i>
-                            Phần thi tự luận
-                        </button>
+                <div class="col-4">
+                    <div class="border-start border-start-4 border-start-info px-3 mb-3">
+                        <small class="text-medium-emphasis">Trắc nghiệm</small>
+                        <div class="fs-7">@scoreTracNghiem/@totalScoreTracNghiem điểm</div>
                     </div>
-                </nav>
-                <div class="tab-content" id="nav-tabContent">
-                    <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab" tabindex="0">
-                        <div class="accordion">
-                            @foreach (var item in ViewBag.dsTN as List<QuestionAndAnswerVm>)
-                            {
+                </div>
+                <div class="col-4">
+                    <div class="border-start border-start-4 border-start-info px-3 mb-3">
+                        <small class="text-medium-emphasis">Tự luận</small>
+                        <div class="fs-7">@scoreTuLuan/@totalScoreTuLuan điểm</div>
+                    </div>
+                </div>
+            </div>
+            <nav>
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <button class="nav-link active" id="nav-home-tab" data-coreui-toggle="tab" data-coreui-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">
+                        <i class="bi-dot"></i>
+                        Phần thi trắc nghiệm
+                    </button>
+                    <button class="nav-link" id="nav-profile-tab" data-coreui-toggle="tab" data-coreui-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">
+                        <i class="bi-dot"></i>
+                        Phần thi tự luận
+                    </button>
+                </div>
+            </nav>
+            <div class="tab-content" id="nav-tabContent">
+                <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab" tabindex="0">
+                    <div class="accordion">
+                        @foreach (var item in ViewBag.dsTN as List<QuestionAndAnswerVm>)
+                        {
                             demtn++;
                             string idThe = "tn" + item.Id.ToString();
                             <div class="accordion-item">
                                 <h2 class="accordion-header">
                                     <button class="accordion-button collapsed" type="button" data-coreui-toggle="collapse" data-coreui-target="#@idThe" aria-expanded="false" aria-controls="@idThe">
-                                        @{
-                                        if (item.QCorrectAns.ToUpper() == item.Answer.ToUpper())
-                                        {
-                                                <span class="badge bg-success me-2 ">
-                                                    Câu @demtn
-                                                    <small>
-                                                        <span class="badge bg-dark" style="vertical-align: text-top;">
-                                                            @item.Score điểm
-                                                        </span>
-                                                    </small>
+                                        <span class="badge bg-secondary me-2 ">
+                                            Câu @demtn
+                                            <small>
+                                                <span class="badge text-bg-light" style="vertical-align: text-top;">
+                                                    @item.Score điểm
                                                 </span>
-                                        }
-                                        else
-                                        {
-                                                <span class="badge bg-danger me-2 ">
-                                                    Câu @demtn
-                                                    <small>
-                                                        <span class="badge bg-dark" style="vertical-align: text-top;">
-                                                            @item.Score điểm
-                                                        </span>
-                                                    </small>
-                                                </span>
-                                        }
-                                        }
+                                            </small>
+                                        </span>
                                         @item.Text
                                     </button>
                                 </h2>
@@ -170,372 +138,353 @@
                                             @{
                                             if (!string.IsNullOrEmpty(item.QA))
                                             {
-                                            if (item.QCorrectAns == "A")
-                                            {
+                                                if (item.QCorrectAns == "A")
+                                                {
                                                     <div class="col-6">
                                                         <button class="btn w-100 text-black btn-success " disabled>@item.QA</button>
                                                     </div>
-                                            }
-                                            else
-                                            {
-                                            if (item.Answer == "A")
-                                            {
-                                                    <div class="col-6">
-                                                        <button class="btn w-100 text-black btn-danger " disabled>@item.QA</button>
-                                                    </div>
-                                            }
-                                            else
-                                            {
-                                                    <div class="col-6">
-                                                        <button class="btn w-100 text-black btn-outline-light " disabled>@item.QA</button>
-                                                    </div>
-                                            }
-                                            }
+                                                }
+                                                else
+                                                {
+                                                    if (item.Answer == "A")
+                                                    {
+                                                        <div class="col-6">
+                                                            <button class="btn w-100 text-black btn-danger " disabled>@item.QA</button>
+                                                        </div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="col-6">
+                                                            <button class="btn w-100 text-black btn-outline-light " disabled>@item.QA</button>
+                                                        </div>
+                                                    }
+                                                }
                                             }
                                             if (!string.IsNullOrEmpty(item.QB))
                                             {
-                                            if (item.QCorrectAns == "B")
-                                            {
+                                                if (item.QCorrectAns == "B")
+                                                {
                                                     <div class="col-6">
                                                         <button class="btn w-100 text-black btn-success " disabled>@item.QB</button>
                                                     </div>
-                                            }
-                                            else
-                                            {
-                                            if (item.Answer == "B")
-                                            {
-                                                    <div class="col-6">
-                                                        <button class="btn w-100 text-black btn-danger " disabled>@item.QB</button>
-                                                    </div>
-                                            }
-                                            else
-                                            {
-                                                    <div class="col-6">
-                                                        <button class="btn w-100 text-black btn-outline-light " disabled>@item.QB</button>
-                                                    </div>
-                                            }
-                                            }
+                                                }
+                                                else
+                                                {
+                                                    if (item.Answer == "B")
+                                                    {
+                                                        <div class="col-6">
+                                                            <button class="btn w-100 text-black btn-danger " disabled>@item.QB</button>
+                                                        </div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="col-6">
+                                                            <button class="btn w-100 text-black btn-outline-light " disabled>@item.QB</button>
+                                                        </div>
+                                                    }
+                                                }
                                             }
                                             if (!string.IsNullOrEmpty(item.QC))
                                             {
-                                            if (item.QCorrectAns == "C")
-                                            {
+                                                if (item.QCorrectAns == "C")
+                                                {
                                                     <div class="col-6">
                                                         <button class="btn w-100 text-black btn-success " disabled>@item.QC</button>
                                                     </div>
-                                            }
-                                            else
-                                            {
-                                            if (item.Answer == "C")
-                                            {
-                                                    <div class="col-6">
-                                                        <button class="btn w-100 text-black btn-danger " disabled>@item.QC</button>
-                                                    </div>
-                                            }
-                                            else
-                                            {
-                                                    <div class="col-6">
-                                                        <button class="btn w-100 text-black btn-outline-light " disabled>@item.QC</button>
-                                                    </div>
-                                            }
-                                            }
+                                                }
+                                                else
+                                                {
+                                                    if (item.Answer == "C")
+                                                    {
+                                                        <div class="col-6">
+                                                            <button class="btn w-100 text-black btn-danger " disabled>@item.QC</button>
+                                                        </div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="col-6">
+                                                            <button class="btn w-100 text-black btn-outline-light " disabled>@item.QC</button>
+                                                        </div>
+                                                    }
+                                                }
                                             }
                                             if (!string.IsNullOrEmpty(item.QD))
                                             {
-                                            if (item.QCorrectAns == "D")
-                                            {
+                                                if (item.QCorrectAns == "D")
+                                                {
                                                     <div class="col-6">
                                                         <button class="btn w-100 text-black btn-success " disabled>@item.QD</button>
                                                     </div>
-                                            }
-                                            else
-                                            {
-                                            if (item.Answer == "D")
-                                            {
-                                                    <div class="col-6">
-                                                        <button class="btn w-100 text-black btn-danger " disabled>@item.QD</button>
-                                                    </div>
-                                            }
-                                            else
-                                            {
-                                                    <div class="col-6">
-                                                        <button class="btn w-100 text-black btn-outline-light " disabled>@item.QD</button>
-                                                    </div>
-                                            }
-                                            }
+                                                }
+                                                else
+                                                {
+                                                    if (item.Answer == "D")
+                                                    {
+                                                        <div class="col-6">
+                                                            <button class="btn w-100 text-black btn-danger " disabled>@item.QD</button>
+                                                        </div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="col-6">
+                                                            <button class="btn w-100 text-black btn-outline-light " disabled>@item.QD</button>
+                                                        </div>
+                                                    }
+                                                }
                                             }
                                             }
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            }
-                        </div>
+                        }
                     </div>
-                    <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab" tabindex="0">
-                        <div class="accordion">
-                            @{
-
-
-                            var groupdsTL = dsTL.GroupBy(x => x.CauHoiTuLuanId);
-                            foreach (var group in groupdsTL)
-                            {
-                            demtl++;
-                            string idThe = "tl" + group.FirstOrDefault().Id.ToString();
-                            int cauhoituluanId = group.FirstOrDefault().CauHoiTuLuanId;
-                                    <div class="accordion-item">
-                                        <h2 class="accordion-header">
-                                            <button class="accordion-button collapsed" type="button" data-coreui-toggle="collapse" data-coreui-target="#@idThe" aria-expanded="false" aria-controls="@idThe">
-                                           @{
-                                                var isCorrect = group.All(x => x.ThuTu == x.Answer);
-                                                var listDCY = dsDCY.Where(x => x.CauHoiTuLuanId == cauhoituluanId).ToList();
-                                                var isDCYCorrect = listDCY.All(item => item.Answer == item.CorrectAnswer);
-                                                var listLTCD = dsLTCD.Where(x => x.CauHoiTuLuanId == cauhoituluanId).ToList();
-                                                var isLTCDCorrect = listLTCD.All(item => item.Answer == item.CorrectAnswer);
-                                                var listDS = dsDS.Where(x => x.CauHoiTuLuanId == cauhoituluanId).ToList();
-                                                var isDSCorrect = listDS.All(item => item.Answer == item.CorrectAnswer);
-
-                                                var badgeColor = isCorrect && isDCYCorrect && isLTCDCorrect && isDSCorrect ? "bg-success" : "bg-danger";
-
-                                                <span class="badge @badgeColor me-2 ">
-                                                    Câu @demtl
-                                                    <small>
-                                                        <span class="badge bg-dark" style="vertical-align: text-top;">
-                                                            @chTL.FirstOrDefault(x => x.Id == group.FirstOrDefault().CauHoiTuLuanId)?.Score điểm
-                                                        </span>
-                                                    </small>
+                </div>
+                <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab" tabindex="0">
+                    <div class="accordion">
+                        @{
+                        var groupdsTL = dsTL.GroupBy(x => x.CauHoiTuLuanId);
+                        foreach (var group in groupdsTL) //Với mỗi group tương ứng với câu hỏi tự luận
+                        {
+                        demtl++;
+                        string idThe = "tl" + group.FirstOrDefault().Id.ToString();
+                        int cauhoituluanId = group.FirstOrDefault().CauHoiTuLuanId;
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-coreui-toggle="collapse" data-coreui-target="#@idThe" aria-expanded="false" aria-controls="@idThe">
+                                        <span class="badge bg-secondary me-2 ">
+                                            Câu @demtl
+                                            <small>
+                                                <span class="badge text-bg-light" style="vertical-align: text-top;">
+                                                    @chTL.FirstOrDefault(x => x.Id == group.FirstOrDefault().CauHoiTuLuanId)?.Score điểm
                                                 </span>
+                                            </small>
+                                        </span>
+                                        @group.FirstOrDefault().CauHoiTuLuanText
+                                    </button>
+                                </h2>
+                                <div id="@idThe" class="accordion-collapse collapse" data-coreui-parent="#accordionExample">
+                                    <div class="accordion-body">
+                                        <p class="mb-1" style="text-align:start;font-weight:500;"> I. Sắp xếp theo đúng trình tự WSD:</p>
+                                        <table class="table table-bordered table-hover " style="width:100%">
+                                            <thead style="vertical-align:middle;font-size:small">
+                                                <tr>
+                                                    <th class="col-8" style="text-align:start;font-weight: 300">
+                                                        Nội dung thao tác
+                                                    </th>
+                                                    <th class="col-1" style="text-align:center;font-weight: 300">
+                                                        Trả lời
+                                                    </th>
+                                                    <th class="col-1" style="text-align:center;font-weight: 300">
+                                                        Đáp án đúng
+                                                    </th>
+                                                    <th class="col-1" style="text-align:center;font-weight: 300">
+                                                        Điểm số
+                                                    </th>
+                                                    <th class="col-1" style="text-align:center;font-weight: 300">
+                                                        Kết quả
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var item in group.OrderBy(x => x.ThuTu)) //Với mỗi câu hỏi trình tự thao tác
+                                            {
+                                                var checkTTTT = (item.Answer == item.ThuTu) ? true : false;
+                                                var checklistDCY = dsDCY.Where(x => x.CauhoitrinhtuthaotacId == item.Id).ToList();
+                                                var checklistLTCD = dsLTCD.Where(x => x.CauhoitrinhtuthaotacId == item.Id).ToList();
+
+                                                var checkisDCYCorrect = checklistDCY != null ? checklistDCY.All(c => c.Answer == c.CorrectAnswer) : true;
+                                                var checkisLTCDCorrect = checklistLTCD != null ? checklistLTCD.All(c => c.Answer == c.CorrectAnswer) : true;
+
+                                                var checkisDSCorrect = checklistLTCD.All(itemLTCD =>
+                                                {
+                                                    var listDS = dsDS.Where(x => x.LoiTaiCongDoanId == itemLTCD.Id).ToList();
+                                                    if (listDS != null)
+                                                    {
+                                                        if (listDS.All(c => c.Answer == c.CorrectAnswer))
+                                                        {
+                                                            return true;
+                                                        }
+                                                        else
+                                                        {
+                                                            return false;
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        return true;
+                                                    }
+                                                });
+                                                var result = checkTTTT && checkisDCYCorrect && checkisLTCDCorrect && checkisDSCorrect ? "OK" : "NG";
+                                                var bgColorClass = checkTTTT && checkisDCYCorrect && checkisLTCDCorrect && checkisDSCorrect ? "bg-success" : "bg-danger";
+
+                                                <tr style="text-align:center;vertical-align:middle" class="@($"{bgColorClass} p-2 text-dark bg-opacity-10")">
+                                                    <td style="text-align:start">@item.Text</td>
+                                                    <td>@item.Answer</td>
+                                                    <td>@item.ThuTu</td>
+                                                    <td style="font-size:x-small">@item.Score điểm</td>
+                                                    <td>
+                                                    <span class="badge @bgColorClass">
+                                                            @result
+                                                        </span>
+                                                    </td>
+                                                </tr>
                                             }
-                                                @group.FirstOrDefault().CauHoiTuLuanText
-                                            </button>
-                                        </h2>
-                                        <div id="@idThe" class="accordion-collapse collapse" data-coreui-parent="#accordionExample">
-                                            <div class="accordion-body">
-                                                <p class="mb-1" style="text-align:start;font-weight:600;"> I. Sắp xếp theo đúng trình tự WSD:</p>
-                                                <table class="table table-bordered table-hover " style="width:100%">
-                                                    <thead style="vertical-align:middle;font-size:small">
-                                                        <tr>
-                                                            <th class="col-2" style="text-align:center;font-weight: 300">
-                                                                Trả lời
-                                                            </th>
-                                                            <th class="col-2" style="text-align:center;font-weight: 300">
-                                                                Đáp án đúng
-                                                            </th>
-                                                            <th class="col-8" style="text-align:start;font-weight: 300">
-                                                                Nội dung thao tác
-                                                            </th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        @foreach (var item in group.OrderBy(x => x.ThuTu))
+                                            </tbody>
+                                        </table>
+
+                                        <p class="mb-1" style="text-align:start;font-weight:500;"> II. Điểm chú ý tại công đoạn / Spec tại công đoạn (Nếu có):</p>
+                                        <table class="table table-bordered table-hover " style="width:100%">
+                                            <thead style="vertical-align:middle;font-size:small">
+                                                <tr>
+                                                    <th class="col-8" style="font-weight: 300;text-align:start">
+                                                        Điểm chú ý
+                                                    </th>
+                                                    <th class="col-2" style="text-align:center;font-weight: 300">
+                                                        Trả lời
+                                                    </th>
+                                                    <th class="col-2" style="text-align:center;font-weight: 300">
+                                                        Đáp án đúng
+                                                    </th>
+                                                    <th></th>
+
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @{
+                                                var listDCYdl = dsDCY.Where(x => x.CauHoiTuLuanId == cauhoituluanId).ToList();
+                                                foreach (var i in listDCYdl.OrderBy(x => x.CorrectAnswer))
                                                 {
-                                                if (item.ThuTu == item.Answer)
-                                                {
-                                                        <tr style="text-align:center;vertical-align:middle" class="bg-success p-2 text-dark bg-opacity-10">
-                                                            <td>
-                                                                @item.Answer
-                                                            </td>
-                                                            <td>
-                                                                @item.ThuTu
-                                                            </td>
-                                                            <td style="text-align:start">
-                                                                @item.Text
-                                                            </td>
-
-                                                        </tr>
-                                                }
-                                                else
-                                                {
-                                                        <tr style="text-align:center;vertical-align:middle" class="bg-danger p-2 text-dark bg-opacity-10">
-                                                            <td>
-                                                                @item.Answer
-                                                            </td>
-                                                            <td>
-                                                                @item.ThuTu
-                                                            </td>
-                                                            <td style="text-align:start">
-                                                                @item.Text
-                                                            </td>
-
-                                                        </tr>
-                                                }
-                                                }
-                                                    </tbody>
-                                                </table>
-
-                                                <p class="mb-1" style="text-align:start;font-weight:600;"> II. Điểm chú ý tại công đoạn / Spec tại công đoạn (Nếu có):</p>
-                                                <table class="table table-bordered table-hover " style="width:100%">
-                                                    <thead style="vertical-align:middle;font-size:small">
-                                                        <tr>
-                                                            <th class="col-2" style="text-align:center;font-weight: 300">
-                                                                Trả lời
-                                                            </th>
-                                                            <th class="col-2" style="text-align:center;font-weight: 300">
-                                                                Đáp án đúng
-                                                            </th>
-                                                            <th class="col-8" style="font-weight: 300;text-align:start">
-                                                                Điểm chú ý
-                                                            </th>
-
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        @{
-                                                    var listDCYdl = dsDCY.Where(x => x.CauHoiTuLuanId == cauhoituluanId).ToList();
-                                                    foreach (var i in listDCYdl)
-                                                    {
-                                                        if (i.Answer == i.CorrectAnswer)  
-                                                        {
-                                                                    <tr style="text-align:center;vertical-align:middle" class="bg-success p-2 text-dark bg-opacity-10">
-                                                                            <td>
-                                                                                @i.Answer
-                                                                            </td>
-                                                                            <td>
-                                                                                @i.CorrectAnswer
-                                                                            </td>
-                                                                            <td style="text-align:start">
-                                                                                @i.Text
-                                                                            </td>
-
-                                                                        </tr>
-                                                        }
-                                                        else
-                                                        {
-                                                                <tr style="text-align:center;vertical-align:middle" class="bg-danger p-2 text-dark bg-opacity-10">
-                                                                    <td>
-                                                                        @i.Answer
-                                                                    </td>
-                                                                    <td>
-                                                                        @i.CorrectAnswer
-                                                                    </td>
-                                                                    <td style="text-align:start">
-                                                                        @i.Text
-                                                                    </td>
-
-                                                                </tr>
-                                                        }
-                                                        
-                                                    }
-
-                                                        }
-                                                    </tbody>
-                                                </table>
-
-                                                <p class="mb-1" style="text-align:start;font-weight:600;"> III. Lỗi tại công đoạn:</p>
-                                                <table class="table table-bordered table-hover " style="width:100%">
-                                                    <thead style="vertical-align:middle;font-size:small">
-                                                        <tr>
-                                                           <th class="col-2" style="text-align:center;font-weight: 300">
-                                                                Trả lời
-                                                            </th>
-                                                            <th class="col-2" style="text-align:center;font-weight: 300">
-                                                                Đáp án đúng
-                                                            </th>
-                                                            <th class="col-8" style="font-weight: 300;text-align:start">
-                                                                Lỗi tại công đoạn
-                                                            </th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        @{
-                                                    var listLTCDdl = dsLTCD.Where(x => x.CauHoiTuLuanId == cauhoituluanId).ToList();
-                                                    foreach (var i in listLTCDdl)
-                                                    {
-                                                         if (i.Answer == i.CorrectAnswer)  
-                                                        {
-                                                                    <tr style="text-align:center;vertical-align:middle" class="bg-success p-2 text-dark bg-opacity-10">
-                                                                            <td>
-                                                                                @i.Answer
-                                                                            </td>
-                                                                            <td>
-                                                                                @i.CorrectAnswer
-                                                                            </td>
-                                                                            <td style="text-align:start">
-                                                                                @i.Text
-                                                                            </td>
-
-                                                                        </tr>
-                                                        }
-                                                        else
-                                                        {
-                                                                <tr style="text-align:center;vertical-align:middle" class="bg-danger p-2 text-dark bg-opacity-10">
-                                                                    <td>
-                                                                        @i.Answer
-                                                                    </td>
-                                                                    <td>
-                                                                        @i.CorrectAnswer
-                                                                    </td>
-                                                                    <td style="text-align:start">
-                                                                        @i.Text
-                                                                    </td>
-
-                                                                </tr>
-                                                        }
-                                                    }
-                                                        }
-                                                    </tbody>
-                                                </table>
-
-                                                <p class="mb-1" style="text-align:start;font-weight:600;"> IV. Đối sách:</p>
-                                                <table class="table table-bordered table-hover " style="width:100%">
-                                                    <thead style="vertical-align:middle;font-size:small">
-                                                        <tr>
-                                                            <th class="col-2" style="text-align:center;font-weight: 300">
-                                                                Trả lời
-                                                            </th>
-                                                            <th class="col-2" style="text-align:center;font-weight: 300">
-                                                                Đáp án đúng
-                                                            </th>
-                                                            <th class="col-8" style="font-weight: 300;text-align:start">
-                                                                Đối sách
-                                                            </th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        @{
-                                                    var listDSdl = dsDS.Where(x => x.CauHoiTuLuanId == cauhoituluanId).ToList();
-                                                    foreach (var i in listDSdl)
-                                                    {
+                                                    <tr style="text-align:center;vertical-align:middle" class=" p-2 text-dark bg-opacity-10">
+                                                        <td style="text-align:start">
+                                                            @i.Text
+                                                        </td>
+                                                        <td>
+                                                            @i.Answer
+                                                        </td>
+                                                        <td>
+                                                            @i.CorrectAnswer
+                                                        </td>
+                                                        <td>
+                                                            @{
                                                         if (i.Answer == i.CorrectAnswer)
                                                         {
-                                                                        <tr style="text-align:center;vertical-align:middle" class="bg-success p-2 text-dark bg-opacity-10">
-                                                                            <td>
-                                                                                @i.Answer
-                                                                            </td>
-                                                                            <td>
-                                                                                @i.CorrectAnswer
-                                                                            </td>
-                                                                            <td style="text-align:start">
-                                                                                @i.Text
-                                                                            </td>
-
-                                                                        </tr>
+                                                            <i style="color:green" class="bi-check"></i>
                                                         }
                                                         else
                                                         {
-                                                                        <tr style="text-align:center;vertical-align:middle" class="bg-danger p-2 text-dark bg-opacity-10">
-                                                                            <td>
-                                                                                @i.Answer
-                                                                            </td>
-                                                                            <td>
-                                                                                @i.CorrectAnswer
-                                                                            </td>
-                                                                            <td style="text-align:start">
-                                                                                @i.Text
-                                                                            </td>
+                                                            <i style="color:red" class="bi-x"></i>
+                                                        }
+                                                            }
+                                                        </td>
+                                                    </tr>
+                                                }
+                                                }
+                                            </tbody>
+                                        </table>
 
-                                                                        </tr>
+                                        <p class="mb-1" style="text-align:start;font-weight:500;"> III. Lỗi tại công đoạn:</p>
+                                        <table class="table table-bordered table-hover " style="width:100%">
+                                            <thead style="vertical-align:middle;font-size:small">
+                                                <tr>
+                                                    <th class="col-8" style="font-weight: 300;text-align:start">
+                                                        Lỗi tại công đoạn
+                                                    </th>
+                                                    <th class="col-2" style="text-align:center;font-weight: 300">
+                                                        Trả lời
+                                                    </th>
+                                                    <th class="col-2" style="text-align:center;font-weight: 300">
+                                                        Đáp án đúng
+                                                    </th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @{
+                                                var listLTCDdl = dsLTCD.Where(x => x.CauHoiTuLuanId == cauhoituluanId).ToList();
+                                                foreach (var i in listLTCDdl)
+                                                {
+                                                    <tr style="text-align:center;vertical-align:middle" class="p-2 text-dark bg-opacity-10">
+                                                        <td style="text-align:start">
+                                                            @i.Text
+                                                        </td>
+                                                        <td>
+                                                            @i.Answer
+                                                        </td>
+                                                        <td>
+                                                            @i.CorrectAnswer
+                                                        </td>
+                                                        <td>
+                                                            @{
+                                                        if (i.Answer == i.CorrectAnswer)
+                                                        {
+                                                                        <i style="color:green" class="bi-check"></i>
                                                         }
-                                                    }
+                                                        else
+                                                        {
+                                                                        <i style="color:red" class="bi-x    "></i>
                                                         }
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
+                                                            }
+                                                        </td>
+                                                    </tr>
+                                                }
+                                                }
+                                            </tbody>
+                                        </table>
+
+                                        <p class="mb-1" style="text-align:start;font-weight:500;"> IV. Đối sách:</p>
+                                        <table class="table table-bordered table-hover " style="width:100%">
+                                            <thead style="vertical-align:middle;font-size:small">
+                                                <tr>
+                                                    <th class="col-8" style="font-weight: 300;text-align:start">
+                                                        Đối sách
+                                                    </th>
+                                                    <th class="col-2" style="text-align:center;font-weight: 300">
+                                                        Trả lời
+                                                    </th>
+                                                    <th class="col-2" style="text-align:center;font-weight: 300">
+                                                        Đáp án đúng
+                                                    </th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @{
+                                                var listDSdl = dsDS.Where(x => x.CauHoiTuLuanId == cauhoituluanId).ToList();
+                                                foreach (var i in listDSdl)
+                                                {
+                                                    <tr style="text-align:center;vertical-align:middle" class="p-2 text-dark bg-opacity-10">
+                                                        <td style="text-align:start">
+                                                            @i.Text
+                                                        </td>
+                                                        <td>
+                                                            @i.Answer
+                                                        </td>
+                                                        <td>
+                                                            @i.CorrectAnswer
+                                                        </td>
+                                                        <td>
+                                                            @{
+                                                        if (i.Answer == i.CorrectAnswer)
+                                                        {
+                                                                        <i style="color:green" class="bi-check"></i>
+                                                        }
+                                                        else
+                                                        {
+                                                                        <i style="color:red" class="bi-x    "></i>
+                                                        }
+                                                            }
+                                                        </td>
+                                                    </tr>
+                                                }
+                                                }
+                                            </tbody>
+                                        </table>
                                     </div>
-                            }
-                            }
-                        </div>
+                                </div>
+                            </div>
+                        }
+                        }
                     </div>
                 </div>
             </div>
@@ -550,7 +499,7 @@
         var tracnghiemScore = @scoreTracNghiem;
         var tuluanScore = @scoreTuLuan;
         var totalScore = tracnghiemScore + tuluanScore;
-        var errorScore = 10 - totalScore;
+        var errorScore = 100 - totalScore;
         // Create a pie chart
         var myChart = new Chart(ctx, {
             type: 'doughnut',

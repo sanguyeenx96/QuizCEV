@@ -1,7 +1,7 @@
 ﻿@model ViewModels.ExamResult.Response.ExamResultVm
 @{
     float totalScore = Model.Score;
-    string danhgia = (totalScore >= 8) ? "tốt" : (totalScore >= 6) ? "trung bình" : "không đạt";
+    string danhgia = (totalScore >= 80) ? "điểm cao" : (totalScore >= 60) ? "điểm số trung bình" : "điểm thấp";
     int demtn = 0;
     int demtl = 0;
     float scoreTN = ViewBag.scoreTN;
@@ -25,64 +25,49 @@
     <div class="modal-body">
         <div class="row">
             <div class="col-md-12">
-                <div class="card mb-3
-                     @{
-                     if (danhgia == "tốt")
-                     {
-                                        <text>border-top-success border-top-3 mb-3</text>
-            }
-            if (danhgia == "trung bình")
-            {
-                                        <text>border-top-warning border-top-3 mb-3</text>
-            }
-            if (danhgia == "không đạt")
-            {
-                                        <text>border-top-danger border-top-3 mb-3</text>
-            }
-        }">
+                @{
+                    var borderClass = danhgia switch
+                    {
+                        "điểm cao" => "border-top-success border-top-3 mb-3",
+                        "điểm số trung bình" => "border-top-warning border-top-3 mb-3",
+                        "điểm thấp" => "border-top-danger border-top-3 mb-3",
+                        _ => ""
+                    };
+
+                    var textClass = danhgia switch
+                    {
+                        "điểm cao" => "text-success",
+                        "điểm số trung bình" => "text-warning",
+                        "điểm thấp" => "text-danger",
+                        _ => ""
+                    };
+
+                    var iconClass = danhgia switch
+                    {
+                        "điểm cao" => "điểm cao",
+                        "điểm số trung bình" => "trung bình",
+                        "điểm thấp" => "điểm thấp",
+                        _ => ""
+                    };
+                }
+
+                <div class="card mb-3 @borderClass">
                     <div class="card-body">
-                        <h5 class="card-title">Điểm số @totalScore/10 điểm</h5>
-                        <p class="card-text"><small>Đánh giá: <b
-                    @{
-                        if (danhgia == "tốt")
-                        {
-                                                    <text>class="text-success</text>
-                        }
-                        if (danhgia == "trung bình")
-                        {
-                                                    <text>class="text-warning</text>
-                        }
-                        if (danhgia == "không đạt")
-                        {
-                                                    <text>class="text-danger</text>
-                        }
-                    }
-                    ">@danhgia</b> </small></p>
-                 <hr>
-            <div style="position: relative; text-align: center;">
-                <div style="width: 100%; position: absolute; top: 50%; left: 0; transform: translateY(-50%); z-index: 999999999999999">
-                    @{
-                        if (danhgia == "tốt")
-                        {
-                                            <h1 class="display-6 text-success animate__animated animate__rotateIn">OK</h1>
-                        }
-                        if (danhgia == "trung bình")
-                        {
-                                            <h1 class="display-6 text-warning animate__animated animate__rotateIn">OK</h1>
-                        }
-                        if (danhgia == "không đạt")
-                        {
-                                            <h1 class="display-6 text-danger animate__animated animate__rotateIn">NG</h1>
-                        }
-                    }
+                        <h5 class="card-title">Điểm số @totalScore/100 điểm</h5>
+                        <p class="card-text">
+                            <small>Đánh giá: <b class="@textClass">@danhgia</b></small>
+                        </p>
+                        <hr>
+                        <div style="position: relative; text-align: center;">
+                            @*<div style="width: 100%; position: absolute; top: 50%; left: 0; transform: translateY(-50%);z-index:99999">
+                                <h1 class="display-6 text-@textClass animate__animated animate__rotateIn">@iconClass</h1>
+                            </div>*@
+                            <canvas id="myChart3"></canvas>
+                        </div>
+                    </div>
                 </div>
-                <canvas style="width:100%" id="myChart3"></canvas>
             </div>
 
-
-            </div>
-        </div>
-            </div>
             <div class="col-md-12">
                 <div class="card ">
                     <div class="card-body">
@@ -90,23 +75,19 @@
                             <div class="col-4">
                                 <div class="border-start border-start-4 border-start-info px-3 mb-3">
                                     <small class="text-medium-emphasis">Thời gian làm bài thi</small>
-                                    <div class="fs-7">@Model.ThoiGianLamBai phút</div>
-                                    <span class="badge bg-light me-2 text-dark"> Cho phép</span>
+                                    <div class="fs-7">@Model.ThoiGianLamBai/@Model.ThoiGianChoPhepLamBai phút</div>
                                 </div>
                             </div>
                             <div class="col-4">
                                 <div class="border-start border-start-4 border-start-info px-3 mb-3">
                                     <small class="text-medium-emphasis">Trắc nghiệm</small>
-                                    <div class="fs-7">Đúng @slDungTN/@slCauhoiTN câu </div>
-                                    <span class="badge bg-light me-2 text-dark"> @scoreTN/@totalScoreTN điểm</span>
+                                    <div class="fs-7">@scoreTN/@totalScoreTN điểm</div>
                                 </div>
                             </div>
                             <div class="col-4">
                                 <div class="border-start border-start-4 border-start-info px-3 mb-3">
                                     <small class="text-medium-emphasis">Tự luận</small>
-                                    <div class="fs-7">Đúng @slDungTL/@slCauhoiTL câu</div>
-                                    <span class="badge bg-light me-2 text-dark">@scoreTL/@totalScoreTL điểm</span>
-
+                                    <div class="fs-7">@scoreTL/@totalScoreTL điểm</div>
                                 </div>
                             </div>
                         </div>
@@ -125,184 +106,152 @@
                         <div class="tab-content" id="nav-tabContent">
                             <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab" tabindex="0">
                                 <div class="accordion">
-                                    @foreach (var item in Model.LogExams.Where(x=>x.LoaiCauHoi=="TN"))
+                                    @foreach (var item in Model.LogExams.Where(x => x.LoaiCauHoi == "TN"))
                                     {
-                                    demtn++;
-                                    string idThe = "tn" + item.Id.ToString();
-                                    <div class="accordion-item">
-                                        <h2 class="accordion-header">
-                                            <button class="accordion-button collapsed" type="button" data-coreui-toggle="collapse" data-coreui-target="#@idThe" aria-expanded="false" aria-controls="@idThe">
-                                                @{
-                                                if (item.Cautraloi.ToUpper() == item.Dapandung.ToUpper())
-                                                {
-                                                    <span class="badge bg-success me-2 ">
+                                        demtn++;
+                                        string idThe = "tn" + item.Id.ToString();
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header">
+                                                <button class="accordion-button collapsed" type="button" data-coreui-toggle="collapse" data-coreui-target="#@idThe" aria-expanded="false" aria-controls="@idThe">
+                                                    <span class="badge bg-secondary me-2 ">
                                                         Câu @demtn
                                                         <small>
-                                                            <span class="badge bg-dark" style="vertical-align: text-top;">
+                                                            <span class="badge text-bg-light" style="vertical-align: text-top;">
                                                                 @item.Score điểm
                                                             </span>
                                                         </small>
                                                     </span>
-                                                }
-                                                else
-                                                {
-                                                    <span class="badge bg-danger me-2 ">
-                                                        Câu @demtn
-                                                        <small>
-                                                            <span class="badge bg-dark" style="vertical-align: text-top;">
-                                                                @item.Score điểm
-                                                            </span>
-                                                        </small>
-                                                    </span>
-                                                }
-                                                }
-                                                @item.Cauhoi
-                                            </button>
-                                        </h2>
-                                        <div id="@idThe" class="accordion-collapse collapse" data-coreui-parent="#accordionExample">
-                                            <div class="accordion-body">
-                                                <div class="row">
-                                                    @{
-                                                    if (!string.IsNullOrEmpty(item.QA))
-                                                    {
-                                                    if (item.Dapandung == "A")
-                                                    {
-                                                        <div class="col-6">
-                                                            <button class="btn w-100 text-black btn-success mb-2" disabled>@item.QA</button>
-                                                        </div>
-                                                    }
-                                                    else
-                                                    {
-                                                    if (item.Cautraloi == "A")
-                                                    {
-                                                        <div class="col-6">
-                                                            <button class="btn w-100 text-black btn-danger " disabled>@item.QA</button>
-                                                        </div>
-                                                    }
-                                                    else
-                                                    {
-                                                        <div class="col-6">
-                                                            <button class="btn w-100 text-black btn-outline-light " disabled>@item.QA</button>
-                                                        </div>
-                                                    }
+                                                    @item.Cauhoi
+                                                </button>
+                                            </h2>
+                                            <div id="@idThe" class="accordion-collapse collapse" data-coreui-parent="#accordionExample">
+                                                <div class="accordion-body">
+                                                    <div class="row">
+                                                        @{
+                                                        if (!string.IsNullOrEmpty(item.QA))
+                                                        {
+                                                            if (item.Dapandung == "A")
+                                                            {
+                                                                <div class="col-6">
+                                                                    <button class="btn w-100 text-black btn-success mb-2" disabled>@item.QA</button>
+                                                                </div>
+                                                            }
+                                                            else
+                                                            {
+                                                                if (item.Cautraloi == "A")
+                                                                {
+                                                                    <div class="col-6">
+                                                                        <button class="btn w-100 text-black btn-danger " disabled>@item.QA</button>
+                                                                    </div>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <div class="col-6">
+                                                                        <button class="btn w-100 text-black btn-outline-light " disabled>@item.QA</button>
+                                                                    </div>
+                                                                }
 
-                                                    }
+                                                            }
 
-                                                    }
-                                                    if (!string.IsNullOrEmpty(item.QB))
-                                                    {
-                                                    if (item.Dapandung == "B")
-                                                    {
-                                                        <div class="col-6">
-                                                            <button class="btn w-100 text-black btn-success " disabled>@item.QB</button>
-                                                        </div>
-                                                    }
-                                                    else
-                                                    {
-                                                    if (item.Cautraloi == "B")
-                                                    {
-                                                        <div class="col-6">
-                                                            <button class="btn w-100 text-black btn-danger " disabled>@item.QB</button>
-                                                        </div>
-                                                    }
-                                                    else
-                                                    {
-                                                        <div class="col-6">
-                                                            <button class="btn w-100 text-black btn-outline-light " disabled>@item.QB</button>
-                                                        </div>
-                                                    }
-                                                    }
-                                                    }
-                                                    if (!string.IsNullOrEmpty(item.QC))
-                                                    {
-                                                    if (item.Dapandung == "C")
-                                                    {
-                                                        <div class="col-6">
-                                                            <button class="btn w-100 text-black btn-success " disabled>@item.QC</button>
-                                                        </div>
-                                                    }
-                                                    else
-                                                    {
-                                                    if (item.Cautraloi == "C")
-                                                    {
-                                                        <div class="col-6">
-                                                            <button class="btn w-100 text-black btn-danger " disabled>@item.QC</button>
-                                                        </div>
-                                                    }
-                                                    else
-                                                    {
-                                                        <div class="col-6">
-                                                            <button class="btn w-100 text-black btn-outline-light " disabled>@item.QC</button>
-                                                        </div>
-                                                    }
-                                                    }
-                                                    }
-                                                    if (!string.IsNullOrEmpty(item.QD))
-                                                    {
-                                                    if (item.Dapandung == "D")
-                                                    {
-                                                        <div class="col-6">
-                                                            <button class="btn w-100 text-black btn-success " disabled>@item.QD</button>
-                                                        </div>
-                                                    }
-                                                    else
-                                                    {
-                                                    if (item.Cautraloi == "D")
-                                                    {
-                                                        <div class="col-6">
-                                                            <button class="btn w-100 text-black btn-danger " disabled>@item.QD</button>
-                                                        </div>
-                                                    }
-                                                    else
-                                                    {
-                                                        <div class="col-6">
-                                                            <button class="btn w-100 text-black btn-outline-light " disabled>@item.QD</button>
-                                                        </div>
-                                                    }
-                                                    }
-                                                    }
-                                                    }
+                                                        }
+                                                        if (!string.IsNullOrEmpty(item.QB))
+                                                        {
+                                                            if (item.Dapandung == "B")
+                                                            {
+                                                                <div class="col-6">
+                                                                    <button class="btn w-100 text-black btn-success " disabled>@item.QB</button>
+                                                                </div>
+                                                            }
+                                                            else
+                                                            {
+                                                                if (item.Cautraloi == "B")
+                                                                {
+                                                                    <div class="col-6">
+                                                                        <button class="btn w-100 text-black btn-danger " disabled>@item.QB</button>
+                                                                    </div>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <div class="col-6">
+                                                                        <button class="btn w-100 text-black btn-outline-light " disabled>@item.QB</button>
+                                                                    </div>
+                                                                }
+                                                            }
+                                                        }
+                                                        if (!string.IsNullOrEmpty(item.QC))
+                                                        {
+                                                            if (item.Dapandung == "C")
+                                                            {
+                                                                <div class="col-6">
+                                                                    <button class="btn w-100 text-black btn-success " disabled>@item.QC</button>
+                                                                </div>
+                                                            }
+                                                            else
+                                                            {
+                                                                if (item.Cautraloi == "C")
+                                                                {
+                                                                    <div class="col-6">
+                                                                        <button class="btn w-100 text-black btn-danger " disabled>@item.QC</button>
+                                                                    </div>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <div class="col-6">
+                                                                        <button class="btn w-100 text-black btn-outline-light " disabled>@item.QC</button>
+                                                                    </div>
+                                                                }
+                                                            }
+                                                        }
+                                                        if (!string.IsNullOrEmpty(item.QD))
+                                                        {
+                                                            if (item.Dapandung == "D")
+                                                            {
+                                                                <div class="col-6">
+                                                                    <button class="btn w-100 text-black btn-success " disabled>@item.QD</button>
+                                                                </div>
+                                                            }
+                                                            else
+                                                            {
+                                                                if (item.Cautraloi == "D")
+                                                                {
+                                                                    <div class="col-6">
+                                                                        <button class="btn w-100 text-black btn-danger " disabled>@item.QD</button>
+                                                                    </div>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <div class="col-6">
+                                                                        <button class="btn w-100 text-black btn-outline-light " disabled>@item.QD</button>
+                                                                    </div>
+                                                                }
+                                                            }
+                                                        }
+                                                        }
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
                                     }
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab" tabindex="0">
                                 <div class="accordion">
                                     @{
-                                    foreach (var item in Model.LogExams.Where(x=>x.LoaiCauHoi=="TL") )
+                                    foreach (var item in Model.LogExams.Where(x => x.LoaiCauHoi == "TL"))
                                     {
-                                    demtl++;
-                                    string idThe = "tl" + item.Id.ToString();
+                                        demtl++;
+                                        string idThe = "tl" + item.Id.ToString();
                                         <div class="accordion-item">
                                             <h2 class="accordion-header">
                                                 <button class="accordion-button collapsed" type="button" data-coreui-toggle="collapse" data-coreui-target="#@idThe" aria-expanded="false" aria-controls="@idThe">
-                                                    @{
-                                                if (item.Score == item.FinalScore)
-                                                {
-                                                        <span class="badge bg-success me-2 ">
-                                                            Câu @demtl
-                                                            <small>
-                                                                <span class="badge bg-dark" style="vertical-align: text-top;">
-                                                                    @item.Score điểm
-                                                                </span>
-                                                            </small>
-                                                        </span>
-                                                }
-                                                else
-                                                {
-                                                        <span class="badge bg-danger me-2 ">
-                                                            Câu @demtl
-                                                            <small>
-                                                                <span class="badge bg-dark" style="vertical-align: text-top;">
-                                                                    @item.Score điểm
-                                                                </span>
-                                                            </small>
-                                                        </span>
-                                                }
-                                                    }
+                                                    <span class="badge bg-secondary me-2 ">
+                                                        Câu @demtl
+                                                        <small>
+                                                            <span class="badge text-bg-light" style="vertical-align: text-top;">
+                                                                @item.Score điểm
+                                                            </span>
+                                                        </small>
+                                                    </span>
                                                     @item.Cauhoi
                                                 </button>
                                             </h2>
@@ -324,38 +273,37 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                        @foreach (var itemNoiDung in item.LogExamTrinhtuthaotacs as List<ViewModels.LogExamTrinhtuthaotac.Response.LogExamTrinhtuthaotacVm>)
-                                                        {
-                                                            if (itemNoiDung.ThuTu == itemNoiDung.Answer)
+                                                            @foreach (var itemNoiDung in item.LogExamTrinhtuthaotacs as List<ViewModels.LogExamTrinhtuthaotac.Response.LogExamTrinhtuthaotacVm>)
                                                             {
-                                                                <tr style="text-align:center;vertical-align:middle" class="bg-success p-2 text-dark bg-opacity-10">
-                                                                    <td>
-                                                                        @itemNoiDung.Answer
-                                                                    </td>
-                                                                    <td>
-                                                                        @itemNoiDung.ThuTu
-                                                                    </td>
-                                                                    <td style="text-align:start">
-                                                                        @itemNoiDung.Text
-                                                                    </td>
-                                                               
-                                                                </tr>
+                                                                if (itemNoiDung.ThuTu == itemNoiDung.Answer)
+                                                                {
+                                                                    <tr style="text-align:center;vertical-align:middle" class="bg-success p-2 text-dark bg-opacity-10">
+                                                                        <td>
+                                                                            @itemNoiDung.Answer
+                                                                        </td>
+                                                                        <td>
+                                                                            @itemNoiDung.ThuTu
+                                                                        </td>
+                                                                        <td style="text-align:start">
+                                                                            @itemNoiDung.Text
+                                                                        </td>
+                                                                    </tr>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <tr style="text-align:center;vertical-align:middle" class="bg-danger p-2 text-dark bg-opacity-10">
+                                                                        <td>
+                                                                            @itemNoiDung.Answer
+                                                                        </td>
+                                                                        <td>
+                                                                            @itemNoiDung.ThuTu
+                                                                        </td>
+                                                                        <td style="text-align:start">
+                                                                            @itemNoiDung.Text
+                                                                        </td>
+                                                                    </tr>
+                                                                }
                                                             }
-                                                            else
-                                                            {
-                                                                <tr style="text-align:center;vertical-align:middle" class="bg-danger p-2 text-dark bg-opacity-10">
-                                                                    <td>
-                                                                        @itemNoiDung.Answer
-                                                                    </td>
-                                                                    <td>
-                                                                        @itemNoiDung.ThuTu
-                                                                    </td>
-                                                                    <td style="text-align:start">
-                                                                        @itemNoiDung.Text
-                                                                    </td>
-                                                                </tr>
-                                                            }
-                                                        }
                                                         </tbody>
                                                     </table>
 
@@ -378,39 +326,39 @@
                                                         </thead>
                                                         <tbody>
                                                             @{
-                                                         foreach (var i in item.logExamDiemChuYs as List<ViewModels.LogExamDiemChuY.Response.LogExamDiemChuYVm>)
-                                                        {
-                                                        if (i.Answer == i.CorrectAnswer)
-                                                        {
-                                                            <tr style="text-align:center;vertical-align:middle" class="bg-success p-2 text-dark bg-opacity-10">
-                                                                <td>
-                                                                    @i.Answer
-                                                                </td>
-                                                                <td>
-                                                                    @i.CorrectAnswer
-                                                                </td>
-                                                                <td style="text-align:start">
-                                                                    @i.Text
-                                                                </td>
+                                                            foreach (var i in item.logExamDiemChuYs as List<ViewModels.LogExamDiemChuY.Response.LogExamDiemChuYVm>)
+                                                            {
+                                                                if (i.Answer == i.CorrectAnswer)
+                                                                {
+                                                                    <tr style="text-align:center;vertical-align:middle" class="bg-success p-2 text-dark bg-opacity-10">
+                                                                        <td>
+                                                                            @i.Answer
+                                                                        </td>
+                                                                        <td>
+                                                                            @i.CorrectAnswer
+                                                                        </td>
+                                                                        <td style="text-align:start">
+                                                                            @i.Text
+                                                                        </td>
 
-                                                            </tr>
-                                                        }
-                                                        else
-                                                        {
-                                                            <tr style="text-align:center;vertical-align:middle" class="bg-danger p-2 text-dark bg-opacity-10">
-                                                                <td>
-                                                                    @i.Answer
-                                                                </td>
-                                                                <td>
-                                                                    @i.CorrectAnswer
-                                                                </td>
-                                                                <td style="text-align:start">
-                                                                    @i.Text
-                                                                </td>
+                                                                    </tr>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <tr style="text-align:center;vertical-align:middle" class="bg-danger p-2 text-dark bg-opacity-10">
+                                                                        <td>
+                                                                            @i.Answer
+                                                                        </td>
+                                                                        <td>
+                                                                            @i.CorrectAnswer
+                                                                        </td>
+                                                                        <td style="text-align:start">
+                                                                            @i.Text
+                                                                        </td>
 
-                                                            </tr>
-                                                        }
-                                                        }
+                                                                    </tr>
+                                                                }
+                                                            }
 
                                                             }
                                                         </tbody>
@@ -433,39 +381,39 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                        @{
-                                                        foreach (var i in item.logExamLoiTaiCongDoans as List<ViewModels.LogExamLoiTaiCongDoan.Response.LogExamLoiTaiCongDoanVm>)
-                                                        {
-                                                            if (i.Answer == i.CorrectAnswer)
-                                                            {
-                                                                <tr style="text-align:center;vertical-align:middle" class="bg-success p-2 text-dark bg-opacity-10">
-                                                                    <td>
-                                                                        @i.Answer
-                                                                    </td>
-                                                                    <td>
-                                                                        @i.CorrectAnswer
-                                                                    </td>
-                                                                    <td style="text-align:start">
-                                                                        @i.Text
-                                                                    </td>
-                                                                </tr>
+                                                            @{
+                                                                foreach (var i in item.logExamLoiTaiCongDoans as List<ViewModels.LogExamLoiTaiCongDoan.Response.LogExamLoiTaiCongDoanVm>)
+                                                                {
+                                                                    if (i.Answer == i.CorrectAnswer)
+                                                                    {
+                                                                        <tr style="text-align:center;vertical-align:middle" class="bg-success p-2 text-dark bg-opacity-10">
+                                                                            <td>
+                                                                                @i.Answer
+                                                                            </td>
+                                                                            <td>
+                                                                                @i.CorrectAnswer
+                                                                            </td>
+                                                                            <td style="text-align:start">
+                                                                                @i.Text
+                                                                            </td>
+                                                                        </tr>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <tr style="text-align:center;vertical-align:middle" class="bg-danger p-2 text-dark bg-opacity-10">
+                                                                            <td>
+                                                                                @i.Answer
+                                                                            </td>
+                                                                            <td>
+                                                                                @i.CorrectAnswer
+                                                                            </td>
+                                                                            <td style="text-align:start">
+                                                                                @i.Text
+                                                                            </td>
+                                                                        </tr>
+                                                                    }
+                                                                }
                                                             }
-                                                            else
-                                                            {
-                                                                <tr style="text-align:center;vertical-align:middle" class="bg-danger p-2 text-dark bg-opacity-10">
-                                                                    <td>
-                                                                        @i.Answer
-                                                                    </td>
-                                                                    <td>
-                                                                        @i.CorrectAnswer
-                                                                    </td>
-                                                                    <td style="text-align:start">
-                                                                        @i.Text
-                                                                    </td>
-                                                                </tr>
-                                                            }
-                                                        }
-                                                        }
                                                         </tbody>
                                                     </table>
 
@@ -486,39 +434,39 @@
                                                         </thead>
                                                         <tbody>
                                                             @{
-                                                        foreach (var i in item.logExamDoiSaches as List<ViewModels.LogExamDoiSach.Response.LogExamDoiSachVm>)
-                                                        {
-                                                        if (i.Answer == i.CorrectAnswer)
-                                                        {
-                                                                <tr style="text-align:center;vertical-align:middle" class="bg-success p-2 text-dark bg-opacity-10">
-                                                                    <td>
-                                                                        @i.Answer
-                                                                    </td>
-                                                                    <td>
-                                                                        @i.CorrectAnswer
-                                                                    </td>
-                                                                    <td style="text-align:start">
-                                                                        @i.Text
-                                                                    </td>
+                                                                foreach (var i in item.logExamDoiSaches as List<ViewModels.LogExamDoiSach.Response.LogExamDoiSachVm>)
+                                                                {
+                                                                    if (i.Answer == i.CorrectAnswer)
+                                                                    {
+                                                                        <tr style="text-align:center;vertical-align:middle" class="bg-success p-2 text-dark bg-opacity-10">
+                                                                            <td>
+                                                                                @i.Answer
+                                                                            </td>
+                                                                            <td>
+                                                                                @i.CorrectAnswer
+                                                                            </td>
+                                                                            <td style="text-align:start">
+                                                                                @i.Text
+                                                                            </td>
 
-                                                                </tr>
-                                                        }
-                                                        else
-                                                        {
-                                                                <tr style="text-align:center;vertical-align:middle" class="bg-danger p-2 text-dark bg-opacity-10">
-                                                                    <td>
-                                                                        @i.Answer
-                                                                    </td>
-                                                                    <td>
-                                                                        @i.CorrectAnswer 
-                                                                    </td>
-                                                                    <td style="text-align:start">
-                                                                        @i.Text
-                                                                    </td>
+                                                                        </tr>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <tr style="text-align:center;vertical-align:middle" class="bg-danger p-2 text-dark bg-opacity-10">
+                                                                            <td>
+                                                                                @i.Answer
+                                                                            </td>
+                                                                            <td>
+                                                                                @i.CorrectAnswer
+                                                                            </td>
+                                                                            <td style="text-align:start">
+                                                                                @i.Text
+                                                                            </td>
 
-                                                                </tr>
-                                                        }
-                                                        }
+                                                                        </tr>
+                                                                    }
+                                                                }
                                                             }
                                                         </tbody>
                                                     </table>
@@ -538,7 +486,7 @@
                 </div>
             </div>
         </div>
-    </div>  
+    </div>
 </div>
 
 

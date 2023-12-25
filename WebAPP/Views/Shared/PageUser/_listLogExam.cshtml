@@ -2,39 +2,39 @@
 @foreach (var item in Model.OrderByDescending(x=>x.Date))
 {
     float totalScore = item.Score;
-    string danhgia = (totalScore >= 8) ? "Kết quả tốt" : (totalScore >= 6) ? "Kết quả trung bình" : "Không đạt";
+    string danhgia = (totalScore >= 80) ? "Điểm cao" : (totalScore >= 60) ? "Điểm số trung bình" : "Điểm thấp";
     <div class="card my-2">
         <div class="card-body">
             <h5 class="card-title">Bài thi @item.CategoryName </h5>
             <p class="card-text">@item.Hoten - Bộ phận @item.Bophan</p>
             @{
-                if (danhgia == "Kết quả tốt")
-                {
-                    <p>
-                        Điểm số : <span class="badge bg-light text-dark"> @item.Score điểm</span> - 
-                        Kết quả : <span class="badge bg-success">@danhgia</span>
-                        <br>
-                        Thời điểm làm bài thi : <span class="badge bg-light text-dark">@item.Date</span>
-                    </p>
-                }
-                if (danhgia == "Kết quả trung bình")
-                {
-                    <p>
-                        Điểm số : <span class="badge bg-light text-dark"> @item.Score điểm</span> -
-                        Kết quả : <span class="badge bg-warning">@danhgia</span>
-                        <br>
-                        Thời điểm  làm bài thi : <span class="badge bg-light text-dark">@item.Date</span>
-                    </p>
-                }
-                if (danhgia == "Không đạt")
-                {
-                    <p>
-                        Điểm số : <span class="badge bg-light text-dark"> @item.Score điểm</span> -
-                        Kết quả : <span class="badge bg-danger">@danhgia</span>
-                        <br>
-                        Thời điểm  làm bài thi : <span class="badge bg-light text-dark">@item.Date</span>
-                    </p>
-                }
+            if (danhgia == "Điểm cao")
+            {
+                <p>
+                    Điểm số : <span class="badge bg-light text-dark"> @item.Score điểm</span> - 
+                    Kết quả : <span class="badge bg-success">@danhgia</span>
+                    <br>
+                    Thời điểm làm bài thi : <span class="badge bg-light text-dark">@item.Date</span>
+                </p>
+            }
+            if (danhgia == "Điểm số trung bình")
+            {
+                <p>
+                    Điểm số : <span class="badge bg-light text-dark"> @item.Score điểm</span> -
+                    Kết quả : <span class="badge bg-warning">@danhgia</span>
+                    <br>
+                    Thời điểm  làm bài thi : <span class="badge bg-light text-dark">@item.Date</span>
+                </p>
+            }
+            if (danhgia == "Điểm thấp")
+            {
+                <p>
+                    Điểm số : <span class="badge bg-light text-dark"> @item.Score điểm</span> -
+                    Kết quả : <span class="badge bg-danger">@danhgia</span>
+                    <br>
+                    Thời điểm  làm bài thi : <span class="badge bg-light text-dark">@item.Date</span>
+                </p>
+            }
             }
             <button class="btn btn-primary btnXemchitietlichsu" data-idbaithi="@item.Id">
                 <i class="bi-eye"></i>

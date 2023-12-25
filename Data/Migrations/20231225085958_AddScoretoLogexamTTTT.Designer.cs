@@ -4,6 +4,7 @@ using Data.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(TracNghiemCEVDbContext))]
-    partial class TracNghiemCEVDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231225085958_AddScoretoLogexamTTTT")]
+    partial class AddScoretoLogexamTTTT
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,7 +52,7 @@ namespace Data.Migrations
                         new
                         {
                             Id = new Guid("8d04dce2-969a-435d-bba4-df3f325983dc"),
-                            ConcurrencyStamp = "cc783012-c35f-4d54-bae7-b6a661c7506b",
+                            ConcurrencyStamp = "7dc1f8de-5065-4aef-b027-e75901890eb7",
                             Description = "Administrator role",
                             Name = "admin",
                             NormalizedName = "admin"
@@ -58,7 +60,7 @@ namespace Data.Migrations
                         new
                         {
                             Id = new Guid("470f4021-29d8-4c8e-a9de-527571683d86"),
-                            ConcurrencyStamp = "f90feacc-f38a-4c46-8a17-162e32ac6abb",
+                            ConcurrencyStamp = "c7de6ae5-ee13-4482-90a8-685d017505da",
                             Description = "User role",
                             Name = "user",
                             NormalizedName = "user"
@@ -134,14 +136,14 @@ namespace Data.Migrations
                             Id = new Guid("69bd714f-9576-45ba-b5b7-f00649be00de"),
                             AccessFailedCount = 0,
                             CellId = 1,
-                            ConcurrencyStamp = "d7bcd088-48c5-4f7c-9b42-9c2095d173c9",
+                            ConcurrencyStamp = "b295ea59-e4af-43d8-b2f7-3fd70e1e5eb2",
                             Email = "smt.ngocsang@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             Name = "Nguyen Ngoc Sang",
                             NormalizedEmail = "smt.ngocsang@gmail.com",
                             NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAEGuFWKtZDXNkbGR+QGBUXYjeuMzRwtAccRIbxbqTLQVhF6SewC8uxXMptwFKUiDc5Q==",
+                            PasswordHash = "AQAAAAEAACcQAAAAECEKuNVfTrqiEm4crJjF/DFttnMMBwGl4XOVoZlX9uR2ZrLu9pw6LqjmF784T1E25Q==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -470,9 +472,6 @@ namespace Data.Migrations
 
                     b.Property<int>("Answer")
                         .HasColumnType("int");
-
-                    b.Property<float>("FinalScore")
-                        .HasColumnType("real");
 
                     b.Property<int>("LogExamId")
                         .HasColumnType("int");
