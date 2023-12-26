@@ -212,9 +212,21 @@ namespace Application.CauHoiTrinhTuThaoTac
                     var danhsachthututhaotac = new List<CauHoiTrinhThuThaoTacImportExcelRequest>();
                     for (int row = 2; row <= worksheet.Dimension.End.Row; row++)
                     {
+                        string? text = null;
+                        if (worksheet.Cells[row, 1].Value != null)
+                        {
+                            text = worksheet.Cells[row, 1].Value.ToString();
+                        }
+                        float? score = 0;
+                        if (worksheet.Cells[row, 2].Value != null)
+                        {
+                            score = Convert.ToInt32((worksheet.Cells[row, 2].Value.ToString()));
+                        }
+
                         var newThututhaotac = new CauHoiTrinhThuThaoTacImportExcelRequest
                         {
-                            Text = GetCellValue(worksheet, row, 1)
+                            Text = text,
+                            Score = score
                         };
                         danhsachthututhaotac.Add(newThututhaotac);
                     }
@@ -245,7 +257,8 @@ namespace Application.CauHoiTrinhTuThaoTac
                         var requestTTTT = new CauHoiTrinhTuThaoTacCreateRequest()
                         {
                             CauHoiTuLuanId = cauhoituluanId,
-                            Text = item.Text
+                            Text = item.Text,
+                            Score = item.Score
                         };
                         var result = await Create(requestTTTT);
                         if (result.IsSuccessed)

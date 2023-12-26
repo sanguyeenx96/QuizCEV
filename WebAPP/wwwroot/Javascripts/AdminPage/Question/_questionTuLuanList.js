@@ -12,8 +12,8 @@ $(document).ready(function () {
             inputLabel: "Số điểm chưa gán còn lại: " + remainScore + " điểm",
             inputAttributes: {
                 min: "0",
-                max: "10",
-                step: "0.25",
+                max: "100",
+                step: "1",
             },
             inputValue: parseFloat(thisScore),
         });
@@ -52,7 +52,7 @@ $(document).ready(function () {
                             },
                             success: function (result) {
                                 $("#countDiemso").html(result.result);
-                                if (result.result !== 10) {
+                                if (result.result !== 100) {
                                     $("#logoDiemdagan i").html('<i class="bi-x-circle-fill" style="color:red"></i>');
                                 } else {
                                     $("#logoDiemdagan i").html('<i class="bi-check-circle-fill" style="color:green"></i>');
@@ -147,7 +147,7 @@ $(document).ready(function () {
             success: function (result) {
                 if (result.success) {
                     let nowTotalScore = result.result;
-                    let remainScore = 10 - nowTotalScore;
+                    let remainScore = 100 - nowTotalScore;
                     showScoreInputDialogTuLuan(
                         id,
                         intCategoryId,

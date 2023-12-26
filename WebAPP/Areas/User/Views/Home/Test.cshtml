@@ -179,7 +179,6 @@
                                         icon: "success",
                                         showConfirmButton: false,
                                         timer: 1500 // Hiển thị thông báo thành công trong 1.5 giây
-
                                     }).then(() => {
                                         var url = "ConfirmEndExam";
                                         window.location.href = url;
@@ -203,9 +202,6 @@
             localStorage.setItem('countdownTime', remainingTime.toString());
         }, 1000, { autostart: true });
     }
-
-    
-
 
     $("#btnNopbai").click(function () {
         Swal.fire({

@@ -47,12 +47,12 @@ namespace WebAPI.Controllers
             return Ok(result);
         }
 
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> Update(int id, ExamResultUpdateRequest request)
-        //{
-        //    var result = await _examResultService.Update(id,request);
-        //    return Ok(result);
-        //}
+        [HttpPut("{id}")]
+        public async Task<IActionResult> DanhGia(int id, ExamResultDanhGiaRequest request)
+        {
+            var result = await _examResultService.DanhGia(id, request);
+            return Ok(result);
+        }
 
         //[HttpDelete("{id}")]
         //public async Task<IActionResult> Delete(int id)

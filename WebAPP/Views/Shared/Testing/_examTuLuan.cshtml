@@ -222,7 +222,7 @@
                                             <tr style="text-align:center;vertical-align:middle" data-id="@ds.Id" data-chtlId="@Model.Id">
                                                 <th style="font-weight: 300">
                                                     <select class="form-select ansDS" style="text-align:center" type="number">
-                                                        <option selected disabled></option>
+                                                        <option selected disabled>- - -</option>
                                                         @foreach (var ltcd in selectListLTCD)
                                                     {
                                                             <option value="@ltcd.Text">@ltcd.Text</option>
@@ -285,6 +285,13 @@
             });
         });
 
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top",
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: true,
+        });
         $("#btnTraLoiTL").click(function (e) {
             var form = $("#formTraLoiCauHoiTuLuan")[0];
             if (form.checkValidity()) {
@@ -365,7 +372,15 @@
                                 url: 'TestingTuLuan',
                                 type: 'GET',
                                 success: function (response) {
-                                    $("#examTuluan").html(response);
+                                    Toast.fire({
+                                        icon: "success",
+                                        title: "Đang trả lời câu hỏi...",
+                                        showConfirmButton: false,
+                                        allowOutsideClick: false,
+                                        allowEscapeKey: false
+                                    }).then(function () {
+                                        $("#examTuluan").html(response);
+                                    })                                    
                                 },
                                 error: function (error) {
                                     console.log(error);

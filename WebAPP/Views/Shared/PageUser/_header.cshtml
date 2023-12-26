@@ -28,6 +28,14 @@
     <div class="container-fluid">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb my-0 ms-2">
+                @if (ViewBag.chedothi == 1)
+                {
+                    <li class="breadcrumb-item active">
+                        <span class="badge text-bg-warning shadow">
+                            <i class="bi-mortarboard-fill"></i>
+                           Chế độ luyện tập</span>
+                    </li>
+                }
                 <li class="breadcrumb-item active"><span>@ViewBag.thisPage</span></li>
                 @if (ViewBag.step1 != null)
                 {
@@ -39,8 +47,8 @@
 </header>
 
 <script>
-    $(document).ready(function(){
-        $("#btnLogout").click(function(){
+    $(document).ready(function () {
+        $("#btnLogout").click(function () {
             Swal.fire({
                 title: "Đăng xuất tài khoản?",
                 icon: "warning",

@@ -31,19 +31,19 @@
                 @{
                     if (!string.IsNullOrEmpty(Model.QA))
                     {
-                        <button style="width:200px" class="btn  btn-outline-dark mt-2" type="submit" name="answer" value="A">@Model.QA</button>
+                            <button style="width:200px" class="btn  btn-outline-dark mt-2" type="submit" name="answer" value="A">@Model.QA</button>
                     }
                     if (!string.IsNullOrEmpty(Model.QB))
                     {
-                        <button style="width:200px" class="btn  btn-outline-dark mt-2" type="submit" name="answer" value="B">@Model.QB</button>
+                            <button style="width:200px" class="btn  btn-outline-dark mt-2" type="submit" name="answer" value="B">@Model.QB</button>
                     }
                     if (!string.IsNullOrEmpty(Model.QC))
                     {
-                        <button style="width:200px" class="btn  btn-outline-dark mt-2" type="submit" name="answer" value="C">@Model.QC</button>
+                            <button style="width:200px" class="btn  btn-outline-dark mt-2" type="submit" name="answer" value="C">@Model.QC</button>
                     }
                     if (!string.IsNullOrEmpty(Model.QD))
                     {
-                        <button style="width:200px" class="btn  btn-outline-dark mt-2" type="submit" name="answer" value="D">@Model.QD</button>
+                            <button style="width:200px" class="btn  btn-outline-dark mt-2" type="submit" name="answer" value="D">@Model.QD</button>
                     }
                 }
             </div>
@@ -62,6 +62,15 @@
 
 <script>
     $(document).ready(function () {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top",
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: true,
+        });
+        
+
         $('#formTraLoiCauHoiTracNghiem').submit(function (e) {
             e.preventDefault();
             var Id = $("#Id").val();
@@ -103,7 +112,15 @@
                             url: 'TestingTracNghiem',
                             type: 'GET',
                             success: function (response) {
-                                $("#examTracNghiem").html(response);
+                                Toast.fire({
+                                    icon: "success",
+                                    title: "Đang trả lời câu hỏi...",
+                                    showConfirmButton: false,
+                                    allowOutsideClick: false,
+                                    allowEscapeKey: false
+                                }).then(function(){
+                                    $("#examTracNghiem").html(response);
+                                })
                             },
                             error: function (error) {
                                 console.log(error);

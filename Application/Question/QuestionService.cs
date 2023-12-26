@@ -162,6 +162,11 @@ namespace Application.Question
                         {
                             qcans = worksheet.Cells[row, 6].Value.ToString().ToUpper();
                         }
+                        float? score = 0;
+                        if (worksheet.Cells[row, 7].Value != null)
+                        {
+                            score = Convert.ToInt32((worksheet.Cells[row, 7].Value.ToString()));
+                        }
                         var newquestion = new QuestionImportExcelRequest
                         {
                             Text = cauhoi,
@@ -169,7 +174,8 @@ namespace Application.Question
                             QB = qb,
                             QC = qc,
                             QD = qd,
-                            QCorrectAns = qcans                            
+                            QCorrectAns = qcans,
+                            Score = score
                         };
                         danhsachcauhois.Add(newquestion);
                     }
@@ -198,13 +204,15 @@ namespace Application.Question
                 dataTable.Columns.Add("QD", typeof(string));
                 dataTable.Columns.Add("QCorrectAns", typeof(string));
                 dataTable.Columns.Add("CategoryId", typeof(int));
+                dataTable.Columns.Add("Score", typeof(int));
+
                 foreach (var cauhoi in request)
                 {
                     bool isTextExists = ChecktrungTextQuestion(categoryId, cauhoi.Text);
                     if (!isTextExists)
                     {
                         lineupdate++;
-                        dataTable.Rows.Add(cauhoi.Text, cauhoi.QA, cauhoi.QB, cauhoi.QC, cauhoi.QD, cauhoi.QCorrectAns, categoryId);
+                        dataTable.Rows.Add(cauhoi.Text, cauhoi.QA, cauhoi.QB, cauhoi.QC, cauhoi.QD, cauhoi.QCorrectAns, categoryId,cauhoi.Score);
                     }
                     else
                     {
@@ -222,6 +230,8 @@ namespace Application.Question
                     bulkCopy.ColumnMappings.Add("QD", "QD");
                     bulkCopy.ColumnMappings.Add("QCorrectAns", "QCorrectAns");
                     bulkCopy.ColumnMappings.Add("CategoryId", "CategoryId");
+                    bulkCopy.ColumnMappings.Add("Score", "Score");
+
                     // Thiết lập kích thước lô nếu cần
                     bulkCopy.BatchSize = 1000; // Điều chỉnh kích thước lô theo nhu cầu
                     // Thực hiện sao chép dữ liệu vào SQL

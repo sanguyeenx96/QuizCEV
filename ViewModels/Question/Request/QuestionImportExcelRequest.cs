@@ -14,5 +14,6 @@ namespace ViewModels.Question.Request
         public string? QC { get; set; }
         public string? QD { get; set; }
         public string? QCorrectAns { get; set; }
+        public float? Score { get; set; }
     }
 }

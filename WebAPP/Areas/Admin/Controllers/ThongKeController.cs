@@ -23,6 +23,22 @@ namespace WebAPP.Areas.Admin.Controllers
             _categoryApiClient = categoryApiClient;
         }
 
+
+        [HttpPost]
+        public async Task<IActionResult> DanhGia(int id, string result)
+        {
+            var request = new ExamResultDanhGiaRequest()
+            {
+                Result = result == "ok" ? true : false
+            };
+            var kq = await _examResultApiClient.DanhGia(id, request);
+            if (!kq.IsSuccessed)
+            {
+                return Json(new { success = false, message = kq.Message });
+            }
+            return Json(new { success = true });
+        }
+
         public async Task<IActionResult> Index()
         {
             ViewBag.thisPage = "Thống kê dữ liệu lịch sử bài thi";       

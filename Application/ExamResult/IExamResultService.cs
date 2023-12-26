@@ -21,7 +21,7 @@ namespace Application.ExamResult
 
         //Task<ApiResult<int>> Update(int id, ExamResultUpdateRequest request);
 
-        //Task<ApiResult<bool>> Delete(int id);
+        Task<ApiResult<bool>> DanhGia(int id,ExamResultDanhGiaRequest request);
 
     }
 }

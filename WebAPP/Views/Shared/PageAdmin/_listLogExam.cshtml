@@ -3,7 +3,7 @@
     var dataTen = Json.Serialize(ViewBag.dataTen);
     var dataDiem = Json.Serialize(ViewBag.dataDiem);
 }
-<div class="row mb-2">    
+<div class="row mb-2">
     <div class="col-sm-5 col-lg-5">
         <div class="card ">
             <div class="card-body pb-0 d-flex justify-content-between align-items-start">
@@ -11,7 +11,7 @@
                     <div class="fs-5 fw-semibold">
                         <span id="countDiemTren6"></span>
                     </div>
-                    <div class="small text-medium-emphasis">Biểu đồ điểm số trên 6</div>
+                    <div class="small text-medium-emphasis">Biểu đồ điểm số trên 60</div>
                 </div>
             </div>
             <div class="c-chart-wrapper mt-3 mx-3" style="height:70px;">
@@ -26,7 +26,7 @@
                     <div class="fs-5 fw-semibold">
                         <span id="countDiemDuoi6"></span>
                     </div>
-                    <div class="small text-medium-emphasis">Biểu đồ điểm số dưới 6</div>
+                    <div class="small text-medium-emphasis">Biểu đồ điểm số dưới 60</div>
                 </div>
             </div>
             <div class="c-chart-wrapper mt-3 mx-3" style="height:70px;">
@@ -53,7 +53,7 @@
     <div class="card-body">
         <div class="d-flex justify-content-between">
             <div>
-                @{                    
+                @{
                     if (Model != null && Model.Any() && Model.DistinctBy(x => x.CategoryName).Count() == 1)
                     {
                         <h4 class="card-title mb-0">@Model.FirstOrDefault()?.CategoryName</h4>
@@ -78,21 +78,21 @@
     <div class="card-footer">
         <div class="row row-cols-1 row-cols-md-12 text-center">
             <div class="col-4 mb-sm-2 mb-0">
-                <div class="text-medium-emphasis">Điểm cao (Trên 8 điểm)</div>
+                <div class="text-medium-emphasis">Điểm cao (Trên 80 điểm)</div>
                 <div class="fw-semibold" id="txtDiemsocao"></div>
                 <div class="progress progress-thin mt-2">
                     <div id="barDiemcao" class="progress-bar bg-success" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
                 </div>
             </div>
             <div class="col-4 mb-sm-2 mb-0">
-                <div class="text-medium-emphasis">Điểm trung bình (6 đến 8 điểm)</div>
+                <div class="text-medium-emphasis">Điểm trung bình (60 đến 80 điểm)</div>
                 <div class="fw-semibold" id="txtDiemsotrungbinh"></div>
                 <div class="progress progress-thin mt-2">
                     <div id="barTrungbinh" class="progress-bar bg-warning" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
                 </div>
             </div>
             <div class="col-4 mb-sm-2 mb-0">
-                <div class="text-medium-emphasis">Điểm thấp (Dưới 6 điểm)</div>
+                <div class="text-medium-emphasis">Điểm thấp (Dưới 60 điểm)</div>
                 <div class="fw-semibold" id="txtDiemsothap"></div>
                 <div class="progress progress-thin mt-2">
                     <div id="barDiemthap" class="progress-bar bg-danger" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
@@ -106,8 +106,15 @@
         <table id="tblDanhsachdulieu" class="table table-hover" style="vertical-align:middle;width:100%">
             <thead style="font-size:small">
                 <tr>
+                    <th></th>
+                    <th style="font-weight: 350;">
+                        Ngày giờ
+                    </th>
                     <th style="font-weight: 350;">
                         Phòng thi
+                    </th>
+                    <th style="font-weight: 350;">
+                        Mã nhân viên
                     </th>
                     <th style="font-weight: 350;">
                         Họ tên
@@ -122,22 +129,35 @@
                         Cell
                     </th>
                     <th style="font-weight: 350;">
-                        Kết quả
-                    </th>
-                    <th style="font-weight: 350;">
                         Điểm số
                     </th>
-                    <th></th>
+                    <th style="font-weight: 350;">
+                        Đánh giá
+                    </th>
                 </tr>
             </thead>
             <tbody style="font-size:smaller">
-                @foreach (var item in Model)
+                @foreach (var item in Model.OrderByDescending(x=>x.Date))
                 {
-                    float totalScore = item.Score;
-                    string danhgia = (totalScore >= 8) ? "Kết quả tốt" : (totalScore >= 6) ? "Trung bình" : "Không đạt";
                     <tr>
+                        <td style="text-align:end;white-space:nowrap">
+                            <div class="btn-group">
+                                <button class="btn btn-primary btn-sm w-100 btnXemChiTietBaithi" data-idbaithi="@item.Id">
+                                    Xem chi tiết
+                                </button>
+                                <button class="btn btn-success btn-sm btnDanhGia" data-thisid="@item.Id">
+                                    Đánh giá
+                                </button>
+                            </div>
+                        </td>
+                        <td>
+                            @item.Date
+                        </td>
                         <td style="text-align:start">
                             @item.CategoryName
+                        </td>
+                        <td>
+                            @item.Username
                         </td>
                         <td>
                             @item.Hoten
@@ -152,38 +172,29 @@
                             @item.Cell
                         </td>
                         <td>
+                            @item.Score điểm
+                        </td>
+                        <td style="white-space:nowrap">
                             @{
-                                if (danhgia == "Kết quả tốt")
+                                if (item.Result == null)
                                 {
-                                    <span class=" text-success">
-                                        @danhgia
-                                    </span>
+                                    <i class="bi-question-circle-fill"></i>
                                 }
-                                if (danhgia == "Trung bình")
+                                else
                                 {
-                                    <span class=" text-warning">
-                                        @danhgia
-                                    </span>
-                                }
-                                if (danhgia == "Không đạt")
-                                {
-                                    <span class=" text-danger">
-                                        @danhgia
-                                    </span>
+                                    if (item.Result == true)
+                                    {
+                                        <span class="badge bg-success">OK</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger">NG</span>
+                                    }
+
                                 }
                             }
                         </td>
-                        <td>
-                            <span style="width:60px;vertical-align: text-bottom" class="badge text-bg-light">
-                                @item.Score điểm
-                            </span>
-                        </td>
-                        <td style="text-align:end;white-space:nowrap">
-                            <button class="btn btn-outline-primary w-100 btnXemChiTietBaithi" data-idbaithi="@item.Id">
-                                <i class="bi-eye"></i>
-                                Xem chi tiết
-                            </button>
-                        </td>
+
                     </tr>
                 }
             </tbody>
@@ -200,6 +211,104 @@
 
 <script>
     $(document).ready(function () {
+        function loadDataTheoChuDe() {
+            var selectphongThiValue = $('#PhongThi').val();
+            var selectDate = $('#datepicker').val();
+            var selectboPhanId = $('#deptSelectList').val();
+            var selectmodelId = $('#modelSelectList').val();
+            var selectcellId = $('#cellSelectList').val();
+
+            var name = $('#txtName').val();
+            var userName = $('#txtuserName').val();
+
+            var intCategoryId = parseInt(selectphongThiValue);
+            var intboPhanId = parseInt(selectboPhanId);
+            var intmodelId = parseInt(selectmodelId);
+            var intcellId = parseInt(selectcellId);
+
+
+            $.ajax({
+                url: '/admin/thongke/Search',
+                type: 'POST',
+                data: {
+                    CategoryId: intCategoryId,
+                    Date: selectDate,
+                    boPhanId: selectboPhanId,
+                    modelId: intmodelId,
+                    cellId: intcellId,
+                    name: name,
+                    userName: userName
+                },
+                success: function (data) {
+                    $('#ketquaTimkiem').html(data);
+                },
+                error: function (error) {
+                    console.error(error);
+                }
+            });
+        }
+
+        $(".btnDanhGia").click(async function () {
+            let id = $(this).attr("data-thisid");
+            const inputOptions = new Promise((resolve) => {
+                setTimeout(() => {
+                    resolve({
+                        "ok": "OK",
+                        "ng": "NG",
+                    });
+                }, 0);
+            });
+            const { value: rs } = await Swal.fire({
+                icon: "warning",
+                title: "Đánh giá kết quả bài thi",
+                input: "radio",
+                inputOptions,
+                inputValidator: (value) => {
+                    if (!value) {
+                        return "Bạn cần chọn đánh giá cho bài thi!";
+                    }
+                }
+            });
+            if (rs) {
+                $.ajax({
+                    url: '/admin/thongke/danhgia',
+                    type: 'POST',
+                    data: {
+                        id: id,
+                        result: rs
+                    },
+                    success: function (result) {
+                        if (result.success) {
+                            Swal.fire({
+                                icon: "success",
+                                title: "Đánh giá bài thi thành công",
+                                showConfirmButton: false,
+                                timer: 1000,
+                            }).then(function () {
+                                loadDataTheoChuDe();
+                            })
+                        } else {
+                            Swal.fire(
+                                "Lỗi máy chủ",
+                                "Thao tác đã được huỷ bỏ!",
+                                "error"
+                            );
+                        }
+                    },
+                    error: function (error) {
+                        Swal.fire(
+                            "Lỗi máy chủ",
+                            "Thao tác đã được huỷ bỏ!",
+                            "error"
+                        );
+                    }
+                });
+            }
+
+        });
+
+
+
         $(".btnXemChiTietBaithi").click(function () {
             var id = $(this).attr("data-idbaithi");
             $.ajax({
@@ -220,7 +329,6 @@
                         text: "Không tải được dữ liệu bài thi",
                         showConfirmButton: false,
                         timer: 1000,
-
                     })
                 }
             });
@@ -244,7 +352,7 @@
 
         var countDiemTren8 = dataDiem
             .filter(function (score) {
-                return score >= 8;
+                return score >= 80;
             })
             .length;
         var percentTren8 = (countDiemTren8 / countTotal) * 100;
@@ -257,12 +365,12 @@
 
         var countDiemTren6 = dataDiem
             .filter(function (score) {
-                return (score >= 6 && score < 8);
+                return (score >= 60 && score < 80);
             })
             .length;
         var percentTren6 = (countDiemTren6 / countTotal) * 100;
         var intpercentTren6 = parseInt(percentTren6)
-        $('#countDiemTren6').text(countDiemTren6 + " bài thi đạt (~" + intpercentTren6 + "%)")
+        $('#countDiemTren6').text(countDiemTren6 + " bài thi điểm cao (~" + intpercentTren6 + "%)")
         $('#txtDiemsotrungbinh').text(countDiemTren6 + " bài thi (~" + intpercentTren6 + "%)");
         var barTrungbinh = document.getElementById('barTrungbinh');
         if (barTrungbinh) {
@@ -271,12 +379,12 @@
 
         var countDiemDuoi6 = dataDiem
             .filter(function (score) {
-                return score < 6;
+                return score < 60;
             })
             .length;
         var percentDuoi6 = (countDiemDuoi6 / countTotal) * 100;
         var intpercentDuoi6 = parseInt(percentDuoi6)
-        $('#countDiemDuoi6').text(countDiemDuoi6 + " bài thi không đạt (~" + intpercentDuoi6 + "%)");
+        $('#countDiemDuoi6').text(countDiemDuoi6 + " bài thi điểm thấp (~" + intpercentDuoi6 + "%)");
         $('#txtDiemsothap').text(countDiemDuoi6 + " bài thi (~" + intpercentDuoi6 + "%)");
         var barDiemthap = document.getElementById('barDiemthap');
         if (barDiemthap) {
@@ -295,7 +403,7 @@
         // Tạo mảng dữ liệu cho điểm số dưới 6
         var dataDiemDuoi6 = dataDiem
             .map(function (score) {
-                return score < 6 ? score : null;
+                return score < 60 ? score : null;
             })
             .filter(function (score) {
                 return score !== null;
@@ -307,7 +415,7 @@
         // Tạo mảng dữ liệu cho điểm số trên hoặc bằng 6
         var dataDiemTren6 = dataDiem
             .map(function (score) {
-                return score >= 6 ? score : null;
+                return score >= 60 ? score : null;
             })
             .filter(function (score) {
                 return score !== null;

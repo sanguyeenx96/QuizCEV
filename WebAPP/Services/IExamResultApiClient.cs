@@ -13,6 +13,7 @@ namespace WebAPP.Services
         Task<ApiResult<int>> Create(ExamResultCreateRequest request);
 
         Task<ApiResult<bool>> CheckRetest(ExamResultCheckRetestRequest request);
+        Task<ApiResult<bool>> DanhGia(int id, ExamResultDanhGiaRequest request);
 
     }
 }
