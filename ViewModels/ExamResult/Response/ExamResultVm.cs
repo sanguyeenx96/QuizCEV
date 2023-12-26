@@ -10,6 +10,7 @@ namespace ViewModels.ExamResult.Response
     public class ExamResultVm
     {
         public int Id { get; set; }
+        public bool? Result { get; set; }
         public int ThoiGianLamBai { get; set; }
         public int ThoiGianChoPhepLamBai { get; set; }
         public string? CategoryName { get; set; }
@@ -17,6 +18,8 @@ namespace ViewModels.ExamResult.Response
         public float Score { get; set; }
         public Guid UserId { get; set; }
         public string? Hoten { get; set; }
+        public string? Username { get; set; }
+
         public string? Bophan { get; set; }
         public string? Model { get; set; }
         public string? Cell { get; set; }

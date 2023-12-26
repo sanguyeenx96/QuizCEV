@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics.SymbolStore;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -47,6 +48,17 @@ namespace Application.ExamResult
             _context.ExamResults.Add(newExamResult);
             await _context.SaveChangesAsync();
             return new ApiSuccessResult<int> { Id = newExamResult.Id };
+        }
+
+        public async Task<ApiResult<bool>> DanhGia(int id, ExamResultDanhGiaRequest request)
+        {
+            var examResult = await _context.ExamResults.FindAsync(id);
+            if (examResult == null)
+                return new ApiErrorResult<bool>("Không tìm thấy bài thi");
+            examResult.Result = request.Result;
+            _context.Update(examResult);
+            await _context.SaveChangesAsync();
+            return new ApiSuccessResult<bool>();
         }
 
         public async Task<ApiResult<List<ExamResultVm>>> Getall()
@@ -110,9 +122,11 @@ namespace Application.ExamResult
                 var listExamResults = resultList.Select(result => new ExamResultVm
                 {
                     Id = result.Id,
+                    Result = result.Result,
                     ThoiGianLamBai = result.ThoiGianLamBai,
                     ThoiGianChoPhepLamBai = result.ThoiGianChoPhepLamBai,
                     Hoten = result.AppUser.Name,
+                    Username = result.AppUser.UserName,
                     CategoryName = result.CategoryName,
                     UserId = result.UserId,
                     CategoryId = result.CategoryId,
@@ -144,6 +158,8 @@ namespace Application.ExamResult
                                     Text = LogExamTrinhtuthaotac.Text,
                                     ThuTu = LogExamTrinhtuthaotac.ThuTu,
                                     Answer = LogExamTrinhtuthaotac.Answer,
+                                    Score= LogExamTrinhtuthaotac.Score,
+                                    FinalScore = LogExamTrinhtuthaotac.FinalScore,
                                     LogExamId = LogExamTrinhtuthaotac.LogExamId
                                 }).ToList()
                                 : new List<LogExamTrinhtuthaotacVm>(),

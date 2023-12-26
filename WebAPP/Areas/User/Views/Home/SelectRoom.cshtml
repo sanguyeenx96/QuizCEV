@@ -46,6 +46,12 @@
             Phòng thi đang đóng
         </button>
     </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="pills-test-tab" data-coreui-toggle="pill" data-coreui-target="#pills-test" type="button" role="tab" aria-controls="pills-test" aria-selected="false">
+            <i class="bi-mortarboard"></i>
+            Chế độ luyện tập
+        </button>
+    </li>
 </ul>
 <div class="tab-content" id="pills-tabContent">
     <div class="tab-pane fade show active" id="pills-open" role="tabpanel" aria-labelledby="pills-open-tab" tabindex="0">
@@ -57,7 +63,7 @@
                     <p class="card-text">Thời gian làm bài <span class="badge bg-light text-dark">@item.Time phút</span> <br> Ngày tạo <span class="badge bg-light text-dark">@item.DateCreate.ToString("dd/MM/yyyy")</span> </p>
                     <input name="idPhong" value="@item.Id" hidden>
                     <button type="submit" class="btn btn-success btnBatdauthi"
-                        data-idPhong=@item.Id
+                        data-idPhong="@item.Id"
                         data-tenPhong="@item.Name"
                         onclick="localStorage.clear();">
                         <i class="bi-play"></i>
@@ -77,6 +83,24 @@
                     <button type="button" class="btn btn-secondary" disabled>
                         <i class="bi-play"></i>
                         Bắt đầu
+                    </button>
+                </div>
+            </div>
+        }
+    </div>
+    <div class="tab-pane fade" id="pills-test" role="tabpanel" aria-labelledby="pills-test-tab" tabindex="0">
+        @foreach (var item in Model)
+        {
+            <div class="card mb-2">
+                <div class="card-body">
+                    <h5 class="card-title">Phòng thi @item.Name</h5>
+                    <p class="card-text">Thời gian làm bài <span class="badge bg-light text-dark">@item.Time phút</span> <br> Ngày tạo <span class="badge bg-light text-dark">@item.DateCreate.ToString("dd/MM/yyyy")</span> </p>
+                    <button type="button" class="btn btn-warning btnBatdauthithu"
+                        data-idPhong="@item.Id"
+                        data-tenPhong="@item.Name"
+                        onclick="localStorage.clear();">
+                        <i class="bi-play"></i>
+                        Bắt đầu thi thử
                     </button>
                 </div>
             </div>
@@ -139,5 +163,51 @@
                 }
             });
         });
+
+        $(".btnBatdauthithu").click(function () {
+            var idPhong = $(this).attr("data-idPhong");
+            var tenPhong = $(this).attr("data-tenPhong");
+            swalWithBootstrapButtons
+                .fire({
+                    title: "Bắt đầu?",
+                    text: "Phòng thi " + tenPhong,
+                    showCancelButton: true,
+                    confirmButtonText: "Xác nhận",
+                    cancelButtonText: "Huỷ bỏ",
+                    reverseButtons: true,
+                })
+                .then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: "SelectRoomTest", // Đường dẫn đến action
+                            method: "POST",
+                            data: {
+                                idPhong: idPhong
+                                , categoryName: tenPhong
+                            }, // Dữ liệu gửi đi
+                            success: function (response) {
+                                if (response.success) {
+                                    var url = "Test";
+                                    window.location.href = url;
+                                }
+                                else {
+                                    Swal.fire({
+                                        icon: "error",
+                                        width: 300,
+                                        text: response.message,
+                                        showConfirmButton: false,
+                                        timer: 2000,
+                                    });
+                                }
+
+                            },
+                            error: function (error) {
+                                // Xử lý lỗi nếu có
+                                console.error("Error:", error);
+                            }
+                        });
+                    }
+                });
+        })
     });
 </script>
