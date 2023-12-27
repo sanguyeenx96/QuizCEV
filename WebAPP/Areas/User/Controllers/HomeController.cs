@@ -692,6 +692,10 @@ namespace WebAPP.Areas.User.Controllers
             int chedothi = Convert.ToInt32(TempData["Chedothithu"].ToString());
             if (chedothi == 1) //thi thử
             {
+                int thoiGianChoPhepLamBai = Convert.ToInt32(TempData["thoiGianThi"].ToString());
+                int thoiGianConLai = Convert.ToInt32(time);
+                int thoiGianLamBai = thoiGianChoPhepLamBai - (thoiGianConLai / 60 / 1000);
+                TempData["thoiGianLamBai"] = thoiGianLamBai;
                 TempData.Keep();
                 return Json(new { success = true });
             }
