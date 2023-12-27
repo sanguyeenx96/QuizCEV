@@ -20,7 +20,6 @@ namespace WebAPI.Controllers
             _deptService = deptService;
         }
 
-
         //Dept
         [HttpGet]
         public async Task<IActionResult> GetAll()
@@ -50,7 +49,6 @@ namespace WebAPI.Controllers
             return Ok(result);
         }
 
-
         //Model
         [HttpGet("getallbydept/{id}")]
         public async Task<IActionResult> GetAllByDept(int id)
@@ -79,7 +77,6 @@ namespace WebAPI.Controllers
             var result = await _deptService.DeleteModel(id);
             return Ok(result);
         }
-
 
         //Cell
         [HttpGet("getallbymodel/{id}")]

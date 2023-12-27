@@ -9,11 +9,11 @@
 <div class="card">
     <div class="card-body">
         <div class="form-group mb-2">
-            <label class="form-label">Nội dung lỗi</label>
+            <label class="form-label text-black">Nội dung lỗi</label>
             <input id="noidungloi" class="form-control" value="@Model.Text" />
         </div>
         <div class="form-group mb-2">
-            <label class="form-label">Chọn đối sách cần sửa</label>
+            <label class="form-label text-black">Chọn đối sách cần sửa</label>
             <select class="form-select form-select-lg " id="selectDS" name="selectDS" style="overflow: hidden;">
                 <option value="" selected disabled>Nhấn để chọn</option>
                 @foreach (var item in selectListItems)
@@ -23,7 +23,7 @@
             </select>
         </div>
         <div class="form-group mb-2" id="noidung" hide>
-            <label class="form-label">Nội dung mới</label>
+            <label class="form-label text-black">Nội dung mới</label>
             <input id="textDS" class="form-control" />
         </div>
     </div>
