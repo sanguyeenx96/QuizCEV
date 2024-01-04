@@ -408,6 +408,10 @@
             });
         });
 
+
+
+
+
         $(".btnThemLoiCongDoan").click(async function () {
             var cauhoitrinhtuthaotacId = $(this).attr("data-cauhoittttId");
             var cauhoituluanId = $(this).data("abc");
@@ -605,6 +609,7 @@
                 },
             });
         });
+
         async function showScoreInputDialog(id, intCategoryId, remainScore, thisScore) {
             const { value: soDiem } = await Swal.fire({
                 title: "Chọn điểm số cho câu hỏi",

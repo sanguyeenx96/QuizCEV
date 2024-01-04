@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using WebAPP.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,8 +20,10 @@ builder.Services.AddAuthorization(options => {
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddMemoryCache();
 builder.Services.AddSession();
 
+builder.Services.AddSingleton<ITempDataProvider, CookieTempDataProvider>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddTransient<ICategoryApiClient, CategoryApiClient>();
 builder.Services.AddTransient<IQuestionApiClient, QuestionApiClient>();

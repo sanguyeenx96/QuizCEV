@@ -42,12 +42,14 @@ namespace WebAPP.Areas.User.Controllers
         private readonly ILogExamDCYApiClient _logExamDCYApiClient;
         private readonly ILogExamDSApiClient _logExamDSApiClient;
 
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
         public HomeController(ICategoryApiClient categoryApiClient, IQuestionApiClient questionApiClient,
             ICauHoiTuLuanApiClient cauHoiTuLuanApiClient, ICauHoiTrinhTuThaoTacApiClient cauHoiTrinhTuThaoTacApiClient,
             IExamResultApiClient examResultApiClient, ILogExamApiClient logExamApiClient,
             ILogExamTrinhtuthaotacApiClient logExamTrinhtuthaotacApiClient, ISettingApiClient settingApiClient,
             ILogExamDCYApiClient logExamDCYApiClient, ILogExamLTCDApiClient logExamLTCDApiClient,
-            ILogExamDSApiClient logExamDSApiClient)
+            ILogExamDSApiClient logExamDSApiClient, IHttpContextAccessor httpContextAccessor)
         {
             _categoryApiClient = categoryApiClient;
             _questionApiClient = questionApiClient;
@@ -60,6 +62,7 @@ namespace WebAPP.Areas.User.Controllers
             _logExamDCYApiClient = logExamDCYApiClient;
             _logExamLTCDApiClient = logExamLTCDApiClient;
             _logExamDSApiClient = logExamDSApiClient;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         //Check setting re-test
@@ -114,7 +117,10 @@ namespace WebAPP.Areas.User.Controllers
         [HttpPost]
         public async Task<IActionResult> SelectRoom(int idPhong, string categoryName)
         {
-            TempData["Chedothithu"] = 0;
+            var session = _httpContextAccessor.HttpContext.Session;
+            // Sử dụng session
+            session.SetString("Chedothi", "thithat");
+            //TempData["Chedothithu"] = 0;
             bool modeCheck = CheckRetest().Result;
             if (modeCheck == false) //Nếu không cho thi lại
             {
@@ -268,7 +274,8 @@ namespace WebAPP.Areas.User.Controllers
             ViewBag.hoten = User.FindFirst(ClaimTypes.Name).Value.ToString();
             ViewBag.bophan = User.FindFirst(ClaimTypes.Country).Value.ToString();
 
-            int chedothi = Convert.ToInt32(TempData["Chedothithu"].ToString());
+            var session = _httpContextAccessor.HttpContext.Session;
+            var chedothi = session.GetString("Chedothi");
             ViewBag.chedothi = chedothi;
 
             ViewBag.thisPage = tenPhongthi;
@@ -689,8 +696,11 @@ namespace WebAPP.Areas.User.Controllers
         [HttpPost]
         public async Task<IActionResult> Save(string time)
         {
-            int chedothi = Convert.ToInt32(TempData["Chedothithu"].ToString());
-            if (chedothi == 1) //thi thử
+            //int chedothi = Convert.ToInt32(TempData["Chedothithu"].ToString());
+            var session = _httpContextAccessor.HttpContext.Session;
+            var chedothi = session.GetString("Chedothi");
+
+            if (chedothi == "thithu") //thi thử
             {
                 int thoiGianChoPhepLamBai = Convert.ToInt32(TempData["thoiGianThi"].ToString());
                 int thoiGianConLai = Convert.ToInt32(time);
@@ -1221,7 +1231,10 @@ namespace WebAPP.Areas.User.Controllers
         [HttpPost]
         public async Task<IActionResult> SelectRoomTest(int idPhong, string categoryName)
         {
-            TempData["Chedothithu"] = 1;
+            var session = _httpContextAccessor.HttpContext.Session;
+            // Sử dụng session
+            session.SetString("Chedothi", "thithu");
+            //TempData["Chedothithu"] = 1;
 
             //Trắc nghiệm
             List<QuestionAndAnswerVm> listQuestionAndAnswerTracNghiem = new List<QuestionAndAnswerVm>();

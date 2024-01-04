@@ -306,91 +306,115 @@
                     })
                 }
                 else {
-                    //Start get values from tbl here:
-                    var dataDCY = [];
-                    var dataLTCD = [];
-                    var dataDS = [];
-                    $('#tblDCY tbody tr').each(function () {
-                        let inputValue = $(this).find('.ansDCY').val();
-                        let id = $(this).attr("data-id");
-                        id = parseInt(id)
-                        inputValue = parseInt(inputValue)
-                        dataDCY.push({
-                            Id: id,
-                            Answer: inputValue
-                        });
-                    });
-                    $('#tblLTCD tbody tr').each(function () {
-                        let inputValue = $(this).find('.ansLTCD').val();
-                        let id = $(this).attr("data-id");
-                        id = parseInt(id)
-                        inputValue = parseInt(inputValue)
-                        dataLTCD.push({
-                            Id: id,
-                            Answer: inputValue
-                        });
-                    });
+                    let allAnsDSHaveData = true;  // Biến để theo dõi trạng thái
+
                     $('#tblDS tbody tr').each(function () {
                         let selectText = $(this).find('.ansDS').val();
                         if (!selectText) {
-                            // Prevent form submission
-                            event.preventDefault();
-                            // Display an alert or any other validation message
-                            Swal.fire({
-                                icon: "warning",
-                                title: "Vui lòng chọn lỗi tương ứng với đối sách",
-                                showConfirmButton: false,
-                                timer: 1000,
-                            });                            
-                        }else{
+                            // Nếu một trong các .ansDS không có dữ liệu
+                            allAnsDSHaveData = false;  // Đặt biến thành false
+                            return false;  // Dừng vòng lặp
+                        }
+                    });
+
+                    if (!allAnsDSHaveData) {
+                        // Hiển thị thông báo khi có ít nhất một .ansDS không có dữ liệu
+                        Swal.fire({
+                            icon: "warning",
+                            title: "Vui lòng chọn lỗi tương ứng với đối sách",
+                            showConfirmButton: false,
+                            timer: 1000,
+                        });
+                        // Ngăn chặn sự kiện mặc định (form submission)
+                        event.preventDefault();
+                    } else {
+                        // Tiếp tục xử lý khi tất cả các .ansDS đều có dữ liệu
+                        //Start get values from tbl here:
+                        var dataDCY = [];
+                        var dataLTCD = [];
+                        var dataDS = [];
+                        $('#tblDCY tbody tr').each(function () {
+                            let inputValue = $(this).find('.ansDCY').val();
                             let id = $(this).attr("data-id");
                             id = parseInt(id)
-                            dataDS.push({
+                            inputValue = parseInt(inputValue)
+                            dataDCY.push({
                                 Id: id,
-                                Answer: selectText
+                                Answer: inputValue
                             });
-                        }
-                    });
-                    //Send all value to Controller:
-                    var dataToSend = {
-                        dataDCY: dataDCY,
-                        dataLTCD: dataLTCD,
-                        dataDS: dataDS,
-                        dataTTTT: parsedNewOrder
-                    };
-                    console.log(dataToSend)
-
-                    $.ajax({
-                        url: 'TraloiTuLuan',
-                        type: 'POST',
-                        contentType: 'application/json',
-                        data: JSON.stringify(dataToSend),
-                        dataType: 'json', // Add this line
-
-                        success: function (response) {
-                            $.ajax({
-                                url: 'TestingTuLuan',
-                                type: 'GET',
-                                success: function (response) {
-                                    Toast.fire({
-                                        icon: "success",
-                                        title: "Đang trả lời câu hỏi...",
-                                        showConfirmButton: false,
-                                        allowOutsideClick: false,
-                                        allowEscapeKey: false
-                                    }).then(function () {
-                                        $("#examTuluan").html(response);
-                                    })                                    
-                                },
-                                error: function (error) {
-                                    console.log(error);
-                                }
+                        });
+                        $('#tblLTCD tbody tr').each(function () {
+                            let inputValue = $(this).find('.ansLTCD').val();
+                            let id = $(this).attr("data-id");
+                            id = parseInt(id)
+                            inputValue = parseInt(inputValue)
+                            dataLTCD.push({
+                                Id: id,
+                                Answer: inputValue
                             });
-                        },
-                        error: function (error) {
-                            console.log(error);
-                        }
-                    });
+                        });
+                        $('#tblDS tbody tr').each(function () {
+                            let selectText = $(this).find('.ansDS').val();
+                            if (!selectText) {
+                                // Prevent form submission
+                                event.preventDefault();
+                                // Display an alert or any other validation message
+                                Swal.fire({
+                                    icon: "warning",
+                                    title: "Vui lòng chọn lỗi tương ứng với đối sách",
+                                    showConfirmButton: false,
+                                    timer: 1000,
+                                });
+                            } else {
+                                let id = $(this).attr("data-id");
+                                id = parseInt(id)
+                                dataDS.push({
+                                    Id: id,
+                                    Answer: selectText
+                                });
+                            }
+                        });
+                        //Send all value to Controller:
+                        var dataToSend = {
+                            dataDCY: dataDCY,
+                            dataLTCD: dataLTCD,
+                            dataDS: dataDS,
+                            dataTTTT: parsedNewOrder
+                        };
+                        console.log(dataToSend)
+
+                        $.ajax({
+                            url: 'TraloiTuLuan',
+                            type: 'POST',
+                            contentType: 'application/json',
+                            data: JSON.stringify(dataToSend),
+                            dataType: 'json', // Add this line
+
+                            success: function (response) {
+                                $.ajax({
+                                    url: 'TestingTuLuan',
+                                    type: 'GET',
+                                    success: function (response) {
+                                        Toast.fire({
+                                            icon: "success",
+                                            title: "Đang trả lời câu hỏi...",
+                                            showConfirmButton: false,
+                                            allowOutsideClick: false,
+                                            allowEscapeKey: false
+                                        }).then(function () {
+                                            $("#examTuluan").html(response);
+                                        })
+                                    },
+                                    error: function (error) {
+                                        console.log(error);
+                                    }
+                                });
+                            },
+                            error: function (error) {
+                                console.log(error);
+                            }
+                        });
+                    }
                 }
             } else {
                 form.reportValidity();
