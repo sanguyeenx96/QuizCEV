@@ -4,7 +4,10 @@
     ViewData["ActiveChild"] = "pageThemcauhoitracnghiem";
 }
 <div class="form-group mb-2">
-    <label class="form-label">Chọn chủ đề & Phòng thi</label>
+    <label class="form-label">
+        <i class="bi-option"></i>
+        Chọn chủ đề & Phòng thi
+    </label>
     <select class="form-select form-select-lg " id="categoryId" name="categoryId" style="overflow: hidden;">
         @foreach (var item in ViewBag.listcat)
         {

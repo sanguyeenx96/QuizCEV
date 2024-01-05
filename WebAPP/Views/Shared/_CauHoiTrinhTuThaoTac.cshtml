@@ -76,7 +76,7 @@
                                             <i class="bi-plus"></i>
                                             Thêm
                                         </btn>
-                                        <btn class="btn btn-sm btn-secondary btnSuaDiemChuY w-100" data-id="@item.Id">
+                                        <btn class="btn btn-sm btn-secondary btnSuaDiemChuY w-100" data-abc="@item.CauHoiTuLuanId" data-id="@item.Id">
                                             <i class="bi-pencil"></i>
                                             Sửa
                                         </btn>
@@ -120,7 +120,7 @@
                                         </td>
                                         <td>
                                             <div class="btn-group" style=" white-space:nowrap;width:140px;font-size:small">
-                                                <btn class="btn btn-sm btn-secondary btnSuaLoiDoiSach w-100" data-abc="@item.CauHoiTuLuanId" data-id="@ltcd.Id" data-noidungcauhoi="@item.Text">
+                                                <btn class="btn btn-sm btn-secondary btnSuaLoiDoiSach w-100" data-ltcdId="@ltcd.Id" data-noidungltcd="@ltcd.Text" data-abc="@item.CauHoiTuLuanId" data-id="@ltcd.Id" data-noidungcauhoi="@item.Text">
                                                     <i class="bi-pencil"></i>
                                                     Sửa
                                                 </btn>
@@ -148,9 +148,9 @@
                                 </td>
                                 <td style="text-align:center">
                                     <div style="width:140px">
-                                        <btn class="btn btn-sm btn-success btnRefresh" style=";font-size:small" data-abc="@item.CauHoiTuLuanId">
+                                        @*<btn class="btn btn-sm btn-success btnRefresh" style=";font-size:small" data-abc="@item.CauHoiTuLuanId">
                                             <i class="bi-arrow-clockwise"></i>
-                                        </btn>
+                                        </btn>*@
                                     </div>
                                 </td>
                             </tr>
@@ -163,7 +163,7 @@
                     </span>
                     <hr>
                     <button class="btn btn-light shadow btnSuaDiemCauHoiTTTT" style="font-size:small"
-                    data-idTTTT="@item.Id" data-nowScoreTTTT="@item.Score" data-catId="">
+                        data-idTTTT="@item.Id" data-nowScoreTTTT="@item.Score" data-catId="">
                         <i class="bi-plus-slash-minus"></i>
                         <br>
                         Sửa điểm
@@ -204,6 +204,7 @@
             "info": false,
             "rowReorder": true
         });
+
         table.on('row-reorder', function (e, diff, edit) {
             table.one('draw', function () {
                 var newOrder = [];
@@ -394,23 +395,125 @@
         });
 
         $(".btnSuaDiemChuY").click(function () {
+            var cauhoituluanId = $(this).data("abc");
+            var intcauhoituluanId = parseInt(cauhoituluanId);
             var id = $(this).attr("data-id");
+            //$.ajax({
+            //    url: "OpenModalEditDCY",
+            //    type: "POST",
+            //    data: {
+            //        id: id,
+            //    },
+            //    success: function (result) {
+            //        $("#editDiemChuY").html(result);
+            //        $("#modelEditDCY").modal("show");
+            //    },
+            //});
             $.ajax({
-                url: "OpenModalEditDCY",
+                url: "GetSelectListDCY",
                 type: "POST",
                 data: {
                     id: id,
                 },
-                success: function (result) {
-                    $("#editDiemChuY").html(result);
-                    $("#modelEditDCY").modal("show");
+                success: function (data) {
+                    console.log(data)
+                    // Tạo select list từ dữ liệu
+                    var selectList = $('<select id="slldcy" class="form-select" >');
+                    // Thêm các option từ dữ liệu vào selectList
+                    $.each(data, function (index, item) {
+                        selectList.append($('<option>', {
+                            value: item.value,
+                            text: item.text
+                        }));
+                    });
+                    // Hiển thị Swal với select list
+                    Swal.fire({
+                        title: 'Chọn điểm chú ý',
+                        html: selectList.prop('outerHTML'),
+                        showDenyButton: true,
+                        showCancelButton: true,
+                        confirmButtonText: "Sửa",
+                        denyButtonText: `Xoá`,
+                        cancelButtonText: 'Hủy bỏ',
+                        //preConfirm: function () {
+                        //    return selectList.val();
+                        //}
+                    }).then(async function (result) {
+                        // Xử lý giá trị được chọn
+                        var selectedId = $('#slldcy').val();
+                        var selectedText = $('#slldcy option:selected').text();
+                        if (result.isConfirmed) { //Sửa
+                            const { value: text } = await Swal.fire({
+                                input: "textarea",
+                                inputLabel: "Nội dung điểm chú ý",
+                                inputValue: selectedText,
+                                showCancelButton: true
+                            });
+                            if (text) {
+                                id = parseInt(selectedId);
+                                $.ajax({
+                                    url: "EditDCY",
+                                    type: "POST",
+                                    data: {
+                                        id: id,
+                                        text: text
+                                    },
+                                    success: function (result) {
+                                        Swal.fire({
+                                            icon: "success",
+                                            title: "Sửa nội dung điểm chú ý thành công",
+                                            showConfirmButton: false,
+                                            timer: 1500,
+                                        });
+                                        $.ajax({
+                                            url: "GetAllByCauHoiTuLuan",
+                                            type: "POST",
+                                            data: {
+                                                id: intcauhoituluanId,
+                                            },
+                                            success: function (result) {
+                                                $("#@randomid").html(result);
+                                            },
+                                        });
+                                    },
+                                });
+                            }
+                        } else if (result.isDenied) { //Xoá
+                            idDCY = parseInt(selectedId)
+                            $.ajax({
+                                url: "DeleteDCY",
+                                type: "POST",
+                                data: {
+                                    id: idDCY
+                                },
+                                success: function (result) {
+                                    Swal.fire({
+                                        icon: "success",
+                                        title: "Xoá điểm chú ý thành công",
+                                        showConfirmButton: false,
+                                        timer: 1500,
+                                    });
+                                    $.ajax({
+                                        url: "GetAllByCauHoiTuLuan",
+                                        type: "POST",
+                                        data: {
+                                            id: intcauhoituluanId,
+                                        },
+                                        success: function (result) {
+                                            $("#@randomid").html(result);
+                                        },
+                                    });
+                                },
+                            });
+                        }
+                    });
                 },
+                error: function () {
+                    // Xử lý lỗi khi gửi yêu cầu Ajax
+                    console.error('Đã có lỗi xảy ra khi tải dữ liệu.');
+                }
             });
         });
-
-
-
-
 
         $(".btnThemLoiCongDoan").click(async function () {
             var cauhoitrinhtuthaotacId = $(this).attr("data-cauhoittttId");
@@ -438,7 +541,7 @@
                     success: function (result) {
                         Swal.fire({
                             icon: "success",
-                            title: "Thêm điểm chú ý thành công",
+                            title: "Thêm lỗi tại công đoạn thành công",
                             showConfirmButton: false,
                             timer: 1500,
                         });
@@ -458,36 +561,172 @@
             }
         });
 
-        $(".btnThemDoiSachLoi").click(function () {
-            var id = $(this).attr("data-cauhoittttId");
-            $.ajax({
-                url: "OpenModalCreateDoiSach",
-                type: "POST",
-                data: {
-                    cauhoitrinhtuthaotacId: id,
-                },
-                success: function (result) {
-                    $("#createDoiSach").html(result);
-                    $("#modelCreateDoiSach").modal("show");
-                },
-            });
-        })
+        //$(".btnSuaLoiDoiSach").click(function () {
+        //    var id = $(this).attr("data-id");
+        //    id = parseInt(id)
+        //    $.ajax({
+        //        url: "OpenModalEditLoiDoiSach",
+        //        type: "POST",
+        //        data: {
+        //            loitaicongdoanId: id,
+        //        },
+        //        success: function (result) {
+        //            $("#editLoiDoiSach").html(result);
+        //            $("#modelSuaLoiDoiSach").modal("show");
+        //        },
+        //    });
+        //})
 
         $(".btnSuaLoiDoiSach").click(function () {
+
+            var cauhoituluanId = $(this).data("abc");
+            var intcauhoituluanId = parseInt(cauhoituluanId);
             var id = $(this).attr("data-id");
-            id = parseInt(id)
+            var noidungltcd = $(this).attr("data-noidungltcd");
+            var ltcdId = $(this).attr("data-ltcdId");
+            ltcdId = parseInt(ltcdId);
+
             $.ajax({
-                url: "OpenModalEditLoiDoiSach",
+                url: "GetSelectListLoiDoiSach",
                 type: "POST",
                 data: {
                     loitaicongdoanId: id,
                 },
-                success: function (result) {
-                    $("#editLoiDoiSach").html(result);
-                    $("#modelSuaLoiDoiSach").modal("show");
+                success: function (data) {
+                    console.log(data)
+                    // Tạo select list từ dữ liệu
+                    var selectList = $('<select id="sllds" class="form-select" >');
+                    // Thêm các option từ dữ liệu vào selectList
+                    $.each(data, function (index, item) {
+                        selectList.append($('<option>', {
+                            value: item.value,
+                            text: item.text
+                        }));
+                    });
+                    // Hiển thị Swal với select list
+                    Swal.fire({
+                        title: 'Chọn đối sách cần sửa',
+                        html: selectList.prop('outerHTML'),
+                        showDenyButton: true,
+                        showCancelButton: true,
+                        confirmButtonText: "Sửa",
+                        denyButtonText: `Xoá`,
+                        cancelButtonText: 'Sửa nội dung lỗi tại công đoạn',
+                        //preConfirm: function () {
+                        //    return selectList.val();
+                        //}
+                    }).then(async function (result) {
+                        // Xử lý giá trị được chọn
+                        var selectedId = $('#sllds').val();
+                        var selectedText = $('#sllds option:selected').text();
+                        if (result.isConfirmed) { //Sửa
+                            const { value: text } = await Swal.fire({
+                                input: "textarea",
+                                inputLabel: "Nội dung đối sách",
+                                inputValue: selectedText,
+                                showCancelButton: true
+                            });
+                            if (text) {
+                                var newTextDS = $("#textDS").val();
+                                var idDS = parseInt(selectedId);
+                                $.ajax({
+                                    url: "EditDoiSach",
+                                    type: "POST",
+                                    data: {
+                                        id: idDS,
+                                        text: text
+                                    },
+                                    success: function (result) {
+                                        Swal.fire({
+                                            icon: "success",
+                                            title: "Sửa nội dung đối sách thành công",
+                                            showConfirmButton: false,
+                                            timer: 1500,
+                                        });
+                                        $.ajax({
+                                            url: "GetAllByCauHoiTuLuan",
+                                            type: "POST",
+                                            data: {
+                                                id: intcauhoituluanId,
+                                            },
+                                            success: function (result) {
+                                                $("#@randomid").html(result);
+                                            },
+                                        });
+                                    },
+                                });
+                            }
+                        } else if (result.isDenied) { //Xoá
+                            var idDS = parseInt(selectedId);
+                            $.ajax({
+                                url: "DeleteDS",
+                                type: "POST",
+                                data: {
+                                    id: idDS
+                                },
+                                success: function (result) {
+                                    Swal.fire({
+                                        icon: "success",
+                                        title: "Xoá nội dung đối sách thành công",
+                                        showConfirmButton: false,
+                                        timer: 1500,
+                                    });
+                                    $.ajax({
+                                        url: "GetAllByCauHoiTuLuan",
+                                        type: "POST",
+                                        data: {
+                                            id: intcauhoituluanId,
+                                        },
+                                        success: function (result) {
+                                            $("#@randomid").html(result);
+                                        },
+                                    });
+                                },
+                            });
+                        } else if (result.dismiss === Swal.DismissReason.cancel) {
+                            const { value: text } = await Swal.fire({
+                                input: "textarea",
+                                inputLabel: "Nội dung lỗi tại công đoạn",
+                                inputValue: noidungltcd,
+                                showCancelButton: true
+                            });
+                            if (text) {
+                                $.ajax({
+                                    url: "EditLTCD",
+                                    type: "POST",
+                                    data: {
+                                        id: ltcdId,
+                                        text: text
+                                    },
+                                    success: function (result) {
+                                        Swal.fire({
+                                            icon: "success",
+                                            title: "Sửa nội dung lỗi tại công đoạn thành công",
+                                            showConfirmButton: false,
+                                            timer: 1500,
+                                        });
+                                        $.ajax({
+                                            url: "GetAllByCauHoiTuLuan",
+                                            type: "POST",
+                                            data: {
+                                                id: intcauhoituluanId,
+                                            },
+                                            success: function (result) {
+                                                $("#@randomid").html(result);
+                                            },
+                                        });
+                                    },
+                                });
+                            }
+                        }
+                    });
                 },
+                error: function () {
+                    // Xử lý lỗi khi gửi yêu cầu Ajax
+                    console.error('Đã có lỗi xảy ra khi tải dữ liệu.');
+                }
             });
-        })
+        });
 
         $(".btnXoaLoiTaiCongDoan").click(async function () {
             var id = $(this).data("id");
@@ -505,7 +744,7 @@
             swalWithBootstrapButtons
                 .fire({
                     title: "Xoá lỗi tại công đoạn?",
-                    text: "Dữ liệu liên quan tới lỗi tại công đoạn này sẽ bị xoá",
+                    text: "Và dữ liệu đối sách liên quan tới lỗi tại công đoạn này sẽ bị xoá",
                     icon: "warning",
                     showCancelButton: true,
                     confirmButtonText: "Xác nhận",
@@ -558,22 +797,22 @@
                 });
         })
 
-        $(".btnRefresh").click(function () {
-            var cauhoituluanId = $(this).data("abc");
-            var intcauhoituluanId = parseInt(cauhoituluanId);
-            $.ajax({
-                url: "GetAllByCauHoiTuLuan",
-                type: "POST",
-                data: {
-                    id: intcauhoituluanId,
-                },
-                success: function (result) {
-                    $("#@randomid").empty();
+        //$(".btnRefresh").click(function () {
+        //    var cauhoituluanId = $(this).data("abc");
+        //    var intcauhoituluanId = parseInt(cauhoituluanId);
+        //    $.ajax({
+        //        url: "GetAllByCauHoiTuLuan",
+        //        type: "POST",
+        //        data: {
+        //            id: intcauhoituluanId,
+        //        },
+        //        success: function (result) {
+        //            $("#@randomid").empty();
 
-                    $("#@randomid").html(result);
-                },
-            });
-        })
+        //            $("#@randomid").html(result);
+        //        },
+        //    });
+        //})
 
         $(".btnSuaDiemCauHoiTTTT").click(function () {
             var catId = @catId;
@@ -609,6 +848,85 @@
                 },
             });
         });
+
+        $(".btnThemDoiSachLoi").click(function () {
+            var cauhoituluanId = $(this).data("abc");
+            var intcauhoituluanId = parseInt(cauhoituluanId);
+
+            var id = $(this).attr("data-cauhoittttId");
+            $.ajax({
+                url: "GetSelectListLTCD",
+                type: "POST",
+                data: {
+                    cauhoitrinhtuthaotacId: id,
+                },
+                success: function (data) {
+                    console.log(data)
+                    // Tạo select list từ dữ liệu
+                    var selectList = $('<select id="slltcd" class="form-select" >');
+                    // Thêm các option từ dữ liệu vào selectList
+                    $.each(data, function (index, item) {
+                        selectList.append($('<option>', {
+                            value: item.value,
+                            text: item.text
+                        }));
+                    });
+                    // Hiển thị Swal với select list
+                    Swal.fire({
+                        title: 'Chọn lỗi tại công đoạn cần thêm đối sách',
+                        html: selectList.prop('outerHTML'),
+                        showCancelButton: true,
+                        confirmButtonText: "Tiếp tục",
+                        cancelButtonText: 'Hủy bỏ',
+                    }).then(async function (result) {
+                        // Xử lý giá trị được chọn
+                        var selectedId = $('#slltcd').val();
+                        if (result.isConfirmed) { //Sửa
+                            const { value: text } = await Swal.fire({
+                                input: "textarea",
+                                inputLabel: "Nội dung đối sách",
+                                showCancelButton: true
+                            });
+                            if (text) {
+                                idLTCD = parseInt(selectedId);
+                                $.ajax({
+                                    url: "CreateDoiSach",
+                                    type: "POST",
+                                    data: {
+                                        loitaicongdoanId: idLTCD,
+                                        text: text
+                                    },
+                                    success: function (result) {
+                                        Swal.fire({
+                                            icon: "success",
+                                            title: "Thêm đối sách thành công",
+                                            showConfirmButton: false,
+                                            timer: 1500,
+                                        });
+                                        $.ajax({
+                                            url: "GetAllByCauHoiTuLuan",
+                                            type: "POST",
+                                            data: {
+                                                id: intcauhoituluanId,
+                                            },
+                                            success: function (result) {
+                                                $("#@randomid").html(result);
+                                            },
+                                        });
+                                    },
+                                });
+                            }
+                        }
+                    });
+                },
+                error: function () {
+                    // Xử lý lỗi khi gửi yêu cầu Ajax
+                    console.error('Đã có lỗi xảy ra khi tải dữ liệu.');
+                }
+            });
+        })
+
+
 
         async function showScoreInputDialog(id, intCategoryId, remainScore, thisScore) {
             const { value: soDiem } = await Swal.fire({
@@ -697,6 +1015,5 @@
                 );
             }
         }
-
     });
 </script>

@@ -6,7 +6,6 @@
     .btn-group .btn {
         margin-right: 2px; /* Điều chỉnh giá trị để thay đổi kích thước của khoảng trống */
     }
-
     .alert {
         display: inline-block;
         width: fit-content;
@@ -23,7 +22,10 @@
         </div>
     </div>
     <div class="form-group mb-2">
-        <label class="form-label">Chọn chủ đề & Phòng thi</label>
+        <label class="form-label">
+            <i class="bi-option"></i>
+            Chọn chủ đề & Phòng thi
+        </label>
         <select class="form-select form-select-lg" id="categoryId" name="categoryId" style="overflow: hidden;">
             @foreach (var item in ViewBag.listcat)
             {

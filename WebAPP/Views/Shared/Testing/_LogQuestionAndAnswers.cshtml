@@ -8,306 +8,312 @@
 
 }
 
-<h1 class="display-6 mb-3">
-    <i class="bi-chevron-down"></i>
-    Phần trắc nghiệm
-</h1>
 
-@foreach (var item in Model)
+
+@if (Model.Count > 0)
 {
-    demtn++;
-    string idThe = "tn" + item.Id.ToString();
-    <div class="accordion-item  animate__animated animate__fadeInLeft">
-        <h2 class="accordion-header">
-            <button class="accordion-button collapsed" type="button" data-coreui-toggle="collapse" data-coreui-target="#@idThe" aria-expanded="false" aria-controls="@idThe">
-                <span class="badge bg-dark me-2 ">Câu @demtn</span>  @item.Text
-            </button>
-        </h2>
-        <div id="@idThe" class="accordion-collapse collapse" data-coreui-parent="#accordionExample">
-            <div class="accordion-body border border-0" style="background-image: url('/paper.jpg'); background-size:cover; background-position: center;">
-                <div class="row">
-                    @{
-                        if (!string.IsNullOrEmpty(item.QA))
-                        {
-                            <div class="col-6">
-                                <button class="btn w-100 btnDoicautraloi
+    <h1 class="display-6 mb-3">
+        <i class="bi-chevron-down"></i>
+        Phần trắc nghiệm
+    </h1>
+    foreach (var item in Model)
+    {
+        demtn++;
+        string idThe = "tn" + item.Id.ToString();
+        <div class="accordion-item  animate__animated animate__fadeInLeft">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-coreui-toggle="collapse" data-coreui-target="#@idThe" aria-expanded="false" aria-controls="@idThe">
+                    <span class="badge bg-dark me-2 ">Câu @demtn</span>  @item.Text
+                </button>
+            </h2>
+            <div id="@idThe" class="accordion-collapse collapse" data-coreui-parent="#accordionExample">
+                <div class="accordion-body border border-0" style="background-image: url('/paper.jpg'); background-size:cover; background-position: center;">
+                    <div class="row">
+                        @{
+                            if (!string.IsNullOrEmpty(item.QA))
+                            {
+                                <div class="col-6">
+                                    <button class="btn w-100 btnDoicautraloi
                                 @if(item.Answer == "A")
                             {
-                                                                                <text>btn-dark disabled</text>
+                                                                                            <text>btn-dark disabled</text>
                                 }
                                 else
                                 {
-                                                                                <text>btn-outline-dark</text>
+                                                                                            <text>btn-outline-dark</text>
                                 }
-                                                                            mt-1" data-id="@item.Id" data-newAs="A">@item.QA</button>
-                            </div>
-                        }
-                        if (!string.IsNullOrEmpty(item.QB))
-                        {
-                            <div class="col-6">
-                                <button class="btn w-100 btnDoicautraloi
+                                                                                        mt-1" data-id="@item.Id" data-newAs="A">@item.QA</button>
+                                </div>
+                            }
+                            if (!string.IsNullOrEmpty(item.QB))
+                            {
+                                <div class="col-6">
+                                    <button class="btn w-100 btnDoicautraloi
                                 @if(item.Answer == "B")
                             {
-                                                                                    <text>btn-dark disabled</text>
+                                                                                                <text>btn-dark disabled</text>
                                 }
                                 else
                                 {
-                                                                                <text>btn-outline-dark</text>
+                                                                                            <text>btn-outline-dark</text>
                                 }
-                                                                            mt-1" data-id="@item.Id" data-newAs="B">@item.QB</button>
-                            </div>
-                        }
-                        if (!string.IsNullOrEmpty(item.QC))
-                        {
-                            <div class="col-6">
-                                <button class="btn w-100 btnDoicautraloi
+                                                                                        mt-1" data-id="@item.Id" data-newAs="B">@item.QB</button>
+                                </div>
+                            }
+                            if (!string.IsNullOrEmpty(item.QC))
+                            {
+                                <div class="col-6">
+                                    <button class="btn w-100 btnDoicautraloi
                                 @if(item.Answer == "C")
                             {
-                                                                                    <text>btn-dark disabled</text>
+                                                                                                <text>btn-dark disabled</text>
                                 }
                                 else
                                 {
-                                                                                    <text>btn-outline-dark</text>
+                                                                                                <text>btn-outline-dark</text>
                                 }
-                                                                            mt-1" data-id="@item.Id" data-newAs="C">@item.QC</button>
-                            </div>
-                        }
-                        if (!string.IsNullOrEmpty(item.QD))
-                        {
-                            <div class="col-6">
-                                <button class="btn w-100 btnDoicautraloi
+                                                                                        mt-1" data-id="@item.Id" data-newAs="C">@item.QC</button>
+                                </div>
+                            }
+                            if (!string.IsNullOrEmpty(item.QD))
+                            {
+                                <div class="col-6">
+                                    <button class="btn w-100 btnDoicautraloi
                                 @if(item.Answer == "D")
                             {
-                                                                                    <text>btn-dark disabled</text>
+                                                                                                <text>btn-dark disabled</text>
                                 }
                                 else
                                 {
-                                                                                    <text>btn-outline-dark</text>
+                                                                                                <text>btn-outline-dark</text>
                                 }
-                                                                            mt-1" data-id="@item.Id" data-newAs="D">@item.QD</button>
-                            </div>
+                                                                                        mt-1" data-id="@item.Id" data-newAs="D">@item.QD</button>
+                                </div>
+                            }
                         }
-                    }
+                    </div>
                 </div>
-            </div>
 
+            </div>
         </div>
-    </div>
+    }
 }
 
-<h1 class="display-6 my-3">
-    <i class="bi-chevron-down"></i>
-    Phần tự luận
-</h1>
 @{
     if (ViewBag.listQuestionAndAnswerTrinhTuThaoTac != null)
     {
         List<ViewModels.CauHoiTrinhTuThaoTac.Response.QuestionAndAnswerTrinhTuThaoTacVm> lichsuTuluan = ViewBag.listQuestionAndAnswerTrinhTuThaoTac as List<ViewModels.CauHoiTrinhTuThaoTac.Response.QuestionAndAnswerTrinhTuThaoTacVm>;
-        var groupDataTuluan = lichsuTuluan.GroupBy(x => x.CauHoiTuLuanId);
-        foreach (var group in groupDataTuluan)
+        if (lichsuTuluan.Count > 0)
         {
-            demtl++;
-            string idThe = "tl" + group.FirstOrDefault().Id.ToString();
-            int cauhoituluanId = group.FirstOrDefault().CauHoiTuLuanId;
-            <div class="accordion-item  animate__animated animate__fadeInLeft">
-                <h2 class="accordion-header">
-                    <button class="accordion-button collapsed" type="button" data-coreui-toggle="collapse" data-coreui-target="#@idThe" aria-expanded="false" aria-controls="@idThe">
-                        <span class="badge bg-dark me-2 ">Câu @demtl</span>  @group.FirstOrDefault().CauHoiTuLuanText
-                    </button>
-                </h2>
-                <div id="@idThe" class="accordion-collapse collapse" data-coreui-parent="#accordionExample">
-                    <div class="accordion-body border border-0" style="background-image: url('/paper.jpg'); background-size:cover; background-position: center;">
-                        <p class="mb-1" style="text-align:start;font-weight:600;"> I. Sắp xếp theo đúng trình tự WSD:</p>
-                        <div class="card mb-3">
-                            <div class="card-body">
-                                <table class="table table-hover " style="width:100%">
-                                    <thead style="vertical-align:middle;font-size:small">
-                                        <tr>
-                                            <th class="col-2" style="text-align:center;font-weight: 300">
-                                                Thứ tự
-                                            </th>
-                                            <th hidden>
-                                                Id
-                                            </th>
-                                            <th class="col-10" style="text-align:start;font-weight: 300">
-                                                Nội dung thao tác
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var item in group.OrderBy(x => x.Answer))
-                                        {
-                                            <tr style="text-align:center;vertical-align:middle">
-                                                <td>
-                                                    @item.Answer
-                                                </td>
-                                                <td hidden>
-                                                    @item.Id
-                                                </td>
-                                                <td style="text-align:start">
-                                                    @item.Text
-                                                </td>
+            <h1 class="display-6 my-3">
+                <i class="bi-chevron-down"></i>
+                Phần tự luận
+            </h1>
+            var groupDataTuluan = lichsuTuluan.GroupBy(x => x.CauHoiTuLuanId);
+            foreach (var group in groupDataTuluan)
+            {
+                demtl++;
+                string idThe = "tl" + group.FirstOrDefault().Id.ToString();
+                int cauhoituluanId = group.FirstOrDefault().CauHoiTuLuanId;
+                <div class="accordion-item  animate__animated animate__fadeInLeft">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-coreui-toggle="collapse" data-coreui-target="#@idThe" aria-expanded="false" aria-controls="@idThe">
+                            <span class="badge bg-dark me-2 ">Câu @demtl</span>  @group.FirstOrDefault().CauHoiTuLuanText
+                        </button>
+                    </h2>
+                    <div id="@idThe" class="accordion-collapse collapse" data-coreui-parent="#accordionExample">
+                        <div class="accordion-body border border-0" style="background-image: url('/paper.jpg'); background-size:cover; background-position: center;">
+                            <p class="mb-1" style="text-align:start;font-weight:600;"> I. Sắp xếp theo đúng trình tự WSD:</p>
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <table class="table table-hover " style="width:100%">
+                                        <thead style="vertical-align:middle;font-size:small">
+                                            <tr>
+                                                <th class="col-2" style="text-align:center;font-weight: 300">
+                                                    Thứ tự
+                                                </th>
+                                                <th hidden>
+                                                    Id
+                                                </th>
+                                                <th class="col-10" style="text-align:start;font-weight: 300">
+                                                    Nội dung thao tác
+                                                </th>
                                             </tr>
-                                        }
-                                    </tbody>
-                                </table>
-                                <button style="width:200px" class="btn btn-primary btnDoicautraloituluan" data-cauhoituluanId="@cauhoituluanId">
-                                    <i class="bi-arrow-clockwise"></i>
-                                    Thay đổi câu trả lời
-                                </button>
-                            </div>
-                        </div>
-
-                        <p class="mb-1" style="text-align:start;font-weight:600;"> II. Điểm chú ý tại công đoạn / Spec tại công đoạn (Nếu có):</p>
-                        <div class="card mb-3">
-                            <div class="card-body">
-                                <table id="tblDCY" class="table table-hover" style="width:100%">
-                                    <thead style="vertical-align:middle;font-size:small">
-                                        <tr>
-                                            <th class="col-2" style="font-weight: 300;text-align:center">
-                                                STT
-                                            </th>
-                                            <th hidden>
-                                                Id
-                                            </th>
-                                            <th class="col-10" style="font-weight: 300;text-align:start">
-                                                Điểm chú ý
-                                            </th>
-
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @{
-
-                                            var viewbagDCY = ViewBag.listQuestionAndAnswerDiemChuY as List<ViewModels.CauHoiTrinhTuThaoTac.Response.QuestionAndAnswerDiemChuYVm>;
-                                            var listDCY = viewbagDCY.Where(x => x.CauHoiTuLuanId == cauhoituluanId).ToList();
-                                            foreach (var i in listDCY)
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in group.OrderBy(x => x.Answer))
                                             {
                                                 <tr style="text-align:center;vertical-align:middle">
                                                     <td>
-                                                        @i.Answer
+                                                        @item.Answer
                                                     </td>
                                                     <td hidden>
-                                                        @i.Id
+                                                        @item.Id
                                                     </td>
                                                     <td style="text-align:start">
-                                                        @i.Text
-                                                    </td>
-
-                                                </tr>
-                                            }
-
-                                        }
-                                    </tbody>
-                                </table>
-                                <button style="width:200px" class="btn btn-primary btnDoicautraloiDCY" data-cauhoituluanId="@cauhoituluanId">
-                                    <i class="bi-arrow-clockwise"></i>
-                                    Thay đổi câu trả lời
-                                </button>
-                            </div>
-                        </div>
-
-                        <p class="mb-1" style="text-align:start;font-weight:600;"> III. Lỗi tại công đoạn:</p>
-                        <div class="card mb-3">
-                            <div class="card-body">
-                                <table id="tblLTCD" class="table table-hover" style="width:100%">
-                                    <thead style="vertical-align:middle;font-size:small">
-                                        <tr>
-                                            <th class="col-2" style="font-weight: 300;text-align:center">
-                                                STT
-                                            </th>
-                                            <th hidden>
-                                                Id
-                                            </th>
-                                            <th class="col-10" style="font-weight: 300;text-align:start">
-                                                Lỗi tại công đoạn
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @{
-
-                                            var viewbagLTCD = ViewBag.listQuestionAndAnswerLoiTaiCongDoan as List<ViewModels.CauHoiTrinhTuThaoTac.Response.QuestionAndAnswerLoiTaiCongDoanVm>;
-                                            var listLTCD = viewbagLTCD.Where(x => x.CauHoiTuLuanId == cauhoituluanId).ToList();
-                                            foreach (var i in listLTCD)
-                                            {
-                                                <tr style="text-align:center;vertical-align:middle">
-                                                    <td>
-                                                        @i.Answer
-                                                    </td>
-                                                    <td hidden>
-                                                        @i.Id
-                                                    </td>
-                                                    <td style="text-align:start">
-                                                        @i.Text
+                                                        @item.Text
                                                     </td>
                                                 </tr>
                                             }
-                                        }
-                                    </tbody>
-                                </table>
-                                <button style="width:200px" class="btn btn-primary btnDoicautraloiLTCD" data-cauhoituluanId="@cauhoituluanId">
-                                    <i class="bi-arrow-clockwise"></i>
-                                    Thay đổi câu trả lời
-                                </button>
+                                        </tbody>
+                                    </table>
+                                    <button style="width:200px" class="btn btn-primary btnDoicautraloituluan" data-cauhoituluanId="@cauhoituluanId">
+                                        <i class="bi-arrow-clockwise"></i>
+                                        Thay đổi câu trả lời
+                                    </button>
+                                </div>
                             </div>
-                        </div>
 
-                        <p class="mb-1" style="text-align:start;font-weight:600;"> IV. Đối sách:</p>
-                        <div class="card mb-3">
-                            <div class="card-body">
-                                <table id="tblLTCD" class="table table-hover" style="width:100%">
-                                    <thead style="vertical-align:middle;font-size:small">
-                                        <tr>
-                                            <th class="col-5" style="font-weight: 300;text-align:center">
-                                                Lỗi tại công đoạn
-                                            </th>
-                                            <th hidden>
-                                                Id
-                                            </th>
-                                            <th class="col-2">
-                                            </th>
-                                            <th class="col-5" style="font-weight: 300;text-align:start">
-                                                Đối sách
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @{
+                            <p class="mb-1" style="text-align:start;font-weight:600;"> II. Điểm chú ý tại công đoạn / Spec tại công đoạn (Nếu có):</p>
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <table id="tblDCY" class="table table-hover" style="width:100%">
+                                        <thead style="vertical-align:middle;font-size:small">
+                                            <tr>
+                                                <th class="col-2" style="font-weight: 300;text-align:center">
+                                                    STT
+                                                </th>
+                                                <th hidden>
+                                                    Id
+                                                </th>
+                                                <th class="col-10" style="font-weight: 300;text-align:start">
+                                                    Điểm chú ý
+                                                </th>
 
-                                            var viewbagDS = ViewBag.listQuestionAndAnswerDoiSach as List<ViewModels.CauHoiTrinhTuThaoTac.Response.QuestionAndAnswerDoiSachVm>;
-                                            var listDS = viewbagDS.Where(x => x.CauHoiTuLuanId == cauhoituluanId).ToList();
-                                            foreach (var i in listDS)
-                                            {
-                                                <tr style="text-align:center;vertical-align:middle">
-                                                    <td>
-                                                        @i.Answer
-                                                    </td>
-                                                    <td style="text-align:center">
-                                                        <i class="bi-arrow-right"></i>
-                                                    </td>
-                                                    <td hidden>
-                                                        @i.Id
-                                                    </td>
-                                                    <td style="text-align:start">
-                                                        @i.Text
-                                                    </td>
-                                                </tr>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @{
+
+                                                var viewbagDCY = ViewBag.listQuestionAndAnswerDiemChuY as List<ViewModels.CauHoiTrinhTuThaoTac.Response.QuestionAndAnswerDiemChuYVm>;
+                                                var listDCY = viewbagDCY.Where(x => x.CauHoiTuLuanId == cauhoituluanId).ToList();
+                                                foreach (var i in listDCY)
+                                                {
+                                                    <tr style="text-align:center;vertical-align:middle">
+                                                        <td>
+                                                            @i.Answer
+                                                        </td>
+                                                        <td hidden>
+                                                            @i.Id
+                                                        </td>
+                                                        <td style="text-align:start">
+                                                            @i.Text
+                                                        </td>
+
+                                                    </tr>
+                                                }
+
                                             }
-                                        }
-                                    </tbody>
-                                </table>
-                                <button style="width:200px" class="btn btn-primary btnDoicautraloiDS" data-cauhoituluanId="@cauhoituluanId">
-                                    <i class="bi-arrow-clockwise"></i>
-                                    Thay đổi câu trả lời
-                                </button>
+                                        </tbody>
+                                    </table>
+                                    <button style="width:200px" class="btn btn-primary btnDoicautraloiDCY" data-cauhoituluanId="@cauhoituluanId">
+                                        <i class="bi-arrow-clockwise"></i>
+                                        Thay đổi câu trả lời
+                                    </button>
+                                </div>
                             </div>
-                        </div>
 
+                            <p class="mb-1" style="text-align:start;font-weight:600;"> III. Lỗi tại công đoạn:</p>
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <table id="tblLTCD" class="table table-hover" style="width:100%">
+                                        <thead style="vertical-align:middle;font-size:small">
+                                            <tr>
+                                                <th class="col-2" style="font-weight: 300;text-align:center">
+                                                    STT
+                                                </th>
+                                                <th hidden>
+                                                    Id
+                                                </th>
+                                                <th class="col-10" style="font-weight: 300;text-align:start">
+                                                    Lỗi tại công đoạn
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @{
+
+                                                var viewbagLTCD = ViewBag.listQuestionAndAnswerLoiTaiCongDoan as List<ViewModels.CauHoiTrinhTuThaoTac.Response.QuestionAndAnswerLoiTaiCongDoanVm>;
+                                                var listLTCD = viewbagLTCD.Where(x => x.CauHoiTuLuanId == cauhoituluanId).ToList();
+                                                foreach (var i in listLTCD)
+                                                {
+                                                    <tr style="text-align:center;vertical-align:middle">
+                                                        <td>
+                                                            @i.Answer
+                                                        </td>
+                                                        <td hidden>
+                                                            @i.Id
+                                                        </td>
+                                                        <td style="text-align:start">
+                                                            @i.Text
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            }
+                                        </tbody>
+                                    </table>
+                                    <button style="width:200px" class="btn btn-primary btnDoicautraloiLTCD" data-cauhoituluanId="@cauhoituluanId">
+                                        <i class="bi-arrow-clockwise"></i>
+                                        Thay đổi câu trả lời
+                                    </button>
+                                </div>
+                            </div>
+                            <p class="mb-1" style="text-align:start;font-weight:600;"> IV. Đối sách:</p>
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <table id="tblLTCD" class="table table-hover" style="width:100%">
+                                        <thead style="vertical-align:middle;font-size:small">
+                                            <tr>
+                                                <th class="col-5" style="font-weight: 300;text-align:center">
+                                                    Lỗi tại công đoạn
+                                                </th>
+                                                <th hidden>
+                                                    Id
+                                                </th>
+                                                <th class="col-2">
+                                                </th>
+                                                <th class="col-5" style="font-weight: 300;text-align:start">
+                                                    Đối sách
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @{
+
+                                                var viewbagDS = ViewBag.listQuestionAndAnswerDoiSach as List<ViewModels.CauHoiTrinhTuThaoTac.Response.QuestionAndAnswerDoiSachVm>;
+                                                var listDS = viewbagDS.Where(x => x.CauHoiTuLuanId == cauhoituluanId).ToList();
+                                                foreach (var i in listDS)
+                                                {
+                                                    <tr style="text-align:center;vertical-align:middle">
+                                                        <td>
+                                                            @i.Answer
+                                                        </td>
+                                                        <td style="text-align:center">
+                                                            <i class="bi-arrow-right"></i>
+                                                        </td>
+                                                        <td hidden>
+                                                            @i.Id
+                                                        </td>
+                                                        <td style="text-align:start">
+                                                            @i.Text
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            }
+                                        </tbody>
+                                    </table>
+                                    <button style="width:200px" class="btn btn-primary btnDoicautraloiDS" data-cauhoituluanId="@cauhoituluanId">
+                                        <i class="bi-arrow-clockwise"></i>
+                                        Thay đổi câu trả lời
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
                     </div>
                 </div>
-            </div>
-        }
+            }
+        }        
     }
 }
 

@@ -2,8 +2,16 @@
     int thisQ = Convert.ToInt32(ViewBag.numQuestionTracnghiem);
     int totalQTracNghiem = Convert.ToInt32(ViewBag.soluongcauhoiTracNghiem);
 
-    double percentProcessbar = ((double)thisQ / totalQTracNghiem) * 100;
-    string pP = percentProcessbar.ToString("0") + "%";
+    string pP = "100%";
+    if (totalQTracNghiem == 0)
+    {
+        pP = "100%";
+    }
+    else
+    {
+        double percentProcessbar = ((double)thisQ / totalQTracNghiem) * 100;
+        pP = percentProcessbar.ToString() + "%";
+    }
 }
 <div class="progress-group">
     <div class="progress-group-header">
