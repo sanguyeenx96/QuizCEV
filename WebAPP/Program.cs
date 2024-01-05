@@ -19,11 +19,11 @@ builder.Services.AddAuthorization(options => {
 });
 
 // Add services to the container.
+builder.Services.AddMvc().AddSessionStateTempDataProvider();
+
 builder.Services.AddControllersWithViews();
-builder.Services.AddMemoryCache();
 builder.Services.AddSession();
 
-builder.Services.AddSingleton<ITempDataProvider, CookieTempDataProvider>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddTransient<ICategoryApiClient, CategoryApiClient>();
 builder.Services.AddTransient<IQuestionApiClient, QuestionApiClient>();
