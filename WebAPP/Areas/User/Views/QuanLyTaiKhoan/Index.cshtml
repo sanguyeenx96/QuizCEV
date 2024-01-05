@@ -3,29 +3,47 @@
     {
     <partial name="PageUser/_sideBar" />
     }
-    <h1 class="display-6 mb-2">Thông tin tài khoản</h1>
-    <div class="card">
+    <h1 class="display-6 mb-2">
+        <i class="bi-chevron-down"></i>
+        Thông tin tài khoản
+    </h1>
+    <div class="card col-xl-8">
         <div class="card-body">
             <table class="table">
                 <tbody>
                     <tr>
-                        <td>Họ tên</td>
+                        <td     >
+                            <i class="bi-dot"></i>
+                            Họ tên
+                        </td>
                         <td>@Model.Name</td>
                     </tr>
                     <tr>
-                        <td>Bộ phận</td>
+                        <td>
+                            <i class="bi-dot"></i>
+                            Bộ phận
+                        </td>
                         <td>@Model.Dept</td>
                     </tr>
                     <tr>
-                        <td>Model</td>
+                        <td>
+                            <i class="bi-dot"></i>
+                            Model
+                        </td>
                         <td>@Model.Model</td>
                     </tr>
                     <tr>
-                        <td>Cell</td>
+                        <td>
+                            <i class="bi-dot"></i>
+                            Cell
+                        </td>
                         <td>@Model.Cell</td>
                     </tr>
                     <tr>
-                        <td>Tên đăng nhập (Mã nhân viên)</td>
+                        <td>
+                            <i class="bi-dot"></i>
+                            Tên đăng nhập (Mã nhân viên)
+                        </td>
                         <td>@Model.UserName</td>
                     </tr>
                 </tbody>

@@ -341,7 +341,6 @@ namespace WebAPP.Areas.Admin.Controllers
             return Json(selectList);
         }
 
-
         [HttpPost]
         public async Task<IActionResult> EditDCY(int id, DiemChuYUpdateRequest request)
         {
@@ -385,6 +384,18 @@ namespace WebAPP.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        public async Task<IActionResult> GetSelectListLTCD(Guid cauhoitrinhtuthaotacId)
+        {
+            var result = await _loiTaiCongDoanApiClient.GetAllByCauHoiTrinhTuThaoTacId(cauhoitrinhtuthaotacId);
+            var selectList = result.ResultObj.Select(item => new SelectListItem
+            {
+                Text = item.Text,
+                Value = item.Id.ToString()  // Giả sử Id là trường chứa giá trị bạn muốn
+            }).ToList();
+            return Json(selectList);
+        }
+
+        [HttpPost]
         public async Task<IActionResult> CreateDoiSach(int loitaicongdoanId, DoiSachCreateRequest request)
         {
             var result = await _doiSachApiClient.Create(loitaicongdoanId, request);
@@ -399,6 +410,18 @@ namespace WebAPP.Areas.Admin.Controllers
         {
             var result = await _loiTaiCongDoanApiClient.GetById(loitaicongdoanId);
             return PartialView("_editLoiDoiSach", result.ResultObj);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> GetSelectListLoiDoiSach(int loitaicongdoanId)
+        {
+            var result = await _loiTaiCongDoanApiClient.GetById(loitaicongdoanId);
+            var selectList = result.ResultObj.doiSaches.Select(item => new SelectListItem
+            {
+                Text = item.Text,
+                Value = item.Id.ToString()  // Giả sử Id là trường chứa giá trị bạn muốn
+            }).ToList();
+            return Json(selectList);
         }
 
         [HttpPost]
