@@ -15,8 +15,6 @@ namespace WebAPP.Services
         Task<ApiResult<bool>> ChangeOrder(List<CauHoiTrinhTuThaoTacChangeOrderRequest> request);
         Task<ApiResult<bool>> UpdateText(Guid id, CauHoiTrinhTuThaoTacUpdateTextRequest request);
         Task<ApiResult<ImportExcelResult>> ImportExcel(Stream file, int cauhoituluanId);
-
         Task<ApiResult<bool>> UpdateScore(Guid id, CauHoiTrinhTuThaoTacUpdateScoreRequest request);
-
     }
 }

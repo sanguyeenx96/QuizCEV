@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using WebAPP.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,6 +19,8 @@ builder.Services.AddAuthorization(options => {
 });
 
 // Add services to the container.
+builder.Services.AddMvc().AddSessionStateTempDataProvider();
+
 builder.Services.AddControllersWithViews();
 builder.Services.AddSession();
 

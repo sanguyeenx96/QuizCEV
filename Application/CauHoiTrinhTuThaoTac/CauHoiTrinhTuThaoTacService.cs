@@ -222,7 +222,6 @@ namespace Application.CauHoiTrinhTuThaoTac
                         {
                             score = Convert.ToInt32((worksheet.Cells[row, 2].Value.ToString()));
                         }
-
                         var newThututhaotac = new CauHoiTrinhThuThaoTacImportExcelRequest
                         {
                             Text = text,

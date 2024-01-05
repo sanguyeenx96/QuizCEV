@@ -102,6 +102,7 @@ namespace WebAPP.Areas.Admin.Controllers
         public async Task<IActionResult> GetAllTuLuanByCategoryId(int id)
         {
             var result = await _cauHoiTuLuanApiClient.GetAllByCategory(id);
+            
             return PartialView("_questionTuLuanList", result.ResultObj);
         }
         [HttpPost]
@@ -327,6 +328,19 @@ namespace WebAPP.Areas.Admin.Controllers
             var result = await _diemChuYApiClient.GetAllByCauHoiTrinhTuThaoTacId(id);
             return PartialView("_editDiemChuY", result.ResultObj);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> GetSelectListDCY(Guid id)
+        {
+            var result = await _diemChuYApiClient.GetAllByCauHoiTrinhTuThaoTacId(id);
+            var selectList= result.ResultObj.Select(item => new SelectListItem
+            {
+                Text = item.Text,
+                Value = item.Id.ToString()  // Giả sử Id là trường chứa giá trị bạn muốn
+            }).ToList();
+            return Json(selectList);
+        }
+
 
         [HttpPost]
         public async Task<IActionResult> EditDCY(int id, DiemChuYUpdateRequest request)
