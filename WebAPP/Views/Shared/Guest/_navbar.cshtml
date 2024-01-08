@@ -1,0 +1,159 @@
+﻿<nav class="navbar navbar-expand-lg bg-white">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+            <img src="~/logo-vietnam.png" alt="" width="100">
+        </a>
+        <button class="navbar-toggler" type="button" data-coreui-toggle="collapse" data-coreui-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo02" style="text-align:center">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">Tin tức nội bộ</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Lương thưởng</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Tài liệu đào tạo</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Kiểm tra đánh giá</a>
+                </li>
+            </ul>
+            <button type="button" class="btn btn-outline-dark" id="btnLoginNew">
+                <i class="bi-key"></i>
+                Đăng nhập
+            </button>
+
+            <div class="btn-group">
+                <button type="button" class="btn btn-outline-dark dropdown-toggle" data-coreui-toggle="dropdown" aria-expanded="false" id="groupBtnLogoutNew">
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end" style="text-align:center">
+                    <li><button class="dropdown-item" type="button">Thông tin tài khoản</button></li>
+                    <li>
+                        <button class="dropdown-item text-danger" type="button" id="btnLogoutNew">
+                            <i class="bi-power"></i>
+                            Đăng xuất
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<script>
+    function checkRole() {
+        $.ajax({
+            url: '/Guest/Home/CheckRole',
+            method: 'GET',
+            success: function (data) {
+                if (data.name != null && data.role != null) {
+                    $("#btnLoginNew").hide();
+                    $("#groupBtnLogoutNew").show();
+                    $("#groupBtnLogoutNew").html('<i class="bi-person"></i> ' + (data.name || ''));
+                }
+                if (data.name == null && data.role == null) {
+                    $("#btnLoginNew").show();
+                    $("#groupBtnLogoutNew").hide();
+                }
+
+
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+    $(document).ready(function () {
+        checkRole();
+    })
+    $("#btnLoginNew").click(function () {
+        var username, password;
+        Swal.fire({
+            title: 'Đăng nhập tài khoản',
+            html:
+                '<form>' +
+                '<div class="col-12" style="text-align: center">' +
+                '<input style="width: 70%" type="text" id="username" class="swal2-input" placeholder="Tên đăng nhập">' +
+                '<input style="width: 70%" type="password" id="password" class="swal2-input" placeholder="Mật khẩu">' +
+                '</div>' +
+                '</form>',
+            showCancelButton: true,
+            confirmButtonText: '<i class="bi-key"></i> Đăng nhập',
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            cancelButtonText: "Huỷ bỏ",
+
+            showLoaderOnConfirm: true,
+            preConfirm: () => {
+                username = Swal.getPopup().querySelector('#username').value;
+                password = Swal.getPopup().querySelector('#password').value;
+                if (!username || !password) {
+                    Swal.showValidationMessage("Bạn cần nhập đủ tên đăng nhập và mật khẩu!");                    
+                }else{
+                    return new Promise(function (resolve, reject) {
+                        setTimeout(function () {
+                            resolve();
+                        }, 1300);
+                    });
+                }
+            },
+            allowOutsideClick: () => !Swal.isLoading()
+
+        }).then((result) => {
+            if (result.isConfirmed) {
+                var data = {
+                    UserName: username,
+                    Password: password
+                };
+                $.ajax({
+                    type: "POST",
+                    url: "/Guest/Home/Login",
+                    contentType: "application/json",
+                    data: JSON.stringify(data),
+                    success: function (result) {
+                        if (result.success) {
+                            checkRole();
+                        } else {
+                            Swal.fire({
+                                icon: "error",
+                                width: 300,
+                                text: result.message,
+                                showConfirmButton: false,
+                                timer: 2000,
+                            });
+                        }
+                    }
+                });
+            }
+        });
+    });
+    $("#btnLogoutNew").click(function () {
+        Swal.fire({
+            title: "Đăng xuất tài khoản?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Xác nhận",
+            cancelButtonText: "Huỷ bỏ"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: "/Guest/Home/Logout", // Đường dẫn đến action
+                    method: "POST",
+                    success: function (response) {
+                        checkRole();
+                    },
+                    error: function (error) {
+                        // Xử lý lỗi nếu có
+                        console.error("Error:", error);
+                    }
+                });
+            }
+        });
+    });
+
+</script>
