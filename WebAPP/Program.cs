@@ -65,7 +65,10 @@ app.UseSession();
 app.MapControllerRoute(
     name: "MyArea",
     pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
+//Default to to GuestPage
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Login}/{action=Login}/{id?}");
+    pattern: "{area=Guest}/{controller=Home}/{action=Index}/{id?}");
+    //pattern: "{controller=Login}/{action=Login}/{id?}");
 app.Run();

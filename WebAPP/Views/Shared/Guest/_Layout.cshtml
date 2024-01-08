@@ -1,0 +1,55 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <base href="./">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>eExam CEV</title>
+
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="assets/favicon/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+    <!-- Vendors styles-->
+    <link href="~/coreui/dist/vendors/simplebar/css/simplebar.css" rel="stylesheet" />
+    <link href="~/coreui/dist/css/vendors/simplebar.css" rel="stylesheet" />
+    <!-- Main styles for this application-->
+    <link href="~/coreui/dist/css/style.css" rel="stylesheet" />
+    <link href="~/bootstrap-icons/font/bootstrap-icons.min.css" rel="stylesheet" />
+
+    <script src="~/sweetalert2/sweetalert2.all.min.js"></script>
+    <link href="~/datatables/datatables.min.css" rel="stylesheet" />
+    <script src="~/datatables/datatables.min.js"></script>
+
+    <link href="~/flip-master/dist/flip.min.css" rel="stylesheet" />
+    <script src="~/flip-master/dist/flip.min.js"></script>
+
+    <link href="~/animate.css/animate.min.css" rel="stylesheet" />
+
+    <script src="~/chart.js"></script>
+    <script src="~/chartjs-plugin-datalabels/chartjs-plugin-datalabels.min.js"></script>
+
+    <script src="~/moment.js/moment.min.js"></script>
+
+    <link href="~/pikaday/css/pikaday.min.css" rel="stylesheet" />
+    <script src="~/pikaday/pikaday.min.js"></script>
+</head>
+<body>
+    <div class="wrapper d-flex flex-column min-vh-100 bg-light">
+        <partial name="Guest/_navbar" />      
+        <div class="body flex-grow-1 bg-white" >
+            <div class="container-fluid p-0 mb-3">
+                @RenderBody()
+            </div>
+        </div>
+        <partial name="Guest/_footer" />
+    </div>
+    <!-- CoreUI and necessary plugins-->
+    <script src="~/coreui/dist/vendors/coreui/coreui/js/coreui.bundle.min.js"></script>
+    <script src="~/coreui/dist/vendors/simplebar/js/simplebar.min.js"></script>
+
+    <script src="~/coreui/dist/vendors/coreui/utils/js/coreui-utils.js"></script>    
+</body>
+</html>
