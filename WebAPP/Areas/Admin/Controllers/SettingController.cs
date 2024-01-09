@@ -36,6 +36,7 @@ namespace WebAPP.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult Help()
         {
+            ViewBag.thisPage = "Tài liệu hỗ trợ";
             return View();
         }
 

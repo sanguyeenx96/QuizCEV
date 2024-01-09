@@ -54,7 +54,7 @@ namespace WebAPP.Areas.Admin.Controllers
         }
         public async Task<IActionResult> Create()
         {
-            ViewBag.thisPage = "Thêm mới câu hỏi trắc nghiệm";
+            ViewBag.thisPage = "Tạo câu hỏi trắc nghiệm";
             var listcategory = await _categoryApiClient.GetAll();
             ViewBag.listcat = listcategory.ResultObj.Select(x => new SelectListItem()
             {
@@ -65,7 +65,7 @@ namespace WebAPP.Areas.Admin.Controllers
         }
         public async Task<IActionResult> CreateTuLuan()
         {
-            ViewBag.thisPage = "Thêm mới câu hỏi tự luận";
+            ViewBag.thisPage = "Tạo câu hỏi tự luận";
             var listcategory = await _categoryApiClient.GetAll();
             ViewBag.listcat = listcategory.ResultObj.Select(x => new SelectListItem()
             {

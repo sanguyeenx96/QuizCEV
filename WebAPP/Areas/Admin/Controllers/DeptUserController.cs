@@ -27,7 +27,7 @@ namespace WebAPP.Areas.Admin.Controllers
 
         public async Task<IActionResult> List()
         {
-            ViewBag.thisPage = "Quản lý danh sách tài khoản";
+            ViewBag.thisPage = "Danh sách tài khoản";
             var listDept = await _deptApiClient.GetAll();
             ViewBag.listDept = listDept.ResultObj.Select(x => new SelectListItem()
             {
@@ -38,7 +38,7 @@ namespace WebAPP.Areas.Admin.Controllers
         }
         public async Task<IActionResult> ListBophan()
         {
-            ViewBag.thisPage = "Quản lý bộ phận";
+            ViewBag.thisPage = "Danh sách bộ phận";
             var listDept = await _deptApiClient.GetAll();
             ViewBag.listDept = listDept.ResultObj.Select(x => new SelectListItem()
             {

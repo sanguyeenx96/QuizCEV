@@ -17,20 +17,20 @@ namespace WebAPP.Areas.Admin.Controllers
 
         public async Task<IActionResult> List()
         {
-            ViewBag.thisPage = "Danh sách Chủ đề & Phòng thi";
+            ViewBag.thisPage = "Danh sách và cài đặt thông tin phòng thi";
             var result = await _categoryApiClient.GetAll();
             return View(result.ResultObj);
         }
 
         public IActionResult Create()
         {
-            ViewBag.thisPage = "Thêm mới Chủ đề & Phòng thi";
+            ViewBag.thisPage = "Tạo phòng thi";
             return View();
         }
 
         public async Task<IActionResult> ChangeStatus()
         {
-            ViewBag.thisPage = "Đóng / Mở phòng thi";
+            ViewBag.thisPage = "Đóng / Mở trạng thái phòng thi";
             var result = await _categoryApiClient.GetAll();
             return View(result.ResultObj); ;
         }

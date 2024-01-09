@@ -2,15 +2,19 @@
     <div class="container-fluid">
         <button class="header-toggler px-md-0 me-md-3" type="button" onclick="coreui.Sidebar.getInstance(document.querySelector('#sidebar')).toggle()">
             <i class="bi-list"></i>
-        </button>
-     
+        </button>    
         
         <ul class="header-nav ms-3">
             <li class="nav-item">
-                <a id="btnLogout" class="btn btn-outline-danger ">
+                <a class="btn btn-outline-dark" asp-area="Guest" asp-controller="Home" asp-action="Index">
+                    <i class="bi-house-fill"></i>
+                    Về trang chủ
+                </a>
+
+                @*<a id="btnLogout" class="btn btn-outline-danger ">
                     <i class="bi-box-arrow-left"></i>
                     Đăng xuất
-                </a>
+                </a>*@
             </li>
         </ul>
     </div>
@@ -32,8 +36,8 @@
     $(document).ready(function () {
         $("#btnLogout").click(function () {
             Swal.fire({
-                title: "Đăng xuất tài khoản?",
-                icon: "warning",
+                title: "Quay lại trang chủ?",
+                icon: "question",
                 showCancelButton: true,
                 confirmButtonColor: "#3085d6",
                 cancelButtonColor: "#d33",
@@ -41,18 +45,21 @@
                 cancelButtonText: "Huỷ bỏ"
             }).then((result) => {
                 if (result.isConfirmed) {
-                    $.ajax({
-                        url: "/Login/Logout", // Đường dẫn đến action
-                        method: "POST",
-                        success: function (response) {
-                            var url = "/Login";
-                            window.location.href = url;
-                        },
-                        error: function (error) {
-                            // Xử lý lỗi nếu có
-                            console.error("Error:", error);
-                        }
-                    });
+                    var url = "/Guest/Home/Index";
+                    window.location.href = url;
+
+                    //$.ajax({
+                    //    url: "/Login/Logout", // Đường dẫn đến action
+                    //    method: "POST",
+                    //    success: function (response) {
+                    //        var url = "/Login";
+                    //        window.location.href = url;
+                    //    },
+                    //    error: function (error) {
+                    //        // Xử lý lỗi nếu có
+                    //        console.error("Error:", error);
+                    //    }
+                    //});
                 }
             });
         })

@@ -62,9 +62,9 @@ app.UseAuthorization();
 
 app.UseSession();
 
-app.MapControllerRoute(
-    name: "MyArea",
-    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+//app.MapControllerRoute(
+//    name: "MyArea",
+//    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 
 //Default to to GuestPage
 app.MapControllerRoute(
