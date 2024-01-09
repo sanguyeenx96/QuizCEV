@@ -13,6 +13,9 @@
     }
 </style>
 <div class="row">
+    <h1 class="display-6 mb-3" style="text-align:center">
+        DANH SÁCH CÂU HỎI
+    </h1>
     <div class="col-12">
         <div class="alert alert-warning d-flex align-items-center" role="alert">
             <div>
@@ -21,10 +24,10 @@
             </div>
         </div>
     </div>
-    <div class="form-group mb-2">
+
+    <div class="form-group mb-2">  
         <label class="form-label">
-            <i class="bi-option"></i>
-            Chọn chủ đề & Phòng thi
+            Chọn phòng thi
         </label>
         <select class="form-select form-select-lg" id="categoryId" name="categoryId" style="overflow: hidden;">
             @foreach (var item in ViewBag.listcat)
