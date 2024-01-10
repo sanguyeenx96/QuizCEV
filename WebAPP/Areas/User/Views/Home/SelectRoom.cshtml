@@ -66,7 +66,7 @@
                     <button type="submit" class="btn btn-success btnBatdauthi"
                         data-idPhong="@item.Id"
                         data-tenPhong="@item.Name"
-                        onclick="localStorage.clear();">
+                        onclick="localStorage.removeItem('countdownTime');">
                         <i class="bi-play"></i>
                         Bắt đầu
                     </button>
@@ -99,7 +99,7 @@
                     <button type="button" class="btn btn-warning btnBatdauthithu"
                         data-idPhong="@item.Id"
                         data-tenPhong="@item.Name"
-                        onclick="localStorage.clear();">
+                        onclick="localStorage.removeItem('countdownTime');">
                         <i class="bi-play"></i>
                         Bắt đầu thi thử
                     </button>

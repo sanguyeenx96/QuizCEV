@@ -1,14 +1,9 @@
 ﻿@model List<ViewModels.Question.Response.QuestionAndAnswerVm>
-
-
 @{
     //List<ViewModels.Question.Response.QuestionAndAnswerVm> cauhoivacautraloitracnghiem = ViewBag.questionAndAnswerTracNghiem as List<ViewModels.Question.Response.QuestionAndAnswerVm>;
     int demtn = 0;
     int demtl = 0;
-
 }
-
-
 
 @if (Model.Count > 0)
 {
@@ -32,62 +27,79 @@
                         @{
                             if (!string.IsNullOrEmpty(item.QA))
                             {
-                                <div class="col-6">
-                                    <button class="btn w-100 btnDoicautraloi
+                                <div class="col-12">
+                                    <div class="btn-group mb-2 w-100">
+                                        <button class="btn btn-secondary disabled">A</button>
+                                        <button style="text-align:start" class="btn w-100 btnDoicautraloi
                                 @if(item.Answer == "A")
                             {
-                                                                                            <text>btn-dark disabled</text>
+                                        <text>btn-primary disabled</text>
                                 }
                                 else
                                 {
-                                                                                            <text>btn-outline-dark</text>
+                                    <text>btn-outline-dark</text>
                                 }
-                                                                                        mt-1" data-id="@item.Id" data-newAs="A">@item.QA</button>
+                                      " data-id="@item.Id" data-newAs="A">@item.QA
+                                      </button>
+                                    </div>
                                 </div>
                             }
                             if (!string.IsNullOrEmpty(item.QB))
                             {
-                                <div class="col-6">
-                                    <button class="btn w-100 btnDoicautraloi
+                                <div class="col-12">
+                                    <div class="btn-group mb-2 w-100">
+                                        <button class="btn btn-secondary disabled">B</button>
+                                        <button style="text-align:start" class="btn w-100 btnDoicautraloi
                                 @if(item.Answer == "B")
-                            {
-                                                                                                <text>btn-dark disabled</text>
+                                {
+                                        <text>btn-primary disabled</text>
                                 }
                                 else
                                 {
-                                                                                            <text>btn-outline-dark</text>
+                                    <text>btn-outline-dark</text>
                                 }
-                                                                                        mt-1" data-id="@item.Id" data-newAs="B">@item.QB</button>
+                                      " data-id="@item.Id" data-newAs="B">@item.QB
+                                      </button>
+                                    </div>
                                 </div>
+
                             }
                             if (!string.IsNullOrEmpty(item.QC))
                             {
-                                <div class="col-6">
-                                    <button class="btn w-100 btnDoicautraloi
-                                @if(item.Answer == "C")
-                            {
-                                                                                                <text>btn-dark disabled</text>
-                                }
-                                else
-                                {
-                                                                                                <text>btn-outline-dark</text>
-                                }
-                                                                                        mt-1" data-id="@item.Id" data-newAs="C">@item.QC</button>
+                                <div class="col-12">
+                                    <div class="btn-group mb-2 w-100">
+                                        <button class="btn btn-secondary disabled">C</button>
+                                        <button style="text-align:start" class="btn w-100 btnDoicautraloi
+                                    @if(item.Answer == "C")
+                                    {
+                                                <text>btn-primary disabled</text>
+                                    }
+                                    else
+                                    {
+                                            <text>btn-outline-dark</text>
+                                    }
+                                        " data-id="@item.Id" data-newAs="B">@item.QC
+                                                    </button>
+                                    </div>
                                 </div>
                             }
                             if (!string.IsNullOrEmpty(item.QD))
                             {
-                                <div class="col-6">
-                                    <button class="btn w-100 btnDoicautraloi
-                                @if(item.Answer == "D")
-                            {
-                                                                                                <text>btn-dark disabled</text>
+                                <div class="col-12">
+                                    <div class="btn-group mb-2 w-100">
+                                        <button class="btn btn-secondary disabled">D</button>
+                                        <button style="text-align:start" class="btn w-100 btnDoicautraloi
+                                    @if(item.Answer == "D")
+                                {
+                                            <text>btn-primary disabled</text>
                                 }
                                 else
                                 {
-                                                                                                <text>btn-outline-dark</text>
+                                            <text>btn-outline-dark</text>
                                 }
-                                                                                        mt-1" data-id="@item.Id" data-newAs="D">@item.QD</button>
+                                              " data-id="@item.Id" data-newAs="D">@item.QD
+                                                                      </button>
+                                    </div>
                                 </div>
                             }
                         }
