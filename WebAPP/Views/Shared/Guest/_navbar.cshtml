@@ -17,7 +17,7 @@
                     <a class="nav-link " aria-current="page" href="#">Giới thiệu</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Tin tức</a>
+                    <a class="nav-link active" aria-current="page" asp-area="guest" asp-controller="home" asp-action="index">Tin tức</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#" id="btnLuongThuong">Lương thưởng</a>
@@ -51,7 +51,6 @@
                 <ul class="dropdown-menu dropdown-menu-end" style="text-align:center">
                     <li><button class="dropdown-item" type="button">Thông tin tài khoản</button></li>
                     <li><hr class="dropdown-divider"></li>
-
                     <li>
                         <button class="dropdown-item text-danger" type="button" id="btnLogoutNew">
                             <i class="bi-power"></i>
@@ -91,6 +90,7 @@
                     $("#btnLoginNew").show();
                     $("#groupBtnLogoutNew").hide();
                     localStorage.removeItem("isAdmin");
+                    localStorage.removeItem("isLoggedIn");
                 }
             },
             error: function (error) {
@@ -109,7 +109,7 @@
                 '<form>' +
                 '<div class="col-12" style="text-align: center">' +
                 '<input style="width: 70%" type="text" id="username" class="swal2-input" placeholder="Tên đăng nhập">' +
-                '<input style="width: 70%" type="password" id="password" class="swal2-input" placeholder="Mật khẩu">' +
+                '<input style="width: 70%;margin-top:5px" type="password" id="password" class="swal2-input" placeholder="Mật khẩu">' +
                 '</div>' +
                 '</form>',
             showCancelButton: true,
@@ -117,7 +117,6 @@
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
             cancelButtonText: "Huỷ bỏ",
-
             showLoaderOnConfirm: true,
             preConfirm: () => {
                 username = Swal.getPopup().querySelector('#username').value;
@@ -133,7 +132,6 @@
                 }
             },
             allowOutsideClick: () => !Swal.isLoading()
-
         }).then((result) => {
             if (result.isConfirmed) {
                 var data = {
@@ -162,11 +160,22 @@
                                 timer: 2000,
                             });
                         }
+                    },
+                    error: function (error) {
+                        console.log("loi ket noi")
+                        Swal.fire({
+                            icon: "error",
+                            width: 300,
+                            text: "Không kết nối được với máy chủ",
+                            showConfirmButton: false,
+                            timer: 2000,
+                        });
                     }
                 });
             }
         });
     });
+
     $("#btnLogoutNew").click(function () {
         Swal.fire({
             title: "Đăng xuất tài khoản?",
@@ -198,11 +207,6 @@
         });
     });
 
-    $("#btnLuongThuong").click(function () {
-        const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
-        alert("Chức năng đang hoàn thiện")
-    });
-
 
 
     $("#btnTestPageUser").click(function () {
@@ -216,7 +220,7 @@
                 
                 Toast.fire({
                     icon: "error",
-                    title: "không có quyền truy cập"
+                    title: "Không có quyền truy cập"
                 });
             }
         } else {
@@ -226,9 +230,6 @@
             });
         }
     });
-
-
-
 
     $("#btnTestPageAdmin").click(function () {
         const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
@@ -240,7 +241,7 @@
             } else {
                 Toast.fire({
                     icon: "error",
-                    title: "không có quyền truy cập"
+                    title: "Không có quyền truy cập"
                 });
             }
         } else {
@@ -250,5 +251,4 @@
             });
         }
     });
-
 </script>

@@ -35,24 +35,44 @@
         <form id="formTraLoiCauHoiTracNghiem">
             <div>
                 <span class="badge rounded-pill text-bg-dark mb-3 ">@Model.Score điểm</span>
-                <h2>@Model.Text</h2>
-                <p>Tên linh kiện tại công đoạn?</p>
+                <h2 class="mb-4">@Model.Text</h2>
+                @* <p>Tên linh kiện tại công đoạn?</p>*@          
                 @{
                     if (!string.IsNullOrEmpty(Model.QA))
                     {
-                        <button style="width:200px" class="btn  btn-outline-dark mt-2" type="submit" name="answer" value="A">@Model.QA</button>
+                        <div class="col-12" >
+                            <div class="btn-group mb-2 w-100" >
+                                <button class="btn btn-dark disabled">A</button>
+                                <button style="text-align:start" class="btn w-100 text-black btn-outline-secondary" type="submit" name="answer" value="A">@Model.QA</button>
+                            </div>
+                        </div>
                     }
                     if (!string.IsNullOrEmpty(Model.QB))
                     {
-                        <button style="width:200px" class="btn  btn-outline-dark mt-2" type="submit" name="answer" value="B">@Model.QB</button>
+                        <div class="col-12">
+                            <div class="btn-group mb-2 w-100" >
+                                <button class="btn btn-dark disabled">B</button>
+                                <button style="text-align:start" class="btn w-100 text-black btn-outline-secondary" type="submit" name="answer" value="B">@Model.QB</button>
+                            </div>
+                        </div>
                     }
                     if (!string.IsNullOrEmpty(Model.QC))
                     {
-                        <button style="width:200px" class="btn  btn-outline-dark mt-2" type="submit" name="answer" value="C">@Model.QC</button>
+                        <div class="col-12">
+                            <div class="btn-group mb-2 w-100">
+                                <button class="btn btn-dark disabled">C</button>
+                                <button style="text-align:start" class="btn w-100 text-black btn-outline-secondary" type="submit" name="answer" value="C">@Model.QC</button>
+                            </div>
+                        </div>
                     }
                     if (!string.IsNullOrEmpty(Model.QD))
                     {
-                        <button style="width:200px" class="btn  btn-outline-dark mt-2" type="submit" name="answer" value="D">@Model.QD</button>
+                        <div class="col-12">
+                            <div class="btn-group mb-2 w-100">
+                                <button class="btn btn-dark disabled">D</button>
+                                <button style="text-align:start" class="btn w-100 text-black btn-outline-secondary" type="submit" name="answer" value="D">@Model.QD</button>
+                            </div>
+                        </div>
                     }
                 }
             </div>
@@ -71,16 +91,26 @@
 
 <script>
     $(document).ready(function () {
+        var canClick = true;
+
         const Toast = Swal.mixin({
             toast: true,
             position: "top",
             showConfirmButton: false,
-            timer: 2000,
+            timer: 1000,
             timerProgressBar: true,
         });
 
         $('#formTraLoiCauHoiTracNghiem').submit(function (e) {
             e.preventDefault();
+            // Kiểm tra nếu không thể ấn thì không làm gì cả
+            if (!canClick) {
+                return;
+            }
+
+            // Chuyển trạng thái không thể ấn
+            canClick = false;
+
             var Id = $("#Id").val();
             var Text = $("#Text").val();
             var QA = $("#QA").val();
@@ -123,11 +153,12 @@
                                 Toast.fire({
                                     icon: "success",
                                     title: "Đang trả lời câu hỏi...",
-                                    showConfirmButton: false,
-                                    allowOutsideClick: false,
                                     allowEscapeKey: false
                                 }).then(function () {
                                     $("#examTracNghiem").html(response);
+
+                                    // Sau khi toast chạy xong, chuyển trạng thái có thể ấn
+                                    canClick = true;
                                 })
                             },
                             error: function (error) {
@@ -143,6 +174,8 @@
                             showConfirmButton: false,
                             timer: 2000,
                         });
+                        // Nếu có lỗi, chuyển trạng thái có thể ấn
+                        canClick = true;
                     }
                 }
             });
