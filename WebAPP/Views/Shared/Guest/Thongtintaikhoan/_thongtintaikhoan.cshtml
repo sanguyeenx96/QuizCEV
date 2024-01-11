@@ -1,0 +1,82 @@
+﻿@model ViewModels.Users.Response.UserVm
+<style>
+    .table tbody tr:last-child td {
+        border-bottom: none;
+    }
+</style>
+
+<div class="modal-header">
+    <h5 class="modal-title" id="staticBackdropLabel">
+        <i class="bi-person-fill"></i>
+        Thông tin tài khoản
+    </h5>
+    <button type="button" class="btn-close" data-coreui-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+    <table class="table mb-0">
+        <tbody>
+            <tr>
+                <td>
+                    <i class="bi-dot"></i>
+                    Loại tài khoản
+                </td>
+                <td id="infoLTK">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <i class="bi-dot"></i>
+                    Họ tên
+                </td>
+                <td>@Model.Name</td>
+            </tr>
+            <tr>
+                <td>
+                    <i class="bi-dot"></i>
+                    Bộ phận
+                </td>
+                <td>@Model.Dept</td>
+            </tr>
+            <tr>
+                <td>
+                    <i class="bi-dot"></i>
+                    Model
+                </td>
+                <td>@Model.Model</td>
+            </tr>
+            <tr>
+                <td>
+                    <i class="bi-dot"></i>
+                    Cell
+                </td>
+                <td>@Model.Cell</td>
+            </tr>
+            <tr>
+                <td>
+                    <i class="bi-dot"></i>
+                    Tên đăng nhập / Mã nhân viên
+                </td>
+                <td style="vertical-align:middle">
+                    @Model.UserName
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<script>
+    $(document).ready(function () {
+        const isAdmin = localStorage.getItem("isAdmin") === "true";
+        if (isAdmin) {
+            $('#infoLTK').html('<span class="badge bg-danger"><i class="bi-unlock-fill"></i> Tài khoản quản trị</span> ')
+        } else {
+            $('#infoLTK').html('<span class="badge bg-primary"><i class="bi-person-fill"></i> Tài khoản người dùng</span> ')
+        }
+    })
+</script>
+
+
+
+
+
+

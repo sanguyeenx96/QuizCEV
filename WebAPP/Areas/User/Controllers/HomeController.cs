@@ -73,6 +73,7 @@ namespace WebAPP.Areas.User.Controllers
             var rerestSetting = listSetting.Where(x => x.Name == "Retest").FirstOrDefault();
             return rerestSetting.Status;
         }
+
         private async Task<bool> CheckBaithiRetest(string categoryName)
         {
             Guid id = Guid.Empty;
@@ -581,6 +582,7 @@ namespace WebAPP.Areas.User.Controllers
             TempData.Keep();
             return PartialView("Testing/_thayDoiDapAnDCY", result);
         }
+
         [HttpPost]
         public async Task<IActionResult> PostChangeChooseDCY([FromBody] List<ChangeAnswerDiemChuYRequest> request)
         {
@@ -607,6 +609,7 @@ namespace WebAPP.Areas.User.Controllers
             TempData.Keep();
             return PartialView("Testing/_thayDoiDapAnLTCD", result);
         }
+
         [HttpPost]
         public async Task<IActionResult> PostChangeChooseLTCD([FromBody] List<ViewModels.CauHoiTrinhTuThaoTac.LoiTaiCongDoan.ChangeAnswerLoiTaiCongDoanRequest> request)
         {
@@ -640,6 +643,7 @@ namespace WebAPP.Areas.User.Controllers
             TempData.Keep();
             return PartialView("Testing/_thayDoiDapAnDS", result);
         }
+
         [HttpPost]
         public async Task<IActionResult> PostChangeChooseDS([FromBody] List<ViewModels.CauHoiTrinhTuThaoTac.LoiTaiCongDoan.DoiSach.ChangeAnswerDoiSachRequest> request)
         {
@@ -675,6 +679,7 @@ namespace WebAPP.Areas.User.Controllers
                 return Json(value);
             }
         }
+
         //Đổi lịch sử câu trả lời
         [HttpPost]
         public IActionResult ChangeAnswer(int id, string newAns)
@@ -690,7 +695,6 @@ namespace WebAPP.Areas.User.Controllers
             TempData.Keep();
             return Json(new { success = true });
         }
-
 
         //Lưu kết quả
         [HttpPost]
@@ -1225,8 +1229,6 @@ namespace WebAPP.Areas.User.Controllers
             return View();
         }
 
-
-
         //CHế độ luyện tập
         [HttpPost]
         public async Task<IActionResult> SelectRoomTest(int idPhong, string categoryName)
@@ -1298,6 +1300,47 @@ namespace WebAPP.Areas.User.Controllers
             TempData.Keep();
             return Json(new { success = true });
         }
+
+
+        /// <summary>
+        /// Phần tự luận Version 2, thay đổi giao diện trả lời
+        /// </summary>
+      
+        [HttpGet]
+        public async Task<IActionResult> TestingTuLuanVer2()
+        {
+            int totalTuLuan = Convert.ToInt32(TempData["soluongcauhoiTuLuan"].ToString());
+            int idPhong = Convert.ToInt32(TempData["idPhong"].ToString());
+            var phongThi = await _categoryApiClient.GetById(idPhong);
+            ViewBag.thisPage = phongThi.ResultObj.Name.ToString();
+            ViewBag.soluongcauhoiTuLuan = totalTuLuan;
+            ViewBag.numQuestionTuLuan = TempData["numQuestionTuLuan"];
+            CauHoiTuLuanVm q = null;
+            string jsonQuestionsTuLuan = TempData["questionsTuLuan"].ToString();
+
+            Queue<CauHoiTuLuanVm> qlistTuLuan = JsonConvert.DeserializeObject<Queue<CauHoiTuLuanVm>>(jsonQuestionsTuLuan);
+            if (qlistTuLuan.Count > 0)
+            {
+                q = qlistTuLuan.Peek();
+                int id = q.Id;
+                //Lay ra duoc ca List<DiemChuYVm> va List<LoiTaiCongDoanVm> va List<DoiSachVm>:
+                var danhsachcauhoitrinhtuthaotac = await _cauHoiTrinhTuThaoTacApiClient.GetAllByCauHoiTuLuan(id);
+                List<CauHoiTrinhTuThaoTacVm> listdanhsachcauhoitrinhtuthaotac = danhsachcauhoitrinhtuthaotac.ResultObj;
+                var random = new Random();
+                listdanhsachcauhoitrinhtuthaotac = listdanhsachcauhoitrinhtuthaotac.OrderBy(x => random.Next()).ToList();
+                ViewBag.listTrinhTuThaoTac = listdanhsachcauhoitrinhtuthaotac;
+
+                TempData.Keep();
+                return PartialView("Testing/_examTuLuanVer2", q);
+            }
+            else
+            {
+                TempData["StatusTL"] = 1;
+                TempData.Keep();
+                return PartialView("Testing/_finishTuLuan");
+            }
+        }
+
 
     }
 }
