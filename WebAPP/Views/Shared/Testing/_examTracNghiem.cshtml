@@ -15,66 +15,75 @@
         double percentProcessbar = ((double)thisQ / totalQTracNghiem) * 100;
         pP = percentProcessbar.ToString() + "%";
     }
-   
+
 }
 
-<div class="progress-group">
+<div class="progress-group mb-0">
     <div class="progress-group-header">
-        <i class="bi-mortarboard mx-1"></i>
-        <div>Phần thi trắc nghiệm</div>
-        <div class="ms-auto font-weight-bold">Đã hoàn thành @thisQ/@totalQTracNghiem câu hỏi</div>
-    </div>
+        <small class="text-muted ">
+            Đã trả lời @thisQ / @totalQTracNghiem câu hỏi
+        </small>
+@*        <div class="ms-auto font-weight-bold">Đã hoàn thành @thisQ/@totalQTracNghiem câu hỏi</div>
+*@    </div>
     <div class="progress-group-bars">
-        <div class="progress ">
-            <div class="progress-bar progress-bar-striped bg-success progress-bar-animated" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: @pP"></div>
+        <div class="progress rounded-0 ">
+            <div class="progress-bar progress-bar-striped bg-success progress-bar-animated" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: @pP ;opacity:0.9"></div>
         </div>
     </div>
 </div>
-<div class="card bg-white pt-1 border border-0" style="background-image: url('/paper.jpg'); background-size:cover; background-position: center;">
+@*<div class="card bg-white border border-0" style="background-image: url('/paper.jpg'); background-size:cover; background-position: center;">
+*@
+<div class="card bg-white rounded-0 border border-0">
     <div class="card-body text-center">
         <form id="formTraLoiCauHoiTracNghiem">
             <div>
-                <span class="badge rounded-pill text-bg-dark mb-3 ">@Model.Score điểm</span>
-                <h2 class="mb-4">@Model.Text</h2>
-                @* <p>Tên linh kiện tại công đoạn?</p>*@          
-                @{
-                    if (!string.IsNullOrEmpty(Model.QA))
-                    {
-                        <div class="col-12" >
-                            <div class="btn-group mb-2 w-100" >
-                                <button class="btn btn-dark disabled">A</button>
-                                <button style="text-align:start" class="btn w-100 text-black btn-outline-secondary" type="submit" name="answer" value="A">@Model.QA</button>
-                            </div>
-                        </div>
+                <span class="badge rounded-pill text-bg-light mb-2 ">
+                    <small>
+                        @Model.Score điểm
+                    </small>
+                </span>
+                <h1 class="display-6 mb-4">@Model.Text</h1>
+                @* <p>Tên linh kiện tại công đoạn?</p>*@
+                <div class="container-sm">
+                    @{
+                        if (!string.IsNullOrEmpty(Model.QA))
+                        {
+                                <div class="col-12">
+                                    <div class="btn-group mb-2 w-100 shadow-sm">
+                                    <button class="btn btn-dark disabled" style="min-width:40px">A</button>
+                                        <button style="text-align:start" class="btn w-100  btn-light" type="submit" name="answer" value="A">@Model.QA</button>
+                                    </div>
+                                </div>
+                        }
+                        if (!string.IsNullOrEmpty(Model.QB))
+                        {
+                                <div class="col-12">
+                                <div class="btn-group mb-2 w-100 shadow-sm">
+                                    <button class="btn btn-dark disabled" style="min-width:40px">B</button>
+                                    <button style="text-align:start" class="btn w-100 btn-light" type="submit" name="answer" value="B">@Model.QB</button>
+                                    </div>
+                                </div>
+                        }
+                        if (!string.IsNullOrEmpty(Model.QC))
+                        {
+                                <div class="col-12">
+                                <div class="btn-group mb-2 w-100 shadow-sm">
+                                    <button class="btn btn-dark disabled" style="min-width:40px">C</button>
+                                    <button style="text-align:start" class="btn w-100 btn-light" type="submit" name="answer" value="C">@Model.QC</button>
+                                    </div>
+                                </div>
+                        }
+                        if (!string.IsNullOrEmpty(Model.QD))
+                        {
+                                <div class="col-12">
+                                <div class="btn-group mb-2 w-100 shadow-sm">
+                                    <button class="btn btn-dark disabled" style="min-width:40px">D</button>
+                                    <button style="text-align:start" class="btn w-100 btn-light" type="submit" name="answer" value="D">@Model.QD</button>
+                                    </div>
+                                </div>
+                        }
                     }
-                    if (!string.IsNullOrEmpty(Model.QB))
-                    {
-                        <div class="col-12">
-                            <div class="btn-group mb-2 w-100" >
-                                <button class="btn btn-dark disabled">B</button>
-                                <button style="text-align:start" class="btn w-100 text-black btn-outline-secondary" type="submit" name="answer" value="B">@Model.QB</button>
-                            </div>
-                        </div>
-                    }
-                    if (!string.IsNullOrEmpty(Model.QC))
-                    {
-                        <div class="col-12">
-                            <div class="btn-group mb-2 w-100">
-                                <button class="btn btn-dark disabled">C</button>
-                                <button style="text-align:start" class="btn w-100 text-black btn-outline-secondary" type="submit" name="answer" value="C">@Model.QC</button>
-                            </div>
-                        </div>
-                    }
-                    if (!string.IsNullOrEmpty(Model.QD))
-                    {
-                        <div class="col-12">
-                            <div class="btn-group mb-2 w-100">
-                                <button class="btn btn-dark disabled">D</button>
-                                <button style="text-align:start" class="btn w-100 text-black btn-outline-secondary" type="submit" name="answer" value="D">@Model.QD</button>
-                            </div>
-                        </div>
-                    }
-                }
+                </div>
             </div>
             <input id="Id" value="@Model.Id" hidden />
             <input id="Text" value="@Model.Text" hidden />

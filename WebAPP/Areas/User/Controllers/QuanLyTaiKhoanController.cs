@@ -7,7 +7,7 @@ using WebAPP.Services;
 namespace WebAPP.Areas.User.Controllers
 {
     [Area("User")]
-    [Authorize(Policy = "userpolicy")]
+
     public class QuanLyTaiKhoanController : Controller
     {
         private readonly IUserApiClient _userApiClient;
@@ -30,6 +30,19 @@ namespace WebAPP.Areas.User.Controllers
             };
             var result = await _userApiClient.GetById(id);
             return View(result.ResultObj);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetTTTK()
+        {
+            Guid id = Guid.Empty;
+            var userIdString = User.FindFirstValue("UserId");
+            if (Guid.TryParse(userIdString, out var userId))
+            {
+                id = userId;
+            };
+            var result = await _userApiClient.GetById(id);
+            return PartialView("Guest/Thongtintaikhoan/_thongtintaikhoan", result.ResultObj);
         }
 
         [HttpPost]

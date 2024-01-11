@@ -30,10 +30,16 @@
                         Kiểm tra đánh giá
                     </a>
                     <ul class="dropdown-menu" style="text-align:center">
-                        <li><a class="dropdown-item" href="#" id="btnTestPageUser">Truy cập</a></li>
-                        <li><hr class="dropdown-divider"></li>
                         <li>
-                            <a class="dropdown-item text-danger" href="#"  id="btnTestPageAdmin">
+                            <a class="dropdown-item" href="#" id="btnTestPageUser">
+                                Truy cập
+                            </a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li>
+                            <a class="dropdown-item text-danger" href="#" id="btnTestPageAdmin">
                                 <i class="bi-database-fill-lock"></i>
                                 Trang quản lý
                             </a>
@@ -41,16 +47,31 @@
                     </ul>
                 </li>
             </ul>
-            <button type="button" class="btn btn-outline-dark rounded-pill" id="btnLoginNew">
+            <button type="button" class="btn btn-primary rounded-pill" id="btnLoginNew">
                 <i class="bi-person-circle"></i>
                 Đăng nhập
             </button>
-            <div class="btn-group">
-                <button type="button" class="btn btn-outline-dark dropdown-toggle" data-coreui-toggle="dropdown" aria-expanded="false" id="groupBtnLogoutNew">
+            <div class="btn-group" id="grgroupBtnLogoutNew">
+                <button type="button" class="btn dropdown-toggle rounded-pill" data-coreui-toggle="dropdown" aria-expanded="false" id="groupBtnLogoutNew">
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end" style="text-align:center">
-                    <li><button class="dropdown-item" type="button">Thông tin tài khoản</button></li>
-                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                        <button class="dropdown-item" type="button" id="btnDMK">
+                            Đổi mật khẩu
+                        </button>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li>
+                        <button class="dropdown-item" type="button" id="btnXemTTTK">
+                            Thông tin tài khoản
+                        </button>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    
                     <li>
                         <button class="dropdown-item text-danger" type="button" id="btnLogoutNew">
                             <i class="bi-power"></i>
@@ -62,6 +83,18 @@
         </div>
     </div>
 </nav>
+
+
+
+<div class="modal fade" id="staticBackdrop" data-coreui-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div id="contentModalTTTK">
+            </div>            
+        </div>
+    </div>
+</div>
+
 
 <script>
     const Toast = Swal.mixin({
@@ -78,17 +111,22 @@
             success: function (data) {
                 if (data.name != null && data.role != null) {
                     $("#btnLoginNew").hide();
-                    $("#groupBtnLogoutNew").show();
-                    $("#groupBtnLogoutNew").html('<i class="bi-person-fill"></i> ' + (data.name || ''));
+                    $("#grgroupBtnLogoutNew").show();
                     if (data.role == "admin") {
                         localStorage.setItem("isAdmin", true);
+                        $("#groupBtnLogoutNew").html('<i class="bi-unlock-fill"></i> ' + (data.name || ''));
+                        $("#groupBtnLogoutNew").removeClass('text-white bg-primary');
+                        $("#groupBtnLogoutNew").addClass('text-white bg-danger');
                     } else if (data.role = "user") {
                         localStorage.setItem("isAdmin", false);
+                        $("#groupBtnLogoutNew").html('<i class="bi-person-fill"></i> ' + (data.name || ''));
+                        $("#groupBtnLogoutNew").removeClass('text-white bg-danger');
+                        $("#groupBtnLogoutNew").addClass('text-white bg-primary');
                     }
                 }
                 if (data.name == null && data.role == null) {
+                    $("#grgroupBtnLogoutNew").hide();
                     $("#btnLoginNew").show();
-                    $("#groupBtnLogoutNew").hide();
                     localStorage.removeItem("isAdmin");
                     localStorage.removeItem("isLoggedIn");
                 }
@@ -98,8 +136,105 @@
             }
         });
     }
+
+
     $(document).ready(function () {
         checkRole();
+        $('#btnXemTTTK').click(function () {        
+            $.ajax({
+                url: '/User/QuanLyTaiKhoan/GetTTTK',
+                type: 'GET',
+                success: function (data) {
+                    $('#contentModalTTTK').html(data);
+                    $('#staticBackdrop').modal("show")
+                },
+                error: function (error) {
+                    // Xử lý lỗi nếu có
+                    console.error(error);
+                }
+            });
+        })
+
+        $("#btnDMK").click(async function () {
+            async function Step2() {
+                const { value: newMK } = await Swal.fire({
+                    currentProgressStep: 1,
+                    input: "password",
+                    inputLabel: "Nhập mật khẩu mới",
+                    inputPlaceholder: "Mật khẩu mới",
+                    confirmButtonText: 'Xác nhận',
+                });
+                if (newMK) {
+                    $.ajax({
+                        url: '/User/Quanlytaikhoan/UserResetPassword',
+                        type: 'POST',
+                        data: { newPassword: newMK },
+                        success: function (result) {
+                            if (result.success) {
+                                Swal.fire({
+                                    icon: "success",
+                                    width: 300,
+                                    text: "Đổi mật khẩu thành công",
+                                    showConfirmButton: false,
+                                    timer: 1000,
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: "error",
+                                    width: 300,
+                                    text: "Lỗi hệ thống",
+                                    showConfirmButton: false,
+                                    timer: 1000,
+                                });
+                            }
+                        },
+                        error: function (error) {
+                            console.error(error);
+                        }
+                    });
+                }
+            }
+            const steps = ['1', '2']
+            const Queue = Swal.mixin({
+                progressSteps: steps,
+                confirmButtonText: 'Tiếp tục',
+                // optional classes to avoid backdrop blinking between steps
+                showClass: { backdrop: 'swal2-noanimation' },
+                hideClass: { backdrop: 'swal2-noanimation' },
+            })
+                ; (async () => {
+                    const { value: currentMK } = await Queue.fire({
+                        currentProgressStep: 0,
+                        input: "password",
+                        inputLabel: "Nhập mật khẩu hiện tại",
+                        inputPlaceholder: "Mật khẩu hiện tại của bạn"
+                    });
+                    if (currentMK) {
+                        $.ajax({
+                            url: '/User/Quanlytaikhoan/CheckPassword',
+                            type: 'POST',
+                            data: { password: currentMK },
+                            success: function (result) {
+                                if (result.success) {
+                                    Step2()
+                                }
+                                else {
+                                    Swal.fire({
+                                        icon: "error",
+                                        width: 300,
+                                        text: "Sai mật khẩu",
+                                        showConfirmButton: false,
+                                        timer: 1000,
+                                    })
+                                }
+                            },
+                            error: function (error) {
+                                console.error(error);
+                            }
+                        });
+                    }
+                })()
+        })
     })
     $("#btnLoginNew").click(function () {
         var username, password;
@@ -145,7 +280,7 @@
                     data: JSON.stringify(data),
                     success: function (result) {
                         if (result.success) {
-                            checkRole();                            
+                            checkRole();
                             Toast.fire({
                                 icon: "success",
                                 title: "Đăng nhập thành công"
@@ -191,7 +326,7 @@
                     url: "/Guest/Home/Logout", // Đường dẫn đến action
                     method: "POST",
                     success: function (response) {
-                        checkRole();                        
+                        checkRole();
                         Toast.fire({
                             icon: "success",
                             title: "Đăng xuất thành công"
@@ -217,7 +352,7 @@
                 var url = "User/Home/SelectRoom";
                 window.location.href = url;
             } else {
-                
+
                 Toast.fire({
                     icon: "error",
                     title: "Không có quyền truy cập"
@@ -252,3 +387,4 @@
         }
     });
 </script>
+

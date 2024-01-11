@@ -12,63 +12,80 @@
             justify-content: center;
         }
     </style>
-    @{
-    if (ViewBag.settingRetest == false)
-    {
-    <small>
-        <span class="badge bg-danger">
-            <i class="bi-exclamation-triangle-fill"></i>
-            Không cho phép thi lại
-        </span>
-    </small>
-    }
-    else
-    {
-    <small>
-        <span class="badge bg-success">
-            <i class="bi-exclamation-triangle-fill"></i>
-            Cho phép thi lại
-        </span>
-    </small>
-    }
-}
+    <div class="col-12" style="text-align:center">
+        @{
+        if (ViewBag.settingRetest == false)
+        {
 
-<h1 class="display-6 mb-3">
+            <small>
+                <span class="badge bg-white text-dark">
+                    <i class="bi-exclamation-triangle-fill" style="color:red"></i>
+                    Không cho phép thi lại
+                </span>
+            </small>
+        }
+        else
+        {
+            <small>
+                <span class="badge bg-white text-dark">
+                    <i class="bi-exclamation-triangle-fill" style="color:green"></i>
+                    Cho phép thi lại
+                </span>
+            </small>
+        }
+    }
+</div>
+
+<h1 class="display-6 mt-2 mb-3">
     Chọn phòng thi
 </h1>
 
-<ul class="nav nav-pills center-pills my-2" id="pills-tab" role="tablist">
+
+
+<ul class="nav nav-pills nav-fill gap-2 p-1 small bg-white rounded-pill shadow-sm" id="pills-tab" role="tablist">
     <li class="nav-item" role="presentation">
-        <button class="nav-link active" id="pills-open-tab" data-coreui-toggle="pill" data-coreui-target="#pills-open" type="button" role="tab" aria-controls="pills-open" aria-selected="true">
+        <button class="nav-link rounded-pill active" id="pills-open-tab" data-coreui-toggle="pill" data-coreui-target="#pills-open" type="button" role="tab" aria-controls="pills-open" aria-selected="true">
             Đang mở
         </button>
     </li>
     <li class="nav-item" role="presentation">
-        <button class="nav-link" id="pills-close-tab" data-coreui-toggle="pill" data-coreui-target="#pills-close" type="button" role="tab" aria-controls="pills-close" aria-selected="false">
+        <button class="nav-link rounded-pill " id="pills-close-tab" data-coreui-toggle="pill" data-coreui-target="#pills-close" type="button" role="tab" aria-controls="pills-close" aria-selected="false">
             Đang đóng
         </button>
     </li>
     <li class="nav-item" role="presentation">
-        <button class="nav-link" id="pills-test-tab" data-coreui-toggle="pill" data-coreui-target="#pills-test" type="button" role="tab" aria-controls="pills-test" aria-selected="false">
+        <button class="nav-link rounded-pill " id="pills-test-tab" data-coreui-toggle="pill" data-coreui-target="#pills-test" type="button" role="tab" aria-controls="pills-test" aria-selected="false">
             Luyện tập
         </button>
     </li>
 </ul>
-<div class="tab-content" id="pills-tabContent">
+<div class="tab-content mt-3" id="pills-tabContent">
     <div class="tab-pane fade show active" id="pills-open" role="tabpanel" aria-labelledby="pills-open-tab" tabindex="0">
         @foreach (var item in Model.Where(x => x.Status == true))
         {
             <div class="card mb-2">
                 <div class="card-body">
-                    <h5 class="card-title">Phòng thi @item.Name</h5>
-                    <p class="card-text">Thời gian làm bài <span class="badge bg-light text-dark">@item.Time phút</span> <br> Ngày tạo <span class="badge bg-light text-dark">@item.DateCreate.ToString("dd/MM/yyyy")</span> </p>
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="card-title ">@item.Name</h5>
+                        <small  style="white-space:nowrap">
+                            <i class="bi-calendar3"></i>
+                            @item.DateCreate.ToString("dd/MM/yyyy")
+                        </small>
+                    </div>
+                    <p class="card-text mb-2" >
+                        <small  style="white-space:nowrap">
+                            <i class="bi-clock"></i>
+                            Thời gian làm bài @item.Time phút
+                        </small>
+                        <br>
+                    </p>
                     <input name="idPhong" value="@item.Id" hidden>
                     <button type="submit" class="btn btn-success btnBatdauthi"
                         data-idPhong="@item.Id"
                         data-tenPhong="@item.Name"
                         onclick="localStorage.removeItem('countdownTime');">
                         <i class="bi-play"></i>
-                        Bắt đầu
+                        Vào phòng thi
                     </button>
                 </div>
             </div>
@@ -79,11 +96,23 @@
         {
             <div class="card mb-2">
                 <div class="card-body">
-                    <h5 class="card-title">Phòng thi @item.Name</h5>
-                    <p class="card-text">Thời gian làm bài <span class="badge bg-light text-dark">@item.Time phút</span> <br> Ngày tạo <span class="badge bg-light text-dark">@item.DateCreate.ToString("dd/MM/yyyy")</span> </p>
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="card-title ">@item.Name</h5>
+                        <small  style="white-space:nowrap">
+                            <i class="bi-calendar3"></i>
+                            @item.DateCreate.ToString("dd/MM/yyyy")
+                        </small>
+                    </div>
+                    <p class="card-text mb-2">
+                        <small  style="white-space:nowrap">
+                            <i class="bi-clock"></i>
+                            Thời gian làm bài @item.Time phút
+                        </small>
+                        <br>
+                    </p>
                     <button type="button" class="btn btn-secondary" disabled>
                         <i class="bi-play"></i>
-                        Bắt đầu
+                        Vào phòng thi
                     </button>
                 </div>
             </div>
@@ -94,8 +123,20 @@
         {
             <div class="card mb-2">
                 <div class="card-body">
-                    <h5 class="card-title">Phòng thi @item.Name</h5>
-                    <p class="card-text">Thời gian làm bài <span class="badge bg-light text-dark">@item.Time phút</span> <br> Ngày tạo <span class="badge bg-light text-dark">@item.DateCreate.ToString("dd/MM/yyyy")</span> </p>
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="card-title ">@item.Name</h5>
+                        <small  style="white-space:nowrap">
+                            <i class="bi-calendar3"></i>
+                            @item.DateCreate.ToString("dd/MM/yyyy")
+                        </small>
+                    </div>
+                    <p class="card-text mb-2">
+                        <small  style="white-space:nowrap">
+                            <i class="bi-clock"></i>
+                            Thời gian làm bài @item.Time phút
+                        </small>
+                        <br>
+                    </p> 
                     <button type="button" class="btn btn-warning btnBatdauthithu"
                         data-idPhong="@item.Id"
                         data-tenPhong="@item.Name"
@@ -103,6 +144,7 @@
                         <i class="bi-play"></i>
                         Bắt đầu thi thử
                     </button>
+                   
                 </div>
             </div>
         }
@@ -123,46 +165,47 @@
             var idPhong = $(this).attr("data-idPhong");
             var tenPhong = $(this).attr("data-tenPhong");
 
-        swalWithBootstrapButtons
-            .fire({
-                title: "Bắt đầu?",
-                text: "Phòng thi " + tenPhong,
-                showCancelButton: true,
-                confirmButtonText: "Xác nhận",
-                cancelButtonText: "Huỷ bỏ",
-                reverseButtons: true,
-            })
-            .then((result) => {
-                if (result.isConfirmed) {
-                    $.ajax({
-                        url: "SelectRoom", // Đường dẫn đến action
-                        method: "POST",
-                        data: { idPhong: idPhong
-                            , categoryName: tenPhong
-                        }, // Dữ liệu gửi đi
-                        success: function (response) {
-                            if (response.success){
-                                var url = "Test";
-                                window.location.href = url;
-                            }
-                            else{
-                                Swal.fire({
-                                    icon: "error",
-                                    width: 300,
-                                    text: response.message,
-                                    showConfirmButton: false,
-                                    timer: 2000,
-                                });
-                            }        
+            swalWithBootstrapButtons
+                .fire({
+                    title: "Bắt đầu?",
+                    text: "Phòng thi " + tenPhong,
+                    showCancelButton: true,
+                    confirmButtonText: "Xác nhận",
+                    cancelButtonText: "Huỷ bỏ",
+                    reverseButtons: true,
+                })
+                .then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: "SelectRoom", // Đường dẫn đến action
+                            method: "POST",
+                            data: {
+                                idPhong: idPhong
+                                , categoryName: tenPhong
+                            }, // Dữ liệu gửi đi
+                            success: function (response) {
+                                if (response.success) {
+                                    var url = "Test";
+                                    window.location.href = url;
+                                }
+                                else {
+                                    Swal.fire({
+                                        icon: "error",
+                                        width: 300,
+                                        text: response.message,
+                                        showConfirmButton: false,
+                                        timer: 2000,
+                                    });
+                                }
 
-                        },
-                        error: function (error) {
-                            // Xử lý lỗi nếu có
-                            console.error("Error:", error);
-                        }
-                    });
-                }
-            });
+                            },
+                            error: function (error) {
+                                // Xử lý lỗi nếu có
+                                console.error("Error:", error);
+                            }
+                        });
+                    }
+                });
         });
 
         $(".btnBatdauthithu").click(function () {
@@ -209,6 +252,6 @@
                         });
                     }
                 });
-        })
+        })        
     });
 </script>

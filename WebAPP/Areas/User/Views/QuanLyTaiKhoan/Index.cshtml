@@ -4,7 +4,6 @@
     <partial name="PageUser/_sideBar" />
     }
     <h1 class="display-6 mb-2">
-        <i class="bi-chevron-down"></i>
         Thông tin tài khoản
     </h1>
     <div class="card col-xl-8">
@@ -57,7 +56,6 @@
     <script>
         $(document).ready(function () {
             $("#btnDoiMK").click(async function () {
-
                 async function Step2() {
                     const { value: newMK } = await Swal.fire({
                         currentProgressStep: 1,
@@ -97,10 +95,6 @@
                         });
                     }
                 }
-
-
-
-
                 const steps = ['1', '2']
                 const Queue = Swal.mixin({
                     progressSteps: steps,
@@ -141,7 +135,6 @@
                             });
                         }
                     })()
-
             })
         })
     </script>
