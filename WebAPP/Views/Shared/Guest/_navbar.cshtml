@@ -2,6 +2,10 @@
     .nav-link.active {
         border-bottom: 1px solid rgb(204, 0, 0);
     }
+
+    .custom-link {
+        cursor: pointer;
+    }
 </style>
 <nav class="navbar navbar-expand-lg bg-white">
     <div class="container-fluid">
@@ -14,16 +18,16 @@
         <div class="collapse navbar-collapse" id="navbarTogglerDemo02" style="text-align:center">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link " aria-current="page" href="#">Giới thiệu</a>
+                    <a id="pageIntro" class="nav-link" aria-current="page" asp-area="guest" asp-controller="home" asp-action="intro">Giới thiệu</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" asp-area="guest" asp-controller="home" asp-action="index">Tin tức</a>
+                    <a id="pageIndex" class="nav-link" aria-current="page" asp-area="guest" asp-controller="home" asp-action="index">Tin tức</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#" id="btnLuongThuong">Lương thưởng</a>
+                    <a class="nav-link custom-link" id="btnLuongThuong">Lương thưởng</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Tài liệu đào tạo</a>
+                    <a class="nav-link custom-link">Tài liệu đào tạo</a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-coreui-toggle="dropdown" aria-expanded="false">
@@ -31,7 +35,7 @@
                     </a>
                     <ul class="dropdown-menu" style="text-align:center">
                         <li>
-                            <a class="dropdown-item" href="#" id="btnTestPageUser">
+                            <a class="dropdown-item custom-link" id="btnTestPageUser">
                                 Truy cập
                             </a>
                         </li>
@@ -39,7 +43,7 @@
                             <hr class="dropdown-divider">
                         </li>
                         <li>
-                            <a class="dropdown-item text-danger" href="#" id="btnTestPageAdmin">
+                            <a class="dropdown-item text-danger custom-link" id="btnTestPageAdmin">
                                 <i class="bi-database-fill-lock"></i>
                                 Trang quản lý
                             </a>
@@ -47,12 +51,12 @@
                     </ul>
                 </li>
             </ul>
-            <button type="button" class="btn btn-primary rounded-pill" id="btnLoginNew">
+            <button type="button" class="btn btn-light rounded-pill" id="btnLoginNew">
                 <i class="bi-person-circle"></i>
                 Đăng nhập
             </button>
             <div class="btn-group" id="grgroupBtnLogoutNew">
-                <button type="button" class="btn dropdown-toggle rounded-pill" data-coreui-toggle="dropdown" aria-expanded="false" id="groupBtnLogoutNew">
+                <button type="button" class="btn dropdown-toggle rounded-pill bg-light shadow-sm" data-coreui-toggle="dropdown" aria-expanded="false" id="groupBtnLogoutNew">
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end" style="text-align:center">
                     <li>
@@ -85,7 +89,6 @@
 </nav>
 
 
-
 <div class="modal fade" id="staticBackdrop" data-coreui-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -94,6 +97,7 @@
         </div>
     </div>
 </div>
+
 
 
 <script>
@@ -114,14 +118,14 @@
                     $("#grgroupBtnLogoutNew").show();
                     if (data.role == "admin") {
                         localStorage.setItem("isAdmin", true);
-                        $("#groupBtnLogoutNew").html('<i class="bi-unlock-fill"></i> ' + (data.name || ''));
-                        $("#groupBtnLogoutNew").removeClass('text-white bg-primary');
-                        $("#groupBtnLogoutNew").addClass('text-white bg-danger');
+                        $("#groupBtnLogoutNew").html('<div class="avatar bg-warning">ADM<span class="avatar-status bg-success"></span></div> ' + (data.name || ''));
+                        //$("#groupBtnLogoutNew").removeClass('text-white bg-primary');
+                        //$("#groupBtnLogoutNew").addClass('text-white bg-danger');
                     } else if (data.role = "user") {
                         localStorage.setItem("isAdmin", false);
-                        $("#groupBtnLogoutNew").html('<i class="bi-person-fill"></i> ' + (data.name || ''));
-                        $("#groupBtnLogoutNew").removeClass('text-white bg-danger');
-                        $("#groupBtnLogoutNew").addClass('text-white bg-primary');
+                        $("#groupBtnLogoutNew").html('<div class="avatar text-bg-dark">USR<span class="avatar-status bg-success"></span></div> ' + (data.name || ''));
+                        //$("#groupBtnLogoutNew").removeClass('text-white bg-danger');
+                        //$("#groupBtnLogoutNew").addClass('text-white bg-primary');
                     }
                 }
                 if (data.name == null && data.role == null) {
@@ -136,7 +140,6 @@
             }
         });
     }
-
 
     $(document).ready(function () {
         checkRole();

@@ -4,12 +4,17 @@
 
     double percentProcessbar = ((double)thisQ / totalQTuLuan) * 100;
     string pP = percentProcessbar.ToString("0") + "%";
+
+    if(thisQ == totalQTuLuan)
+    {
+        pP = "100%";
+    }
 }
 <div class="progress-group">
     <div class="progress-group-header">
-        <i class="bi-mortarboard mx-1"></i>
-        <div>Phần thi trắc nghiệm</div>
-        <div class="ms-auto font-weight-bold"> @thisQ/@totalQTuLuan câu hỏi trắc nghiệm</div>
+        <small class="text-muted ">
+            Đã trả lời @thisQ / @totalQTuLuan câu hỏi
+        </small>
     </div>
     <div class="progress-group-bars">
         <div class="progress ">
@@ -18,9 +23,8 @@
     </div>
 </div>
 <div class="text-center text-muted mt-3">
-    <h4 class="display-6" style="font-size:larger">
+    <h1 class="display-6" style="font-size:larger">
         <br />
-        <i class="bi-check"></i>
-        Bạn đã hoàn thành phần thi tự luận
-    </h4>
+        Đã hoàn thành phần thi tự luận
+    </h1>
 </div>

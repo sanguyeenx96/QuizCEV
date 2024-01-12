@@ -13,7 +13,6 @@ using WebAPP.Services;
 namespace WebAPP.Areas.Guest.Controllers
 {
     [Area("Guest")]
-    [Authorize]
     [AllowAnonymous]
     public class HomeController : Controller
     {
@@ -35,6 +34,10 @@ namespace WebAPP.Areas.Guest.Controllers
                 hoten = User.FindFirst(ClaimTypes.Name).Value.ToString();
             }                  
             return Json(new { role = role, name= hoten });
+        }
+        public IActionResult Intro()
+        {
+            return View();
         }
 
         public IActionResult Index()
