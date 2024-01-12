@@ -101,9 +101,9 @@
     </div>
 </div>
 
-<div id="dongho" class="row col-12">
+<div id="dongho" class="row col-12 ms-2">
     <div class="col-8" style="display: grid; place-items: center;">
-        <button id="btnNopbai" class="btn btn-success text-white text-bold animate__animated animate__pulse animate__infinite shadow px-5 btn-lg" style="pointer-events: auto; height:100%;opacity:0.9">
+        <button id="btnNopbai" class="btn btn-success text-white text-bold animate__animated animate__pulse animate__infinite shadow btn-lg w-100" style="pointer-events: auto ;opacity:0.9">
             NỘP BÀI THI
         </button>
     </div>
@@ -285,7 +285,7 @@
 
         $(".btnCauhoituluan").click(function () {
             $.ajax({
-                url: 'TestingTuLuanVer2', // Add "Ver2"
+                url: 'TestingTuLuanVer2', // Add "Ver2" --> 
                 type: 'GET',
                 success: function (response) {
                     $("#examTuluan").html(response);

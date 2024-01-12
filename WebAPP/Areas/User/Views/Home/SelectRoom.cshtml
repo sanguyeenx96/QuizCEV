@@ -63,7 +63,7 @@
     <div class="tab-pane fade show active" id="pills-open" role="tabpanel" aria-labelledby="pills-open-tab" tabindex="0">
         @foreach (var item in Model.Where(x => x.Status == true))
         {
-            <div class="card mb-2">
+            <div class="card mb-2 shadow-sm">
                 <div class="card-body">
                     <div class="d-flex w-100 justify-content-between">
                         <h5 class="card-title ">@item.Name</h5>
@@ -94,7 +94,7 @@
     <div class="tab-pane fade" id="pills-close" role="tabpanel" aria-labelledby="pills-close-tab" tabindex="0">
         @foreach (var item in Model.Where(x => x.Status == false))
         {
-            <div class="card mb-2">
+            <div class="card mb-2 shadow-sm">
                 <div class="card-body">
                     <div class="d-flex w-100 justify-content-between">
                         <h5 class="card-title ">@item.Name</h5>
@@ -121,7 +121,7 @@
     <div class="tab-pane fade" id="pills-test" role="tabpanel" aria-labelledby="pills-test-tab" tabindex="0">
         @foreach (var item in Model)
         {
-            <div class="card mb-2">
+            <div class="card mb-2 shadow-sm">
                 <div class="card-body">
                     <div class="d-flex w-100 justify-content-between">
                         <h5 class="card-title ">@item.Name</h5>
