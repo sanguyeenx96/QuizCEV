@@ -1,25 +1,27 @@
 # QuizCEV
-- .Net Core 6 MVC 
+- .Net Core 6 MVC
+- Javascript
 - N-Layer architecture
 - MSSQL Server
 - EF Code First
 - Identity
 - Token, Tempdata, Session
 - DI
+- 
+![0](https://github.com/sanguyeenx96/QuizCEV/assets/103011257/b3610f72-7dc7-4e32-bb38-c5d08deaf742)
 
-![111](https://github.com/sanguyeenx96/QuizCEV/assets/103011257/831889c2-66ec-4632-9897-d6fbb33309db)
-![2222](https://github.com/sanguyeenx96/QuizCEV/assets/103011257/ecfd9a93-8560-4b76-91c8-1270652f7485)
-![1](https://github.com/sanguyeenx96/QuizCEV/assets/103011257/d1d2bbac-d513-494e-9d7b-527e997593af)
-![1](https://github.com/sanguyeenx96/QuizCEV/assets/103011257/f6418438-ffe9-4032-99e3-1c9fa4bdfba2)
-![2](https://github.com/sanguyeenx96/QuizCEV/assets/103011257/21ad1946-ac63-4bac-8bc9-c2164d0cf1f1)
-![2](https://github.com/sanguyeenx96/QuizCEV/assets/103011257/43919a34-8aca-41ed-aa09-7a3d0bd132f2)
-![3](https://github.com/sanguyeenx96/QuizCEV/assets/103011257/0660911b-3522-4bfe-838e-f8631823bd99)
-![4](https://github.com/sanguyeenx96/QuizCEV/assets/103011257/52c0da1a-8208-47b9-9ca0-2ccd38d5d208)
-![5](https://github.com/sanguyeenx96/QuizCEV/assets/103011257/ced96d6f-8494-49b5-8c93-5ca6925140aa)
-![6](https://github.com/sanguyeenx96/QuizCEV/assets/103011257/947d32bd-bcf3-4f55-b1c3-163081eb4c69)
-![7](https://github.com/sanguyeenx96/QuizCEV/assets/103011257/e35ed6ca-dd19-4057-973d-c33738155c92)
-![8](https://github.com/sanguyeenx96/QuizCEV/assets/103011257/e28f3258-47e6-4e36-bed1-e1fca4862b79)
-![9](https://github.com/sanguyeenx96/QuizCEV/assets/103011257/b7935fc1-39ce-4794-910c-cb879b913bc1)
-![10](https://github.com/sanguyeenx96/QuizCEV/assets/103011257/3e0d75b1-b2c6-483c-aaeb-6b7d953b65b2)
-![11](https://github.com/sanguyeenx96/QuizCEV/assets/103011257/c4ed4f1c-c4f2-489a-83a9-bc484db9ecf2)
-![12](https://github.com/sanguyeenx96/QuizCEV/assets/103011257/6bb49e1a-f878-4eb9-a3c5-53b0ebe7ea20)
+![1](https://github.com/sanguyeenx96/QuizCEV/assets/103011257/86794180-2aa8-4361-a896-9b2a9ded13f6)
+
+![2](https://github.com/sanguyeenx96/QuizCEV/assets/103011257/2e70d4f7-4c7e-4ac1-9d3f-7ea7a4f507f9)
+
+![3](https://github.com/sanguyeenx96/QuizCEV/assets/103011257/b9956b24-0dce-49b9-9e46-57524254b81b)
+
+![4](https://github.com/sanguyeenx96/QuizCEV/assets/103011257/58bbf918-3e10-4ea5-b5a9-4971226d776b)
+
+![5](https://github.com/sanguyeenx96/QuizCEV/assets/103011257/e923c03e-b200-4b3a-b948-9d286b689c56)
+
+![6](https://github.com/sanguyeenx96/QuizCEV/assets/103011257/4f45c476-6fab-4d99-834e-7fc211fa2454)
+
+![7](https://github.com/sanguyeenx96/QuizCEV/assets/103011257/d84de401-c200-4f6a-9364-4220676c8946)
+
+![8](https://github.com/sanguyeenx96/QuizCEV/assets/103011257/6af2a714-5f13-4e2c-88d4-43af2d5cdb7b)
