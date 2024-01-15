@@ -82,5 +82,11 @@ namespace Data.EF
         public DbSet<LogExamLoiTaiCongDoan> logExamLoiTaiCongDoans { get; set; }
         public DbSet<LogExamDoiSach> logExamDoiSaches { get; set; }
 
+        /// <summary>
+        /// Phần trang nhất tin tức
+        /// </summary>
+        public DbSet<PostCategory> postCategories { get; set; }
+        public DbSet<PostPost> postPosts { get; set; }
+
     }
 }

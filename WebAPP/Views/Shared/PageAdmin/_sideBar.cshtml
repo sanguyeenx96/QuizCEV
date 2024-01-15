@@ -3,20 +3,68 @@
 </style>
 <div class="sidebar sidebar-dark sidebar-fixed" id="sidebar">
     <div class="sidebar-brand d-none d-md-flex">
-        <span class="badge badge-sm bg-light text-dark m-2 ">
-            <i class="bi-unlock-fill"></i>
+        <button class="badge badge-lg bg-dark m-2 " disabled>
             Trang quản trị
-        </span>
+        </button>
     </div>
     <ul class="sidebar-nav" data-coreui="navigation" data-simplebar="">
-        <li class="nav-title">Thống kê</li>
+        <li class="nav-title">Bài đăng và tin tức</li>
+        <li class="nav-group" aria-expanded="false">
+            <a class="nav-link nav-group-toggle" href="#">
+                <i class="bi-folder2-open mx-3"></i>
+                Quản lý bài đăng
+            </a>
+            <ul class="nav-group-items" style="height: auto;">
+                <li class="nav-item">
+                    <a id="" class="nav-link" asp-action="category" asp-controller="post" asp-area="admin" style="font-size:small">
+                        Danh sách chủ đề
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a id="" class="nav-link" asp-action="list" asp-controller="question" asp-area="admin" style="font-size:small">
+                        Danh sách bài đăng
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a id="" class="nav-link" asp-action="createnewpost" asp-controller="post" asp-area="admin" style="font-size:small">
+                        Tạo bài đăng mới
+                    </a>
+                </li>                
+            </ul>
+        </li>
+
+        <li class="nav-group" aria-expanded="false">
+            <a class="nav-link nav-group-toggle" href="#">
+                <i class="bi-folder2-open mx-3"></i>
+                Quản lý tin tức
+            </a>
+            <ul class="nav-group-items" style="height: auto;">
+                <li class="nav-item">
+                    <a class="nav-link" asp-action="list" asp-controller="question" asp-area="admin" style="font-size:small">
+                        Danh sách tin tức
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a  class="nav-link" asp-action="create" asp-controller="question" asp-area="admin" style="font-size:small">
+                        Đăng tin tức mới
+                    </a>
+                </li>
+                
+            </ul>
+        </li>
+
+        <li class="nav-title">Quản lý lương thưởng  </li>
+
+        <li class="nav-title">Tài liệu đào tạo  </li>
+
+        <li class="nav-title">Kiểm tra đánh giá năng lực</li>
+
         <li class="nav-item">
             <a id="pageDiemsoThongke" class="nav-link" asp-action="index" asp-controller="thongke" asp-area="admin">
                 <i class="bi-clipboard-data mx-3"></i>
                 Điểm số & Thống kê
             </a>
         </li>
-        <li class="nav-title">Quản lý</li>
         <li class="nav-group" aria-expanded="false">
             <a class="nav-link nav-group-toggle" href="#">
                 <i class="bi-folder2-open mx-3"></i>
@@ -85,8 +133,7 @@
                     </a>
                 </li>
             </ul>
-        </li>     
-        <li class="nav-title">Cài đặt</li>
+        </li>
         <li class="nav-item">
             <a id="pageDiemsoThongke" class="nav-link" asp-action="index" asp-controller="setting" asp-area="admin">
                 <i class="bi-gear mx-3"></i>

@@ -11,6 +11,8 @@ using Application.LogExamDiemChuY;
 using Application.LogExamDoiSach;
 using Application.LogExamLoiTaiCongDoan;
 using Application.LogExamTrinhtuthaotac;
+using Application.Post.PostCategory;
+using Application.Post.PostPosts;
 using Application.Question;
 using Application.Role;
 using Application.Setting;
@@ -73,6 +75,9 @@ builder.Services.AddTransient<IDoiSachService, DoiSachService>();
 builder.Services.AddTransient<ILogExamDiemChuYService, LogExamDiemChuYService>();
 builder.Services.AddTransient<ILogExamLoiTaiCongDoanService, LogExamLoiTaiCongDoanService>();
 builder.Services.AddTransient<ILogExamDoiSachService, LogExamDoiSachService>();
+
+builder.Services.AddTransient<IPostCategoryService, PostCategoryService>();
+builder.Services.AddTransient<IPostPostService, PostPostsService>();
 
 
 

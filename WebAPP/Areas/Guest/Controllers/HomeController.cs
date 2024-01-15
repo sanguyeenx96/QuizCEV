@@ -23,27 +23,6 @@ namespace WebAPP.Areas.Guest.Controllers
             _userApiClient = userApiClient;
             _configuration = configuration;
         }
-        public IActionResult CheckRole()
-        {
-            string role = null;
-            string hoten = null;
-            string checkrole = HttpContext.Session.GetString("Role");
-            if (!string.IsNullOrEmpty(checkrole))
-            {
-                role = checkrole;
-                hoten = User.FindFirst(ClaimTypes.Name).Value.ToString();
-            }                  
-            return Json(new { role = role, name= hoten });
-        }
-        public IActionResult Intro()
-        {
-            return View();
-        }
-
-        public IActionResult Index()
-        {
-            return View();
-        }
 
         [HttpPost]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
@@ -85,6 +64,7 @@ namespace WebAPP.Areas.Guest.Controllers
                 return Json(new { success = false, message = "Tài khoản chưa được gán quyền" });
             }
         }
+
         private ClaimsPrincipal ValidateToken(string jwtToken)
         {
             IdentityModelEventSource.ShowPII = true;
@@ -111,6 +91,28 @@ namespace WebAPP.Areas.Guest.Controllers
 
             //return RedirectToAction("Login", "Login");
             return Json(new { success = true });
+        }
+
+        public IActionResult CheckRole()
+        {
+            string role = null;
+            string hoten = null;
+            string checkrole = HttpContext.Session.GetString("Role");
+            if (!string.IsNullOrEmpty(checkrole))
+            {
+                role = checkrole;
+                hoten = User.FindFirst(ClaimTypes.Name).Value.ToString();
+            }
+            return Json(new { role = role, name = hoten });
+        }
+
+        public IActionResult Index()
+        {
+            return View();
+        }
+        public IActionResult ViewPost()
+        {
+            return View();
         }
     }
 }
