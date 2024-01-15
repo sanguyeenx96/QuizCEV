@@ -29,27 +29,36 @@
                 <li class="nav-item">
                     <a class="nav-link custom-link">Tài liệu đào tạo</a>
                 </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-coreui-toggle="dropdown" aria-expanded="false">
-                        Kiểm tra đánh giá
-                    </a>
-                    <ul class="dropdown-menu" style="text-align:center">
-                        <li>
-                            <a class="dropdown-item custom-link" id="btnTestPageUser">
-                                Truy cập
-                            </a>
-                        </li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <li>
-                            <a class="dropdown-item text-danger custom-link" id="btnTestPageAdmin">
-                                <i class="bi-database-fill-lock"></i>
-                                Trang quản lý
-                            </a>
-                        </li>
-                    </ul>
+                <li class="nav-item">
+                    <a class="nav-link custom-link" id="btnTestPage">Kiểm tra đánh giá</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link custom-link" id="btnAdminPage" asp-area="admin" asp-controller="home" asp-action="index">
+                        Quản trị
+                    </a>
+                </li>
+
+                @* <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-coreui-toggle="dropdown" aria-expanded="false">
+                Kiểm tra đánh giá
+                </a>
+                <ul class="dropdown-menu" style="text-align:center">
+                <li>
+                <a class="dropdown-item custom-link" id="btnTestPageUser">
+                Truy cập
+                </a>
+                </li>
+                <li>
+                <hr class="dropdown-divider">
+                </li>
+                <li>
+                <a class="dropdown-item text-danger custom-link" id="btnTestPageAdmin">
+                <i class="bi-database-fill-lock"></i>
+                Trang quản lý
+                </a>
+                </li>
+                </ul>
+                </li>*@
             </ul>
             <button type="button" class="btn btn-light rounded-pill" id="btnLoginNew">
                 <i class="bi-person-circle"></i>
@@ -75,7 +84,7 @@
                     <li>
                         <hr class="dropdown-divider">
                     </li>
-                    
+
                     <li>
                         <button class="dropdown-item text-danger" type="button" id="btnLogoutNew">
                             <i class="bi-power"></i>
@@ -93,7 +102,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div id="contentModalTTTK">
-            </div>            
+            </div>
         </div>
     </div>
 </div>
@@ -103,7 +112,7 @@
 <script>
     const Toast = Swal.mixin({
         toast: true,
-        position: "top",
+        position: "top-right",
         showConfirmButton: false,
         timer: 1000,
         timerProgressBar: true,
@@ -121,11 +130,13 @@
                         $("#groupBtnLogoutNew").html('<div class="avatar bg-warning">ADM<span class="avatar-status bg-success"></span></div> ' + (data.name || ''));
                         //$("#groupBtnLogoutNew").removeClass('text-white bg-primary');
                         //$("#groupBtnLogoutNew").addClass('text-white bg-danger');
+                        $('#btnAdminPage').show();
                     } else if (data.role = "user") {
                         localStorage.setItem("isAdmin", false);
                         $("#groupBtnLogoutNew").html('<div class="avatar text-bg-dark">USR<span class="avatar-status bg-success"></span></div> ' + (data.name || ''));
                         //$("#groupBtnLogoutNew").removeClass('text-white bg-danger');
                         //$("#groupBtnLogoutNew").addClass('text-white bg-primary');
+                        $('#btnAdminPage').hide();
                     }
                 }
                 if (data.name == null && data.role == null) {
@@ -142,8 +153,9 @@
     }
 
     $(document).ready(function () {
+        $('#btnAdminPage').hide();
         checkRole();
-        $('#btnXemTTTK').click(function () {        
+        $('#btnXemTTTK').click(function () {
             $.ajax({
                 url: '/User/QuanLyTaiKhoan/GetTTTK',
                 type: 'GET',
@@ -345,9 +357,7 @@
         });
     });
 
-
-
-    $("#btnTestPageUser").click(function () {
+    $("#btnTestPage").click(function () {
         const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
         if (isLoggedIn) {
             const isAdmin = localStorage.getItem("isAdmin") === "true";
@@ -355,10 +365,9 @@
                 var url = "User/Home/SelectRoom";
                 window.location.href = url;
             } else {
-
                 Toast.fire({
                     icon: "error",
-                    title: "Không có quyền truy cập"
+                    title: "Chỉ tài khoản người dùng được phép truy cập chức năng!"
                 });
             }
         } else {
@@ -369,25 +378,47 @@
         }
     });
 
-    $("#btnTestPageAdmin").click(function () {
-        const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
-        if (isLoggedIn) {
-            const isAdmin = localStorage.getItem("isAdmin") === "true";
-            if (isAdmin) {
-                var url = "Admin/thongke/Index";
-                window.location.href = url;
-            } else {
-                Toast.fire({
-                    icon: "error",
-                    title: "Không có quyền truy cập"
-                });
-            }
-        } else {
-            Toast.fire({
-                icon: "error",
-                title: "Cần đăng nhập để truy cập"
-            });
-        }
-    });
+        //$("#btnTestPageUser").click(function () {
+        //    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+        //    if (isLoggedIn) {
+        //        const isAdmin = localStorage.getItem("isAdmin") === "true";
+        //        if (!isAdmin) {
+        //            var url = "User/Home/SelectRoom";
+        //            window.location.href = url;
+        //        } else {
+
+        //            Toast.fire({
+        //                icon: "error",
+        //                title: "Không có quyền truy cập"
+        //            });
+        //        }
+        //    } else {
+        //        Toast.fire({
+        //            icon: "error",
+        //            title: "Cần đăng nhập để truy cập"
+        //        });
+        //    }
+        //});
+
+        //$("#btnTestPageAdmin").click(function () {
+        //    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+        //    if (isLoggedIn) {
+        //        const isAdmin = localStorage.getItem("isAdmin") === "true";
+        //        if (isAdmin) {
+        //            var url = "Admin/thongke/Index";
+        //            window.location.href = url;
+        //        } else {
+        //            Toast.fire({
+        //                icon: "error",
+        //                title: "Không có quyền truy cập"
+        //            });
+        //        }
+        //    } else {
+        //        Toast.fire({
+        //            icon: "error",
+        //            title: "Cần đăng nhập để truy cập"
+        //        });
+        //    }
+        //});
 </script>
 
