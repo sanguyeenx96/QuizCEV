@@ -11,6 +11,7 @@ namespace Data.Entities
         public int Id { get; set; }
         public string Title { set; get; }
         public string Description { set; get; }
+        public string? ThumbImage { set; get; }
         public string Content { set; get; }
         public DateTime DateCreated { set; get; }
         public DateTime DateUpdated { set; get; }

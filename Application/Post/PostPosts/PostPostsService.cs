@@ -25,16 +25,17 @@ namespace Application.Post.PostPosts
         {
             _context = context;
         }
-        public async Task<ApiResult<int>> Create(PostPostsCreateRequest request)
+        public async Task<ApiResult<bool>> Create(PostPostsCreateRequest request)
         {
             var checkDuplicateName = await _context.postPosts.Where(x =>(x.Title == request.Title && x.PostCategoryId == request.PostCategoryId)).FirstOrDefaultAsync();
             if (checkDuplicateName != null)
-                return new ApiErrorResult<int>("Tiêu đề này đã tồn tại trong chủ đề");
+                return new ApiErrorResult<bool>("Tiêu đề này đã tồn tại trong chủ đề");
 
             var newPost = new Data.Entities.PostPost()
             {
                 Title = request.Title,
                 Description = request.Description,
+                ThumbImage = request.ThumbImage,
                 Content = request.Content,
                 DateCreated = DateTime.Now,
                 DateUpdated = DateTime.Now,
@@ -43,7 +44,7 @@ namespace Application.Post.PostPosts
             };
             _context.postPosts.Add(newPost);
             await _context.SaveChangesAsync();
-            return new ApiSuccessResult<int> { Id = newPost.Id };
+            return new ApiSuccessResult<bool>();
         }
 
         public async Task<ApiResult<bool>> Delete(int id)
@@ -63,6 +64,7 @@ namespace Application.Post.PostPosts
                 Id = x.Id,
                 Title = x.Title,
                 Description = x.Description,
+                ThumbImage =x.ThumbImage,
                 Content = x.Content,
                 DateCreated = x.DateCreated,
                 DateUpdated = x.DateUpdated,
@@ -72,25 +74,25 @@ namespace Application.Post.PostPosts
             return new ApiSuccessResult<List<PostPostsVm>>(result);
         }
 
-        public async Task<ApiResult<List<PostPostsVm>>> GetAllByCategory(int id)
+        public async Task<ApiResult<List<PostWithOutContentVm>>> GetAllByCategory(int id)
         {
             var category = await _context.postCategories.FindAsync(id);
             if (category == null)
-                return new ApiErrorResult<List<PostPostsVm>>($"Không tìm thấy Category có id {id}");
+                return new ApiErrorResult<List<PostWithOutContentVm>>($"Không tìm thấy Category có id {id}");
             var result = _context.postPosts.Where(x => x.PostCategoryId == id);
             // Projecting the data into the desired ViewModel
-            var listPost = await result.Select(x => new PostPostsVm
+            var listPost = await result.Select(x => new PostWithOutContentVm
             {
                 Id = x.Id,
                 Title = x.Title,
                 Description = x.Description,
-                Content = x.Content,
+                ThumbImage = x.ThumbImage,
                 DateCreated = x.DateCreated,
                 DateUpdated = x.DateUpdated,
                 ViewCount = x.ViewCount,
                 PostCategoryId = x.PostCategoryId
             }).ToListAsync();
-            return new ApiSuccessResult<List<PostPostsVm>>(listPost);
+            return new ApiSuccessResult<List<PostWithOutContentVm>>(listPost);
         }
 
         public async  Task<ApiResult<PostPostsVm>> GetById(int id)
@@ -103,6 +105,7 @@ namespace Application.Post.PostPosts
                 Id = post.Id,
                 Title = post.Title,
                 Description = post.Description,
+                ThumbImage = post.ThumbImage,
                 Content = post.Content,
                 DateCreated = post.DateCreated,
                 DateUpdated = post.DateUpdated,
@@ -122,6 +125,17 @@ namespace Application.Post.PostPosts
             post.Content = request.Content;
             post.DateUpdated = DateTime.Now;
             post.PostCategoryId = request.PostCategoryId;
+            _context.postPosts.Update(post);
+            await _context.SaveChangesAsync();
+            return new ApiSuccessResult<bool>();
+        }
+
+        public async Task<ApiResult<bool>> UpdateThumbImage(int id, PostPostThumbImageUpdate request)
+        {
+            var post = await _context.postPosts.FindAsync(id);
+            if (post == null)
+                return new ApiErrorResult<bool>($"Không tìm thấy post có id {id}");
+            post.ThumbImage = request.ThumbImage;        
             _context.postPosts.Update(post);
             await _context.SaveChangesAsync();
             return new ApiSuccessResult<bool>();

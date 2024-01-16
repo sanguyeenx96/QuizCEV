@@ -18,10 +18,12 @@ namespace WebAPP.Areas.Guest.Controllers
     {
         private readonly IConfiguration _configuration;
         private readonly IUserApiClient _userApiClient;
-        public HomeController(IUserApiClient userApiClient, IConfiguration configuration)
+        private readonly IPostPostsApiClient _postPostsApiClient;
+        public HomeController(IUserApiClient userApiClient, IConfiguration configuration, IPostPostsApiClient postPostsApiClient)
         {
             _userApiClient = userApiClient;
             _configuration = configuration;
+            _postPostsApiClient = postPostsApiClient;
         }
 
         [HttpPost]
@@ -113,6 +115,14 @@ namespace WebAPP.Areas.Guest.Controllers
         public IActionResult ViewPost()
         {
             return View();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Get6News()
+        {
+            var resultAll = await _postPostsApiClient.GetAll();
+            var result = resultAll.ResultObj.Take(6).ToList();
+            return PartialView("guest/index/_tintuc", result);
         }
     }
 }

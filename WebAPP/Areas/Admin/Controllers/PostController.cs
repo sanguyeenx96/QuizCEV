@@ -87,7 +87,7 @@ namespace WebAPP.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreatePost(PostPostsCreateRequest request)
+        public async Task<IActionResult> CreatePost([FromBody] PostPostsCreateRequest request)
         {
             var result = await _postPostsApiClient.Create(request);
             if (!result.IsSuccessed)
@@ -97,8 +97,64 @@ namespace WebAPP.Areas.Admin.Controllers
             return Json(new { success = true });
         }
 
+        public async Task<IActionResult> ListPost(int postCategoryId)
+        {          
+            var result = await _postCategoryApiClient.GetAll();
+            ViewBag.selectChude = result.ResultObj.Select(x => new SelectListItem()
+            {
+                Text = x.Title,
+                Value = x.Id.ToString()
+            });
+            ViewBag.thisPage = "Danh sách bài đăng";
+            var listPostWithOutContent = await _postPostsApiClient.GetAllByCategory(postCategoryId);
+            ViewBag.SelectedCategoryId = postCategoryId.ToString();
+            return View(listPostWithOutContent.ResultObj);
+        }
 
+        [HttpPost]
+        public async Task<IActionResult> UpdateThumbImage(int id, PostPostThumbImageUpdate request)
+        {
+            var result = await _postPostsApiClient.UpdateThumbImage(id,request);
+            if (!result.IsSuccessed)
+            {
+                return Json(new { success = false, message = result.Message });
+            }
+            return Json(new { success = true });
+        }
 
+        public async Task<IActionResult> UpdatePost(int id)
+        {
+            ViewBag.thisPage = "Sửa bài đăng";
+            var resultChude = await _postCategoryApiClient.GetAll();
+            ViewBag.selectChude = resultChude.ResultObj.Select(x => new SelectListItem()
+            {
+                Text = x.Title,
+                Value = x.Id.ToString()
+            });
+            var result = await _postPostsApiClient.GetById(id);
+            return View(result.ResultObj);
+        }
 
+        [HttpPost]
+        public async Task<IActionResult> UpdatePostContent( int id,[FromBody] PostPostsUpdateRequest request)
+        {
+            var result = await _postPostsApiClient.Update(id,request);
+            if (!result.IsSuccessed)
+            {
+                return Json(new { success = false, message = result.Message });
+            }
+            return Json(new { success = true });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeletePost(int id)
+        {
+            var result = await _postPostsApiClient.Delete(id);
+            if (!result.IsSuccessed)
+            {
+                return Json(new { success = false, message = result.Message });
+            }
+            return Json(new { success = true });
+        }
     }
 }

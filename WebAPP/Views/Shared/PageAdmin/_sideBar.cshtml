@@ -8,6 +8,12 @@
         </button>
     </div>
     <ul class="sidebar-nav" data-coreui="navigation" data-simplebar="">
+        <li class="nav-item">
+            <a id="pageDiemsoThongke" class="nav-link" asp-action="index" asp-controller="home" asp-area="admin">
+                <i class="bi-speedometer2 mx-3"></i>
+                Dashboard
+            </a>
+        </li>
         <li class="nav-title">Bài đăng và tin tức</li>
         <li class="nav-group" aria-expanded="false">
             <a class="nav-link nav-group-toggle" href="#">
@@ -21,7 +27,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a id="" class="nav-link" asp-action="list" asp-controller="question" asp-area="admin" style="font-size:small">
+                    <a id="" class="nav-link" asp-action="listpost" asp-controller="post" asp-area="admin" style="font-size:small">
                         Danh sách bài đăng
                     </a>
                 </li>

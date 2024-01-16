@@ -6,11 +6,18 @@
 <div class="container-fluid">
     <div class="row g-3">
         <div class="col-12 mt-4">
-            <partial name="Guest/Index/_tintuc" />
+            <div id="News"></div>
         </div>
         <div class="col-12">
             <partial name="Guest/Index/_thongbao" />
-        </div>
-       
+        </div>   
     </div>
 </div>
+
+<script>
+    $(document).ready(function(){
+        $.get("/guest/home/Get6News", function (result) {
+            $("#News").html(result);
+        });
+    })
+</script>

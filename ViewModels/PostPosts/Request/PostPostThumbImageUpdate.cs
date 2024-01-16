@@ -6,12 +6,9 @@ using System.Threading.Tasks;
 
 namespace ViewModels.PostPosts.Request
 {
-    public class PostPostsCreateRequest
+    public class PostPostThumbImageUpdate
     {
-        public int PostCategoryId { get; set; }
-        public string Title { set; get; }
-        public string Description { set; get; }
         public string ThumbImage { get; set; }
-        public string Content { set; get; }
+
     }
 }

@@ -1,4 +1,6 @@
-﻿<style>
+﻿@model List<ViewModels.PostPosts.Response.PostPostsVm>
+
+<style>
     .image-link {
         display: block;
         width: 100%;
@@ -13,7 +15,22 @@
             position: absolute;
             top: 0;
             left: 0;
-        }   
+        }
+
+    .equal-height-row {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .equal-height-col {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .card {
+        flex: 1;
+    }
+
 </style>
 <section>
     <div class="container">
@@ -26,389 +43,75 @@
     </div>
     <div class="container overflow-hidden">
         <div class="row gy-4 gy-lg-0 equal-height-row">
-            <div class="col-12 col-lg-4 col-md-6 mb-4  animate__animated animate__fadeIn">
-                <article>
-                    <div class="card border-0">
-                        <figure class="card-img-top m-0 overflow-hidden bsb-overlay-hover">
-                            <a href="#!" class="image-link">
-                                <img class="img-fluid bsb-scale bsb-hover-scale-up" loading="lazy" src="~/industrial-gr05.jpg" alt="Living">
-                            </a>
-                            <figcaption>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-eye text-white bsb-hover-fadeInDown" viewBox="0 0 16 16">
-                                    <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z" />
-                                    <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z" />
-                                </svg>
-                                <h4 class="h6 text-white bsb-hover-fadeInUp mt-2">Xem chi tiết</h4>
-                            </figcaption>
-                        </figure>
-                        <div class="card-body border bg-white p-4">
-                            <div class="entry-header mb-3">
-                                <ul class="entry-meta list-unstyled d-flex mb-2">
+            @foreach (var item in Model)
+            {
+                <div class="col-12 col-lg-4 col-md-6 mb-4 equal-height-col animate__animated animate__fadeIn">
+                    <article class="card border-0">
+                        <div class="card border-0">
+                            <figure class="card-img-top m-0 overflow-hidden bsb-overlay-hover">
+                                <a href="#!" class="image-link">
+                                    <img class="img-fluid bsb-scale bsb-hover-scale-up" loading="lazy" src="@item.ThumbImage" >
+                                </a>
+                                <figcaption>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-eye text-white bsb-hover-fadeInDown" viewBox="0 0 16 16">
+                                        <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z" />
+                                        <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z" />
+                                    </svg>
+                                    <h4 class="h6 text-white bsb-hover-fadeInUp mt-2">Xem chi tiết</h4>
+                                </figcaption>
+                            </figure>
+                            <div class="card-body border bg-white p-4">
+                                <div class="entry-header mb-3">
+                                    <ul class="entry-meta list-unstyled d-flex mb-2">
+                                        <li>
+                                            <a class="link-primary text-decoration-none" href="#!">
+                                                PDE
+                                            </a>
+                                        </li>
+                                    </ul>
+                                    <h2 class="card-title entry-title h4 mb-0">
+                                        <a class="link-dark text-decoration-none" href="#!">
+                                            @item.Title
+                                        </a>
+                                    </h2>
+                                </div>
+                                <p class="card-text entry-summary text-secondary mb-3">
+                                    @item.Description
+                                </p>
+                                <a asp-action="viewpost" class="btn btn-outline-primary m-0 text-nowrap">Xem chi tiết</a>
+                            </div>
+                            <div class="card-footer border border-top-0 bg-light p-4">
+                                <ul class="entry-meta list-unstyled d-flex align-items-center m-0">
                                     <li>
-                                        <a class="link-primary text-decoration-none" href="#!">
-                                            PDE 
+                                        <a class="fs-7 link-secondary text-decoration-none d-flex align-items-center" href="#!">
+                                            <i class="bi-calendar3"></i>
+                                            <span class="ms-2 fs-7">
+                                                @item.DateCreated.ToShortDateString()
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <span class="px-3">&bull;</span>
+                                    </li>
+                                    <li>
+                                        <a class="link-secondary text-decoration-none d-flex align-items-center" href="#!">
+                                            <i class="bi-eye"></i>
+                                            <span class="ms-2 fs-7">
+                                                @item.ViewCount
+                                            </span>
                                         </a>
                                     </li>
                                 </ul>
-                                <h2 class="card-title entry-title h4 mb-0">
-                                    <a class="link-dark text-decoration-none" href="#!">
-                                       Tăng hiệu quả sản xuất năm 2024
-                                    </a>
-                                </h2>
                             </div>
-                            <p class="card-text entry-summary text-secondary mb-3">
-                                Learn how a marketing coach earned six figures by 20, primarily through 1:1 sales. Her insights provide...
-                            </p>
-                            <a asp-action="viewpost" class="btn btn-outline-primary m-0 text-nowrap entry-more">Xem chi tiết</a>
                         </div>
-                        <div class="card-footer border border-top-0 bg-light p-4">
-                            <ul class="entry-meta list-unstyled d-flex align-items-center m-0">
-                                <li>
-                                    <a class="fs-7 link-secondary text-decoration-none d-flex align-items-center" href="#!">
-                                        <i class="bi-calendar3"></i>
-                                        <span class="ms-2 fs-7">09/01/2024</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <span class="px-3">&bull;</span>
-                                </li>
-                                <li>
-                                    <a class="link-secondary text-decoration-none d-flex align-items-center" href="#!">
-                                        <i class="bi-eye"></i>
-                                        <span class="ms-2 fs-7">67</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </article>
-            </div>
+                    </article>
+                </div>
 
-            <div class="col-12 col-lg-4 col-md-6 mb-4  animate__animated animate__fadeIn">
-                <article>
-                    <div class="card border-0">
-                        <figure class="card-img-top m-0 overflow-hidden bsb-overlay-hover">
-                            <a href="#!" class="image-link">
-                                <img class="img-fluid bsb-scale bsb-hover-scale-up" loading="lazy" src="~/nhatrac.png" alt="Living">
-                            </a>
-                            <figcaption>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-eye text-white bsb-hover-fadeInDown" viewBox="0 0 16 16">
-                                    <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z" />
-                                    <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z" />
-                                </svg>
-                                <h4 class="h6 text-white bsb-hover-fadeInUp mt-2">Xem chi tiết</h4>
-                            </figcaption>
-                        </figure>
-                        <div class="card-body border bg-white p-4">
-                            <div class="entry-header mb-3">
-                                <ul class="entry-meta list-unstyled d-flex mb-2">
-                                    <li>
-                                        <a class="link-primary text-decoration-none" href="#!">
-                                            ALL
-                                        </a>
-                                    </li>
-                                </ul>
-                                <h2 class="card-title entry-title h4 mb-0">
-                                    <a class="link-dark text-decoration-none" href="#!">
-                                        Hoạt động môi trường năm 2023
-                                    </a>
-                                </h2>
-                            </div>
-                            <p class="card-text entry-summary text-secondary mb-3">
-                                Learn how a marketing coach earned six figures by 20, primarily through 1:1 sales. Her insights provide...
-                            </p>
-                            <a href="#!" class="btn btn-outline-primary m-0 text-nowrap entry-more">Xem chi tiết</a>
-                        </div>
-                        <div class="card-footer border border-top-0 bg-light p-4">
-                            <ul class="entry-meta list-unstyled d-flex align-items-center m-0">
-                                <li>
-                                    <a class="fs-7 link-secondary text-decoration-none d-flex align-items-center" href="#!">
-                                        <i class="bi-calendar3"></i>
-                                        <span class="ms-2 fs-7">28/12/2023</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <span class="px-3">&bull;</span>
-                                </li>
-                                <li>
-                                    <a class="link-secondary text-decoration-none d-flex align-items-center" href="#!">
-                                        <i class="bi-eye"></i>
-                                        <span class="ms-2 fs-7">667</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </article>
-            </div>
+            }
 
-            <div class="col-12 col-lg-4 col-md-6 mb-4  animate__animated animate__fadeIn">
-                <article>
-                    <div class="card border-0">
-                        <figure class="card-img-top m-0 overflow-hidden bsb-overlay-hover">
-                            <a href="#!" class="image-link">
-                                <img class="img-fluid bsb-scale bsb-hover-scale-up" loading="lazy" src="~/congdoan.jpg" alt="Living">
-                            </a>
-                            <figcaption>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-eye text-white bsb-hover-fadeInDown" viewBox="0 0 16 16">
-                                    <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z" />
-                                    <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z" />
-                                </svg>
-                                <h4 class="h6 text-white bsb-hover-fadeInUp mt-2">Xem chi tiết</h4>
-                            </figcaption>
-                        </figure>
-                        <div class="card-body border bg-white p-4">
-                            <div class="entry-header mb-3">
-                                <ul class="entry-meta list-unstyled d-flex mb-2">
-                                    <li>
-                                        <a class="link-primary text-decoration-none" href="#!">
-                                            ALL
-                                        </a>
-                                    </li>
-                                </ul>
-                                <h2 class="card-title entry-title h4 mb-0">
-                                    <a class="link-dark text-decoration-none" href="#!">
-                                        Hoạt động công đoàn năm 2023
-                                    </a>
-                                </h2>
-                            </div>
-                            <p class="card-text entry-summary text-secondary mb-3">
-                                Learn how a marketing coach earned six figures by 20, primarily through 1:1 sales. Her insights provide...
-                            </p>
-                            <a href="#!" class="btn btn-outline-primary m-0 text-nowrap entry-more">Xem chi tiết</a>
-                        </div>
-                        <div class="card-footer border border-top-0 bg-light p-4">
-                            <ul class="entry-meta list-unstyled d-flex align-items-center m-0">
-                                <li>
-                                    <a class="fs-7 link-secondary text-decoration-none d-flex align-items-center" href="#!">
-                                        <i class="bi-calendar3"></i>
-                                        <span class="ms-2 fs-7">10/12/2023</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <span class="px-3">&bull;</span>
-                                </li>
-                                <li>
-                                    <a class="link-secondary text-decoration-none d-flex align-items-center" href="#!">
-                                        <i class="bi-eye"></i>
-                                        <span class="ms-2 fs-7">627</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </article>
-            </div>
 
-            <div class="col-12 col-lg-4 col-md-6 mb-4  animate__animated animate__fadeIn">
-                <article>
-                    <div class="card border-0">
-                        <figure class="card-img-top m-0 overflow-hidden bsb-overlay-hover">
-                            <a href="#!" class="image-link">
-                                <img class="img-fluid bsb-scale bsb-hover-scale-up" loading="lazy" src="~/qua2010.jpg" alt="Living">
-                            </a>
-                            <figcaption>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-eye text-white bsb-hover-fadeInDown" viewBox="0 0 16 16">
-                                    <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z" />
-                                    <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z" />
-                                </svg>
-                                <h4 class="h6 text-white bsb-hover-fadeInUp mt-2">Xem chi tiết</h4>
-                            </figcaption>
-                        </figure>
-                        <div class="card-body border bg-white p-4">
-                            <div class="entry-header mb-3">
-                                <ul class="entry-meta list-unstyled d-flex mb-2">
-                                    <li>
-                                        <a class="link-primary text-decoration-none" href="#!">
-                                            ALL
-                                        </a>
-                                    </li>
-                                </ul>
-                                <h2 class="card-title entry-title h4 mb-0">
-                                    <a class="link-dark text-decoration-none" href="#!">
-                                        Hoạt động tặng quà 20/10
-                                    </a>
-                                </h2>
-                            </div>
-                            <p class="card-text entry-summary text-secondary mb-3">
-                                Learn how a marketing coach earned six figures by 20, primarily through 1:1 sales. Her insights provide...
-                            </p>
-                            <a href="#!" class="btn btn-outline-primary m-0 text-nowrap entry-more">Xem chi tiết</a>
-                        </div>
-                        <div class="card-footer border border-top-0 bg-light p-4">
-                            <ul class="entry-meta list-unstyled d-flex align-items-center m-0">
-                                <li>
-                                    <a class="fs-7 link-secondary text-decoration-none d-flex align-items-center" href="#!">
-                                        <i class="bi-calendar3"></i>
-                                        <span class="ms-2 fs-7">20/10/2023</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <span class="px-3">&bull;</span>
-                                </li>
-                                <li>
-                                    <a class="link-secondary text-decoration-none d-flex align-items-center" href="#!">
-                                        <i class="bi-eye"></i>
-                                        <span class="ms-2 fs-7">674</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </article>
-            </div>
-
-            <div class="col-12 col-lg-4 col-md-6 mb-4  animate__animated animate__fadeIn">
-                <article>
-                    <div class="card border-0">
-                        <figure class="card-img-top m-0 overflow-hidden bsb-overlay-hover">
-                            <a href="#!" class="image-link">
-                                <img class="img-fluid bsb-scale bsb-hover-scale-up" loading="lazy" src="~/daotao.jpg" alt="Living">
-                            </a>
-                            <figcaption>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-eye text-white bsb-hover-fadeInDown" viewBox="0 0 16 16">
-                                    <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z" />
-                                    <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z" />
-                                </svg>
-                                <h4 class="h6 text-white bsb-hover-fadeInUp mt-2">Xem chi tiết</h4>
-                            </figcaption>
-                        </figure>
-                        <div class="card-body border bg-white p-4">
-                            <div class="entry-header mb-3">
-                                <ul class="entry-meta list-unstyled d-flex mb-2">
-                                    <li>
-                                        <a class="link-primary text-decoration-none" href="#!">
-                                            TRAINING
-                                        </a>
-                                    </li>
-                                </ul>
-                                <h2 class="card-title entry-title h4 mb-0">
-                                    <a class="link-dark text-decoration-none" href="#!">
-                                        Đào tạo sinh viên mới 2023
-                                    </a>
-                                </h2>
-                            </div>
-                            <p class="card-text entry-summary text-secondary mb-3">
-                                Learn how a marketing coach earned six figures by 20, primarily through 1:1 sales. Her insights provide...
-                            </p>
-                            <a href="#!" class="btn btn-outline-primary m-0 text-nowrap entry-more">Xem chi tiết</a>
-                        </div>
-                        <div class="card-footer border border-top-0 bg-light p-4">
-                            <ul class="entry-meta list-unstyled d-flex align-items-center m-0">
-                                <li>
-                                    <a class="fs-7 link-secondary text-decoration-none d-flex align-items-center" href="#!">
-                                        <i class="bi-calendar3"></i>
-                                        <span class="ms-2 fs-7">20/10/2023</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <span class="px-3">&bull;</span>
-                                </li>
-                                <li>
-                                    <a class="link-secondary text-decoration-none d-flex align-items-center" href="#!">
-                                        <i class="bi-eye"></i>
-                                        <span class="ms-2 fs-7">674</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </article>
-            </div>
-
-            <div class="col-12 col-lg-4 col-md-6 mb-4  animate__animated animate__fadeIn">
-                <article>
-                    <div class="card border-0">
-                        <figure class="card-img-top m-0 overflow-hidden bsb-overlay-hover">
-                            <a href="#!" class="image-link">
-                                <img class="img-fluid bsb-scale bsb-hover-scale-up" loading="lazy" src="~/pccc.jpg" alt="Living">
-                            </a>
-                            <figcaption>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-eye text-white bsb-hover-fadeInDown" viewBox="0 0 16 16">
-                                    <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z" />
-                                    <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z" />
-                                </svg>
-                                <h4 class="h6 text-white bsb-hover-fadeInUp mt-2">Xem chi tiết</h4>
-                            </figcaption>
-                        </figure>
-                        <div class="card-body border bg-white p-4">
-                            <div class="entry-header mb-3">
-                                <ul class="entry-meta list-unstyled d-flex mb-2">
-                                    <li>
-                                        <a class="link-primary text-decoration-none" href="#!">
-                                            ALL
-                                        </a>
-                                    </li>
-                                </ul>
-                                <h2 class="card-title entry-title h4 mb-0">
-                                    <a class="link-dark text-decoration-none" href="#!">
-                                        Diễn tập chống cháy nổ
-                                    </a>
-                                </h2>
-                            </div>
-                            <p class="card-text entry-summary text-secondary mb-3">
-                                Learn how a marketing coach earned six figures by 20, primarily through 1:1 sales. Her insights provide...
-                            </p>
-                            <a href="#!" class="btn btn-outline-primary m-0 text-nowrap entry-more">Xem chi tiết</a>
-                        </div>
-                        <div class="card-footer border border-top-0 bg-light p-4">
-                            <ul class="entry-meta list-unstyled d-flex align-items-center m-0">
-                                <li>
-                                    <a class="fs-7 link-secondary text-decoration-none d-flex align-items-center" href="#!">
-                                        <i class="bi-calendar3"></i>
-                                        <span class="ms-2 fs-7">20/10/2023</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <span class="px-3">&bull;</span>
-                                </li>
-                                <li>
-                                    <a class="link-secondary text-decoration-none d-flex align-items-center" href="#!">
-                                        <i class="bi-eye"></i>
-                                        <span class="ms-2 fs-7">674</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </article>
-            </div>
         </div>
-      
+
     </div>
 </section>
 
-@*<script>
-    $(".thean").hide();
-
-    $(document).ready(function () {
-        $('#hienthean').click(function () {
-            var theanElement = $(".thean");
-            var thehienElement = $(".thehien");
-            var hientheanElement = $(".hienthean");
-            // Kiểm tra xem phần tử có class .thean có đang hiển thị hay không
-            var isTheanVisible = theanElement.is(":visible");
-            // Nếu đang hiển thị, ẩn đi và thay đổi văn bản
-            if (isTheanVisible) {
-                $('html, body').animate({
-                    scrollTop: thehienElement.offset().top - 150
-                }, 100);
-                theanElement.hide();
-                $('#chuanhien').text('Tải thêm');
-                $("#hienthean").removeClass("bi-chevron-up");
-                // Thêm class mới
-                $("#hienthean").addClass("bi-chevron-down");
-            } else {
-                // Nếu không hiển thị, hiển thị và cuộn trang
-                theanElement.show();
-                $('html, body').animate({
-                    scrollTop: theanElement.offset().top - 150
-                }, 100);
-                $('#chuanhien').text('Thu gọn');
-                $("#hienthean").removeClass("bi-chevron-down");
-                // Thêm class mới
-                $("#hienthean").addClass("bi-chevron-up");
-            }            
-        });
-    });
-</script>*@

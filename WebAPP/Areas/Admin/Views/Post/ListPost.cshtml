@@ -1,0 +1,376 @@
+﻿@model List<ViewModels.PostPosts.Response.PostWithOutContentVm>
+<h1 class="display-6 mb-3" style="text-align:center">
+    DANH SÁCH BÀI ĐĂNG
+</h1>
+<div class="container-fluid">
+    <form id="myForm" asp-action="ListPost" method="post">
+        <div class="card text-bg-white mb-2">
+            <div class="card-body">
+                <small>
+                    Chọn chủ đề
+                </small>
+                <select class="form-select form-select mb-2" id="categoryId" name="postCategoryId" style="overflow: hidden;">
+                    <option selected disabled>Nhấn để chọn</option>
+                    @foreach (var item in ViewBag.selectChude)
+                    {
+                        <option value="@item.Value" @(item.Value == ViewBag.SelectedCategoryId ? "selected" : "")>@item.Text</option>
+                    }
+                </select>
+            </div>
+        </div>
+    </form>
+    @{
+        if (Model != null)
+        {
+            <div class="card text-bg-white mb-2">
+                <div class="card-body">
+                    <table id="tblData" class="table table-hover" style="text-align:start; vertical-align:middle;width:100%">
+                        <thead style="font-size:small">
+                            <tr>
+                                <th style="text-align:center;font-weight: 350;">
+                                </th>
+                                <th style="text-align:center;font-weight: 350;">
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.OrderByDescending(x => x.DateUpdated))
+                            {
+                                <tr>
+                                    <td>
+                                        <div class="row align-items-center">
+                                            <div class="col-3 text-center">
+                                                @{
+                                                    if (item.ThumbImage == null)
+                                                    {
+                                                        <button class="btn btn-light" style="width:100%">
+                                                            <i class="bi-image"></i>
+                                                        </button>
+                                                    }
+                                                    else
+                                                    {
+                                                        <img src="@item.ThumbImage" class="card-img" style="width: 100%;">
+                                                    }
+                                                }
+                                            </div>
+                                            <div class="col-9">
+                                                <p class="mb-0">
+                                                    <strong>
+                                                        @item.Title
+                                                    </strong>
+                                                </p>
+                                                <p class="mb-1">
+                                                    <em>
+                                                        <small>
+                                                            @item.Description
+                                                        </small>
+                                                    </em>
+                                                </p>
+                                                <p class="badge text-bg-warning mb-0">
+                                                    <small>
+                                                        <i class="bi-calendar3"></i>
+                                                        @item.DateUpdated
+                                                    </small>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td style="text-align:end">
+                                        <div class="btn-group" style=" white-space:nowrap">
+                                            <btn class="btn  btn-sm btn-outline-primary btnSuaAnh" data-id="@item.Id">
+                                                <i class="bi-image"> </i>
+                                                Sửa ảnh
+                                            </btn>
+                                            <btn class="btn  btn-sm btn-outline-primary btnSuaBai" data-id="@item.Id">
+                                                <i class="bi-pencil"> </i>
+                                                Sửa bài
+                                            </btn>
+                                            <btn class="btn  btn-sm btn-outline-danger btnXoa" data-id="@item.Id" data-name="@item.Title">
+                                                <i class="bi-trash"> </i>
+                                                Xoá
+                                            </btn>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+    }
+</div>
+
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Sửa hình ảnh nhỏ minh hoạ</h5>
+                <button type="button" class="btn-close" data-coreui-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input id="imageFile" name="imageFile" type="file" accept="image/*" class=" imageFile btn  btn-light form-control " />
+                <img src="" id="preview" hidden>
+                <input id="image" type="text" name="Image" class="form-control" hidden />
+                <div class="mt-2" style="text-align:center">
+                    <img style="width: 50%" src="" id="output">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="btnXacnhansuahinhanh" type="button" class="btn btn-outline-primary">
+                    <i class="bi-check"></i>
+                    Xác nhận
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    function isImage16x9(width, height) {
+        // Tính toán tỉ lệ giữa chiều rộng và chiều cao
+        var aspectRatio = width / height;
+        // So sánh tỉ lệ với 16:9 (1.7778 là tỉ lệ của 16:9)
+        return Math.abs(aspectRatio - 1.7778) < 0.01;
+    }
+
+    function delay(time) {
+        return new Promise(resolve => setTimeout(resolve, time));
+    }
+    function ResizeImage() {
+        if (window.File && window.FileReader && window.FileList && window.Blob) {
+            var filesToUploads = document.getElementById('imageFile').files;
+            var file = filesToUploads[0];
+            if (file) {
+                var reader = new FileReader();
+                // Set the image once loaded into file reader
+                reader.onload = function (e) {
+                    var img = document.createElement("img");
+                    img.src = e.target.result;
+                    var canvas = document.createElement("canvas");
+                    var ctx = canvas.getContext("2d");
+
+                    var MAX_WIDTH = 1024;
+                    var MAX_HEIGHT = 576;
+
+                    var width = img.width;
+                    var height = img.height;
+
+                    if (isImage16x9(width, height)) {
+                        // Calculate the desired width and height for 16:9 aspect ratio
+                        var targetWidth = MAX_WIDTH;
+                        var targetHeight = (9 / 16) * MAX_WIDTH;
+
+                        // Check if the image needs resizing
+                        if (width > targetWidth || height > targetHeight) {
+                            // Determine the scale factor for resizing
+                            var scaleFactor = Math.min(targetWidth / width, targetHeight / height);
+                            // Calculate the new dimensions
+                            width *= scaleFactor;
+                            height *= scaleFactor;
+                        }
+
+                        canvas.width = targetWidth;
+                        canvas.height = targetHeight;
+
+                        // Calculate the position to center the image
+                        var x = (targetWidth - width) / 2;
+                        var y = (targetHeight - height) / 2;
+
+                        // Draw the image on the canvas
+                        ctx.drawImage(img, x, y, width, height);
+
+                        // Convert the canvas content to data URL
+                        dataurl = canvas.toDataURL(file.type);
+
+                        // Update the output element and log the data URL
+                        document.getElementById('output').src = dataurl;
+
+                        // Set the value of the image input (if needed)
+                        document.getElementById('image').value = dataurl;
+
+                    } else {
+                        Swal.fire({
+                            title: "Hình ảnh không đúng tỉ lệ 16:9",
+                            text: "Hình ảnh sẽ không hiển thị đẹp mắt",
+                            icon: "warning",
+                            showCancelButton: true,
+                            confirmButtonColor: "#3085d6",
+                            cancelButtonColor: "#d33",
+                            confirmButtonText: "Tiếp tục",
+                            cancelButtonText: "Huỷ bỏ"
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                // Calculate the desired width and height for 16:9 aspect ratio
+                                var targetWidth = MAX_WIDTH;
+                                var targetHeight = (9 / 16) * MAX_WIDTH;
+
+                                // Check if the image needs resizing
+                                if (width > targetWidth || height > targetHeight) {
+                                    // Determine the scale factor for resizing
+                                    var scaleFactor = Math.min(targetWidth / width, targetHeight / height);
+                                    // Calculate the new dimensions
+                                    width *= scaleFactor;
+                                    height *= scaleFactor;
+                                }
+
+                                canvas.width = targetWidth;
+                                canvas.height = targetHeight;
+
+                                // Calculate the position to center the image
+                                var x = (targetWidth - width) / 2;
+                                var y = (targetHeight - height) / 2;
+
+                                // Draw the image on the canvas
+                                ctx.drawImage(img, x, y, width, height);
+
+                                // Convert the canvas content to data URL
+                                dataurl = canvas.toDataURL(file.type);
+
+                                // Update the output element and log the data URL
+                                document.getElementById('output').src = dataurl;
+
+                                // Set the value of the image input (if needed)
+                                document.getElementById('image').value = dataurl;
+                            }
+                        });
+                    }
+                };
+
+                reader.readAsDataURL(file);
+            }
+        } else {
+            alert('The File APIs are not fully supported in this browser.');
+        }
+    }
+    $(document).ready(function () {
+        // Lắng nghe sự kiện thay đổi trên select list
+        $('#categoryId').on('change', function () {
+            // Gửi form khi có sự thay đổi
+            $('#myForm').submit();
+        });
+
+        $("#tblData").DataTable({
+            "paging": true,
+            "searching": true,
+            "info": true,
+            "responsive": true,
+            "ordering": false
+        });
+
+        $('.btnSuaAnh').click(function () {
+            var id = $(this).data("id");
+            $("#staticBackdrop").data("selected-id", id);
+            $("#staticBackdrop").modal("show");
+        })
+
+        $('#imageFile').change(function (evt) {
+            var files = evt.target.files;
+            var file = files[0];
+            if (file) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById('preview').src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+                delay(2000).then(() => ResizeImage());
+            }
+        });
+        $('#btnXacnhansuahinhanh').click(function () {
+            var thumbImageValue = $("#image").val();
+            var selectedId = $("#staticBackdrop").data("selected-id");
+            var data = {
+                id: selectedId,
+                ThumbImage: thumbImageValue
+            };
+            $.ajax({
+                url: "UpdateThumbImage",
+                type: "POST",
+                data: data,
+                success: function (data) {
+                    if (data.success) {
+                        Swal.fire({
+                            icon: "success",
+                            title: "Sửa hình ảnh thành công",
+                            showConfirmButton: false,
+                            timer: 2000
+                        }).then(function () {
+                            location.reload()
+                        })
+                    } else {
+                        Swal.fire("Thất bại!", data.message, "error");
+                    }
+                },
+                error: function (xhr, t, error) {
+                    Swal.fire("Thất bại!", "Lỗi máy chủ", "error");
+                },
+            });
+        });
+
+        $('.btnSuaBai').click(function (evt) {
+            var id = $(this).data("id");
+            var url = "UpdatePost/" + id;
+            window.location.href = url;
+        });
+
+        
+        $('.btnXoa').click(function (evt) {
+            var id = $(this).data("id");
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: "btn btn-success",
+                    cancelButton: "btn btn-danger",
+                },
+                buttonsStyling: true,
+            });
+            swalWithBootstrapButtons
+                .fire({
+                    title: "Xoá bài đăng?",
+                    text: "Dữ liệu liên quan tới bài đăng sẽ bị xoá",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: "Xác nhận",
+                    cancelButtonText: "Huỷ bỏ",
+                    reverseButtons: true,
+                })
+                .then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: "DeletePost",
+                            type: "POST",
+                            data: {
+                                id: id,
+                            },
+                            success: function (result) {
+                                if (result.success) {
+                                    Swal.fire({
+                                        icon: "success",
+                                        title: "Xoá bài đăng thành công",
+                                        showConfirmButton: false,
+                                        timer: 1500,
+                                    }).then(function () {
+                                        location.reload()
+                                    })
+                                } else {
+                                    Swal.fire(
+                                        "Lỗi máy chủ",
+                                        "Thao tác đã được huỷ bỏ!",
+                                        "error"
+                                    );
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                                Swal.fire(
+                                    "Lỗi máy chủ",
+                                    "Thao tác đã được huỷ bỏ!",
+                                    "error"
+                                );
+                            },
+                        });
+                    }
+                });
+        });
+    });
+</script>

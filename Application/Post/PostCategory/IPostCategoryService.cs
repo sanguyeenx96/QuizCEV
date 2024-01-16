@@ -18,5 +18,6 @@ namespace Application.Post.PostCategory
         Task<ApiResult<int>> Create(PostCategoryCreateRequest request);
         Task<ApiResult<bool>> Delete(int id);
         Task<ApiResult<bool>> Update(int id, PostCategoryUpdateRequest request);
+
     }
 }
