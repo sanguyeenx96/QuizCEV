@@ -14,10 +14,12 @@ namespace Application.Post.PostPosts
     public interface IPostPostService
     {
         Task<ApiResult<List<PostPostsVm>>> GetAll();
-        Task<ApiResult<List<PostPostsVm>>> GetAllByCategory(int id);
+        Task<ApiResult<List<PostWithOutContentVm>>> GetAllByCategory(int id);
         Task<ApiResult<PostPostsVm>> GetById(int id);
-        Task<ApiResult<int>> Create(PostPostsCreateRequest request);
+        Task<ApiResult<bool>> Create(PostPostsCreateRequest request);
         Task<ApiResult<bool>> Delete(int id);
         Task<ApiResult<bool>> Update(int id, PostPostsUpdateRequest request);
+        Task<ApiResult<bool>> UpdateThumbImage(int id, PostPostThumbImageUpdate request);
+
     }
 }

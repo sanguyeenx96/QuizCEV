@@ -18,6 +18,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAll()
         {
             var result = await _postPostService.GetAll();
@@ -25,12 +26,15 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("GetAllByCategory/{id}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAllByCategory(int id)
         {
             var result = await _postPostService.GetAllByCategory(id);
             return Ok(result);
         }
+
         [HttpGet("GetById/{id}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetById(int id)
         {
             var result = await _postPostService.GetById(id);
@@ -55,6 +59,12 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> UpdateName(int id, PostPostsUpdateRequest request)
         {
             var result = await _postPostService.Update(id, request);
+            return Ok(result);
+        }
+        [HttpPatch("updateThumbImage/{id}")]
+        public async Task<IActionResult> UpdateThumbImage(int id, PostPostThumbImageUpdate request)
+        {
+            var result = await _postPostService.UpdateThumbImage(id, request);
             return Ok(result);
         }
 

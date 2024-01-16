@@ -24,8 +24,8 @@
                         <div class="col-12">
                             <div class="input-group">
                                 <input type="text" class="form-control form-control-lg" id="name" placeholder="Nhập tên tại đây" required="@true">
-                                <button id="btnXacNhan" class="btn btn-primary " style="display: flex; align-items: center">
-                                    <i class="bi-check" style="margin-right: 5px;"></i>Xác nhận
+                                <button id="btnXacNhan" class="btn btn-outline-primary " style="display: flex; align-items: center">
+                                    <i class="bi-check" ></i>Xác nhận
                                 </button>
                             </div>
                         </div>
@@ -38,7 +38,7 @@
 
 <div class="card">
     <div class="card-body">
-        <table id="tblDanhsachchudephongthi" class="table table-hover" style="text-align:center; vertical-align:middle;width:100%">
+        <table id="tblDanhsachchude" class="table table-hover" style="text-align:center; vertical-align:middle;width:100%">
             <thead style="font-size:small">
                 <tr>
                     <th style="text-align:center;font-weight: 350;">
@@ -66,7 +66,7 @@
                                     <i class="bi-pencil"> </i>
                                     Đổi tên
                                 </btn>
-                                <btn class="btn btn-outline-danger   btnXoa" data-id="@item.Id" data-name="@item.Title">
+                                <btn class="btn btn-outline-danger  btnXoa" data-id="@item.Id" data-name="@item.Title">
                                     <i class="bi-trash"> </i>
                                     Xoá
                                 </btn>
@@ -81,6 +81,15 @@
 
 <script>
     $(document).ready(function () {
+
+        $("#tblDanhsachchude").DataTable({
+            "paging": true,
+            "searching": true,
+            "info": true,
+            "responsive": true,
+            "ordering": false
+        });
+
         $("#btnXacNhan").click(function (e) {
             var form = $("#myForm")[0];
             if (form.checkValidity()) {
