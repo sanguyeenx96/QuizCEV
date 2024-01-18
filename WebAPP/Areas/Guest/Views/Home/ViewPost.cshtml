@@ -1,6 +1,89 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model ViewModels.PostPosts.Response.PostPostsVm
 @{
+    ViewData["Active"] = "pageIndex";
 }
-123
+
+
+<style>
+    .content img {
+        padding-top: 10px;
+        padding-bottom: 10px;
+        border-radius: 4px; /* Điều chỉnh giá trị để làm tròn góc theo mong muốn */
+    }
+
+    .navbar-nav .nav-link.active, .navbar-nav .nav-link.show {
+        color: unset;
+    }
+</style>
+
+<section class="py-3 py-md-5 py-xl-8 bg-light">
+    <div class="container">
+        <div class="row gy-3 gy-lg-0 align-items-lg-center justify-content-lg-between">
+            <div class="col-12 col-lg-7 order-1 order-lg-0">
+                <div class="entry-header mb-3">
+                    <ul class="entry-meta list-unstyled d-flex mb-3">
+                        <li>
+                            <a class="d-inline-flex px-2 py-1 link-accent text-accent-emphasis bg-accent-subtle border border-accent-subtle rounded-2 text-decoration-none fs-7">
+                                @Model.catName
+                            </a>
+                        </li>
+                    </ul>
+                    <h2 class="display-3  mb-4">
+                        @Model.Title
+                    </h2>
+                </div>
+                <div class="entry-footer text-muted">
+                    <ul class="entry-meta list-unstyled d-flex align-items-center m-0">
+                        <li>
+                            <a class="fs-7 link-secondary text-decoration-none d-flex align-items-center">
+                                <i class="bi-calendar3"></i>
+                                <span class="ms-2 fs-7">@Model.DateCreated.ToShortDateString()</span>
+                            </a>
+                        </li>
+                        <li>
+                            <span class="px-3">&bull;</span>
+                        </li>
+                        <li>
+                            <a class="link-secondary text-decoration-none d-flex align-items-center">
+                                <i class="bi-eye"></i>
+                                <span class="ms-2 fs-7">@Model.ViewCount</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-12 col-lg-4">
+                <a class="d-block bsb-hover-image overflow-hidden rounded" >
+                    <img class="img-fluid bsb-scale bsb-hover-scale-up" loading="lazy" src="@Model.ThumbImage" alt="">
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<main id="main">
+    <section class="py-3 py-md-5 py-xl-5">
+        <div class="container">
+            <div class="row justify-content-md-center gy-3 gy-xl-4">
+                <div class="col-12 gy-3 gy-xl-4 bsb-entry-content">
+                    <div class="content">
+                        @Html.Raw(Model.Content)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div id="tintuccungchuyenmuc"></div>
+</main>
+
+
+<script>
+    $(document).ready(function () {
+        var id = @Model.PostCategoryId.ToString();
+        id = parseInt(id)
+        $.get("/guest/home/Get3NewsCungChuDe/" + id, function (result) {
+            $("#tintuccungchuyenmuc").html(result);
+        });
+    })
+
+</script>

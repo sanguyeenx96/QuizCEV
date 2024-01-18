@@ -1,5 +1,6 @@
-﻿<footer class="footer">
-    <div>        
+﻿@*
+<footer class="footer bg-white" style="border:unset">
+    <div>
         <span style="font-size:small">
             © Canon Electronics VietNam
         </span>
@@ -7,5 +8,39 @@
     <div>
         <span>Powered by</span>
         <b>PDE</b>
+    </div>
+</footer>
+*@
+
+<style>
+    .footer {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+    }
+
+    /* Tùy chỉnh kiểu văn bản và các thuộc tính khác nếu cần */
+    .credits {
+        font-size: 14px;
+        color: #555;
+        /* Thêm các thuộc tính khác nếu cần */
+    }
+
+</style>
+
+<footer class="footer bg-white" style="border:unset">
+    <div class="bg-white py-3 py-md-5 ">
+        <div class="container overflow-hidden text-center">
+            <div class="credits text-secondary text-center mt-2 fs-7">
+                © Canon Electronics VietNam
+            </div>
+            <div class="credits text-secondary text-center mt-2 fs-7">
+                <span>Powered by</span>
+                <b>PDE</b>
+            </div>
+
+        </div>
     </div>
 </footer>

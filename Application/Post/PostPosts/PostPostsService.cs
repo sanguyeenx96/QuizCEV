@@ -27,7 +27,7 @@ namespace Application.Post.PostPosts
         }
         public async Task<ApiResult<bool>> Create(PostPostsCreateRequest request)
         {
-            var checkDuplicateName = await _context.postPosts.Where(x =>(x.Title == request.Title && x.PostCategoryId == request.PostCategoryId)).FirstOrDefaultAsync();
+            var checkDuplicateName = await _context.postPosts.Where(x => (x.Title == request.Title && x.PostCategoryId == request.PostCategoryId)).FirstOrDefaultAsync();
             if (checkDuplicateName != null)
                 return new ApiErrorResult<bool>("Tiêu đề này đã tồn tại trong chủ đề");
 
@@ -57,6 +57,30 @@ namespace Application.Post.PostPosts
             return new ApiSuccessResult<bool> { Message = $"Đã xoá thành công {post.Title}" };
         }
 
+        public async Task<ApiResult<List<PostPostsVm>>> Get6()
+        {
+            var result = await _context.postPosts
+       .Select(x => new PostPostsVm()
+       {
+           Id = x.Id,
+           Title = x.Title,
+           Description = x.Description,
+           ThumbImage = x.ThumbImage,
+           DateCreated = x.DateCreated,
+           DateUpdated = x.DateUpdated,
+           ViewCount = x.ViewCount,
+           PostCategoryId = x.PostCategoryId,
+           catName = _context.postCategories
+                       .Where(pc => pc.Id == x.PostCategoryId)
+                       .Select(pc => pc.Title)
+                       .FirstOrDefault()
+       })
+       .Take(6)
+       .ToListAsync();
+
+            return new ApiSuccessResult<List<PostPostsVm>>(result);
+        }
+
         public async Task<ApiResult<List<PostPostsVm>>> GetAll()
         {
             var result = await _context.postPosts.Select(x => new PostPostsVm()
@@ -64,12 +88,16 @@ namespace Application.Post.PostPosts
                 Id = x.Id,
                 Title = x.Title,
                 Description = x.Description,
-                ThumbImage =x.ThumbImage,
+                ThumbImage = x.ThumbImage,
                 Content = x.Content,
                 DateCreated = x.DateCreated,
                 DateUpdated = x.DateUpdated,
                 ViewCount = x.ViewCount,
-                PostCategoryId = x.PostCategoryId
+                PostCategoryId = x.PostCategoryId,
+                catName = _context.postCategories
+                       .Where(pc => pc.Id == x.PostCategoryId)
+                       .Select(pc => pc.Title)
+                       .FirstOrDefault()
             }).ToListAsync();
             return new ApiSuccessResult<List<PostPostsVm>>(result);
         }
@@ -90,16 +118,21 @@ namespace Application.Post.PostPosts
                 DateCreated = x.DateCreated,
                 DateUpdated = x.DateUpdated,
                 ViewCount = x.ViewCount,
-                PostCategoryId = x.PostCategoryId
+                PostCategoryId = x.PostCategoryId,
+                catName = _context.postCategories
+                            .Where(pc => pc.Id == x.PostCategoryId)
+                            .Select(pc => pc.Title)
+                            .FirstOrDefault()
             }).ToListAsync();
             return new ApiSuccessResult<List<PostWithOutContentVm>>(listPost);
         }
 
-        public async  Task<ApiResult<PostPostsVm>> GetById(int id)
+        public async Task<ApiResult<PostPostsVm>> GetById(int id)
         {
             var post = await _context.postPosts.FindAsync(id);
             if (post == null)
                 return new ApiErrorResult<PostPostsVm>($"Không tìm thấy post có id {id}");
+
             var result = new PostPostsVm
             {
                 Id = post.Id,
@@ -110,8 +143,20 @@ namespace Application.Post.PostPosts
                 DateCreated = post.DateCreated,
                 DateUpdated = post.DateUpdated,
                 ViewCount = post.ViewCount,
-                PostCategoryId = post.PostCategoryId
+                PostCategoryId = post.PostCategoryId,
+                catName = _context.postCategories
+                            .Where(pc => pc.Id == post.PostCategoryId)
+                            .Select(pc => pc.Title)
+                            .FirstOrDefault()
             };
+
+            if (result.catName == null)
+            {
+                // Xử lý trường hợp không tìm thấy catName
+                // Có thể làm thêm log hoặc xử lý khác tùy vào yêu cầu của bạn
+                return new ApiErrorResult<PostPostsVm>($"Không tìm thấy catName cho PostCategoryId {post.PostCategoryId}");
+            }
+
             return new ApiSuccessResult<PostPostsVm>(result);
         }
 
@@ -135,7 +180,7 @@ namespace Application.Post.PostPosts
             var post = await _context.postPosts.FindAsync(id);
             if (post == null)
                 return new ApiErrorResult<bool>($"Không tìm thấy post có id {id}");
-            post.ThumbImage = request.ThumbImage;        
+            post.ThumbImage = request.ThumbImage;
             _context.postPosts.Update(post);
             await _context.SaveChangesAsync();
             return new ApiSuccessResult<bool>();

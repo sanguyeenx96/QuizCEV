@@ -112,17 +112,26 @@ namespace WebAPP.Areas.Guest.Controllers
         {
             return View();
         }
-        public IActionResult ViewPost()
+        public async Task<IActionResult> ViewPost(int id)
         {
-            return View();
+            var result = await _postPostsApiClient.GetById(id);
+            return View(result.ResultObj);
         }
 
         [HttpGet]
         public async Task<IActionResult> Get6News()
         {
-            var resultAll = await _postPostsApiClient.GetAll();
-            var result = resultAll.ResultObj.Take(6).ToList();
+            var resultAll = await _postPostsApiClient.Get6();
+            var result = resultAll.ResultObj.ToList();
             return PartialView("guest/index/_tintuc", result);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Get3NewsCungChuDe(int id)
+        {
+            var resultAll = await _postPostsApiClient.GetAllByCategory(id);
+            var result = resultAll.ResultObj.Take(3).ToList();
+            return PartialView("guest/index/_tintuccungchuyenmuc", result);
         }
     }
 }

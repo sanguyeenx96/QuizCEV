@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.Extensions.FileProviders;
 using WebAPP.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -58,7 +59,17 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
 app.UseStaticFiles();
+//Khi request /contents/1.jpg => Mo file tu Uploads/1.jpg
+app.UseStaticFiles(new StaticFileOptions()
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(Directory.GetCurrentDirectory(), "Uploads")
+        ),
+    RequestPath = "/contents"
+}); 
+
 app.UseAuthentication();
 app.UseRouting();
 app.UseAuthorization();

@@ -13,10 +13,12 @@ namespace ViewModels.PostPosts.Response
         public string? ThumbImage { set; get; }
 
         public string Description { set; get; }
-        public string Content { set; get; }
+        public string? Content { set; get; }
         public DateTime DateCreated { set; get; }
         public DateTime DateUpdated { set; get; }
         public int ViewCount { get; set; }
-        public int PostCategoryId { get; set; } 
+        public int PostCategoryId { get; set; }
+
+        public string? catName { get; set; }
     }
 }

@@ -33,7 +33,7 @@
 
 </style>
 <section>
-    <div class="container">
+    <div class="container-fluid">
         <div class="row">
             <div class="col-12 ">
                 <h2 class="display-5 mb-3">Tin tức nội bộ</h2>
@@ -41,49 +41,52 @@
             </div>
         </div>
     </div>
-    <div class="container overflow-hidden">
-        <div class="row gy-4 gy-lg-0 equal-height-row">
+    <div class="container-fluid overflow-hidden">
+        <div class="row gy-0 equal-height-row">            
             @foreach (var item in Model)
             {
-                <div class="col-12 col-lg-4 col-md-6 mb-4 equal-height-col animate__animated animate__fadeIn">
+                <div class="col-12 col-lg-4 col-md-6 mb-3 equal-height-col animate__animated animate__fadeIn">
                     <article class="card border-0">
                         <div class="card border-0">
                             <figure class="card-img-top m-0 overflow-hidden bsb-overlay-hover">
-                                <a href="#!" class="image-link">
+                                <a class="image-link" asp-action="viewpost" asp-route-id="@item.Id">
                                     <img class="img-fluid bsb-scale bsb-hover-scale-up" loading="lazy" src="@item.ThumbImage" >
                                 </a>
                                 <figcaption>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-eye text-white bsb-hover-fadeInDown" viewBox="0 0 16 16">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-eye text-white bsb-hover-fadeInLeft" viewBox="0 0 16 16">
                                         <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z" />
                                         <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z" />
                                     </svg>
-                                    <h4 class="h6 text-white bsb-hover-fadeInUp mt-2">Xem chi tiết</h4>
+                                    <h4 class="h6 text-white bsb-hover-fadeInRight mt-2">Xem chi tiết</h4>
                                 </figcaption>
                             </figure>
                             <div class="card-body border bg-white p-4">
                                 <div class="entry-header mb-3">
                                     <ul class="entry-meta list-unstyled d-flex mb-2">
                                         <li>
-                                            <a class="link-primary text-decoration-none" href="#!">
-                                                PDE
+                                            <a class="d-inline-flex px-2 py-1 link-accent text-accent-emphasis bg-accent-subtle border border-accent-subtle rounded-2 text-decoration-none fs-7">
+                                                @item.catName
                                             </a>
                                         </li>
                                     </ul>
                                     <h2 class="card-title entry-title h4 mb-0">
-                                        <a class="link-dark text-decoration-none" href="#!">
+                                        <a class="link-dark text-decoration-none" asp-action="viewpost" asp-route-id="@item.Id">
                                             @item.Title
                                         </a>
                                     </h2>
                                 </div>
+                               
+
                                 <p class="card-text entry-summary text-secondary mb-3">
                                     @item.Description
                                 </p>
-                                <a asp-action="viewpost" class="btn btn-outline-primary m-0 text-nowrap">Xem chi tiết</a>
+@*                                <a asp-action="viewpost" class="btn btn-outline-primary m-0 text-nowrap">Xem chi tiết</a>
+*@
                             </div>
                             <div class="card-footer border border-top-0 bg-light p-4">
                                 <ul class="entry-meta list-unstyled d-flex align-items-center m-0">
                                     <li>
-                                        <a class="fs-7 link-secondary text-decoration-none d-flex align-items-center" href="#!">
+                                        <a class="fs-7 link-secondary text-decoration-none d-flex align-items-center" >
                                             <i class="bi-calendar3"></i>
                                             <span class="ms-2 fs-7">
                                                 @item.DateCreated.ToShortDateString()
@@ -94,7 +97,7 @@
                                         <span class="px-3">&bull;</span>
                                     </li>
                                     <li>
-                                        <a class="link-secondary text-decoration-none d-flex align-items-center" href="#!">
+                                        <a class="link-secondary text-decoration-none d-flex align-items-center">
                                             <i class="bi-eye"></i>
                                             <span class="ms-2 fs-7">
                                                 @item.ViewCount
@@ -106,12 +109,26 @@
                         </div>
                     </article>
                 </div>
-
             }
-
-
         </div>
-
     </div>
 </section>
-
+@*
+<div class="card" aria-hidden="true">
+    <rect width="100%" height="100%" fill="#868e96"></rect>
+    <img src="" class="card-img-top" alt="...">
+    <div class="card-body">
+        <h5 class="card-title placeholder-glow">
+            <span class="placeholder col-6"></span>
+        </h5>
+        <p class="card-text placeholder-glow">
+            <span class="placeholder col-7"></span>
+            <span class="placeholder col-4"></span>
+            <span class="placeholder col-4"></span>
+            <span class="placeholder col-6"></span>
+            <span class="placeholder col-8"></span>
+        </p>
+        <a class="btn btn-primary disabled placeholder col-6" aria-disabled="true"></a>
+    </div>
+</div>
+*@

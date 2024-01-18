@@ -16,5 +16,6 @@ namespace ViewModels.PostPosts.Response
         public DateTime DateUpdated { set; get; }
         public int ViewCount { get; set; }
         public int PostCategoryId { get; set; }
+        public string? catName { set; get; }
     }
 }

@@ -57,6 +57,23 @@ namespace WebAPP.Services
             return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
         }
 
+        public async Task<ApiResult<List<PostPostsVm>>> Get6()
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAdress"]);
+
+            var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
+
+            var response = await client.GetAsync("/api/postposts/get6");
+            var result = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                return JsonConvert.DeserializeObject<ApiSuccessResult<List<PostPostsVm>>>(result);
+            }
+            return JsonConvert.DeserializeObject<ApiErrorResult<List<PostPostsVm>>>(result);
+        }
+
         public async Task<ApiResult<List<PostPostsVm>>> GetAll()
         {
             var client = _httpClientFactory.CreateClient();
