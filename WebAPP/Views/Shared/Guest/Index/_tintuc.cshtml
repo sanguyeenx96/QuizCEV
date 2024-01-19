@@ -33,15 +33,15 @@
 
 </style>
 <section>
-    <div class="container-fluid">
+    <div class="container">
         <div class="row">
             <div class="col-12 ">
                 <h2 class="display-5 mb-3">Tin tức nội bộ</h2>
-                <button type="button" class="btn btn-lg btn-primary mb-3 mb-md-4 ">Xem tất cả</button>
+                <a type="button" class="btn btn-lg btn-primary mb-3 mb-md-4 " asp-action="listpost">Xem tất cả</a>
             </div>
         </div>
     </div>
-    <div class="container-fluid overflow-hidden">
+    <div class="container overflow-hidden">
         <div class="row gy-0 equal-height-row">            
             @foreach (var item in Model)
             {
@@ -64,11 +64,12 @@
                                 <div class="entry-header mb-3">
                                     <ul class="entry-meta list-unstyled d-flex mb-2">
                                         <li>
-                                            <a class="d-inline-flex px-2 py-1 link-accent text-accent-emphasis bg-accent-subtle border border-accent-subtle rounded-2 text-decoration-none fs-7">
+                                            <a asp-action="listpost" data-catid="@item.PostCategoryId" class="d-inline-flex px-2 py-1 link-accent text-accent-emphasis bg-accent-subtle border border-accent-subtle rounded-2 text-decoration-none fs-7">
                                                 @item.catName
                                             </a>
                                         </li>
                                     </ul>
+                         
                                     <h2 class="card-title entry-title h4 mb-0">
                                         <a class="link-dark text-decoration-none" asp-action="viewpost" asp-route-id="@item.Id">
                                             @item.Title
@@ -113,6 +114,9 @@
         </div>
     </div>
 </section>
+
+
+
 @*
 <div class="card" aria-hidden="true">
     <rect width="100%" height="100%" fill="#868e96"></rect>

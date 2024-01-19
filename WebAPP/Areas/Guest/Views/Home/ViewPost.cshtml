@@ -2,6 +2,11 @@
 @{
     ViewData["Active"] = "pageIndex";
 }
+@{
+    ViewData["Active"] = "pageTintuc";
+    ViewData["childActive"] = "pageTintucTintucnoibo";
+}
+
 
 
 <style>
@@ -23,7 +28,7 @@
                 <div class="entry-header mb-3">
                     <ul class="entry-meta list-unstyled d-flex mb-3">
                         <li>
-                            <a class="d-inline-flex px-2 py-1 link-accent text-accent-emphasis bg-accent-subtle border border-accent-subtle rounded-2 text-decoration-none fs-7">
+                            <a asp-action="listpost" class="d-inline-flex px-2 py-1 link-accent text-accent-emphasis bg-accent-subtle border border-accent-subtle rounded-2 text-decoration-none fs-7">
                                 @Model.catName
                             </a>
                         </li>
@@ -53,7 +58,7 @@
                 </div>
             </div>
             <div class="col-12 col-lg-4">
-                <a class="d-block bsb-hover-image overflow-hidden rounded" >
+                <a class="d-block bsb-hover-image overflow-hidden rounded">
                     <img class="img-fluid bsb-scale bsb-hover-scale-up" loading="lazy" src="@Model.ThumbImage" alt="">
                 </a>
             </div>
@@ -61,20 +66,18 @@
     </div>
 </section>
 
-<main id="main">
-    <section class="py-3 py-md-5 py-xl-5">
-        <div class="container">
-            <div class="row justify-content-md-center gy-3 gy-xl-4">
-                <div class="col-12 gy-3 gy-xl-4 bsb-entry-content">
-                    <div class="content">
-                        @Html.Raw(Model.Content)
-                    </div>
+<section class="py-3 py-md-5 py-xl-5">
+    <div class="container">
+        <div class="row justify-content-md-center gy-3 gy-xl-4">
+            <div class="col-12 gy-3 gy-xl-4 bsb-entry-content">
+                <div class="content">
+                    @Html.Raw(Model.Content)
                 </div>
             </div>
         </div>
-    </section>
-    <div id="tintuccungchuyenmuc"></div>
-</main>
+    </div>
+</section>
+<div id="tintuccungchuyenmuc"></div>
 
 
 <script>
