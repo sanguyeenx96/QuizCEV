@@ -45,6 +45,14 @@
     {
       "library": "bootstrap-treeview@1.2.0",
       "destination": "wwwroot/bootstrap-treeview/"
+    },
+    {
+      "library": "elfinder@2.1.65",
+      "destination": "wwwroot/lib/elfinder/"
+    },
+    {
+      "library": "jqueryui@1.13.2",
+      "destination": "wwwroot/lib/jqueryui/"
     }
   ]
 }

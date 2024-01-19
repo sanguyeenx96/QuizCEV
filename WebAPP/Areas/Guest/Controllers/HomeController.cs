@@ -19,11 +19,13 @@ namespace WebAPP.Areas.Guest.Controllers
         private readonly IConfiguration _configuration;
         private readonly IUserApiClient _userApiClient;
         private readonly IPostPostsApiClient _postPostsApiClient;
-        public HomeController(IUserApiClient userApiClient, IConfiguration configuration, IPostPostsApiClient postPostsApiClient)
+        private readonly IPostCategoryApiClient _postCategoryApiClient;
+        public HomeController(IUserApiClient userApiClient, IConfiguration configuration, IPostPostsApiClient postPostsApiClient,IPostCategoryApiClient postCategoryApiClient)
         {
             _userApiClient = userApiClient;
             _configuration = configuration;
             _postPostsApiClient = postPostsApiClient;
+            _postCategoryApiClient = postCategoryApiClient;
         }
 
         [HttpPost]
@@ -112,17 +114,41 @@ namespace WebAPP.Areas.Guest.Controllers
         {
             return View();
         }
-        public IActionResult ViewPost()
+
+        public async Task<IActionResult> ListPost()
         {
-            return View();
+            var result = await _postCategoryApiClient.GetAll();
+            return View(result.ResultObj);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> GetListPostByCategory(int id)
+        {
+            var result = await _postPostsApiClient.GetAllByCategory(id);
+            return PartialView("guest/listpost/_noidungtab", result.ResultObj);
+        }
+
+
+        public async Task<IActionResult> ViewPost(int id)
+        {
+            var result = await _postPostsApiClient.GetById(id);
+            return View(result.ResultObj);
         }
 
         [HttpGet]
         public async Task<IActionResult> Get6News()
         {
-            var resultAll = await _postPostsApiClient.GetAll();
-            var result = resultAll.ResultObj.Take(6).ToList();
+            var resultAll = await _postPostsApiClient.Get6();
+            var result = resultAll.ResultObj.ToList();
             return PartialView("guest/index/_tintuc", result);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Get3NewsCungChuDe(int id)
+        {
+            var resultAll = await _postPostsApiClient.GetAllByCategory(id);
+            var result = resultAll.ResultObj.Take(3).ToList();
+            return PartialView("guest/index/_tintuccungchuyenmuc", result);
         }
     }
 }

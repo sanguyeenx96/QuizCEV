@@ -14,6 +14,7 @@ namespace Application.Post.PostPosts
     public interface IPostPostService
     {
         Task<ApiResult<List<PostPostsVm>>> GetAll();
+        Task<ApiResult<List<PostPostsVm>>> Get6();
         Task<ApiResult<List<PostWithOutContentVm>>> GetAllByCategory(int id);
         Task<ApiResult<PostPostsVm>> GetById(int id);
         Task<ApiResult<bool>> Create(PostPostsCreateRequest request);

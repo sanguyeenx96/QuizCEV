@@ -17,6 +17,14 @@ namespace WebAPI.Controllers
             _postPostService = postPostService;
         }
 
+        [HttpGet("get6")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Get6()
+        {
+            var result = await _postPostService.Get6();
+            return Ok(result);
+        }
+
         [HttpGet]
         [AllowAnonymous]
         public async Task<IActionResult> GetAll()

@@ -1,17 +1,4 @@
-﻿<style>
-    .ck-editor__editable[role="textbox"] {
-        /* editing area */
-        min-height: 500px;
-    }
-
-    .ck-content .image {
-        /* block images */
-        max-width: 80%;
-        margin: 20px auto;
-        padding: 20px auto;
-    }
-</style>
-<h1 class="display-6 mb-3" style="text-align:center">
+﻿<h1 class="display-6 mb-3" style="text-align:center">
     TẠO BÀI ĐĂNG MỚI
 </h1>
 <div class="container-fluid">
@@ -35,7 +22,7 @@
                 Nhập mô tả ngắn
             </small>
             <textarea rows="3" id="txtMotangan" class="form-control mb-2" placeholder="Nhập mô tả ngắn bài viết tại đây..."></textarea>
-            
+
             <small>
                 Hình ảnh nhỏ minh hoạ
             </small>
@@ -47,18 +34,18 @@
             </div>
         </div>
     </div>
-    <div id="container">
-        <textarea id="editor">
-        </textarea>
+    <div class="card">
+        <div class="card-body">
+            <textarea id="editor">
+            </textarea>
+        </div>
     </div>
-    <button id="btnXacNhan" class="btn btn-outline-primary  mt-2" style="text-align: center; width:200px">
-        <i class="bi-check" ></i>
+
+    <button id="btnXacNhan" class="btn btn-primary mt-2" style="text-align: center; width:200px">
+        <i class="bi-check"></i>
         Xác nhận
     </button>
 </div>
-
-<script src="~/ckeditor.js"></script>
-<script src="~/vi.js"></script>
 
 <script>
     function isImage16x9(width, height) {
@@ -92,36 +79,36 @@
 
                     if (isImage16x9(width, height)) {
                         // Calculate the desired width and height for 16:9 aspect ratio
-                                var targetWidth = MAX_WIDTH;
-                                var targetHeight = (9 / 16) * MAX_WIDTH;
+                        var targetWidth = MAX_WIDTH;
+                        var targetHeight = (9 / 16) * MAX_WIDTH;
 
-                                // Check if the image needs resizing
-                                if (width > targetWidth || height > targetHeight) {
-                                    // Determine the scale factor for resizing
-                                    var scaleFactor = Math.min(targetWidth / width, targetHeight / height);
-                                    // Calculate the new dimensions
-                                    width *= scaleFactor;
-                                    height *= scaleFactor;
-                                }
+                        // Check if the image needs resizing
+                        if (width > targetWidth || height > targetHeight) {
+                            // Determine the scale factor for resizing
+                            var scaleFactor = Math.min(targetWidth / width, targetHeight / height);
+                            // Calculate the new dimensions
+                            width *= scaleFactor;
+                            height *= scaleFactor;
+                        }
 
-                                canvas.width = targetWidth;
-                                canvas.height = targetHeight;
+                        canvas.width = targetWidth;
+                        canvas.height = targetHeight;
 
-                                // Calculate the position to center the image
-                                var x = (targetWidth - width) / 2;
-                                var y = (targetHeight - height) / 2;
+                        // Calculate the position to center the image
+                        var x = (targetWidth - width) / 2;
+                        var y = (targetHeight - height) / 2;
 
-                                // Draw the image on the canvas
-                                ctx.drawImage(img, x, y, width, height);
+                        // Draw the image on the canvas
+                        ctx.drawImage(img, x, y, width, height);
 
-                                // Convert the canvas content to data URL
-                                dataurl = canvas.toDataURL(file.type);
+                        // Convert the canvas content to data URL
+                        dataurl = canvas.toDataURL(file.type);
 
-                                // Update the output element and log the data URL
-                                document.getElementById('output').src = dataurl;
+                        // Update the output element and log the data URL
+                        document.getElementById('output').src = dataurl;
 
-                                // Set the value of the image input (if needed)
-                                 document.getElementById('image').value = dataurl;
+                        // Set the value of the image input (if needed)
+                        document.getElementById('image').value = dataurl;
 
                     } else {
                         Swal.fire({
@@ -165,7 +152,7 @@
                                 document.getElementById('output').src = dataurl;
 
                                 // Set the value of the image input (if needed)
-                                 document.getElementById('image').value = dataurl;
+                                document.getElementById('image').value = dataurl;
                             }
                         });
                     }
@@ -178,149 +165,84 @@
         }
     }
 
-
-    // This sample still does not showcase all CKEditor 5 features (!)
-    // Visit https://ckeditor.com/docs/ckeditor5/latest/features/index.html to browse all the features.
-    CKEDITOR.ClassicEditor.create(document.getElementById("editor"), {
-        // https://ckeditor.com/docs/ckeditor5/latest/features/toolbar/toolbar.html#extended-toolbar-configuration-format
-        toolbar: {
-            items: [
-                'RemoveFormat', '|',
-                'exportPDF', 'exportWord', '|',
-                'findAndReplace', 'selectAll', '|',
-                'heading', '|',
-                'bold', 'italic', 'strikethrough', 'underline', 'code', 'subscript', 'superscript', 'removeFormat', '|',
-                'bulletedList', 'numberedList', 'todoList', '|',
-                'outdent', 'indent', '|',
-                'undo', 'redo',
-                '-',
-                'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'highlight', '|',
-                'alignment', '|',
-                'link', 'insertImage', 'blockQuote', 'insertTable', 'mediaEmbed', 'codeBlock', 'htmlEmbed', '|',
-                'specialCharacters', 'horizontalLine', 'pageBreak', '|',
-                'sourceEditing'
-            ],
-            shouldNotGroupWhenFull: true
-        },
-        // Changing the language of the interface requires loading the language file using the <script> tag.
-        language: 'vi',
-        list: {
-            properties: {
-                styles: true,
-                startIndex: true,
-                reversed: true
+    $(document).ready(function () {
+        (function (factory) {
+            if (typeof define === 'function' && define.amd) {
+                define(['jquery'], factory);
             }
-        },
-        // https://ckeditor.com/docs/ckeditor5/latest/features/headings.html#configuration
-        heading: {
-            options: [
-                { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
-                { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
-                { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' },
-                { model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' },
-                { model: 'heading4', view: 'h4', title: 'Heading 4', class: 'ck-heading_heading4' },
-                { model: 'heading5', view: 'h5', title: 'Heading 5', class: 'ck-heading_heading5' },
-                { model: 'heading6', view: 'h6', title: 'Heading 6', class: 'ck-heading_heading6' }
-            ]
-        },
-        // https://ckeditor.com/docs/ckeditor5/latest/features/editor-placeholder.html#using-the-editor-configuration
-        placeholder: 'Nhập nội dung bài viết tại đây...',
-        // https://ckeditor.com/docs/ckeditor5/latest/features/font.html#configuring-the-font-family-feature
-        fontFamily: {
-            options: [
-                'default',
-                'Arial, Helvetica, sans-serif',
-                'Courier New, Courier, monospace',
-                'Georgia, serif',
-                'Lucida Sans Unicode, Lucida Grande, sans-serif',
-                'Tahoma, Geneva, sans-serif',
-                'Times New Roman, Times, serif',
-                'Trebuchet MS, Helvetica, sans-serif',
-                'Verdana, Geneva, sans-serif'
-            ],
-            supportAllValues: true
-        },
-        // https://ckeditor.com/docs/ckeditor5/latest/features/font.html#configuring-the-font-size-feature
-        fontSize: {
-            options: [10, 12, 14, 'default', 18, 20, 22],
-            supportAllValues: true
-        },
-        // Be careful with the setting below. It instructs CKEditor to accept ALL HTML markup.
-        // https://ckeditor.com/docs/ckeditor5/latest/features/general-html-support.html#enabling-all-html-features
-        htmlSupport: {
-            allow: [
-                {
-                    name: /.*/,
-                    attributes: true,
-                    classes: true,
-                    styles: true
+            else if (typeof module === 'object' && module.exports) {
+                module.exports = factory(require('jquery'));
+            } else {
+                factory(window.jQuery);
+            }
+        }(function ($) {
+            $.extend($.summernote.plugins, {
+                // Tạo plugin tên elfinder
+                'elfinder': function (context) {
+                    var self = this;
+                    // ui has renders to build ui elements.
+                    var ui = $.summernote.ui;
+                    // Tạo nút bấm
+                    context.memo('button.elfinder', function () {
+                        var button = ui.button({
+                            contents: '<i class="note-icon-picture"/> elFinder',
+                            tooltip: 'Quản lý file',
+                            click: function () {
+                                // Bấm vào nút bấm gọi hàm elfinderDialog
+                                elfinderDialog(context);
+                            }
+                        });
+                        // create jQuery object from button instance.
+                        var $elfinder = button.render();
+                        return $elfinder;
+                    });
+                    // This methods will be called when editor is destroyed by $('..').summernote('destroy');
+                    // You should remove elements on `initialize`.
+                    this.destroy = function () {
+                        this.$panel.remove();
+                        this.$panel = null;
+                    };
                 }
-            ]
-        },
-        // Be careful with enabling previews
-        // https://ckeditor.com/docs/ckeditor5/latest/features/html-embed.html#content-previews
-        htmlEmbed: {
-            showPreviews: true
-        },
-        // https://ckeditor.com/docs/ckeditor5/latest/features/link.html#custom-link-attributes-decorators
-        link: {
-            decorators: {
-                addTargetToExternalLinks: true,
-                defaultProtocol: 'https://',
-                toggleDownloadable: {
-                    mode: 'manual',
-                    label: 'Downloadable',
-                    attributes: {
-                        download: 'file'
+            });
+        }));
+        function elfinderDialog(editor) {
+            var fm = $('<div/>').dialogelfinder({
+                baseUrl: "@Url.Content("~/lib/elfinder/")",
+                url: "@Url.Action("Connector","FileManager", new{area ="Admin"})",
+                lang: 'vi',
+                width: 840,
+                height: 450,
+                destroyOnClose: true,
+                getFileCallback: function (files, fm) {
+                    console.log(files);
+                    editor.invoke('editor.insertImage', files.url);
+                },
+                commandsOptions: {
+                    getfile: {
+                        oncomplete: 'close',
+                        folders: false
                     }
                 }
-            }
-        },
-        // https://ckeditor.com/docs/ckeditor5/latest/features/mentions.html#configuration
-        // The "super-build" contains more premium features that require additional configuration, disable them below.
-        // Do not turn them on unless you read the documentation and know how to configure them and setup the editor.
-        removePlugins: [
-            // These two are commercial, but you can try them out without registering to a trial.
-            // 'ExportPdf',
-            // 'ExportWord',
-            'CKBox',
-            'CKFinder',
-            'EasyImage',
-            // This sample uses the Base64UploadAdapter to handle image uploads as it requires no configuration.
-            // https://ckeditor.com/docs/ckeditor5/latest/features/images/image-upload/base64-upload-adapter.html
-            // Storing images as Base64 is usually a very bad idea.
-            // Replace it on production website with other solutions:
-            // https://ckeditor.com/docs/ckeditor5/latest/features/images/image-upload/image-upload.html
-            // 'Base64UploadAdapter',
-            'RealTimeCollaborativeComments',
-            'RealTimeCollaborativeTrackChanges',
-            'RealTimeCollaborativeRevisionHistory',
-            'PresenceList',
-            'Comments',
-            'TrackChanges',
-            'TrackChangesData',
-            'RevisionHistory',
-            'Pagination',
-            'WProofreader',
-            // Careful, with the Mathtype plugin CKEditor will not load when loading this sample
-            // from a local file system (file://) - load this site via HTTP server if you enable MathType
-            'MathType'
-        ]
-    })
-        .then(editor => {
-            console.log('Editor was initialized', editor);
-            myEditor = editor;
-        })
-          .catch( err => {
-            wal.fire({
-                icon: "error",
-                title: err.stack,
-                showConfirmButton: false,
-                timer: 2000
-            })
-        } );
+            }).dialogelfinder('instance');
+        }
 
-    $(document).ready(function () {
+        $('#editor').summernote({
+            height: 500,
+            toolbar: [
+                ['style', ['style']],
+                ['font', ['bold', 'italic', 'underline', 'clear']],
+                ['fontname', ['fontname']],
+                ['fontsize', ['fontsize']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['table', ['table']],
+                ['height', ['height']],
+                ['insert', ['elfinder', 'link']],
+                ['view', ['fullscreen', 'codeview']],
+            ]
+        });
+
+
         $('#imageFile').change(function (evt) {
             var files = evt.target.files;
             var file = files[0];
@@ -338,7 +260,7 @@
             var idCategory = $('#categoryId').val();
             var txtTieude = $('#txtTieude').val();
             var txtMotangan = $('#txtMotangan').val();
-            var editorData = myEditor.getData();
+            var editorData = $('#editor').val();
             var thumbImageValue = $("#image").val();
             if (idCategory == null) {
                 Swal.fire({

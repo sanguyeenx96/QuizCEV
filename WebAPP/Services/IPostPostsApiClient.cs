@@ -6,6 +6,7 @@ namespace WebAPP.Services
 {
     public interface IPostPostsApiClient
     {
+        Task<ApiResult<List<PostPostsVm>>> Get6();
         Task<ApiResult<List<PostPostsVm>>> GetAll();
         Task<ApiResult<List<PostWithOutContentVm>>> GetAllByCategory(int id);
         Task<ApiResult<PostPostsVm>> GetById(int id);
