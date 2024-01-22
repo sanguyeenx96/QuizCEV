@@ -16,6 +16,8 @@ using Application.Post.PostPosts;
 using Application.Question;
 using Application.Role;
 using Application.Setting;
+using Application.ThongBao.ThongBaoCategory;
+using Application.ThongBao.ThongBaoPost;
 using Application.Users;
 using Data.EF;
 using Data.Entities;
@@ -78,6 +80,10 @@ builder.Services.AddTransient<ILogExamDoiSachService, LogExamDoiSachService>();
 
 builder.Services.AddTransient<IPostCategoryService, PostCategoryService>();
 builder.Services.AddTransient<IPostPostService, PostPostsService>();
+
+builder.Services.AddTransient<IThongBaoPostService, ThongBaoPostService>();
+builder.Services.AddTransient<IThongBaoCategoryService, ThongBaoCategoryService>();
+
 
 
 

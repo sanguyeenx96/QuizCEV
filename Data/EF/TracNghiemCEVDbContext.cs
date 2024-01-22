@@ -44,6 +44,12 @@ namespace Data.EF
             modelBuilder.ApplyConfiguration(new LogExamLoiTaiCongDoanConfiguration());
             modelBuilder.ApplyConfiguration(new LogExamDoiSachConfiguration());
 
+            modelBuilder.ApplyConfiguration(new PostCategoryConfiguration());
+            modelBuilder.ApplyConfiguration(new PostPostConfiguration());
+
+            modelBuilder.ApplyConfiguration(new ThongBaoCategoryConfiguration());
+            modelBuilder.ApplyConfiguration(new ThongBaoPostConfiguration());
+
 
             modelBuilder.Entity<IdentityUserClaim<Guid>>().ToTable("AppUserClaims");
             modelBuilder.Entity<IdentityUserRole<Guid>>().ToTable("AppUserRoles")
@@ -87,6 +93,10 @@ namespace Data.EF
         /// </summary>
         public DbSet<PostCategory> postCategories { get; set; }
         public DbSet<PostPost> postPosts { get; set; }
+
+        public DbSet<ThongBaoCategory> thongBaoCategories { get; set; }
+        public DbSet<ThongBaoPost> thongBaoPosts { get; set; }
+
 
     }
 }

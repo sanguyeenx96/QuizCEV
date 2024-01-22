@@ -50,7 +50,7 @@ namespace Data.Migrations
                         new
                         {
                             Id = new Guid("8d04dce2-969a-435d-bba4-df3f325983dc"),
-                            ConcurrencyStamp = "1c2805fa-756c-4b22-ad41-ac739a310c4f",
+                            ConcurrencyStamp = "6d537fbf-bb5d-4491-8d86-0a345766335a",
                             Description = "Administrator role",
                             Name = "admin",
                             NormalizedName = "admin"
@@ -58,7 +58,7 @@ namespace Data.Migrations
                         new
                         {
                             Id = new Guid("470f4021-29d8-4c8e-a9de-527571683d86"),
-                            ConcurrencyStamp = "9b50e80b-1043-45d8-abbd-fad4ba8b1e50",
+                            ConcurrencyStamp = "5219feb8-757b-4db4-946a-dcc104d4591e",
                             Description = "User role",
                             Name = "user",
                             NormalizedName = "user"
@@ -134,14 +134,14 @@ namespace Data.Migrations
                             Id = new Guid("69bd714f-9576-45ba-b5b7-f00649be00de"),
                             AccessFailedCount = 0,
                             CellId = 1,
-                            ConcurrencyStamp = "5ffecd8a-6bb3-4a93-8ade-f1843e021393",
+                            ConcurrencyStamp = "add7c7a0-3979-49d4-848b-619648ee6b58",
                             Email = "smt.ngocsang@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             Name = "Nguyen Ngoc Sang",
                             NormalizedEmail = "smt.ngocsang@gmail.com",
                             NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAEG58eD6nC3lWYVMXPxK1NTTaNjU8F9kVr0BB+RGCMUOD+KHgerIKP7WEo62uUXdF/Q==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEEpzjA/Gy8YUKZrkv6w+PjjJralFlgHROBZKluwXgTetGTnaZyN2jHQlugg0uScg4A==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -566,7 +566,7 @@ namespace Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("postCategories");
+                    b.ToTable("PostCategory", (string)null);
                 });
 
             modelBuilder.Entity("Data.Entities.PostPost", b =>
@@ -608,7 +608,7 @@ namespace Data.Migrations
 
                     b.HasIndex("PostCategoryId");
 
-                    b.ToTable("postPosts");
+                    b.ToTable("PostPost", (string)null);
                 });
 
             modelBuilder.Entity("Data.Entities.Question", b =>
@@ -677,6 +677,70 @@ namespace Data.Migrations
                             Name = "Retest",
                             Status = true
                         });
+                });
+
+            modelBuilder.Entity("Data.Entities.ThongBaoCategory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ThongBaoCategory", (string)null);
+                });
+
+            modelBuilder.Entity("Data.Entities.ThongBaoPost", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateUpdated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FilePath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ThongBaoCategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ThumbImage")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ViewCount")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ThongBaoCategoryId");
+
+                    b.ToTable("ThongBaoPost", (string)null);
                 });
 
             modelBuilder.Entity("Data.Entities.TTTTDiemChuY", b =>
@@ -989,6 +1053,17 @@ namespace Data.Migrations
                     b.Navigation("Category");
                 });
 
+            modelBuilder.Entity("Data.Entities.ThongBaoPost", b =>
+                {
+                    b.HasOne("Data.Entities.ThongBaoCategory", "thongBaoCategory")
+                        .WithMany("thongBaoPosts")
+                        .HasForeignKey("ThongBaoCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("thongBaoCategory");
+                });
+
             modelBuilder.Entity("Data.Entities.TTTTDiemChuY", b =>
                 {
                     b.HasOne("Data.Entities.CauHoiTrinhTuThaoTac", "CauHoiTrinhTuThaoTac")
@@ -1071,6 +1146,11 @@ namespace Data.Migrations
             modelBuilder.Entity("Data.Entities.PostCategory", b =>
                 {
                     b.Navigation("PostPosts");
+                });
+
+            modelBuilder.Entity("Data.Entities.ThongBaoCategory", b =>
+                {
+                    b.Navigation("thongBaoPosts");
                 });
 
             modelBuilder.Entity("Data.Entities.TTTTLoiTaiCongDoan", b =>

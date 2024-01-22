@@ -14,6 +14,5 @@ namespace WebAPP.Services
         Task<ApiResult<bool>> Delete(int id);
         Task<ApiResult<bool>> Update(int id, PostPostsUpdateRequest request);
         Task<ApiResult<bool>> UpdateThumbImage(int id, PostPostThumbImageUpdate request);
-
     }
 }

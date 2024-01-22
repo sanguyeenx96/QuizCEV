@@ -1,15 +1,10 @@
-﻿<style>
-
-</style>
-<div class="sidebar sidebar-dark sidebar-fixed" id="sidebar">
+﻿<div class="sidebar sidebar-dark sidebar-fixed" id="sidebar">
     <div class="sidebar-brand d-none d-md-flex">
         <button class="badge badge-lg bg-dark m-2 " disabled>
             Trang quản trị
         </button>
     </div>
-
     <ul class="sidebar-nav" data-coreui="navigation" data-simplebar="">
-      
         <li class="nav-item">
             <a id="pageDiemsoThongke" class="nav-link" asp-action="index" asp-controller="home" asp-area="admin">
                 <i class="bi-speedometer2 mx-3"></i>
@@ -46,28 +41,30 @@
                 </li>                
             </ul>
         </li>
-
         <li class="nav-group" aria-expanded="false">
             <a class="nav-link nav-group-toggle" href="#">
                 <i class="bi-folder2-open mx-3"></i>
-                Quản lý tin tức
+                Quản lý thông báo
             </a>
             <ul class="nav-group-items" style="height: auto;">
                 <li class="nav-item">
-                    <a class="nav-link" asp-action="list" asp-controller="question" asp-area="admin" style="font-size:small">
-                        Danh sách tin tức
+                    <a id="" class="nav-link" asp-action="category" asp-controller="thongbao" asp-area="admin" style="font-size:small">
+                        Danh sách chủ đề
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a  class="nav-link" asp-action="create" asp-controller="question" asp-area="admin" style="font-size:small">
-                        Đăng tin tức mới
+                    <a id="" class="nav-link" asp-action="listpost" asp-controller="thongbao" asp-area="admin" style="font-size:small">
+                        Danh sách thông báo
                     </a>
                 </li>
-                
+                <li class="nav-item">
+                    <a id="" class="nav-link" asp-action="createnewpost" asp-controller="thongbao" asp-area="admin" style="font-size:small">
+                        Tạo thông báo mới
+                    </a>
+                </li>
             </ul>
         </li>
 
-        <li class="nav-title">Quản lý lương thưởng  </li>
 
         <li class="nav-title">Tài liệu đào tạo  </li>
 
