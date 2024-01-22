@@ -82,7 +82,7 @@ namespace WebAPP.Areas.Admin.Controllers
                 Text = x.Title,
                 Value = x.Id.ToString()
             });
-            ViewBag.thisPage = "Tạo bài đăng mới";
+            ViewBag.thisPage = "Tạo bài đăng tin tức mới";
             return View();
         }
 
@@ -105,7 +105,7 @@ namespace WebAPP.Areas.Admin.Controllers
                 Text = x.Title,
                 Value = x.Id.ToString()
             });
-            ViewBag.thisPage = "Danh sách bài đăng";
+            ViewBag.thisPage = "Danh sách bài đăng tin tức";
             var listPostWithOutContent = await _postPostsApiClient.GetAllByCategory(postCategoryId);
             ViewBag.SelectedCategoryId = postCategoryId.ToString();
             return View(listPostWithOutContent.ResultObj);
@@ -124,7 +124,7 @@ namespace WebAPP.Areas.Admin.Controllers
 
         public async Task<IActionResult> UpdatePost(int id)
         {
-            ViewBag.thisPage = "Sửa bài đăng";
+            ViewBag.thisPage = "Sửa bài đăng tin tức";
             var resultChude = await _postCategoryApiClient.GetAll();
             ViewBag.selectChude = resultChude.ResultObj.Select(x => new SelectListItem()
             {

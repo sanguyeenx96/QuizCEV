@@ -64,7 +64,7 @@ namespace WebAPP.Areas.Admin.Controllers
             {
                 //IsReadOnly = !User.IsInRole("Administrators")
                 IsReadOnly = false, // Can be readonly according to user's membership permission
-                IsLocked = false, // If locked, files and directories cannot be deleted, renamed or moved
+                IsLocked = true, // If locked, files and directories cannot be deleted, renamed or moved
                 Alias = "Thư mục gốc", // Beautiful name given to the root/home folder
                 //MaxUploadSizeInKb = 2048, // Limit imposed to user uploaded file <= 2048 KB
                 //LockedFolders = new List<string>(new string[] { "Folder1" }

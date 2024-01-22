@@ -60,24 +60,23 @@ namespace Application.Post.PostPosts
         public async Task<ApiResult<List<PostPostsVm>>> Get6()
         {
             var result = await _context.postPosts
-       .Select(x => new PostPostsVm()
-       {
-           Id = x.Id,
-           Title = x.Title,
-           Description = x.Description,
-           ThumbImage = x.ThumbImage,
-           DateCreated = x.DateCreated,
-           DateUpdated = x.DateUpdated,
-           ViewCount = x.ViewCount,
-           PostCategoryId = x.PostCategoryId,
-           catName = _context.postCategories
-                       .Where(pc => pc.Id == x.PostCategoryId)
-                       .Select(pc => pc.Title)
-                       .FirstOrDefault()
-       })
-       .Take(6)
-       .ToListAsync();
-
+           .Select(x => new PostPostsVm()
+           {
+               Id = x.Id,
+               Title = x.Title,
+               Description = x.Description,
+               ThumbImage = x.ThumbImage,
+               DateCreated = x.DateCreated,
+               DateUpdated = x.DateUpdated,
+               ViewCount = x.ViewCount,
+               PostCategoryId = x.PostCategoryId,
+               catName = _context.postCategories
+                           .Where(pc => pc.Id == x.PostCategoryId)
+                           .Select(pc => pc.Title)
+                           .FirstOrDefault()
+           })
+           .Take(6)
+           .ToListAsync();
             return new ApiSuccessResult<List<PostPostsVm>>(result);
         }
 
@@ -132,7 +131,6 @@ namespace Application.Post.PostPosts
             var post = await _context.postPosts.FindAsync(id);
             if (post == null)
                 return new ApiErrorResult<PostPostsVm>($"Không tìm thấy post có id {id}");
-
             var result = new PostPostsVm
             {
                 Id = post.Id,
@@ -149,7 +147,6 @@ namespace Application.Post.PostPosts
                             .Select(pc => pc.Title)
                             .FirstOrDefault()
             };
-
             if (result.catName == null)
             {
                 // Xử lý trường hợp không tìm thấy catName

@@ -1,0 +1,221 @@
+﻿<h1 class="display-6 mb-3" style="text-align:center">
+    TẠO BÀI ĐĂNG THÔNG BÁO MỚI
+</h1>
+<div class="container-fluid">
+    <div class="card text-bg-white mb-2">
+        <div class="card-body">
+            <small>
+                Chọn chủ đề
+            </small>
+            <select class="form-select form-select mb-2" id="categoryId" style="overflow: hidden;">
+                <option selected disabled>Nhấn để chọn</option>
+                @foreach (var item in ViewBag.selectChude)
+                {
+                    <option value="@item.Value">@item.Text</option>
+                }
+            </select>
+            <small>
+                Nhập tiêu đề
+            </small>
+            <input id="txtTieude" class="form-control mb-2" placeholder="Nhập tiêu đề bài viết tại đây..." />
+            <small>
+                Tệp tin đính kèm
+            </small>
+            <form id="uploadForm" method="post" enctype="multipart/form-data">
+                <input type="file" class="form-control btn btn-light" id="fileInput" name="file" />
+            </form>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <textarea id="editor">
+            </textarea>
+        </div>
+    </div>
+    <button id="btnXacNhan" class="btn btn-primary mt-2" style="text-align: center; width:200px">
+        <i class="bi-check"></i>
+        Xác nhận
+    </button>
+</div>
+
+<script>
+    $(document).ready(function () {
+        (function (factory) {
+            if (typeof define === 'function' && define.amd) {
+                define(['jquery'], factory);
+            }
+            else if (typeof module === 'object' && module.exports) {
+                module.exports = factory(require('jquery'));
+            } else {
+                factory(window.jQuery);
+            }
+        }(function ($) {
+            $.extend($.summernote.plugins, {
+                // Tạo plugin tên elfinder
+                'elfinder': function (context) {
+                    var self = this;
+                    // ui has renders to build ui elements.
+                    var ui = $.summernote.ui;
+                    // Tạo nút bấm
+                    context.memo('button.elfinder', function () {
+                        var button = ui.button({
+                            contents: '<i class="note-icon-picture"/> elFinder',
+                            tooltip: 'Quản lý file',
+                            click: function () {
+                                // Bấm vào nút bấm gọi hàm elfinderDialog
+                                elfinderDialog(context);
+                            }
+                        });
+                        // create jQuery object from button instance.
+                        var $elfinder = button.render();
+                        return $elfinder;
+                    });
+                    // This methods will be called when editor is destroyed by $('..').summernote('destroy');
+                    // You should remove elements on `initialize`.
+                    this.destroy = function () {
+                        this.$panel.remove();
+                        this.$panel = null;
+                    };
+                }
+            });
+        }));
+        function elfinderDialog(editor) {
+            var fm = $('<div/>').dialogelfinder({
+                baseUrl: "@Url.Content("~/lib/elfinder/")",
+                url: "@Url.Action("Connector","FileManager", new{area ="Admin"})",
+                lang: 'vi',
+                width: 840,
+                height: 450,
+                destroyOnClose: true,
+                getFileCallback: function (files, fm) {
+                    console.log(files);
+                    editor.invoke('editor.insertImage', files.url);
+                },
+                commandsOptions: {
+                    getfile: {
+                        oncomplete: 'close',
+                        folders: false
+                    }
+                }
+            }).dialogelfinder('instance');
+        }
+
+        $('#editor').summernote({
+            height: 500,
+            toolbar: [
+                ['style', ['style']],
+                ['font', ['bold', 'italic', 'underline', 'clear']],
+                ['fontname', ['fontname']],
+                ['fontsize', ['fontsize']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['table', ['table']],
+                ['height', ['height']],
+                ['insert', ['elfinder', 'link']],
+                ['view', ['fullscreen', 'codeview']],
+            ]
+        });
+
+        var filePath;
+
+        $('#btnXacNhan').click(function () {
+            // Lấy ra tệp tin được chọn
+            var selectedFile = $('#fileInput').prop('files')[0];
+            // Kiểm tra xem có tệp tin nào được chọn không
+            if (selectedFile) {
+                // Nếu có tệp tin, thực hiện lưu
+                var formData = new FormData($('#uploadForm')[0]);
+                $.ajax({
+                    url: '/upload',
+                    type: 'POST',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function (data) {
+                        if (data.success) {
+                            // Tải lên tệp tin thành công, tiếp tục lưu nội dung bài viết
+                            filePath = "Uploads" + "\\" + "Thông báo" + "\\" + data.fileName;
+                            savePost();
+                        } else {
+                            // Hiển thị thông báo khi tải lên tệp tin thất bại
+                            alert('Lỗi khi tải lên tệp tin: ' + data.message);
+                        }
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                        alert('Lỗi: ' + errorThrown);
+                    }
+                });
+            } else {
+                savePost();
+            }
+        });
+
+        function savePost() {
+            var idCategory = $('#categoryId').val();
+            var txtTieude = $('#txtTieude').val();
+            var txtMotangan = $('#txtMotangan').val();
+            var editorData = $('#editor').val();
+            if (idCategory == null) {
+                Swal.fire({
+                    icon: "warning",
+                    title: "Chưa chọn chủ đề",
+                    showConfirmButton: false,
+                    timer: 2000
+                }).then(function () {
+                    $('#categoryId').focus();
+                })
+            }
+            else if (txtTieude.length < 1) {
+                Swal.fire({
+                    icon: "warning",
+                    title: "Chưa nhập tiêu đề",
+                    showConfirmButton: false,
+                    timer: 2000
+                }).then(function () {
+                    $('#txtTieude').focus();
+                })
+            }
+            else if (editorData.length < 1) {
+                Swal.fire({
+                    icon: "warning",
+                    title: "Chưa nhập nội dung bài viết",
+                    showConfirmButton: false,
+                    timer: 2000
+                }).then(function () {
+                    $('#editor').focus();
+                })
+            } else {
+                var data = {
+                    ThongBaoCategoryId: idCategory,
+                    Title: txtTieude,
+                    Content: editorData,
+                    FilePath: filePath
+                };
+                console.log(data)
+                $.ajax({
+                    url: "CreatePost",
+                    type: "POST",
+                    contentType: 'application/json',
+                    data: JSON.stringify(data),
+                    success: function (data) {
+                        if (data.success) {
+                            Swal.fire({
+                                icon: "success",
+                                title: "Tạo bài đăng thành công",
+                                showConfirmButton: false,
+                                timer: 2000
+                            }).then(function () {
+                                window.location.reload();
+                            });
+                        } else {
+                            Swal.fire("Thất bại!", data.message, "error");
+                        }
+                    },
+                    error: function (xhr, t, error) {
+                        Swal.fire("Thất bại!", "Lỗi máy chủ", "error");
+                    },
+                });
+            }
+        }
+    })
+</script>

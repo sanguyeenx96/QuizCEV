@@ -49,6 +49,9 @@ builder.Services.AddTransient<ILogExamDSApiClient, LogExamDSApiClient>();
 builder.Services.AddTransient<IPostCategoryApiClient, PostCategoryApiClient>();
 builder.Services.AddTransient<IPostPostsApiClient, PostPostsApiClient>();
 
+builder.Services.AddTransient<IThongBaoCategoryApiClient, ThongBaoCategoryApiClient>();
+builder.Services.AddTransient<IThongBaoPostApiClient, ThongBaoPostApiClient>();
+
 var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

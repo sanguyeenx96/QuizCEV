@@ -20,6 +20,8 @@ namespace WebAPP.Areas.Guest.Controllers
         private readonly IUserApiClient _userApiClient;
         private readonly IPostPostsApiClient _postPostsApiClient;
         private readonly IPostCategoryApiClient _postCategoryApiClient;
+        private readonly IThongBaoPostApiClient _postPostsApiClient;
+        private readonly IThongBaoCategoryApiClient _postCategoryApiClient;
         public HomeController(IUserApiClient userApiClient, IConfiguration configuration, IPostPostsApiClient postPostsApiClient,IPostCategoryApiClient postCategoryApiClient)
         {
             _userApiClient = userApiClient;
@@ -149,6 +151,17 @@ namespace WebAPP.Areas.Guest.Controllers
             var resultAll = await _postPostsApiClient.GetAllByCategory(id);
             var result = resultAll.ResultObj.Take(3).ToList();
             return PartialView("guest/index/_tintuccungchuyenmuc", result);
+        }
+
+
+        //THÔNG BÁO
+
+        [HttpGet]
+        public async Task<IActionResult> Get6ThongBao()
+        {
+            var resultAll = await _postPostsApiClient.Get6();
+            var result = resultAll.ResultObj.ToList();
+            return PartialView("guest/index/_tintuc", result);
         }
     }
 }

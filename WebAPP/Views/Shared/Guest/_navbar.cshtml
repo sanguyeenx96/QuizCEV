@@ -1,8 +1,8 @@
 ﻿<style>
-/*    .nav-link.active {
-        border-bottom: 1px solid rgb(204, 0, 0);
-    }
-*/
+    /*    .nav-link.active {
+            border-bottom: 1px solid rgb(204, 0, 0);
+        }
+    */
     .custom-link {
         cursor: pointer;
     }
@@ -22,33 +22,21 @@
         <div class="collapse navbar-collapse" id="navbarTogglerDemo02" style="text-align:center">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a id="pageIndex" class="nav-link" aria-current="page" asp-area="guest" asp-controller="home" asp-action="index">Trang chủ</a>
+                    <a id="pageIndex" class="nav-link" aria-current="page" asp-area="guest" asp-controller="home" asp-action="index">
+                        Trang chủ
+                    </a>
                 </li>
-
-                <li class="nav-item dropdown">
-                    <a id="pageTintuc" class="nav-link dropdown-toggle" href="#" role="button" data-coreui-toggle="dropdown" aria-expanded="false">
+                <li class="nav-item">
+                    <a id="pageTintuc" class="nav-link" asp-action="listpost">
                         Tin tức
                     </a>
-                    <ul class="dropdown-menu">
-                        <li>
-                            <a id="pageTintucTintucnoibo" class="dropdown-item custom-link" asp-action="listpost">
-                                Tin tức nội bộ
-                            </a>
-                        </li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <li>
-                            <a class="dropdown-item custom-link" >
-                                Thông báo nội bộ
-                            </a>
-                        </li>
-                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link">
+                        Thông báo
+                    </a>
                 </li>
 
-                <li class="nav-item">
-                    <a class="nav-link custom-link" id="btnLuongThuong">Lương thưởng</a>
-                </li>
                 <li class="nav-item">
                     <a class="nav-link custom-link">Tài liệu đào tạo</a>
                 </li>
@@ -379,47 +367,47 @@
         }
     });
 
-            //$("#btnTestPageUser").click(function () {
-            //    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
-            //    if (isLoggedIn) {
-            //        const isAdmin = localStorage.getItem("isAdmin") === "true";
-            //        if (!isAdmin) {
-            //            var url = "User/Home/SelectRoom";
-            //            window.location.href = url;
-            //        } else {
+                //$("#btnTestPageUser").click(function () {
+                //    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+                //    if (isLoggedIn) {
+                //        const isAdmin = localStorage.getItem("isAdmin") === "true";
+                //        if (!isAdmin) {
+                //            var url = "User/Home/SelectRoom";
+                //            window.location.href = url;
+                //        } else {
 
-            //            Toast.fire({
-            //                icon: "error",
-            //                title: "Không có quyền truy cập"
-            //            });
-            //        }
-            //    } else {
-            //        Toast.fire({
-            //            icon: "error",
-            //            title: "Cần đăng nhập để truy cập"
-            //        });
-            //    }
-            //});
+                //            Toast.fire({
+                //                icon: "error",
+                //                title: "Không có quyền truy cập"
+                //            });
+                //        }
+                //    } else {
+                //        Toast.fire({
+                //            icon: "error",
+                //            title: "Cần đăng nhập để truy cập"
+                //        });
+                //    }
+                //});
 
-            //$("#btnTestPageAdmin").click(function () {
-            //    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
-            //    if (isLoggedIn) {
-            //        const isAdmin = localStorage.getItem("isAdmin") === "true";
-            //        if (isAdmin) {
-            //            var url = "Admin/thongke/Index";
-            //            window.location.href = url;
-            //        } else {
-            //            Toast.fire({
-            //                icon: "error",
-            //                title: "Không có quyền truy cập"
-            //            });
-            //        }
-            //    } else {
-            //        Toast.fire({
-            //            icon: "error",
-            //            title: "Cần đăng nhập để truy cập"
-            //        });
-            //    }
-            //});
+                //$("#btnTestPageAdmin").click(function () {
+                //    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+                //    if (isLoggedIn) {
+                //        const isAdmin = localStorage.getItem("isAdmin") === "true";
+                //        if (isAdmin) {
+                //            var url = "Admin/thongke/Index";
+                //            window.location.href = url;
+                //        } else {
+                //            Toast.fire({
+                //                icon: "error",
+                //                title: "Không có quyền truy cập"
+                //            });
+                //        }
+                //    } else {
+                //        Toast.fire({
+                //            icon: "error",
+                //            title: "Cần đăng nhập để truy cập"
+                //        });
+                //    }
+                //});
 </script>
 

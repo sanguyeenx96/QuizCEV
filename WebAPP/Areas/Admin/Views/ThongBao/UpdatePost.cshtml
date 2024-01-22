@@ -1,0 +1,187 @@
+﻿@model ViewModels.ThongBaoPost.Response.ThongBaoPostVm
+
+<h1 class="display-6 mb-3" style="text-align:center">
+    SỬA BÀI ĐĂNG THÔNG BÁO
+</h1>
+<div class="container-fluid">
+    <div class="card text-bg-white mb-2">
+        <div class="card-body">
+            <small>
+                Chủ đề
+            </small>
+            <select class="form-select form-select mb-2" id="categoryId" style="overflow: hidden;">
+                @foreach (var item in ViewBag.selectChude)
+                {
+                    <option value="@item.Value" @(item.Value == Model.ThongBaoCategoryId.ToString() ? "selected" : "")>@item.Text</option>
+                }
+            </select>
+            <small>
+                Tiêu đề
+            </small>
+            <input id="txtTieude" class="form-control mb-2" placeholder="Nhập tiêu đề bài viết tại đây..." value="@Model.Title" />
+            <small>
+                Tệp tin đính kèm
+            </small>
+            <input class="form-control" value="@Model.FilePath" disabled />
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <textarea id="editor">
+                @Model.Content
+            </textarea>
+        </div>
+    </div>
+
+    <button id="btnXacNhan" class="btn btn-outline-primary  mt-2" style="text-align: center; width:200px" data-id="@Model.Id">
+        <i class="bi-check"></i>
+        Xác nhận
+    </button>
+</div>
+
+<script>
+    $(document).ready(function () {
+        (function (factory) {
+            if (typeof define === 'function' && define.amd) {
+                define(['jquery'], factory);
+            }
+            else if (typeof module === 'object' && module.exports) {
+                module.exports = factory(require('jquery'));
+            } else {
+                factory(window.jQuery);
+            }
+        }(function ($) {
+            $.extend($.summernote.plugins, {
+                // Tạo plugin tên elfinder
+                'elfinder': function (context) {
+                    var self = this;
+                    // ui has renders to build ui elements.
+                    var ui = $.summernote.ui;
+                    // Tạo nút bấm
+                    context.memo('button.elfinder', function () {
+                        var button = ui.button({
+                            contents: '<i class="note-icon-picture"/> elFinder',
+                            tooltip: 'Quản lý file',
+                            click: function () {
+                                // Bấm vào nút bấm gọi hàm elfinderDialog
+                                elfinderDialog(context);
+                            }
+                        });
+                        // create jQuery object from button instance.
+                        var $elfinder = button.render();
+                        return $elfinder;
+                    });
+                    // This methods will be called when editor is destroyed by $('..').summernote('destroy');
+                    // You should remove elements on `initialize`.
+                    this.destroy = function () {
+                        this.$panel.remove();
+                        this.$panel = null;
+                    };
+                }
+            });
+        }));
+        function elfinderDialog(editor) {
+            var fm = $('<div/>').dialogelfinder({
+                baseUrl: "@Url.Content("~/lib/elfinder/")",
+                url: "@Url.Action("Connector","FileManager", new{area ="Admin"})",
+                lang: 'vi',
+                width: 840,
+                height: 450,
+                destroyOnClose: true,
+                getFileCallback: function (files, fm) {
+                    console.log(files);
+                    editor.invoke('editor.insertImage', files.url);
+                },
+                commandsOptions: {
+                    getfile: {
+                        oncomplete: 'close',
+                        folders: false
+                    }
+                }
+            }).dialogelfinder('instance');
+        }
+
+        $('#editor').summernote({
+            height: 500,
+            toolbar: [
+                ['style', ['style']],
+                ['font', ['bold', 'italic', 'underline', 'clear']],
+                ['fontname', ['fontname']],
+                ['fontsize', ['fontsize']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['table', ['table']],
+                ['height', ['height']],
+                ['insert', ['elfinder', 'link']],
+                ['view', ['fullscreen', 'codeview']],
+            ]
+        });
+
+        $('#btnXacNhan').click(function () {
+            var id = $(this).data("id");
+            id = parseInt(id);
+            var idCategory = $('#categoryId').val();
+            var txtTieude = $('#txtTieude').val();
+            var editorData = $('#editor').val();
+
+            if (idCategory == null) {
+                Swal.fire({
+                    icon: "warning",
+                    title: "Chưa chọn chủ đề",
+                    showConfirmButton: false,
+                    timer: 2000
+                }).then(function () {
+                    $('#categoryId').focus();
+                })
+            } else if (txtTieude.length < 1) {
+                Swal.fire({
+                    icon: "warning",
+                    title: "Chưa nhập tiêu đề",
+                    showConfirmButton: false,
+                    timer: 2000
+                }).then(function () {
+                    $('#txtTieude').focus();
+                })
+            } else if (editorData.length < 1) {
+                Swal.fire({
+                    icon: "warning",
+                    title: "Chưa nhập nội dung bài viết",
+                    showConfirmButton: false,
+                    timer: 2000
+                }).then(function () {
+                    $('#editor').focus();
+                })
+            } else {
+                var data = {
+                    ThongBaoCategoryId: idCategory,
+                    Title: txtTieude,
+                    Content: editorData,
+                };
+                console.log(data)
+                $.ajax({
+                    url: "/admin/thongbao/UpdatePostContent/" + id,
+                    type: "POST",
+                    contentType: 'application/json',
+                    data: JSON.stringify(data),
+                    success: function (data) {
+                        if (data.success) {
+                            Swal.fire({
+                                icon: "success",
+                                title: "Sửa bài đăng thành công",
+                                showConfirmButton: false,
+                                timer: 2000
+                            }).then(function () {
+                                window.location.href = '/admin/thongbao/listpost';
+                            });
+                        } else {
+                            Swal.fire("Thất bại!", data.message, "error");
+                        }
+                    },
+                    error: function (xhr, t, error) {
+                        Swal.fire("Thất bại!", "Lỗi máy chủ", "error");
+                    },
+                });
+            }
+        })
+    })
+</script>

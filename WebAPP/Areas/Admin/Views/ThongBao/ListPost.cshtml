@@ -1,0 +1,199 @@
+﻿@model List<ViewModels.ThongBaoPost.Response.ThongBaoPostVm>
+<h1 class="display-6 mb-3" style="text-align:center">
+    DANH SÁCH BÀI ĐĂNG THÔNG BÁO
+</h1>
+<div class="container-fluid">
+    <form id="myForm" asp-action="ListPost" method="post">
+        <div class="card text-bg-white mb-2">
+            <div class="card-body">
+                <small>
+                    Chọn chủ đề
+                </small>
+                <select class="form-select form-select mb-2" id="categoryId" name="thongbaoCategoryId" style="overflow: hidden;">
+                    <option selected disabled>Nhấn để chọn</option>
+                    @foreach (var item in ViewBag.selectChude)
+                    {
+                        <option value="@item.Value" @(item.Value == ViewBag.SelectedCategoryId ? "selected" : "")>@item.Text</option>
+                    }
+                </select>
+            </div>
+        </div>
+    </form>
+    @{
+        if (Model != null)
+        {
+            <div class="card text-bg-white mb-2">
+                <div class="card-body">
+                    <table id="tblData" class="table table-hover" style="text-align:start; vertical-align:middle;width:100%">
+                        <thead style="font-size:small">
+                            <tr>
+                                <th style="text-align:center;font-weight: 350;">
+                                </th>
+                                <th style="text-align:center;font-weight: 350;">
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.OrderByDescending(x => x.DateUpdated))
+                            {
+                                <tr>
+                                    <td>
+                                        <div class="row align-items-center">
+                                            <div class="col-3 text-center">
+                                                <button class="btn btn-secondary" style="width:100%" disabled>
+                                                    <i class="bi-envelope-paper"></i>
+                                                </button>
+                                            </div>
+                                            <div class="col-9">
+                                                <p class="mb-0">
+                                                    <strong>
+                                                        @item.Title
+                                                    </strong>
+                                                </p>
+                                                <p class="mb-1">
+                                                    <em>
+                                                        <small>
+                                                            @item.Description
+                                                        </small>
+                                                    </em>
+                                                </p>
+                                                <p class="badge text-bg-warning mb-0" >
+                                                    <small>
+                                                        <i class="bi-calendar3"></i>
+                                                        @item.DateUpdated
+                                                    </small>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td style="text-align:end">
+                                        <div class="btn-group" style=" white-space:nowrap">                                        
+                                            <btn class="btn btn-sm btn-outline-primary btnSuaBai" data-id="@item.Id">
+                                                <i class="bi-pencil"> </i>
+                                                Sửa bài
+                                            </btn>
+                                            <btn class="btn btn-sm btn-outline-danger btnXoa" data-id="@item.Id" data-name="@item.Title">
+                                                <i class="bi-trash"> </i>
+                                                Xoá
+                                            </btn>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+    }
+</div>
+
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Sửa hình ảnh nhỏ minh hoạ</h5>
+                <button type="button" class="btn-close" data-coreui-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input id="imageFile" name="imageFile" type="file" accept="image/*" class=" imageFile btn  btn-light form-control " />
+                <img src="" id="preview" hidden>
+                <input id="image" type="text" name="Image" class="form-control" hidden />
+                <div class="mt-2" style="text-align:center">
+                    <img style="width: 50%" src="" id="output">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="btnXacnhansuahinhanh" type="button" class="btn btn-outline-primary">
+                    <i class="bi-check"></i>
+                    Xác nhận
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    $(document).ready(function () {
+        // Lắng nghe sự kiện thay đổi trên select list
+        $('#categoryId').on('change', function () {
+            // Gửi form khi có sự thay đổi
+            $('#myForm').submit();
+        });
+
+        $("#tblData").DataTable({
+            "paging": true,
+            "searching": true,
+            "info": true,
+            "responsive": true,
+            "ordering": false
+        });
+
+
+        $('.btnSuaBai').click(function (evt) {
+            var id = $(this).data("id");
+            var url = "UpdatePost/" + id;
+            window.location.href = url;
+        });
+
+
+        $('.btnXoa').click(function (evt) {
+            var id = $(this).data("id");
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: "btn btn-success",
+                    cancelButton: "btn btn-danger",
+                },
+                buttonsStyling: true,
+            });
+            swalWithBootstrapButtons
+                .fire({
+                    title: "Xoá bài đăng?",
+                    text: "Dữ liệu liên quan tới bài đăng sẽ bị xoá",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: "Xác nhận",
+                    cancelButtonText: "Huỷ bỏ",
+                    reverseButtons: true,
+                })
+                .then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: "DeletePost",
+                            type: "POST",
+                            data: {
+                                id: id,
+                            },
+                            success: function (result) {
+                                if (result.success) {
+                                    Swal.fire({
+                                        icon: "success",
+                                        title: "Xoá bài đăng thành công",
+                                        showConfirmButton: false,
+                                        timer: 1500,
+                                    }).then(function () {
+                                        location.reload()
+                                    })
+                                } else {
+                                    Swal.fire(
+                                        "Lỗi máy chủ",
+                                        "Thao tác đã được huỷ bỏ!",
+                                        "error"
+                                    );
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                                Swal.fire(
+                                    "Lỗi máy chủ",
+                                    "Thao tác đã được huỷ bỏ!",
+                                    "error"
+                                );
+                            },
+                        });
+                    }
+                });
+        });
+    });
+</script>
