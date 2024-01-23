@@ -1,13 +1,8 @@
 ﻿@model ViewModels.PostPosts.Response.PostPostsVm
-@{
-    ViewData["Active"] = "pageIndex";
-}
+
 @{
     ViewData["Active"] = "pageTintuc";
-    ViewData["childActive"] = "pageTintucTintucnoibo";
 }
-
-
 
 <style>
     .content img {
@@ -16,9 +11,7 @@
         border-radius: 4px; /* Điều chỉnh giá trị để làm tròn góc theo mong muốn */
     }
 
-    .navbar-nav .nav-link.active, .navbar-nav .nav-link.show {
-        color: unset;
-    }
+    
 </style>
 
 <section class="py-3 py-md-5 py-xl-8 bg-light">
@@ -33,7 +26,7 @@
                             </a>
                         </li>
                     </ul>
-                    <h2 class="display-3  mb-4">
+                    <h2 class="display-5  mb-4">
                         @Model.Title
                     </h2>
                 </div>
@@ -77,6 +70,7 @@
         </div>
     </div>
 </section>
+
 <div id="tintuccungchuyenmuc"></div>
 
 

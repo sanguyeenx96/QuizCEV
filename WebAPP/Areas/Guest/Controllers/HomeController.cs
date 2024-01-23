@@ -20,14 +20,19 @@ namespace WebAPP.Areas.Guest.Controllers
         private readonly IUserApiClient _userApiClient;
         private readonly IPostPostsApiClient _postPostsApiClient;
         private readonly IPostCategoryApiClient _postCategoryApiClient;
-        private readonly IThongBaoPostApiClient _postPostsApiClient;
-        private readonly IThongBaoCategoryApiClient _postCategoryApiClient;
-        public HomeController(IUserApiClient userApiClient, IConfiguration configuration, IPostPostsApiClient postPostsApiClient,IPostCategoryApiClient postCategoryApiClient)
+        private readonly IThongBaoPostApiClient _thongBaoPostApiClient;
+        private readonly IThongBaoCategoryApiClient _thongBaoCategoryApiClient;
+        public HomeController(IUserApiClient userApiClient, IConfiguration configuration, 
+            IPostPostsApiClient postPostsApiClient,IPostCategoryApiClient postCategoryApiClient,
+            IThongBaoPostApiClient thongBaoPostApiClient, IThongBaoCategoryApiClient thongBaoCategoryApiClient
+            )
         {
             _userApiClient = userApiClient;
             _configuration = configuration;
             _postPostsApiClient = postPostsApiClient;
             _postCategoryApiClient = postCategoryApiClient;
+            _thongBaoCategoryApiClient = thongBaoCategoryApiClient;
+            _thongBaoPostApiClient = thongBaoPostApiClient;
         }
 
         [HttpPost]
@@ -114,7 +119,7 @@ namespace WebAPP.Areas.Guest.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            return View(); 
         }
 
         public async Task<IActionResult> ListPost()
@@ -129,7 +134,6 @@ namespace WebAPP.Areas.Guest.Controllers
             var result = await _postPostsApiClient.GetAllByCategory(id);
             return PartialView("guest/listpost/_noidungtab", result.ResultObj);
         }
-
 
         public async Task<IActionResult> ViewPost(int id)
         {
@@ -159,9 +163,49 @@ namespace WebAPP.Areas.Guest.Controllers
         [HttpGet]
         public async Task<IActionResult> Get6ThongBao()
         {
-            var resultAll = await _postPostsApiClient.Get6();
+            var resultAll = await _thongBaoPostApiClient.Get6();
             var result = resultAll.ResultObj.ToList();
-            return PartialView("guest/index/_tintuc", result);
+            return PartialView("guest/index/_thongbao", result);
         }
+
+        public async Task<IActionResult> ViewThongBao(int id)
+        {
+            var result = await _thongBaoPostApiClient.GetById(id);
+            return View(result.ResultObj);
+        }
+        public async Task<IActionResult> ListThongBao()
+        {
+            var result = await _thongBaoCategoryApiClient.GetAll();
+            return View(result.ResultObj);
+        }
+        [HttpPost]
+        public async Task<IActionResult> GetListThongBaoByCategory(int id)
+        {
+            var result = await _thongBaoPostApiClient.GetAllByCategory(id);
+            return PartialView("guest/listthongbao/_noidungtab", result.ResultObj);
+        }
+
+        public IActionResult DownloadFile(string filename)
+        {
+            // Đường dẫn thực tế đến file trên máy chủ
+            string filePath = Path.Combine(Directory.GetCurrentDirectory(), "Uploads", "Thông báo", filename);
+
+            // Kiểm tra xem file có tồn tại không
+            if (System.IO.File.Exists(filePath))
+            {
+                // Đọc nội dung của file thành một mảng byte
+                byte[] fileBytes = System.IO.File.ReadAllBytes(filePath);
+                // Xác định loại nội dung của file
+                string contentType = "application/octet-stream"; // Loại nội dung tổng quát cho các tệp tin nhị phân
+                // Tạo một tên file để hiển thị khi tải về
+                string downloadFileName = filename; // Bạn có thể điều chỉnh tên file theo ý muốn
+                return File(fileBytes, contentType, downloadFileName);
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+
     }
 }

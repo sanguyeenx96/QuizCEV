@@ -1,4 +1,6 @@
-﻿<style>
+﻿@model List<ViewModels.ThongBaoPost.Response.ThongBaoPostVm>
+
+<style>
     .list-group-item {
         padding-left: 0;
         padding-right: 0;
@@ -9,110 +11,57 @@
         <div class="row">
             <div class="col-12 ">
                 <h2 class="display-5 mb-3">Thông báo nội bộ</h2>
-                <button type="button" class="btn btn-lg btn-primary mb-3 mb-md-4 ">Xem tất cả</button>
+                <a type="button" class="btn btn-lg btn-primary mb-3 mb-md-4 " asp-action="listthongbao">Xem tất cả</a>
             </div>
         </div>
     </div>
     <div class="container overflow-hidden">
-        <div class="list-group list-group-flush my-1  animate__animated animate__fadeIn">
-            <a href="#" class="list-group-item">
-                <div class="d-flex w-100 justify-content-between">
-                    <h6 class="mb-1 me-1">
-                        Thông báo RBA
-                    </h6>
-                    <small class="text-muted" style="white-space:nowrap">
-                        <i class="bi-cloud-arrow-up"></i>
-                        Nguyễn Ngọc Sang
-                    </small>
-                </div>
-                <p class="mb-1">Chi tiết các nội dung đào tạo và tiêu chuẩn của RBA</p>
-                <small class="text-muted" style="white-space:nowrap">
-                    <i class="bi-calendar3"></i>
-                    08/01/2024
-                </small>               
-                <span class="px-2">&bull;</span>
-                <small class="text-muted d-inline-block" style="width:60px;">
-                    <i class="bi-eye"></i>
-                    5251
-                </small>
-            </a>
-            <a href="#" class="list-group-item">
-                <div class="d-flex w-100 justify-content-between">
-                    <h6 class="mb-1 me-1">
-                        Thông báo lịch nghỉ Tết Nguyên Đán 2023
-                    </h6>
-                    <small class="text-muted" style="white-space:nowrap">
-                        <i class="bi-cloud-arrow-up"></i>
-                        Nguyễn Ngọc Sang
-                    </small>
-                </div>
-                <p class="mb-1">Lịch nghỉ Tết Nguyên Đán 2023 và kế hoạch 2024</p>
-                <small class="text-muted" style="white-space:nowrap">
-                    <i class="bi-calendar3"></i>
-                    08/01/2024
-                </small>
-                <span class="px-2">&bull;</span>
-                <small class="text-muted d-inline-block" style="width:60px;">
-                    <i class="bi-eye"></i>
-                    5251
-                </small>
-            </a>
-            <a href="#" class="list-group-item">
-                <div class="d-flex w-100 justify-content-between">
-                    <h6 class="mb-1 me-1">
-                        Thông báo thay đổi Layout
-                    </h6>
-                    <small class="text-muted" style="white-space:nowrap">
-                        <i class="bi-cloud-arrow-up"></i>
-                        Nguyễn Ngọc Sang
-                    </small>
-                </div>
-                <p class="mb-1">Chi tiết các nội dung</p>
-                <small class="text-muted" style="white-space:nowrap">
-                    <i class="bi-calendar3"></i>
-                    08/01/2024
-                </small>
-                <span class="px-2">&bull;</span>
-                <small class="text-muted d-inline-block" style="width:60px;">
-                    <i class="bi-eye"></i>
-                    5251
-                </small>
-            </a>
-            <a href="#" class="list-group-item">
-                <div class="d-flex w-100 justify-content-between">
-                    <h6 class="mb-1 me-1">
-
-                        Thông báo RBA
-                    </h6>
-                    <small class="text-muted" style="white-space:nowrap">
-                        <i class="bi-cloud-arrow-up"></i>
-                        Nguyễn Ngọc Sang
-                    </small>
-                </div>
-                <p class="mb-1">Kế hoạch thực hiện</p>
-                <small class="text-muted" style="white-space:nowrap">
-                    <i class="bi-calendar3"></i>
-                    08/01/2024
-                </small>
-                <span class="px-2">&bull;</span>
-                <small class="text-muted d-inline-block" style="width:60px;">
-                    <i class="bi-eye"></i>
-                    5251
-                </small>
-            </a>
+        <div class="list-group list-group-flush my-1 animate__animated animate__fadeIn">
+            @foreach (var item in Model)
+            {
+                <a asp-action="viewthongbao" asp-route-id="@item.Id" class="list-group-item">
+                    <figure>
+                        <blockquote class="blockquote">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h6 class="mb-0 me-1">
+                                    @item.Title
+                                </h6>
+                                <small class="text-muted" style="white-space:nowrap">
+                                    <small class="text-muted" style="white-space:nowrap">
+                                        <i class="bi-calendar3"></i>
+                                        @item.DateUpdated.ToShortDateString()
+                                    </small>
+                                    <span class="px-2">&bull;</span>
+                                    <small class="text-muted d-inline-block" style="width:60px;">
+                                        <i class="bi-eye"></i>
+                                        @item.ViewCount
+                                    </small>
+                                </small>
+                            </div>
+                        </blockquote>
+                        @if (item.FilePath != null && item.FilePath.Length > 3)
+                        {
+                            <figcaption class="blockquote-footer">
+                                <cite>@item.FilePath.Substring(18)</cite>
+                            </figcaption>
+                        }
+                    </figure>
+                </a>
+            }
         </div>
     </div>
-   @* <p class="text-secondary" style="text-align:center">
-        <small>
-            Tải thêm
-        </small>
-        <br />
-        <a href="#">
-            <i class="bi-chevron-down" style="color:rgb(204, 0, 0)"></i>
-        </a>
-    </p>*@
 </section>
 
+@* <p class="text-secondary" style="text-align:center">
+    <small>
+        Tải thêm
+    </small>
+    <br />
+    <a href="#">
+        <i class="bi-chevron-down" style="color:rgb(204, 0, 0)"></i>
+    </a>
+</p>
+*@
 
 @*<header class="header mb-2">
     <a class="header-brand display-6">
@@ -132,22 +81,22 @@
     </ul>
 </header>
 
- <nav aria-label="Page navigation example">
-            <ul class="pagination justify-content-end">
-                <li class="page-item disabled">
-                    <a class="page-link">Previous</a>
-                </li>
-                <li class="page-item active" aria-current="page">
-                    <a class="page-link" href="#">1</a>
-                </li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
+<nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-end">
+        <li class="page-item disabled">
+            <a class="page-link">Previous</a>
+        </li>
+        <li class="page-item active" aria-current="page">
+            <a class="page-link" href="#">1</a>
+        </li>
+        <li class="page-item"><a class="page-link" href="#">2</a></li>
 
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item">
-                    <a class="page-link" href="#">Next</a>
-                </li>
-            </ul>
-        </nav>
+        <li class="page-item"><a class="page-link" href="#">3</a></li>
+        <li class="page-item">
+            <a class="page-link" href="#">Next</a>
+        </li>
+    </ul>
+</nav>
 
 *@
 

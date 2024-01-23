@@ -1,0 +1,40 @@
+﻿@model List<ViewModels.ThongBaoPost.Response.ThongBaoPostVm>
+<style>
+    .list-group-item {
+        padding-left: 0;
+        padding-right: 0;
+    }
+</style>
+<div class="list-group list-group-flush my-1 animate__animated animate__fadeIn">
+    @foreach (var item in Model)
+    {
+        <a asp-action="viewthongbao" asp-route-id="@item.Id" class="list-group-item">
+            <figure>
+                <blockquote class="blockquote">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h6 class="mb-0 me-1">
+                            @item.Title
+                        </h6>
+                        <small class="text-muted" style="white-space:nowrap">
+                            <small class="text-muted" style="white-space:nowrap">
+                                <i class="bi-calendar3"></i>
+                                @item.DateUpdated.ToShortDateString()
+                            </small>
+                            <span class="px-2">&bull;</span>
+                            <small class="text-muted d-inline-block" style="width:60px;">
+                                <i class="bi-eye"></i>
+                                @item.ViewCount
+                            </small>
+                        </small>
+                    </div>
+                </blockquote>
+                @if (item.FilePath != null && item.FilePath.Length > 3)
+                {
+                    <figcaption class="blockquote-footer">
+                        <cite>@item.FilePath.Substring(18)</cite>
+                    </figcaption>
+                }
+            </figure>
+        </a>
+    }
+</div>

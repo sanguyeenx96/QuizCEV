@@ -179,26 +179,5 @@ namespace WebAPP.Areas.Admin.Controllers
             }
         }
 
-        public IActionResult DownloadFile(string filename)
-        {
-            // Đường dẫn thực tế đến file trên máy chủ
-            string filePath = Path.Combine(Directory.GetCurrentDirectory(), "Uploads", "Thông báo", filename);
-
-            // Kiểm tra xem file có tồn tại không
-            if (System.IO.File.Exists(filePath))
-            {
-                // Đọc nội dung của file thành một mảng byte
-                byte[] fileBytes = System.IO.File.ReadAllBytes(filePath);
-                // Xác định loại nội dung của file
-                string contentType = "application/octet-stream"; // Loại nội dung tổng quát cho các tệp tin nhị phân
-                // Tạo một tên file để hiển thị khi tải về
-                string downloadFileName = filename; // Bạn có thể điều chỉnh tên file theo ý muốn
-                return File(fileBytes, contentType, downloadFileName);
-            }
-            else
-            {
-                return NotFound();
-            }
-        }
     }
 }

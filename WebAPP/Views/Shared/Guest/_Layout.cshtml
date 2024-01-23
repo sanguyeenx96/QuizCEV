@@ -56,10 +56,14 @@
         .body {
             flex-grow: 1;
         }
+
+        .navbar-nav .nav-link.active, .navbar-nav .nav-link.show {
+            color: rgb(204, 0, 0);
+        }
     </style>
 </head>
 <body>
-    <div class="wrapper d-flex flex-column min-vh-100 bg-light">
+    <div class="wrapper d-flex flex-column min-vh-100">
         <partial name="Guest/_navbar" />
         <div class="body bg-white ">
             @RenderBody()

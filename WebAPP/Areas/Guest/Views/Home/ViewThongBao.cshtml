@@ -1,0 +1,129 @@
+﻿@model ViewModels.ThongBaoPost.Response.ThongBaoPostVm
+@{
+    ViewData["Active"] = "pageThongBao";
+}
+<style>
+    .content img {
+        padding-top: 10px;
+        padding-bottom: 10px;
+        border-radius: 4px; /* Điều chỉnh giá trị để làm tròn góc theo mong muốn */
+    }
+
+    .custom-link {
+        cursor: pointer;
+    }
+</style>
+
+<section class="py-3 py-md-5 py-xl-8 bg-light">
+    <div class="container">
+        <div class="row gy-3 gy-lg-0 align-items-lg-center justify-content-lg-between">
+            <div class="col-12 order-1 order-lg-0">
+                <div class="entry-header mb-3">
+                    <ul class="entry-meta list-unstyled d-flex mb-3">
+                        <li>
+                            <a asp-action="listpost" class="d-inline-flex px-2 py-1 link-accent text-accent-emphasis bg-accent-subtle border border-accent-subtle rounded-2 text-decoration-none fs-7">
+                                @Model.catName
+                            </a>
+                        </li>
+                    </ul>
+                    <h2 class="display-5  mb-4">
+                        @Model.Title
+                    </h2>
+                </div>
+                <div class="entry-footer text-muted">
+                    <ul class="entry-meta list-unstyled d-flex align-items-center m-0">
+                        <li>
+                            <a class="fs-7 link-secondary text-decoration-none d-flex align-items-center">
+                                <i class="bi-calendar3"></i>
+                                <span class="ms-2 fs-7">@Model.DateCreated.ToShortDateString()</span>
+                            </a>
+                        </li>
+                        <li>
+                            <span class="px-3">&bull;</span>
+                        </li>
+                        <li>
+                            <a class="link-secondary text-decoration-none d-flex align-items-center">
+                                <i class="bi-eye"></i>
+                                <span class="ms-2 fs-7">@Model.ViewCount</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>            
+        </div>
+    </div>
+</section>
+
+<section class="py-3 py-md-5 py-xl-5">
+    <div class="container">
+        <div class="row justify-content-md-center gy-3 gy-xl-4">
+            <div class="col-12 gy-3 gy-xl-4 bsb-entry-content">
+                <div class="content">
+                    @Html.Raw(Model.Content)
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="bsb-post-pagination-2 pb-3 pb-md-5 pb-xl-10 bsb-section-pb-xxl-1X">
+    <div class="container overflow-hidden">
+        <div class="row justify-content-lg-center">
+            <div class="col-12 col-lg-10 col-xl-8 col-xxl-7">
+                <div class="bg-white p-4 p-md-5 border border-light-subtle ">
+                    <div class="row gy-3 gy-md-0 align-items-md-center">
+                        <div class="col-12 col-md-2" style="text-align:center">
+                            <a class="btnDownload custom-link" data-path="@Model.FilePath.Substring(18)">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-file-earmark-arrow-down" viewBox="0 0 16 16">
+                                    <path d="M8.5 6.5a.5.5 0 0 0-1 0v3.793L6.354 9.146a.5.5 0 1 0-.708.708l2 2a.5.5 0 0 0 .708 0l2-2a.5.5 0 0 0-.708-.708L8.5 10.293z" />
+                                    <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z" />
+                                </svg>
+                            </a>
+                        </div>
+                        <div class="col-12 col-md-10">
+                            <a class="d-block px-md-3 text-decoration-none btnDownload custom-link" data-path="@Model.FilePath.Substring(18)">
+                                <h5 class="link-secondary fw-bold fs-6 mb-3">Tập tin đính kèm</h5>
+                                <h2 class="link-dark fs-5">@Model.FilePath.Substring(18)</h2>
+                            </a>
+                        </div>                       
+                    </div>
+                </div>                
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    function downloadFile(filePath) {
+        $.ajax({
+            type: "GET",
+            url: "/guest/home/DownloadFile?filename=" + encodeURIComponent(filePath),
+            xhrFields: {
+                responseType: "blob", // Đặt kiểu dữ liệu của phản hồi thành blob
+            },
+            success: function (data) {
+                var url = window.URL.createObjectURL(data);
+                // Tạo một thẻ a ẩn để tải file
+                var a = document.createElement("a");
+                a.href = url;
+                a.download = filePath; // Tên file khi tải về
+                // Thêm thẻ a vào body và kích hoạt sự kiện click để tải file
+                document.body.appendChild(a);
+                a.click();
+                // Xóa đường dẫn URL sau khi đã tải xong
+                window.URL.revokeObjectURL(url);
+                Swal.fire("Thành công", "Tập tin đang được tải về...", "success");
+            },
+            error: function () {
+                Swal.fire("Thất bại", "Không tìm thấy tập tin ", "error");
+            },
+        });
+    }
+
+    //Button Download
+    $(".btnDownload").on("click", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var path = $(this).data("path");
+        downloadFile(path);
+    });
+</script>
