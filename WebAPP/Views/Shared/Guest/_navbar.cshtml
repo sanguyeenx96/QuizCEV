@@ -32,7 +32,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link">
+                    <a id="pageThongBao" class="nav-link" asp-action="listthongbao">
                         Thông báo
                     </a>
                 </li>
@@ -54,7 +54,7 @@
                 Đăng nhập
             </button>
             <div class="btn-group" id="grgroupBtnLogoutNew">
-                <button type="button" class="btn dropdown-toggle rounded-pill bg-light shadow-sm" data-coreui-toggle="dropdown" aria-expanded="false" id="groupBtnLogoutNew">
+                <button type="button" class="btn btn-sm dropdown-toggle rounded-pill bg-light" data-coreui-toggle="dropdown" aria-expanded="false" id="groupBtnLogoutNew">
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end" style="text-align:center">
                     <li>
@@ -116,13 +116,13 @@
                     $("#grgroupBtnLogoutNew").show();
                     if (data.role == "admin") {
                         localStorage.setItem("isAdmin", true);
-                        $("#groupBtnLogoutNew").html('<div class="avatar bg-warning"><i class="bi-person-fill"></i><span class="avatar-status bg-success"></span></div> ' + (data.name || ''));
+                        $("#groupBtnLogoutNew").html('<div class="avatar bg-primary shadow-sm"><i class="bi-person-fill" style="color:white" ></i><span class="avatar-status bg-success"></span></div> ' + (data.name || ''));
                         //$("#groupBtnLogoutNew").removeClass('text-white bg-primary');
                         //$("#groupBtnLogoutNew").addClass('text-white bg-danger');
                         $('#btnAdminPage').show();
                     } else if (data.role = "user") {
                         localStorage.setItem("isAdmin", false);
-                        $("#groupBtnLogoutNew").html('<div class="avatar text-bg-dark"><i class="bi-person-fill"></i><span class="avatar-status bg-success"></span></div> ' + (data.name || ''));
+                        $("#groupBtnLogoutNew").html('<div class="avatar text-bg-dark shadow-sm"><i class="bi-person-fill"></i><span class="avatar-status bg-success"></span></div> ' + (data.name || ''));
                         //$("#groupBtnLogoutNew").removeClass('text-white bg-danger');
                         //$("#groupBtnLogoutNew").addClass('text-white bg-primary');
                         $('#btnAdminPage').hide();
@@ -351,7 +351,9 @@
         if (isLoggedIn) {
             const isAdmin = localStorage.getItem("isAdmin") === "true";
             if (!isAdmin) {
-                var url = "User/Home/SelectRoom";
+                var currentLocation = window.location;
+                var relativePath = "User/Home/SelectRoom";
+                var url = currentLocation.origin + "/" + relativePath;
                 window.location.href = url;
             } else {
                 Toast.fire({
@@ -367,47 +369,47 @@
         }
     });
 
-                //$("#btnTestPageUser").click(function () {
-                //    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
-                //    if (isLoggedIn) {
-                //        const isAdmin = localStorage.getItem("isAdmin") === "true";
-                //        if (!isAdmin) {
-                //            var url = "User/Home/SelectRoom";
-                //            window.location.href = url;
-                //        } else {
+    //$("#btnTestPageUser").click(function () {
+    //    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+    //    if (isLoggedIn) {
+    //        const isAdmin = localStorage.getItem("isAdmin") === "true";
+    //        if (!isAdmin) {
+    //            var url = "User/Home/SelectRoom";
+    //            window.location.href = url;
+    //        } else {
 
-                //            Toast.fire({
-                //                icon: "error",
-                //                title: "Không có quyền truy cập"
-                //            });
-                //        }
-                //    } else {
-                //        Toast.fire({
-                //            icon: "error",
-                //            title: "Cần đăng nhập để truy cập"
-                //        });
-                //    }
-                //});
+    //            Toast.fire({
+    //                icon: "error",
+    //                title: "Không có quyền truy cập"
+    //            });
+    //        }
+    //    } else {
+    //        Toast.fire({
+    //            icon: "error",
+    //            title: "Cần đăng nhập để truy cập"
+    //        });
+    //    }
+    //});
 
-                //$("#btnTestPageAdmin").click(function () {
-                //    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
-                //    if (isLoggedIn) {
-                //        const isAdmin = localStorage.getItem("isAdmin") === "true";
-                //        if (isAdmin) {
-                //            var url = "Admin/thongke/Index";
-                //            window.location.href = url;
-                //        } else {
-                //            Toast.fire({
-                //                icon: "error",
-                //                title: "Không có quyền truy cập"
-                //            });
-                //        }
-                //    } else {
-                //        Toast.fire({
-                //            icon: "error",
-                //            title: "Cần đăng nhập để truy cập"
-                //        });
-                //    }
-                //});
+    //$("#btnTestPageAdmin").click(function () {
+    //    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+    //    if (isLoggedIn) {
+    //        const isAdmin = localStorage.getItem("isAdmin") === "true";
+    //        if (isAdmin) {
+    //            var url = "Admin/thongke/Index";
+    //            window.location.href = url;
+    //        } else {
+    //            Toast.fire({
+    //                icon: "error",
+    //                title: "Không có quyền truy cập"
+    //            });
+    //        }
+    //    } else {
+    //        Toast.fire({
+    //            icon: "error",
+    //            title: "Cần đăng nhập để truy cập"
+    //        });
+    //    }
+    //});
 </script>
 

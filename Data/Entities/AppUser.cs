@@ -12,6 +12,7 @@ namespace Data.Entities
         public string Name { get; set; }
         public int CellId { get; set; }
         public List<ExamResult> ExamResults { get; set; }
+        public List<ReadResult> readResults { get; set; }
         public Cell Cell { get; set; }
     }
 }

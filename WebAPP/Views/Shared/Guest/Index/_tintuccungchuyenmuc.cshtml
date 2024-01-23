@@ -1,5 +1,39 @@
 ﻿@model List<ViewModels.PostPosts.Response.PostWithOutContentVm>
+@if (Model.Count > 1)
+{
+    int id = Model[1].Id;
+    <section class="bsb-post-pagination-2 pb-3 pb-md-5 pb-xl-10 bsb-section-pb-xxl-1X">
+        <div class="container overflow-hidden">
+            <div class="row justify-content-lg-center">
+                <div class="col-12 col-lg-10 col-xl-8 col-xxl-7">
+                    <div class="bg-white p-4 p-md-5 border border-light-subtle">
+                        <div class="row gy-3 align-items-md-center">
+                            <div class="col-12 col-md-2">
+                                <a asp-action="viewpost" asp-route-id="@id" class="bsb-hover-image d-block overflow-hidden rounded">
+                                    <img class="img-fluid author-avatar bsb-scale bsb-hover-scale-up" loading="lazy" src="@Model[1].ThumbImage" alt="">
+                                </a>
+                            </div>
+                            <div class="col-12 col-md-8 text-end">
+                                <a asp-action="viewpost" asp-route-id="@id" class="d-block px-md-3 text-decoration-none">
+                                    <h5 class="link-secondary fw-bold fs-6 mb-3">Bài tiếp theo</h5>
+                                    <h2 class="link-dark fs-5">@Model[1].Title</h2>
+                                </a>
 
+                            </div>
+                            <div class="col-12 col-md-2 text-end">
+                                <a asp-action="viewpost" asp-route-id="@id">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"></path>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+}
 <section class="bsb-blog-5 py-3 py-md-5 py-xl-8 bsb-section-py-xxl-1X bg-light">
     <div class="container">
         <div class="row justify-content-md-center">
@@ -57,7 +91,7 @@
                                         <span class="px-3">&bull;</span>
                                     </li>
                                     <li>
-                                        <a class="link-secondary text-decoration-none d-flex align-items-center" >
+                                        <a class="link-secondary text-decoration-none d-flex align-items-center">
                                             <i class="bi-eye"></i>
                                             <span class="ms-2 fs-7">
                                                 @item.ViewCount
@@ -69,7 +103,7 @@
                         </div>
                     </article>
                 </div>
-            }          
+            }
         </div>
     </div>
 </section>

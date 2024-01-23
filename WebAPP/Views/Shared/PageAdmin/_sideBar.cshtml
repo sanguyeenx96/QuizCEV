@@ -1,6 +1,6 @@
 ﻿<div class="sidebar sidebar-dark sidebar-fixed" id="sidebar">
     <div class="sidebar-brand d-none d-md-flex">
-        <button class="badge badge-lg bg-dark m-2 " disabled>
+        <button class="badge badge-lg bg-light m-2" style="color: rgb(204, 0, 0);" disabled>
             Trang quản trị
         </button>
     </div>
@@ -16,6 +16,29 @@
                 <i class="bi-question-circle mx-3"></i>
                 Quản lý tập tin
             </a>
+        </li>
+        <li class="nav-group" aria-expanded="false">
+            <a class="nav-link nav-group-toggle" href="#">
+                <i class="bi-folder2-open mx-3"></i>
+                Bộ phận & Tài khoản
+            </a>
+            <ul class="nav-group-items" style="height: auto;">
+                <li class="nav-item">
+                    <a id="pageThembophanmoi" class="nav-link" asp-action="listbophan" asp-controller="deptuser" asp-area="admin" style="font-size:small">
+                        Danh sách bộ phận
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a id="pageDanhsachbophantaikhoan" class="nav-link" asp-action="list" asp-controller="deptuser" asp-area="admin" style="font-size:small">
+                        Danh sách tài khoản
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a id="pageThemtaikhoanmoi" class="nav-link" asp-action="createtaikhoan" asp-controller="deptuser" asp-area="admin" style="font-size:small">
+                        Tạo tài khoản
+                    </a>
+                </li>
+            </ul>
         </li>
         <li class="nav-title">Bài đăng và tin tức</li>
         <li class="nav-group" aria-expanded="false">
@@ -38,7 +61,7 @@
                     <a id="" class="nav-link" asp-action="createnewpost" asp-controller="post" asp-area="admin" style="font-size:small">
                         Tạo bài đăng mới
                     </a>
-                </li>                
+                </li>
             </ul>
         </li>
         <li class="nav-group" aria-expanded="false">
@@ -121,31 +144,8 @@
                     </a>
                 </li>
             </ul>
-        </li>
-        <li class="nav-group" aria-expanded="false">
-            <a class="nav-link nav-group-toggle" href="#">
-                <i class="bi-folder2-open mx-3"></i>
-                Bộ phận & Tài khoản
-            </a>
-            <ul class="nav-group-items" style="height: auto;">
-                <li class="nav-item">
-                    <a id="pageThembophanmoi" class="nav-link" asp-action="listbophan" asp-controller="deptuser" asp-area="admin" style="font-size:small">
-                        Danh sách bộ phận
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a id="pageDanhsachbophantaikhoan" class="nav-link" asp-action="list" asp-controller="deptuser" asp-area="admin" style="font-size:small">
-                        Danh sách tài khoản
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a id="pageThemtaikhoanmoi" class="nav-link" asp-action="createtaikhoan" asp-controller="deptuser" asp-area="admin" style="font-size:small">
-                        Tạo tài khoản
-                    </a>
-                </li>
-            </ul>
-        </li>
-      
+        </li>       
+
         <li class="nav-item">
             <a id="pageDiemsoThongke" class="nav-link" asp-action="index" asp-controller="setting" asp-area="admin">
                 <i class="bi-gear mx-3"></i>

@@ -1,0 +1,82 @@
+﻿@model List<ViewModels.ThongBaoCategory.Response.ThongBaoCategoryVm>
+@{
+    ViewData["Active"] = "pageThongBao";
+}
+
+<section class="py-3 py-md-5 py-xl-8 bg-light">
+    <div class="container">
+        <div class="row justify-content-md-center">
+            <div class="col-12">
+                <h2 class="display-3  mb-4">Thông báo nội bộ</h2>
+                <div class="row">
+                    <div class="col-12 col-md-11 col-lg-8 col-xl-7 col-xxl-6 d-flex gap-3">
+                        <p class="lead text-secondary m-0">
+                            Canon Electronics VietNam
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="py-3 py-md-5 py-xl-10">
+    <div class="container">
+        <div class="row justify-content-md-center gy-3 gy-xl-4">
+            <div class="col-12 gy-3 gy-xl-4 bsb-entry-content">
+                <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                    @foreach (var item in Model)
+                    {
+                        <li class="nav-item" role="presentation">
+                            <button class="btncategory nav-link @if(item.Id == Model.First().Id) {<text>active</text>}"
+                                        data-id="@item.Id"
+                                        data-coreui-toggle="pill"
+                                        data-coreui-target="@($"#pills-{item.Id}")"
+                                        type="button"
+                                        role="tab"
+                                        aria-controls="@($"pills-{item.Id}")"
+                                        aria-selected="@(item.Id == Model.First().Id)">
+                                    @item.Title
+                            </button>
+                        </li>
+                    }
+                </ul>
+                <div class="tab-content" id="pills-tabContent">
+                    <div id="noidungtab"></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<script>
+    $(document).ready(function () {
+        // Hàm thực hiện Ajax
+        function fetchData(categoryId) {
+            $.ajax({
+                url: 'GetListThongBaoByCategory',
+                type: 'POST',
+                data: { id: categoryId },
+                success: function (data) {
+                    $('#noidungtab').html(data);
+                },
+                error: function () {
+                    alert('Có lỗi xảy ra khi gọi Ajax.');
+                }
+            });
+        }
+
+        // Sự kiện click nút
+        $('.btncategory').click(function () {
+            var categoryId = $(this).data('id');
+            fetchData(categoryId);
+        });
+
+        // Gọi hàm với ID của nút đầu tiên khi trang được tải
+        var firstCategoryId = $('.btncategory:first').data('id');
+        fetchData(firstCategoryId);
+    });
+</script>
+

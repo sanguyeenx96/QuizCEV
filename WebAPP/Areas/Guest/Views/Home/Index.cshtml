@@ -18,7 +18,7 @@
         </div>
         *@
         <div class="col-12 mt-3">
-            <partial name="Guest/Index/_thongbao" />
+            <div id="Thongbao"></div>
         </div>
     </div>
 </div>
@@ -26,6 +26,9 @@
 <script>
     $.get("/guest/home/Get6News", function (result) {
         $("#News").html(result);
+    });
+    $.get("/guest/home/Get6ThongBao", function (result) {
+        $("#Thongbao").html(result);
     });
     //$(document).ready(function () {
     //    $('#calendar').evoCalendar({

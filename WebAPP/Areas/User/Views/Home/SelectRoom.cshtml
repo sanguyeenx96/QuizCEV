@@ -80,7 +80,7 @@
                         <br>
                     </p>
                     <input name="idPhong" value="@item.Id" hidden>
-                    <button type="submit" class="btn btn-success btnBatdauthi"
+                    <button type="submit" class="btn btn-outline-success btnBatdauthi"
                         data-idPhong="@item.Id"
                         data-tenPhong="@item.Name"
                         onclick="localStorage.removeItem('countdownTime');">
@@ -110,7 +110,7 @@
                         </small>
                         <br>
                     </p>
-                    <button type="button" class="btn btn-secondary" disabled>
+                    <button type="button" class="btn btn-outline-secondary" disabled>
                         <i class="bi-play"></i>
                         Vào phòng thi
                     </button>
@@ -136,8 +136,8 @@
                             Thời gian làm bài @item.Time phút
                         </small>
                         <br>
-                    </p> 
-                    <button type="button" class="btn btn-warning btnBatdauthithu"
+                    </p>
+                    <button type="button" class="btn btn-outline-warning btnBatdauthithu"
                         data-idPhong="@item.Id"
                         data-tenPhong="@item.Name"
                         onclick="localStorage.removeItem('countdownTime');">

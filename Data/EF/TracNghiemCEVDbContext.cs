@@ -50,6 +50,12 @@ namespace Data.EF
             modelBuilder.ApplyConfiguration(new ThongBaoCategoryConfiguration());
             modelBuilder.ApplyConfiguration(new ThongBaoPostConfiguration());
 
+            //Readpost dao tao
+            modelBuilder.ApplyConfiguration(new ReadCategoryConfiguration());
+            modelBuilder.ApplyConfiguration(new ReadPostConfiguration());
+            modelBuilder.ApplyConfiguration(new ReadResultConfiguration());
+
+
 
             modelBuilder.Entity<IdentityUserClaim<Guid>>().ToTable("AppUserClaims");
             modelBuilder.Entity<IdentityUserRole<Guid>>().ToTable("AppUserRoles")
@@ -96,6 +102,13 @@ namespace Data.EF
 
         public DbSet<ThongBaoCategory> thongBaoCategories { get; set; }
         public DbSet<ThongBaoPost> thongBaoPosts { get; set; }
+
+
+        //Readpost dao tao
+        public DbSet<ReadCategory> readCategories { get; set; }
+        public DbSet<ReadPost> readPosts { get; set; }
+        public DbSet<ReadResult> readResults { get; set; }
+
 
 
     }
