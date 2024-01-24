@@ -14,6 +14,9 @@ using Application.LogExamTrinhtuthaotac;
 using Application.Post.PostCategory;
 using Application.Post.PostPosts;
 using Application.Question;
+using Application.Read.ReadCategory;
+using Application.Read.ReadPost;
+using Application.Read.ReadResult;
 using Application.Role;
 using Application.Setting;
 using Application.ThongBao.ThongBaoCategory;
@@ -83,6 +86,10 @@ builder.Services.AddTransient<IPostPostService, PostPostsService>();
 
 builder.Services.AddTransient<IThongBaoPostService, ThongBaoPostService>();
 builder.Services.AddTransient<IThongBaoCategoryService, ThongBaoCategoryService>();
+
+builder.Services.AddTransient<IReadCategoryService, ReadCategoryService>();
+builder.Services.AddTransient<IReadPostService, ReadPostService>();
+builder.Services.AddTransient<IReadResultService, ReadResultService>();
 
 
 

@@ -1,0 +1,241 @@
+﻿@model List<ViewModels.Read.ReadCategory.ReadCategoryVm>
+<h1 class="display-6 mb-3" style="text-align:center">
+    DANH SÁCH CHỦ ĐỀ TÀI LIỆU ĐÀO TẠO
+</h1>
+<div class="row">
+    <div class="col-sm-6 col-md-3 mb-2">
+        <div class="card h-100">
+            <div class="card-body">
+                <div class="text-medium-emphasis text-end">
+                    <i class="bi-folder2-open"></i>
+                </div>
+                <div class="fs-4 fw-semibold">@Model.Count()</div><small class="text-medium-emphasis text-uppercase fw-semibold">Chủ đề đào tạo</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-md-9 mb-2">
+        <div class="card h-100">
+            <div class="card-body">
+                <form id="myForm">
+                    <label class="form-label">
+                        Thêm chủ đề mới
+                    </label>
+                    <div class="row g-2">
+                        <div class="col-12">
+                            <div class="input-group">
+                                <input type="text" class="form-control form-control-lg" id="name" placeholder="Nhập tên tại đây" required="@true">
+                                <button id="btnXacNhan" class="btn btn-primary " style="display: flex; align-items: center">
+                                    <i class="bi-check"></i>Xác nhận
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <table id="tblDanhsachchude" class="table table-hover" style="text-align:center; vertical-align:middle;width:100%">
+            <thead style="font-size:small">
+                <tr>                   
+                    <th style="text-align:start;font-weight: 350;">
+                        Tên chủ đề
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>                      
+                        <td style="text-align:start">
+                            @Html.DisplayFor(modelItem => item.Title)
+                        </td>
+                        <td style="text-align:end">
+                            <div class="btn-group" style=" white-space:nowrap">
+                                <btn class="btn btn-outline-primary btnSua" data-id="@item.Id">
+                                    <i class="bi-pencil"> </i>
+                                    Đổi tên
+                                </btn>
+                                <btn class="btn btn-outline-danger  btnXoa" data-id="@item.Id" data-name="@item.Title">
+                                    <i class="bi-trash"> </i>
+                                    Xoá
+                                </btn>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        $("#tblDanhsachchude").DataTable({
+            "paging": true,
+            "searching": true,
+            "info": true,
+            "responsive": true,
+            "ordering": false
+        });
+
+        $("#btnXacNhan").click(function (e) {
+            var form = $("#myForm")[0];
+            if (form.checkValidity()) {
+                e.preventDefault();
+                var name = $("#name").val();
+                var data = {
+                    Title: name
+                };
+                $.ajax({
+                    url: "CreateCategory",
+                    type: "POST",
+                    data: data,
+                    success: function (data) {
+                        if (data.success) {
+                            Swal.fire({
+                                icon: "success",
+                                title: "Tạo mới thành công",
+                                showConfirmButton: false,
+                                timer: 1500
+                            }).then(function () {
+                                location.reload()
+                            })
+                        } else {
+                            Swal.fire("Thất bại!", data.message, "error");
+                        }
+                    },
+                    error: function (xhr, t, error) {
+                        Swal.fire("Thất bại!", "Lỗi máy chủ", "error");
+                    },
+                });
+            } else {
+                form.reportValidity();
+            }
+        });
+
+        const swalWithBootstrapButtons = Swal.mixin({
+            buttonsStyling: true,
+        });
+
+        $(".btnSua").click(function (e) {
+            var id = $(this).data("id");
+            var data = {
+                id: id
+            };
+            $.ajax({
+                url: "GetById",
+                type: "POST",
+                data: data,
+                success: function (data) {
+                    if (data.success) {
+                        handleSuccess(data, id);
+                    } else {
+                        Swal.fire("Thất bại!", data.message, "error");
+                    }
+                },
+                error: function (xhr, t, error) {
+                    Swal.fire("Thất bại!", "Lỗi máy chủ", "error");
+                },
+            });
+        });
+        async function handleSuccess(data, id) {
+            if (data.success) {
+                const { value: newName } = await swalWithBootstrapButtons.fire({
+                    title: "Đổi tên chủ đề",
+                    input: "text",
+                    inputLabel: "Chủ đề : " + data.data.title,
+                    inputPlaceholder: "Nhập tên mới",
+                    showCancelButton: true,
+                    confirmButtonText: "Xác nhận",
+                    cancelButtonText: "Huỷ bỏ"
+                });
+                if (newName) {
+                    $.ajax({
+                        url: "UpdateCategoryName",
+                        type: "POST",
+                        data: {
+                            id: id,
+                            Title: newName
+                        },
+                        success: function (data) {
+                            if (data.success) {
+                                Swal.fire({
+                                    icon: "success",
+                                    title: "Đổi tên thành công",
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                }).then(function () {
+                                    location.reload()
+                                })
+                            } else {
+                                Swal.fire(
+                                    "Không thành công!",
+                                    data.message,
+                                    "error"
+                                );
+                            }
+                        },
+                    });
+                }
+            } else {
+                Swal.fire("Thất bại!", data.message, "error");
+            }
+        }
+
+        $(".btnXoa").click(function (e) {
+            var id = $(this).data("id");
+            var name = $(this).data("name");
+
+            swalWithBootstrapButtons
+                .fire({
+                    title: "Xoá chủ đề " + name + "?",
+                    text: "Tất cả dữ liệu và tài liệu liên quan tới chủ đề sẽ bị xoá vĩnh viễn",
+                    icon: "error",
+                    showCancelButton: true,
+                    confirmButtonText: "Xác nhận",
+                    cancelButtonText: "Huỷ bỏ"
+                })
+                .then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: "Delete",
+                            type: "POST",
+                            data: {
+                                id: id
+                            },
+                            success: function (data) {
+                                if (data.success) {
+                                    Swal.fire({
+                                        icon: "success",
+                                        title: "Xoá thành công",
+                                        showConfirmButton: false,
+                                        timer: 1500
+                                    }).then(function () {
+                                        location.reload()
+                                    })
+                                } else {
+                                    Swal.fire(
+                                        "Không thành công!",
+                                        data.message,
+                                        "error"
+                                    );
+                                }
+                            },
+                        });
+                    }
+                });
+
+        });
+
+
+
+
+    });
+
+</script>

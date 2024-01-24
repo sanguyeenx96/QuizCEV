@@ -52,6 +52,10 @@ builder.Services.AddTransient<IPostPostsApiClient, PostPostsApiClient>();
 builder.Services.AddTransient<IThongBaoCategoryApiClient, ThongBaoCategoryApiClient>();
 builder.Services.AddTransient<IThongBaoPostApiClient, ThongBaoPostApiClient>();
 
+builder.Services.AddTransient<IReadCategoryApiClient, ReadCategoryApiClient>();
+builder.Services.AddTransient<IReadPostApiClient, ReadPostApiClient>();
+builder.Services.AddTransient<IReadResultApiClient, ReadResultApiClient>();
+
 var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

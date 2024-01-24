@@ -1,0 +1,365 @@
+﻿<h1 class="display-6 mb-3" style="text-align:center">
+    TẠO BÀI ĐĂNG TÀI LIỆU ĐÀO TẠO MỚI
+</h1>
+<div class="container-fluid">
+    <div class="card text-bg-white mb-2">
+        <div class="card-body">
+            <small>
+                Chọn chủ đề
+            </small>
+            <select class="form-select form-select mb-2" id="categoryId" style="overflow: hidden;">
+                <option selected disabled>Nhấn để chọn</option>
+                @foreach (var item in ViewBag.selectChude)
+                {
+                    <option value="@item.Value">@item.Text</option>
+                }
+            </select>
+            <small>
+                Nhập tiêu đề
+            </small>
+            <input id="txtTieude" class="form-control mb-2" placeholder="Nhập tiêu đề bài viết tại đây..." />
+            <small>
+                Nhập mô tả ngắn
+            </small>
+            <textarea rows="2" id="txtMotangan" class="form-control mb-2" placeholder="Nhập mô tả ngắn của bài viết tại đây..."></textarea>
+            <small>
+                Thời gian đọc yêu cầu (phút)
+            </small>
+            <input id="txtTimeRead" class="form-control mb-2" type="number" min="1" />
+            <small>
+                Hình ảnh nhỏ minh hoạ
+            </small>
+            <input id="imageFile" name="imageFile" type="file" accept="image/*" class=" imageFile btn  btn-light form-control " />
+            <img src="" id="preview" hidden>
+            <input id="image" type="text" name="Image" class="form-control" hidden />
+            <div class="mt-2" style="text-align:center">
+                <img style="width: 50%" src="" id="output">
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <textarea id="editor">
+            </textarea>
+        </div>
+    </div>
+    <button id="btnXacNhan" class="btn btn-primary mt-2" style="text-align: center; width:200px">
+        <i class="bi-check"></i>
+        Xác nhận
+    </button>
+</div>
+
+<script>
+    function isImage16x9(width, height) {
+        // Tính toán tỉ lệ giữa chiều rộng và chiều cao
+        var aspectRatio = width / height;
+        // So sánh tỉ lệ với 16:9 (1.7778 là tỉ lệ của 16:9)
+        return Math.abs(aspectRatio - 1.7778) < 0.01;
+    }
+    function delay(time) {
+        return new Promise(resolve => setTimeout(resolve, time));
+    }
+    function ResizeImage() {
+        if (window.File && window.FileReader && window.FileList && window.Blob) {
+            var filesToUploads = document.getElementById('imageFile').files;
+            var file = filesToUploads[0];
+            if (file) {
+                var reader = new FileReader();
+                // Set the image once loaded into file reader
+                reader.onload = function (e) {
+                    var img = document.createElement("img");
+                    img.src = e.target.result;
+                    var canvas = document.createElement("canvas");
+                    var ctx = canvas.getContext("2d");
+
+                    var MAX_WIDTH = 1024;
+                    var MAX_HEIGHT = 576;
+
+                    var width = img.width;
+                    var height = img.height;
+
+                    if (isImage16x9(width, height)) {
+                        // Calculate the desired width and height for 16:9 aspect ratio
+                        var targetWidth = MAX_WIDTH;
+                        var targetHeight = (9 / 16) * MAX_WIDTH;
+
+                        // Check if the image needs resizing
+                        if (width > targetWidth || height > targetHeight) {
+                            // Determine the scale factor for resizing
+                            var scaleFactor = Math.min(targetWidth / width, targetHeight / height);
+                            // Calculate the new dimensions
+                            width *= scaleFactor;
+                            height *= scaleFactor;
+                        }
+
+                        canvas.width = targetWidth;
+                        canvas.height = targetHeight;
+
+                        // Calculate the position to center the image
+                        var x = (targetWidth - width) / 2;
+                        var y = (targetHeight - height) / 2;
+
+                        // Draw the image on the canvas
+                        ctx.drawImage(img, x, y, width, height);
+
+                        // Convert the canvas content to data URL
+                        dataurl = canvas.toDataURL(file.type);
+
+                        // Update the output element and log the data URL
+                        document.getElementById('output').src = dataurl;
+
+                        // Set the value of the image input (if needed)
+                        document.getElementById('image').value = dataurl;
+
+                    } else {
+                        Swal.fire({
+                            title: "Hình ảnh không đúng tỉ lệ 16:9",
+                            text: "Hình ảnh sẽ không hiển thị đẹp mắt",
+                            icon: "warning",
+                            showCancelButton: true,
+                            confirmButtonColor: "#3085d6",
+                            cancelButtonColor: "#d33",
+                            confirmButtonText: "Tiếp tục",
+                            cancelButtonText: "Huỷ bỏ"
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                // Calculate the desired width and height for 16:9 aspect ratio
+                                var targetWidth = MAX_WIDTH;
+                                var targetHeight = (9 / 16) * MAX_WIDTH;
+
+                                // Check if the image needs resizing
+                                if (width > targetWidth || height > targetHeight) {
+                                    // Determine the scale factor for resizing
+                                    var scaleFactor = Math.min(targetWidth / width, targetHeight / height);
+                                    // Calculate the new dimensions
+                                    width *= scaleFactor;
+                                    height *= scaleFactor;
+                                }
+
+                                canvas.width = targetWidth;
+                                canvas.height = targetHeight;
+
+                                // Calculate the position to center the image
+                                var x = (targetWidth - width) / 2;
+                                var y = (targetHeight - height) / 2;
+
+                                // Draw the image on the canvas
+                                ctx.drawImage(img, x, y, width, height);
+
+                                // Convert the canvas content to data URL
+                                dataurl = canvas.toDataURL(file.type);
+
+                                // Update the output element and log the data URL
+                                document.getElementById('output').src = dataurl;
+
+                                // Set the value of the image input (if needed)
+                                document.getElementById('image').value = dataurl;
+                            }
+                        });
+                    }
+                };
+
+                reader.readAsDataURL(file);
+            }
+        } else {
+            alert('The File APIs are not fully supported in this browser.');
+        }
+    }
+
+    $(document).ready(function () {
+        (function (factory) {
+            if (typeof define === 'function' && define.amd) {
+                define(['jquery'], factory);
+            }
+            else if (typeof module === 'object' && module.exports) {
+                module.exports = factory(require('jquery'));
+            } else {
+                factory(window.jQuery);
+            }
+        }(function ($) {
+            $.extend($.summernote.plugins, {
+                // Tạo plugin tên elfinder
+                'elfinder': function (context) {
+                    var self = this;
+                    // ui has renders to build ui elements.
+                    var ui = $.summernote.ui;
+                    // Tạo nút bấm
+                    context.memo('button.elfinder', function () {
+                        var button = ui.button({
+                            contents: '<i class="note-icon-picture"/> elFinder',
+                            tooltip: 'Quản lý file',
+                            click: function () {
+                                // Bấm vào nút bấm gọi hàm elfinderDialog
+                                elfinderDialog(context);
+                            }
+                        });
+                        // create jQuery object from button instance.
+                        var $elfinder = button.render();
+                        return $elfinder;
+                    });
+                    // This methods will be called when editor is destroyed by $('..').summernote('destroy');
+                    // You should remove elements on `initialize`.
+                    this.destroy = function () {
+                        this.$panel.remove();
+                        this.$panel = null;
+                    };
+                }
+            });
+        }));
+        function elfinderDialog(editor) {
+            var fm = $('<div/>').dialogelfinder({
+                baseUrl: "@Url.Content("~/lib/elfinder/")",
+                url: "@Url.Action("Connector","FileManager", new{area ="Admin"})",
+                lang: 'vi',
+                width: 840,
+                height: 450,
+                destroyOnClose: true,
+                getFileCallback: function (files, fm) {
+                    console.log(files);
+                    editor.invoke('editor.insertImage', files.url);
+                },
+                commandsOptions: {
+                    getfile: {
+                        oncomplete: 'close',
+                        folders: false
+                    }
+                }
+            }).dialogelfinder('instance');
+        }
+
+        $('#editor').summernote({
+            height: 500,
+            toolbar: [
+                ['style', ['style']],
+                ['font', ['bold', 'italic', 'underline', 'clear']],
+                ['fontname', ['fontname']],
+                ['fontsize', ['fontsize']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['table', ['table']],
+                ['height', ['height']],
+                ['insert', ['elfinder', 'link']],
+                ['view', ['fullscreen', 'codeview']],
+            ]
+        });
+
+        $('#imageFile').change(function (evt) {
+            var files = evt.target.files;
+            var file = files[0];
+            if (file) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById('preview').src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+                delay(2000).then(() => ResizeImage());
+            }
+        });
+
+        $('#btnXacNhan').click(function () {
+            var idCategory = $('#categoryId').val();
+            var txtTieude = $('#txtTieude').val();
+            var txtMotangan = $('#txtMotangan').val();
+            var txtTimeRead = $('#txtTimeRead').val();
+            var editorData = $('#editor').val();
+            var thumbImageValue = $("#image").val();
+            if (idCategory == null) {
+                Swal.fire({
+                    icon: "warning",
+                    title: "Chưa chọn chủ đề",
+                    showConfirmButton: false,
+                    timer: 2000
+                }).then(function () {
+                    $('#categoryId').focus();
+                })
+            } else if (txtTieude.length < 1) {
+                Swal.fire({
+                    icon: "warning",
+                    title: "Chưa nhập tiêu đề",
+                    showConfirmButton: false,
+                    timer: 2000
+                }).then(function () {
+                    $('#txtTieude').focus();
+                })
+            } else if (txtMotangan.length < 1) {
+                Swal.fire({
+                    icon: "warning",
+                    title: "Chưa nhập mô tả ngắn",
+                    showConfirmButton: false,
+                    timer: 2000
+                }).then(function () {
+                    $('#txtMotangan').focus();
+                })
+            } else if (txtMotangan.length > 100) {
+                Swal.fire({
+                    icon: "warning",
+                    title: "Mô tả ngắn chỉ tối đa 100 ký tự",
+                    showConfirmButton: false,
+                    timer: 2000
+                }).then(function () {
+                    $('#txtMotangan').focus();
+                })
+            } else if (txtTimeRead.length < 1) {
+                Swal.fire({
+                    icon: "warning",
+                    title: "Chưa chọn thời gian đọc yêu cầu",
+                    showConfirmButton: false,
+                    timer: 2000
+                }).then(function () {
+                    $('#txtTimeRead').focus();
+                })
+            } else if (editorData.length < 1) {
+                Swal.fire({
+                    icon: "warning",
+                    title: "Chưa nhập nội dung bài viết",
+                    showConfirmButton: false,
+                    timer: 2000
+                }).then(function () {
+                    $('#editor').focus();
+                })
+            } else if (thumbImageValue.length < 10) {
+                Swal.fire({
+                    icon: "warning",
+                    title: "Chưa có hình ảnh nhỏ minh hoạ",
+                    showConfirmButton: false,
+                    timer: 2000
+                }).then(function () {
+                    $('#imageFile').focus();
+                })
+            } else {
+                var data = {
+                    ReadCategoryId: idCategory,
+                    Title: txtTieude,
+                    Description: txtMotangan,
+                    Content: editorData,
+                    ThumbImage: thumbImageValue,
+                    Time:txtTimeRead
+                };
+                console.log(data)
+                $.ajax({
+                    url: "CreatePost",
+                    type: "POST",
+                    contentType: 'application/json',
+                    data: JSON.stringify(data),
+                    success: function (data) {
+                        if (data.success) {
+                            Swal.fire({
+                                icon: "success",
+                                title: "Tạo bài đăng thành công",
+                                showConfirmButton: false,
+                                timer: 2000
+                            }).then(function () {
+                                window.location.reload();
+                            });
+                        } else {
+                            Swal.fire("Thất bại!", data.message, "error");
+                        }
+                    },
+                    error: function (xhr, t, error) {
+                        Swal.fire("Thất bại!", "Lỗi máy chủ", "error");
+                    },
+                });
+            }
+        })
+    })
+</script>

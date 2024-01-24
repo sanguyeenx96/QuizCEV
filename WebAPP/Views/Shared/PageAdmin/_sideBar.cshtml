@@ -1,36 +1,38 @@
 ﻿<div class="sidebar sidebar-dark sidebar-fixed" id="sidebar">
     <div class="sidebar-brand d-none d-md-flex">
-        <button class="badge badge-lg bg-light m-2" style="color: rgb(204, 0, 0);" disabled>
+        <button class="badge badge-lg"  disabled>
             Trang quản trị
         </button>
     </div>
     <ul class="sidebar-nav" data-coreui="navigation" data-simplebar="">
+        <li class="nav-title">Tổng quan </li>
+
         <li class="nav-item">
             <a id="pageDiemsoThongke" class="nav-link" asp-action="index" asp-controller="home" asp-area="admin">
                 <i class="bi-speedometer2 mx-3"></i>
-                Dữ liệu tổng quan
+                Lưu lượng
             </a>
         </li>
         <li class="nav-item">
             <a id="pageFileManager" class="nav-link" asp-action="index" asp-controller="filemanager" asp-area="admin">
-                <i class="bi-question-circle mx-3"></i>
-                Quản lý tập tin
+                <i class="bi-database-lock mx-3"></i>
+                Tập tin
             </a>
         </li>
         <li class="nav-group" aria-expanded="false">
             <a class="nav-link nav-group-toggle" href="#">
-                <i class="bi-folder2-open mx-3"></i>
+                <i class="bi-folder2 mx-3"></i>
                 Bộ phận & Tài khoản
             </a>
             <ul class="nav-group-items" style="height: auto;">
                 <li class="nav-item">
                     <a id="pageThembophanmoi" class="nav-link" asp-action="listbophan" asp-controller="deptuser" asp-area="admin" style="font-size:small">
-                        Danh sách bộ phận
+                        Bộ phận
                     </a>
                 </li>
                 <li class="nav-item">
                     <a id="pageDanhsachbophantaikhoan" class="nav-link" asp-action="list" asp-controller="deptuser" asp-area="admin" style="font-size:small">
-                        Danh sách tài khoản
+                        Tài khoản
                     </a>
                 </li>
                 <li class="nav-item">
@@ -40,49 +42,49 @@
                 </li>
             </ul>
         </li>
-        <li class="nav-title">Bài đăng và tin tức</li>
+        <li class="nav-title">Tin tức & thông báo</li>
         <li class="nav-group" aria-expanded="false">
             <a class="nav-link nav-group-toggle" href="#">
-                <i class="bi-folder2-open mx-3"></i>
-                Quản lý bài đăng
+                <i class="bi-folder2 mx-3"></i>
+                Tin tức
             </a>
             <ul class="nav-group-items" style="height: auto;">
                 <li class="nav-item">
                     <a id="" class="nav-link" asp-action="category" asp-controller="post" asp-area="admin" style="font-size:small">
-                        Danh sách chủ đề
+                        Chủ đề
                     </a>
                 </li>
                 <li class="nav-item">
                     <a id="" class="nav-link" asp-action="listpost" asp-controller="post" asp-area="admin" style="font-size:small">
-                        Danh sách bài đăng
+                        Danh sách
                     </a>
                 </li>
                 <li class="nav-item">
                     <a id="" class="nav-link" asp-action="createnewpost" asp-controller="post" asp-area="admin" style="font-size:small">
-                        Tạo bài đăng mới
+                        Đăng bài mới
                     </a>
                 </li>
             </ul>
         </li>
         <li class="nav-group" aria-expanded="false">
             <a class="nav-link nav-group-toggle" href="#">
-                <i class="bi-folder2-open mx-3"></i>
-                Quản lý thông báo
+                <i class="bi-folder2 mx-3"></i>
+                Thông báo
             </a>
             <ul class="nav-group-items" style="height: auto;">
                 <li class="nav-item">
                     <a id="" class="nav-link" asp-action="category" asp-controller="thongbao" asp-area="admin" style="font-size:small">
-                        Danh sách chủ đề
+                        Chủ đề
                     </a>
                 </li>
                 <li class="nav-item">
                     <a id="" class="nav-link" asp-action="listpost" asp-controller="thongbao" asp-area="admin" style="font-size:small">
-                        Danh sách thông báo
+                        Danh sách
                     </a>
                 </li>
                 <li class="nav-item">
                     <a id="" class="nav-link" asp-action="createnewpost" asp-controller="thongbao" asp-area="admin" style="font-size:small">
-                        Tạo thông báo mới
+                        Đăng bài mới
                     </a>
                 </li>
             </ul>
@@ -90,13 +92,42 @@
 
 
         <li class="nav-title">Tài liệu đào tạo  </li>
-
-        <li class="nav-title">Kiểm tra đánh giá năng lực</li>
-
         <li class="nav-item">
             <a id="pageDiemsoThongke" class="nav-link" asp-action="index" asp-controller="thongke" asp-area="admin">
                 <i class="bi-clipboard-data mx-3"></i>
-                Điểm số & Thống kê
+                Thống kê
+            </a>
+        </li>
+        <li class="nav-group" aria-expanded="false">
+            <a class="nav-link nav-group-toggle" href="#">
+                <i class="bi-folder2-open mx-3"></i>
+                Quản lý
+            </a>
+            <ul class="nav-group-items" style="height: auto;">
+                <li class="nav-item">
+                    <a id="pagedaotaoChude" class="nav-link" asp-action="category" asp-controller="tailieudaotao" asp-area="admin" style="font-size:small">
+                        Chủ đề
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a id="pagedaotaoDanhsach" class="nav-link" asp-action="list" asp-controller="tailieudaotao" asp-area="admin" style="font-size:small">
+                        Danh sách 
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a id="pagedaotaoDangbaimoi" class="nav-link" asp-action="createnewpost" asp-controller="tailieudaotao" asp-area="admin" style="font-size:small">
+                        Đăng bài mới
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+
+        <li class="nav-title">Kiểm tra đánh giá năng lực</li>
+        <li class="nav-item">
+            <a id="pageDiemsoThongke" class="nav-link" asp-action="index" asp-controller="thongke" asp-area="admin">
+                <i class="bi-clipboard-data mx-3"></i>
+                Thống kê
             </a>
         </li>
         <li class="nav-group" aria-expanded="false">
@@ -106,18 +137,18 @@
             </a>
             <ul class="nav-group-items" style="height: auto;">
                 <li class="nav-item">
-                    <a id="pageDongMoPhongThi" class="nav-link" asp-action="changestatus" asp-controller="category" asp-area="admin" style="font-size:small">
-                        Trạng thái phòng thi
+                    <a id="" class="nav-link" asp-action="changestatus" asp-controller="category" asp-area="admin" style="font-size:small">
+                        Trạng thái
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a id="pageDanhSachChuDePhongThi" class="nav-link" asp-action="list" asp-controller="category" asp-area="admin" style="font-size:small">
-                        Danh sách phòng thi
+                    <a id="" class="nav-link" asp-action="list" asp-controller="category" asp-area="admin" style="font-size:small">
+                        Danh sách
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a id="pageThemChuDePhongThi" class="nav-link" asp-action="create" asp-controller="category" asp-area="admin" style="font-size:small">
-                        Tạo phòng thi
+                    <a id="" class="nav-link" asp-action="create" asp-controller="category" asp-area="admin" style="font-size:small">
+                        Tạo phòng thi mới
                     </a>
                 </li>
             </ul>
@@ -130,17 +161,17 @@
             <ul class="nav-group-items" style="height: auto;">
                 <li class="nav-item">
                     <a id="pageDanhsachcauhoi" class="nav-link" asp-action="list" asp-controller="question" asp-area="admin" style="font-size:small">
-                        Danh sách câu hỏi
+                        Danh sách
                     </a>
                 </li>
                 <li class="nav-item">
                     <a id="pageThemcauhoitracnghiem" class="nav-link" asp-action="create" asp-controller="question" asp-area="admin" style="font-size:small">
-                        Tạo câu hỏi trắc nghiệm
+                        Thêm câu hỏi trắc nghiệm
                     </a>
                 </li>
                 <li class="nav-item">
                     <a id="pageThemcauhoituluan" class="nav-link" asp-action="createtuluan" asp-controller="question" asp-area="admin" style="font-size:small">
-                        Tạo câu hỏi tự luận
+                        Thêm câu hỏi tự luận
                     </a>
                 </li>
             </ul>
@@ -149,7 +180,7 @@
         <li class="nav-item">
             <a id="pageDiemsoThongke" class="nav-link" asp-action="index" asp-controller="setting" asp-area="admin">
                 <i class="bi-gear mx-3"></i>
-                Cài đặt chức năng
+                Cài đặt
             </a>
         </li>
         <li class="nav-item">

@@ -18,8 +18,4 @@
     <ProjectReference Include="..\ViewModels\ViewModels.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Post\PostThongBao\" />
-  </ItemGroup>
-
 </Project>

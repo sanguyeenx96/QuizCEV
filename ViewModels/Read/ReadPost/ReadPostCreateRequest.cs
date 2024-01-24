@@ -13,5 +13,6 @@ namespace ViewModels.Read.ReadPost
         public string? Description { set; get; }
         public string? ThumbImage { set; get; }
         public string? Content { set; get; }
+        public int Time { get; set; }
     }
 }
