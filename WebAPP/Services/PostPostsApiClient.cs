@@ -160,7 +160,7 @@ namespace WebAPP.Services
             {
                 return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
             }
-            return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result); ;
+            return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result); 
         }
     }
 }

@@ -19,6 +19,6 @@ namespace ViewModels.Read.ReadPost
         public int Time { get; set; }
         public bool Status { get; set; }
         public int ReadCategoryId { get; set; } // Khóa ngoại đến bảng Category
-     
+        public string? catName { get; set; }
     }
 }

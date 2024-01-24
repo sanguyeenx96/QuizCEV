@@ -13,10 +13,7 @@ namespace WebAPP.Areas.Admin.Controllers
         [Route("/file-manager")]
         public IActionResult Index()
         {
-         
-            ViewData["Active"] = "3";
-            ViewBag.tab = "Quản lý files";
-            ViewBag.chilTab = "Trình quản lý tập tin tại máy chủ";
+            ViewBag.thisPage = "Quản lý tập tin máy chủ";         
             return View();
         }
 

@@ -48,7 +48,7 @@ namespace WebAPP.Areas.Admin.Controllers
             {
                 return Json(new { success = false, message = result.Message });
             }
-            return Json(new { success = true, message = result.Message, data = result.ResultObj });
+            return Json(new { success = true, data = result.ResultObj });
         }
 
         [HttpPost]
@@ -110,6 +110,7 @@ namespace WebAPP.Areas.Admin.Controllers
             ViewBag.SelectedCategoryId = postCategoryId.ToString();
             return View(listPostWithOutContent.ResultObj);
         }
+
 
         [HttpPost]
         public async Task<IActionResult> UpdateThumbImage(int id, PostPostThumbImageUpdate request)
