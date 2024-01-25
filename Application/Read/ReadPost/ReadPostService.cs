@@ -1,4 +1,5 @@
 ﻿using Data.EF;
+using Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,18 @@ namespace Application.Read.ReadPost
         {
             _context = context;
         }
+
+        public async Task<ApiResult<bool>> ChangeStatus(int id)
+        {
+            var post = await _context.readPosts.FindAsync(id);
+            if (post == null)
+                return new ApiErrorResult<bool>($"Không tìm thấy post có id {id}");
+            post.Status = !post.Status;
+            _context.Update(post);
+            await _context.SaveChangesAsync();
+            return new ApiSuccessResult<bool>();
+        }
+
         public async Task<ApiResult<bool>> Create(ReadPostCreateRequest request)
         {
             var checkDuplicateName = await _context.readPosts.Where(x => (x.Title == request.Title && x.ReadCategoryId == request.ReadCategoryId)).FirstOrDefaultAsync();
@@ -177,5 +190,46 @@ namespace Application.Read.ReadPost
             return new ApiSuccessResult<bool>();
 
         }
+
+        public async Task<ApiResult<List<ReadPostVm>>> UserGetAllByCategory(int id, ReadPostUserGetAllByCategory request)
+        {
+            var category = await _context.readCategories.FindAsync(id);
+            if (category == null)
+                return new ApiErrorResult<List<ReadPostVm>>($"Không tìm thấy Category có id {id}");
+
+            var result = _context.readPosts.Include(x => x.readResults).Where(x => x.ReadCategoryId == id);
+
+            var listPost = await result.ToListAsync(); // Thực hiện truy vấn đồng bộ ở đây
+
+            var listPostVm = new List<ReadPostVm>();
+            foreach (var x in listPost)
+            {
+                var isReaded = await _context.readResults
+                    .AnyAsync(rr => rr.ReadPostId == x.Id && rr.UserId == request.userId);
+
+                var catName = await _context.readCategories
+                    .Where(pc => pc.Id == x.ReadCategoryId)
+                    .Select(pc => pc.Title)
+                    .FirstOrDefaultAsync();
+
+                listPostVm.Add(new ReadPostVm
+                {
+                    Id = x.Id,
+                    Title = x.Title,
+                    Description = x.Description,
+                    ThumbImage = x.ThumbImage,
+                    DateCreated = x.DateCreated,
+                    DateUpdated = x.DateUpdated,
+                    ViewCount = x.ViewCount,
+                    ReadCategoryId = x.ReadCategoryId,
+                    Status = x.Status,
+                    Time = x.Time,
+                    catName = catName,
+                    isReaded = isReaded
+                });
+            }
+            return new ApiSuccessResult<List<ReadPostVm>>(listPostVm);
+        }
+
     }
 }

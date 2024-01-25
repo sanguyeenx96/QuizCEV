@@ -35,6 +35,13 @@ namespace WebAPI.Controllers
             return Ok(result);
         }
 
+        [HttpPost("UserGetAllByCategory/{id}")]
+        public async Task<IActionResult> UserGetAllByCategory(int id , ReadPostUserGetAllByCategory request)
+        {
+            var result = await _readPostService.UserGetAllByCategory(id,request);
+            return Ok(result);
+        }
+
         [HttpGet("GetById/{id}")]
         [AllowAnonymous]
         public async Task<IActionResult> GetById(int id)
@@ -67,6 +74,13 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> UpdateThumbImage(int id, ReadPostThumbImageUpdate request)
         {
             var result = await _readPostService.UpdateThumbImage(id, request);
+            return Ok(result);
+        }
+
+        [HttpPatch("updatestatus/{id}")]
+        public async Task<IActionResult> UpdateStatus(int id)
+        {
+            var result = await _readPostService.ChangeStatus(id);
             return Ok(result);
         }
     }

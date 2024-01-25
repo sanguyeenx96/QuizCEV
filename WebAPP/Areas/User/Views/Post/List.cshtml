@@ -1,0 +1,71 @@
+﻿@model List<ViewModels.Read.ReadCategory.ReadCategoryVm>
+@section Header
+    {
+    <partial name="PageUser/_header" />
+    }
+@section SideBar
+    {
+    <partial name="PageUser/_sideBar" />
+    }
+
+    @{
+    ViewData["Active"] = "pageReadDoctailieu";
+}
+
+<div class="container">
+    <div class="row justify-content-md-center gy-3 gy-xl-4">
+        <div class="col-12 gy-3 gy-xl-4 bsb-entry-content">
+            <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                @foreach (var item in Model)
+                {
+                    <li class="nav-item" role="presentation">
+                        <button class="btncategory nav-link @if(item.Id == Model.First().Id) {<text>active</text>}"
+                            data-id="@item.Id"
+                            data-coreui-toggle="pill"
+                            data-coreui-target="@($"#pills-{item.Id}")"
+                            type="button"
+                            role="tab"
+                            aria-controls="@($"pills-{item.Id}")"
+                            aria-selected="@(item.Id == Model.First().Id)">
+                            @item.Title
+                        </button>
+                    </li>
+                }              
+            </ul>
+            <div class="tab-content" id="pills-tabContent">
+                <div id="noidungtab"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        // Hàm thực hiện Ajax
+        function fetchData(categoryId) {
+            $.ajax({
+                url: 'GetListPostByCategory',
+                type: 'POST',
+                data: { id: categoryId },
+                success: function (data) {
+                    $('#noidungtab').html(data);
+                },
+                error: function () {
+                    alert('Có lỗi xảy ra khi gọi Ajax.');
+                }
+            });
+        }
+
+        // Sự kiện click nút
+        $('.btncategory').click(function () {
+            var categoryId = $(this).data('id');
+            fetchData(categoryId);
+        });
+
+        // Gọi hàm với ID của nút đầu tiên khi trang được tải
+        var firstCategoryId = $('.btncategory:first').data('id');
+        fetchData(firstCategoryId);
+    });
+</script>
+

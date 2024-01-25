@@ -15,10 +15,12 @@ namespace WebAPP.Areas.Admin.Controllers
     {
         private readonly IReadCategoryApiClient _readCategoryApiClient;
         private readonly IReadPostApiClient _readPostApiClient;
-        public TaiLieuDaoTaoController(IReadCategoryApiClient readCategoryApiClient, IReadPostApiClient readPostApiClient)
+        private readonly IDeptApiClient _deptApiClient;
+        public TaiLieuDaoTaoController(IReadCategoryApiClient readCategoryApiClient, IReadPostApiClient readPostApiClient, IDeptApiClient deptApiClient)
         {
             _readCategoryApiClient = readCategoryApiClient;
             _readPostApiClient = readPostApiClient;
+            _deptApiClient = deptApiClient;
         }
 
         //Category
@@ -146,5 +148,66 @@ namespace WebAPP.Areas.Admin.Controllers
             }
             return Json(new { success = true });
         }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateStatus(int id)
+        {
+            var result = await _readPostApiClient.ChangeStatus(id);
+            if (!result.IsSuccessed)
+            {
+                return Json(new { success = false, message = result.Message });
+            }
+            return Json(new { success = true });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeletePost(int id)
+        {
+            var result = await _readPostApiClient.Delete(id);
+            if (!result.IsSuccessed)
+            {
+                return Json(new { success = false, message = result.Message });
+            }
+            return Json(new { success = true });
+        }
+
+
+        //Thống kê
+        public async Task<IActionResult> ReadResult()
+        {
+            ViewBag.thisPage = "Thống kê dữ liệu lịch sử đọc tài liệu đào tạo";
+            var result = await _readCategoryApiClient.GetAll();
+            var listChude = result.ResultObj;
+            var selectListChude = listChude.Select(item => new SelectListItem
+            {
+                Value = item.Id.ToString(),
+                Text = item.Title
+            }).ToList();
+            ViewBag.SelectListChude = selectListChude;
+
+            var resultlistDept = await _deptApiClient.GetAll();
+            var listDept = resultlistDept.ResultObj.Select(x => new SelectListItem()
+            {
+                Text = x.Name,
+                Value = x.Id.ToString()
+            });
+            ViewBag.listDept = listDept;
+
+            return View(result.ResultObj);
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> GetSelectListPost(int catId)
+        {
+            var listPost = await _readPostApiClient.GetAllByCategory(catId);
+            var result = listPost.ResultObj.Select(x => new SelectListItem()
+            {
+                Text = x.Title,
+                Value = x.Id.ToString()
+            });
+            return Json(result);
+        }
+
     }
 }

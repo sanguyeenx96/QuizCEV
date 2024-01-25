@@ -39,7 +39,7 @@
 <body>
     @RenderSection("SideBar", required: false)
     <div class="wrapper d-flex flex-column min-vh-100 bg-light">
-        <partial name="PageUser/_header" />      
+        @RenderSection("Header", required: false)
         <div class="body flex-grow-1 mb-3">
             <div class="container-fluid">
                 @RenderBody()
@@ -51,7 +51,7 @@
                     © Canon Electronics VietNam
                 </span>
             </div>
-            <div>
+            <div class="text-muted">
                 <span>Powered by</span>
                 <b>PDE</b>
             </div>

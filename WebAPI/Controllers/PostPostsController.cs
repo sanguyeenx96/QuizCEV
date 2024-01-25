@@ -69,12 +69,14 @@ namespace WebAPI.Controllers
             var result = await _postPostService.Update(id, request);
             return Ok(result);
         }
+
         [HttpPatch("updateThumbImage/{id}")]
         public async Task<IActionResult> UpdateThumbImage(int id, PostPostThumbImageUpdate request)
         {
             var result = await _postPostService.UpdateThumbImage(id, request);
             return Ok(result);
         }
+
 
     }
 }

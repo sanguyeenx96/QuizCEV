@@ -282,7 +282,7 @@ namespace WebAPP.Areas.User.Controllers
             ViewBag.thisPage = tenPhongthi;
             TempData["Tenphongthi"] = tenPhongthi;
             ViewBag.totalQuestion = TempData["totalQuestion"];
-            ViewBag.thoiGianThi = TempData["thoiGianThi"];
+            ViewBag.thoiGianThi = TempData[key: "thoiGianThi"];
             TempData.Keep();
             return View();
         }
