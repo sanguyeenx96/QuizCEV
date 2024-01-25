@@ -38,7 +38,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link custom-link">Tài liệu đào tạo</a>
+                    <a class="nav-link custom-link" id="btnReadPage">Tài liệu đào tạo</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link custom-link" id="btnTestPage">Kiểm tra đánh giá</a>
@@ -116,7 +116,7 @@
                     $("#grgroupBtnLogoutNew").show();
                     if (data.role == "admin") {
                         localStorage.setItem("isAdmin", true);
-                        $("#groupBtnLogoutNew").html('<div class="avatar bg-primary shadow-sm"><i class="bi-person-fill" style="color:white" ></i><span class="avatar-status bg-success"></span></div> ' + (data.name || ''));
+                        $("#groupBtnLogoutNew").html('<div class="avatar text-bg-dark shadow-sm"><i class="bi-person-fill-gear" style="color:yellow" ></i><span class="avatar-status bg-success"></span></div> ' + (data.name || ''));
                         //$("#groupBtnLogoutNew").removeClass('text-white bg-primary');
                         //$("#groupBtnLogoutNew").addClass('text-white bg-danger');
                         $('#btnAdminPage').show();
@@ -353,6 +353,29 @@
             if (!isAdmin) {
                 var currentLocation = window.location;
                 var relativePath = "User/Home/SelectRoom";
+                var url = currentLocation.origin + "/" + relativePath;
+                window.location.href = url;
+            } else {
+                Toast.fire({
+                    icon: "error",
+                    title: "Chỉ tài khoản người dùng được phép truy cập chức năng!"
+                });
+            }
+        } else {
+            Toast.fire({
+                icon: "error",
+                title: "Cần đăng nhập để truy cập"
+            });
+        }
+    });
+
+    $("#btnReadPage").click(function () {
+        const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+        if (isLoggedIn) {
+            const isAdmin = localStorage.getItem("isAdmin") === "true";
+            if (!isAdmin) {
+                var currentLocation = window.location;
+                var relativePath = "User/post/list";
                 var url = currentLocation.origin + "/" + relativePath;
                 window.location.href = url;
             } else {

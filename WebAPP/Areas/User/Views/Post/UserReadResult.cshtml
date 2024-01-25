@@ -1,0 +1,64 @@
+﻿@model List<ViewModels.Read.ReadResult.ReadResultVm>
+
+@section Header
+    {
+    <partial name="PageUser/_header" />
+    }
+    @section SideBar
+    {
+    <partial name="PageUser/_sideBar" />
+    }
+
+    <div class="card">
+        <div class="card-body">
+            <table id="tblDanhsachtaikhoan" class="table table-hover" style="vertical-align:middle;width:100%;font-size:small">
+                <thead style="font-size:small">
+                    <tr>
+                        <th style="text-align:start;font-weight: 350;">
+                            Họ tên
+                        </th>
+                        <th style="text-align:start;font-weight: 350;">
+                            Chủ đề
+                        </th>
+                        <th style="text-align:start;font-weight: 350;">
+                            Tài liệu đào tạo
+                        </th>
+                        <th style="text-align:end;font-weight: 350;">
+                            Ngày đọc
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td style="white-space:nowrap">
+                            @item.Hoten
+                        </td>
+                        <td>
+                            @item.CategoryTitle
+                        </td>
+                        <td>
+                            @item.PostTitle
+                        </td>
+                        <td style="white-space:nowrap;text-align:end">
+                            @item.Date
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $("#tblDanhsachtaikhoan").DataTable({
+            "paging": true,
+            "searching": true,
+            "info": true,
+            "responsive": true,
+            "ordering": true
+        });
+    });
+</script>

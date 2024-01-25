@@ -21,6 +21,10 @@
     var dsLTCD = ViewBag.dsLTCD as List<ViewModels.CauHoiTrinhTuThaoTac.Response.QuestionAndAnswerLoiTaiCongDoanVm>;
     var dsDS = ViewBag.dsDS as List<ViewModels.CauHoiTrinhTuThaoTac.Response.QuestionAndAnswerDoiSachVm>;
 }
+@section Header
+    {
+    <partial name="PageUser/_header" />
+    }
 @section SideBar
     {
     <partial name="PageUser/_sideBar" />

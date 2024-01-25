@@ -1,4 +1,9 @@
-﻿@{
+﻿@section Header
+    {
+    <partial name="PageUser/_header" />
+    }
+
+@{
     int thoigianthi = ViewBag.thoiGianThi;
 }
 <style>
@@ -108,7 +113,7 @@
         </button>
     </div>
     <div class="col-4">
-        <div class="tick" data-did-init="handleTickInit" style="opacity:0.6">
+        <div class="tick" data-did-init="handleTickInit" style="opacity:0.3">
             <div data-layout="horizontal fit" data-value-mapping="indexes">
                 <span class="tick-group">
                     <span data-view="flip"></span>
@@ -146,7 +151,7 @@
     function handleTickInit(tick) {
         // Lấy giá trị thời gian còn lại từ localStorage (nếu có)
         var remainingTimeStr = localStorage.getItem('countdownTime');
-        var remainingTime = remainingTimeStr ? parseInt(remainingTimeStr) : countDownTime * 60 * 1000; // Default: 45 minutes
+        var remainingTime = remainingTimeStr ? parseInt(remainingTimeStr) : countDownTime * 60 * 1000; 
         var countdownDuration = Tick.helper.duration(remainingTime, 'milliseconds');
         var timer = Tick.helper.interval(function (passed) {
             var remainingTime = Math.max(countdownDuration - passed, 0);

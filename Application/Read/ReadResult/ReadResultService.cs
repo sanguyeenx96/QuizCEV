@@ -41,7 +41,9 @@ namespace Application.Read.ReadResult
                || request.userName != null || request.name != null)
             {
                 // Sử dụng IQueryable để tận dụng deferred execution
-                IQueryable<Data.Entities.ReadResult> resultQuery = _context.readResults                                              
+                IQueryable<Data.Entities.ReadResult> resultQuery = _context.readResults 
+                                                .Include(x=>x.ReadPost)
+                                                .ThenInclude(x=>x.readCategory)
                                                 .Include(x => x.AppUser)
                                                     .ThenInclude(x => x.Cell)
                                                     .ThenInclude(x => x.Model)
@@ -79,7 +81,9 @@ namespace Application.Read.ReadResult
                     Hoten = result.AppUser.Name,
                     Model = result.AppUser.Cell.Model.Name,
                     Cell = result.AppUser.Cell.Name,
-                    Bophan = result.AppUser.Cell.Model.Dept.Name,                   
+                    Bophan = result.AppUser.Cell.Model.Dept.Name,      
+                    CategoryTitle = result.ReadPost.readCategory.Title,
+                    PostTitle = result.ReadPost.Title
                 }).ToList();
                 return new ApiSuccessResult<List<ReadResultVm>>(listReadResults);
             }

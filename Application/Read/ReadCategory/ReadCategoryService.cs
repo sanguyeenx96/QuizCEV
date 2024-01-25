@@ -18,6 +18,7 @@ namespace Application.Read.ReadCategory
         {
             _context = context;
         }
+
         public async Task<ApiResult<int>> Create(ReadCategoryCreateRequest request)
         {
             var checkDuplicateName = await _context.readCategories.Where(x => x.Title == request.Title).FirstOrDefaultAsync();

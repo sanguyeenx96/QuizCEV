@@ -1,0 +1,102 @@
+﻿@model List<ViewModels.Read.ReadPost.ReadPostVm>
+
+<style>
+    .image-link {
+        display: block;
+        width: 100%;
+        position: relative;
+        overflow: hidden;
+        padding-top: calc(100% * 73 / 129); /* Tính toán padding-top dựa trên tỷ lệ khung hình 129:73 */
+    }
+
+        .image-link img {
+            width: 100%;
+            height: auto;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+    .equal-height-row {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .equal-height-col {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .card {
+        flex: 1;
+    }
+</style>
+<div class="overflow-hidden">
+    <div class="row gy-0 equal-height-row">
+        @foreach (var item in Model.Where(x => x.Status == true).OrderByDescending(x => x.DateCreated))
+        {
+            <div class="col-xl-4 col-lg-6 mb-3 equal-height-col animate__animated animate__fadeIn">
+                <div class="card shadow-sm">
+                    <img src="@item.ThumbImage" class="card-img-top">
+                    <div class="card-body">
+                        <ul class="entry-meta list-unstyled d-flex align-items-center text-muted ms-auto" style="font-size: small;">
+                            <li>
+                                <a class="fs-7 link-secondary text-decoration-none d-flex align-items-center me-3">
+                                    <i class="bi-clock"></i>
+                                    <span class="ms-2 fs-7">
+                                        @item.Time phút đọc
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="fs-7 link-secondary text-decoration-none d-flex align-items-center me-3">
+                                    <i class="bi-calendar3"></i>
+                                    <span class="ms-2 fs-7">
+                                        @item.DateCreated.ToShortDateString()
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="link-secondary text-decoration-none d-flex align-items-center">
+                                    <i class="bi-eye"></i>
+                                    <span class="ms-2 fs-7">
+                                        @item.ViewCount
+                                    </span>
+                                </a>
+                            </li>
+                        </ul>
+
+                        <h5 class="card-title">@item.Title</h5>
+                        <p class="card-text text-muted">
+                            <small>
+                                @item.Description
+                            </small>
+                        </p>
+                    </div>
+                    <div class="card-footer bg-white">
+                        <div class="d-flex w-100 justify-content-between">
+                            <a class="btn btn-outline-primary" asp-action="viewpost" asp-route-id="@item.Id">
+                                <i class="bi-play-fill"></i>
+                                Bắt đầu đọc
+                            </a>
+                            @{
+                                if (item.isReaded == true)
+                                {
+                                    <span class="badge text-success bg-light " style="display: flex; align-items: center;    font-weight: 400;">
+                                        Đã đọc
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge text-danger bg-light" style="display: flex; align-items: center;    font-weight: 400;">
+                                    Chưa đọc
+                                    </span>
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

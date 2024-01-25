@@ -284,6 +284,7 @@ namespace WebAPP.Areas.Admin.Controllers
             });
             return Json(result);
         }
+
         [HttpPost]
         public async Task<IActionResult> GetSelectListModel(int deptId)
         {
@@ -295,6 +296,7 @@ namespace WebAPP.Areas.Admin.Controllers
             });
             return Json(result);
         }
+
         [HttpPost]
         public async Task<IActionResult> GetSelectListCelll(int modelId)
         {
@@ -306,6 +308,7 @@ namespace WebAPP.Areas.Admin.Controllers
             });
             return Json(result);
         }
+
         public async Task<IActionResult> CreateTaiKhoan()
         {
             ViewBag.thisPage = "Thêm mới tài khoản";

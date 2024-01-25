@@ -19,6 +19,25 @@ namespace WebAPP.Services
             _configuration = configuration;
             _httpContextAccessor = httpContextAccessor;
         }
+
+        public async Task<ApiResult<bool>> ChangeStatus(int id)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAdress"]);
+
+            var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
+
+            var httpContent = new StringContent("", Encoding.UTF8, "application/json");
+            var response = await client.PatchAsync($"/api/readpost/updatestatus/{id}", httpContent);
+            var result = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
+            }
+            return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
+        }
+
         public async Task<ApiResult<bool>> Create(ReadPostCreateRequest request)
         {
             var client = _httpClientFactory.CreateClient();
@@ -121,6 +140,7 @@ namespace WebAPP.Services
 
             var json = JsonConvert.SerializeObject(request);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+
             var response = await client.PatchAsync($"/api/readpost/update/{id}", httpContent);
             var result = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
@@ -147,6 +167,26 @@ namespace WebAPP.Services
                 return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
             }
             return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
+        }
+
+        public async Task<ApiResult<List<ReadPostVm>>> UserGetAllByCategory(int id, ReadPostUserGetAllByCategory request)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAdress"]);
+
+            var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
+
+            var json = JsonConvert.SerializeObject(request);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await client.PostAsync($"/api/readpost/UserGetAllByCategory/{id}", httpContent);
+            var result = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                return JsonConvert.DeserializeObject<ApiSuccessResult<List<ReadPostVm>>>(result);
+            }
+            return JsonConvert.DeserializeObject<ApiErrorResult<List<ReadPostVm>>>(result);
         }
     }
 }

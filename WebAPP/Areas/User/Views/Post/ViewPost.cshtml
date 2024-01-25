@@ -1,0 +1,146 @@
+﻿@model ViewModels.Read.ReadPost.ReadPostVm
+@{
+    int thoigiandoc = Model.Time;
+}
+
+
+<style>
+    .content img {
+        padding-top: 10px;
+        padding-bottom: 10px;
+        border-radius: 4px; /* Điều chỉnh giá trị để làm tròn góc theo mong muốn */
+    }
+
+    #end {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        padding-bottom: 60px; /* Adjust the padding as needed */
+    }
+
+</style>
+
+<header class="header header-sticky bg-light border-0">
+    <div class="progress-group-header mt-2">
+        <i class="bi-stopwatch progress-group-icon me-1"></i>
+        <small>Thời gian đọc yêu cầu</small>
+        <small class="ms-auto ">@thoigiandoc phút</small>
+    </div>
+    <div class="progress-group-bars">
+        <div class="progress">
+            <div id="progress-bar" class="progress-bar progress-bar-striped bg-primary progress-bar-animated" role="progressbar" aria-valuemin="0" aria-valuemax="100" >
+            </div>
+        </div>
+    </div>
+</header>
+
+<section class="py-3 py-md-5 py-xl-8 text-bg-dark rounded-2 mt-3">
+    <div class="container">
+        <div class="row gy-3 gy-lg-0 align-items-lg-center justify-content-lg-between">
+            <div class="col-12 col-lg-7 order-1 order-lg-0">
+                <div class="entry-header mb-3">
+                    <ul class="entry-meta list-unstyled d-flex mb-3">
+                        <li>
+                            <a class="d-inline-flex px-2 py-1 link-accent text-accent-emphasis bg-white border border-accent-subtle rounded-2 text-decoration-none fs-7">
+                                @Model.catName
+                            </a>
+                        </li>
+                    </ul>
+                    <h2 class="display-5  mb-4">
+                        @Model.Title
+                    </h2>
+                </div>
+                <div class="entry-footer text-muted">
+                    <ul class="entry-meta list-unstyled d-flex align-items-center m-0">
+                        <li>
+                            <a class="fs-7 link-light text-decoration-none d-flex align-items-center">
+                                <i class="bi-stopwatch"></i>
+                                <span class="ms-2 fs-7">@Model.Time phút đọc</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-12 col-lg-4">
+                <a class="d-block bsb-hover-image overflow-hidden rounded">
+                    <img class="img-fluid bsb-scale bsb-hover-scale-up" loading="lazy" src="@Model.ThumbImage" alt="">
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-3 py-md-5 py-xl-5">
+    <div class="container">
+        <div class="row justify-content-md-center gy-3 gy-xl-4">
+            <div class="col-12 gy-3 gy-xl-4 bsb-entry-content">
+                <div class="content">
+                    @Html.Raw(Model.Content)
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div id="end" class="container-fluid">
+    <div style="display: grid; place-items: center;">
+        <button id="btnEnd" data-id="@Model.Id" class="btn btn-primary text-white text-bold animate__animated animate__pulse animate__infinite shadow btn-lg" style="width: 200px; pointer-events: auto;">
+            HOÀN THÀNH
+        </button>
+    </div>
+</div>
+
+
+<script>
+    var countDownMinutes = @thoigiandoc; // Đặt giá trị thời gian đếm ngược từ server (đơn vị là phút)
+    // Chuyển đổi thời gian đếm ngược thành mili giây
+    var countDownTime = countDownMinutes * 60 * 1000;
+    // Lấy phần tử thanh progress
+    var progressBar = document.getElementById('progress-bar');
+    // Tính khoảng cách thời gian giữa hiện tại và countDownTime
+    var distance = countDownTime;
+    var interval = setInterval(function () {
+        // Tính phần trăm đã qua
+        var progressPercentage = ((countDownTime - distance) / countDownTime) * 100;
+        // Cập nhật chiều rộng của thanh progress
+        progressBar.style.width = progressPercentage + '%';
+        // Kiểm tra nếu đã đếm ngược xong
+        if (distance <= 0) {
+            clearInterval(interval); // Dừng đếm ngược
+            // Thực hiện các hành động khi đếm ngược xong (nếu cần)
+            $("#btnEnd").show();
+        }
+        // Giảm thời gian còn lại mỗi giây
+        distance -= 500;
+    }, 500); // Thực hiện mỗi giây (1000 milliseconds)
+
+    $(document).ready(function(){
+        $("#btnEnd").hide();
+        $("#btnEnd").click(function(){
+            var id = $(this).data("id")
+            $.ajax({
+                url: "/user/post/EndViewPost",
+                data:{
+                    idPost:id
+                },
+                type: 'POST',
+                success: function (result) {
+                    Swal.fire({
+                        icon: "success",
+                        showConfirmButton: false,
+                        timer: 1500 // Hiển thị thông báo thành công trong 1.5 giây
+                    }).then(() => {
+                        var currentLocation = window.location;
+                        var relativePath = "User/post/list";
+                        var url = currentLocation.origin + "/" + relativePath;
+                        window.location.href = url;
+                    });
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        })
+    })
+</script>

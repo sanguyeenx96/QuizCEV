@@ -20,5 +20,7 @@ namespace ViewModels.Read.ReadPost
         public bool Status { get; set; }
         public int ReadCategoryId { get; set; } // Khóa ngoại đến bảng Category
         public string? catName { get; set; }
+
+        public bool? isReaded { get; set; }
     }
 }
