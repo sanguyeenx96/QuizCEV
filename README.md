@@ -7,8 +7,8 @@
 - Identity
 - Token, Tempdata, Session
 - DI
-- 
-![0](https://github.com/sanguyeenx96/QuizCEV/assets/103011257/b3610f72-7dc7-4e32-bb38-c5d08deaf742)
+  
+![screencapture-localhost-7245-2024-01-26-09_09_36](https://github.com/sanguyeenx96/QuizCEV/assets/103011257/dd00a4d6-3c24-470c-ac29-ac971da2ec79)
 
 ![1](https://github.com/sanguyeenx96/QuizCEV/assets/103011257/86794180-2aa8-4361-a896-9b2a9ded13f6)
 
