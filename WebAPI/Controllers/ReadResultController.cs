@@ -33,6 +33,12 @@ namespace WebAPI.Controllers
             return Ok(result);
         }
 
-      
+        [HttpPost("CountPerson")]
+        public async Task<IActionResult> CountPerson(ReadResultCountPersonRequest request)
+        {
+            var result = await _readResultService.CountPerson(request);
+            return Ok(result);
+        }
+
     }
 }

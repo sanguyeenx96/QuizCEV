@@ -7,67 +7,69 @@
 }
 
 <h1 class="display-6 mb-3" style="text-align:center">
-    LỌC DỮ LIỆU ĐỌC TÀI LIỆU ĐÀO TẠO
+    DỮ LIỆU ĐỌC TÀI LIỆU ĐÀO TẠO
 </h1>
-<div class="card mb-3 text-bg-dark">
+<div class="card mb-3 text-bg-white ">
     <div class="card-body">
         <div class="row gx-3 gy-2 align-items-center">
             <div class="col-sm-3">
                 <label for="formGroupExampleInput" class="form-label">
                     <i class="bi-1-circle-fill"></i>
-                    Chọn chủ đề
+                    Bộ phận
                 </label>
-                <select id="catSelectList" asp-items="selectListChude" class="form-select">
-                    <option value="" disabled selected>Nhấn để chọn</option>
-                </select>
-            </div>
-            <div class="col-sm-9">
-                <label for="formGroupExampleInput" class="form-label">
-                    <i class="bi-2-circle-fill"></i>
-                    Chọn tài liệu
-                </label>
-                <select id="postSelectList" asp-items="selectListChude" class="form-select">
-                    <option value="" disabled selected>Nhấn để chọn</option>
-                </select>
-            </div>
-            <div class="col-sm-3">
-                <label for="formGroupExampleInput" class="form-label">Theo ngày thi</label>
-                <input type="text" id="datepicker" class="form-select " autocomplete="off" placeholder="Nhấn để chọn">
-            </div>
-            <div class="col-sm-3">
-                <label for="formGroupExampleInput" class="form-label">
-                    <i class="bi-1-circle-fill"></i>
-                    Theo bộ phận
-                </label>
-                <select id="deptSelectList" class="form-select">
-                    <option value="" disabled selected>Nhấn để chọn</option>
+                <select id="deptSelectList" class="form-select text-bg-light">
+                    <option value="0" disabled selected>Nhấn để chọn</option>
                 </select>
             </div>
             <div class="col-sm-3">
                 <label for="formGroupExampleInput" class="form-label">
                     <i class="bi-2-circle-fill"></i>
-                    Theo Model
+                    Model
                 </label>
-                <select id="modelSelectList" class="form-select">
-                    <option value="" disabled selected>Nhấn để chọn</option>
+                <select id="modelSelectList" class="form-select text-bg-light">
+                    <option value="0" disabled selected>Nhấn để chọn</option>
                 </select>
             </div>
             <div class="col-sm-3">
                 <label for="formGroupExampleInput" class="form-label">
                     <i class="bi-3-circle-fill"></i>
-                    Theo Cell
+                    Cell
                 </label>
-                <select id="cellSelectList" class="form-select">
-                    <option value="" disabled selected>Nhấn để chọn</option>
+                <select id="cellSelectList" class="form-select text-bg-light">
+                    <option value="0" disabled selected>Nhấn để chọn</option>
                 </select>
             </div>
+            <div class="col-sm-3">
+                <label for="formGroupExampleInput" class="form-label">Ngày </label>
+                <input type="text" id="datepicker" class="form-select text-bg-light " autocomplete="off" placeholder="Nhấn để chọn">
+            </div>
+            <div class="col-sm-3">
+                <label for="formGroupExampleInput" class="form-label">
+                    <i class="bi-1-circle-fill"></i>
+                    Chủ đề
+                </label>
+                <select id="catSelectList" asp-items="selectListChude" class="form-select text-bg-light">
+                    <option value="0" disabled selected>Nhấn để chọn</option>
+                </select>
+            </div>
+            <div class="col-sm-9">
+                <label for="formGroupExampleInput" class="form-label">
+                    <i class="bi-2-circle-fill"></i>
+                    Tên tài liệu
+                </label>
+                <select id="postSelectList" class="form-select text-bg-light">
+                    <option value="0" disabled selected>Nhấn để chọn</option>
+                </select>
+            </div>
+
+
             <div class="col-sm-6">
-                <label for="formGroupExampleInput" class="form-label">Theo mã nhân viên</label>
-                <input type="text" id="txtuserName" class="form-control " autocomplete="off" placeholder="Nhập mã nhân viên">
+                <label for="formGroupExampleInput" class="form-label">Mã nhân viên</label>
+                <input type="text" id="txtuserName" class="form-control  text-bg-light" autocomplete="off" placeholder="Nhập mã nhân viên">
             </div>
             <div class="col-sm-6">
-                <label for="formGroupExampleInput" class="form-label">Theo tên nhân viên</label>
-                <input type="text" id="txtName" class="form-control " autocomplete="off" placeholder="Nhập mã nhân viên">
+                <label for="formGroupExampleInput" class="form-label">Tên nhân viên</label>
+                <input type="text" id="txtName" class="form-control text-bg-light " autocomplete="off" placeholder="Nhập mã nhân viên">
             </div>
         </div>
     </div>
@@ -105,8 +107,6 @@
             }
         });
 
-
-
         $('#catSelectList').on("change", function () {
             var catId = $(this).val();
             catId = parseInt(catId);
@@ -135,9 +135,16 @@
             });
         });
 
+        $('#postSelectList').on("change", function () {
+            var postId = $(this).val();
+            postId = parseInt(postId);
+            let selectboPhanId = $('#deptSelectList').val();
+            if (selectboPhanId != null && selectboPhanId != "Nhấn để chọn") {
+                loadDataTheoChuDe();
+            }
+        });
 
         $('#deptSelectList').on("change", function () {
-            loadDataTheoChuDe();
             var deptId = $(this).val();
             deptId = parseInt(deptId);
             $.ajax({
@@ -158,6 +165,10 @@
                             text: item.text
                         }));
                     });
+                    let selectPostValue = $('#postSelectList').val();
+                    if (selectPostValue != null && selectPostValue != "Nhấn để chọn") {
+                        loadDataTheoChuDe();
+                    }
                 },
                 error: function () {
                     console.error('Failed to retrieve department options.');
@@ -166,7 +177,6 @@
         });
 
         $('#modelSelectList').on("change", function () {
-            loadDataTheoChuDe();
             var modelId = $(this).val();
             modelId = parseInt(modelId);
             $.ajax({
@@ -187,43 +197,54 @@
                             text: item.text
                         }));
                     });
+                    let selectPostValue = $('#postSelectList').val();
+                    if (selectPostValue != null && selectPostValue != "Nhấn để chọn") {
+                        loadDataTheoChuDe();
+                    }
                 },
                 error: function () {
                     console.error('Failed to retrieve department options.');
                 }
             });
         })
+
         $('#cellSelectList').on("change", function () {
-            loadDataTheoChuDe();
+            let selectPostValue = $('#postSelectList').val();
+            if (selectPostValue != null && selectPostValue != "Nhấn để chọn") {
+                loadDataTheoChuDe();
+            }
         })
 
         $('#txtuserName').on("keyup", function () {
             loadDataTheoChuDe();
         });
+
         $('#txtName').on("keyup", function () {
             loadDataTheoChuDe();
         });
+
         function loadDataTheoChuDe() {
-            var selectphongThiValue = $('#PhongThi').val();
-            var selectDate = $('#datepicker').val();
+            var selectCatValue = $('#catSelectList').val();
+            var selectPostValue = $('#postSelectList').val();
+
             var selectboPhanId = $('#deptSelectList').val();
             var selectmodelId = $('#modelSelectList').val();
             var selectcellId = $('#cellSelectList').val();
 
+            var selectDate = $('#datepicker').val();
             var name = $('#txtName').val();
             var userName = $('#txtuserName').val();
 
-            var intCategoryId = parseInt(selectphongThiValue);
+            var intPostId = parseInt(selectPostValue);
             var intboPhanId = parseInt(selectboPhanId);
             var intmodelId = parseInt(selectmodelId);
             var intcellId = parseInt(selectcellId);
 
-
             $.ajax({
-                url: '/admin/thongke/Search',
+                url: '/admin/tailieudaotao/Search',
                 type: 'POST',
                 data: {
-                    CategoryId: intCategoryId,
+                    PostId: intPostId,
                     Date: selectDate,
                     boPhanId: selectboPhanId,
                     modelId: intmodelId,

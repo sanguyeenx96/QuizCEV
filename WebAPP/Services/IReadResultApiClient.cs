@@ -7,5 +7,7 @@ namespace WebAPP.Services
     {
         Task<ApiResult<List<ReadResultVm>>> Search(ReadResultSearchRequest request);
         Task<ApiResult<int>> Create(ReadResultCreateRequest request);
+        Task<ApiResult<int>> CountPerson(ReadResultCountPersonRequest request);
+
     }
 }

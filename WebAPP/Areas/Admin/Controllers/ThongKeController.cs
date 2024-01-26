@@ -23,7 +23,6 @@ namespace WebAPP.Areas.Admin.Controllers
             _categoryApiClient = categoryApiClient;
         }
 
-
         [HttpPost]
         public async Task<IActionResult> DanhGia(int id, string result)
         {

@@ -307,8 +307,6 @@
 
         });
 
-
-
         $(".btnXemChiTietBaithi").click(function () {
             var id = $(this).attr("data-idbaithi");
             $.ajax({
@@ -348,7 +346,6 @@
         // Đếm số lượng điểm
         var countTotal = dataDiem.length;
         $('#txtcountTotal').text(countTotal + " bài thi");
-
 
         var countDiemTren8 = dataDiem
             .filter(function (score) {
