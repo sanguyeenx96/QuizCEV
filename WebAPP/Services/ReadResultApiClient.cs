@@ -18,6 +18,26 @@ namespace WebAPP.Services
             _configuration = configuration;
             _httpContextAccessor = httpContextAccessor;
         }
+
+        public async Task<ApiResult<int>> CountPerson(ReadResultCountPersonRequest request)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAdress"]);
+
+            var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
+
+            var json = JsonConvert.SerializeObject(request);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+            var response = await client.PostAsync("/api/readresult/CountPerson", httpContent);
+            var result = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                return JsonConvert.DeserializeObject<ApiSuccessResult<int>>(result);
+            }
+            return JsonConvert.DeserializeObject<ApiErrorResult<int>>(result);
+        }
+
         public async Task<ApiResult<int>> Create(ReadResultCreateRequest request)
         {
             var client = _httpClientFactory.CreateClient();

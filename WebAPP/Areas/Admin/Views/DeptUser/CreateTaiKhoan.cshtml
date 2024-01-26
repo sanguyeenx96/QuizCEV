@@ -12,7 +12,7 @@
             <i class="bi-1-circle-fill "></i>
             Chọn loại tài khoản
         </label>
-        <select class="form-select form-select-lg" id="roleName" name="roleId" style="overflow: hidden;">
+        <select class="form-select form-select-lg " id="roleName" name="roleId" style="overflow: hidden;">
             @foreach (var item in ViewBag.listRoles)
             {
                 <option value="@item.Text">@item.Text</option>
@@ -24,7 +24,7 @@
             <i class="bi-2-circle-fill"></i>
             Chọn bộ phận
         </label>
-        <select id="deptSelectList" class="form-select form-select-lg">
+        <select id="deptSelectList" class="form-select form-select-lg ">
             <option value="" selected disabled>Nhấn để chọn</option>
         </select>
     </div>
@@ -33,14 +33,14 @@
             <i class="bi-3-circle-fill"></i>
             Chọn Model
         </label>
-        <select id="modelSelectList" class="form-select form-select-lg"></select>
+        <select id="modelSelectList" class="form-select form-select-lg "></select>
     </div>
     <div class="form-group col-3 mb-2">
         <label class="form-label">
             <i class="bi-4-circle-fill"></i>
             Chọn Cell
         </label>
-        <select id="cellSelectList" class="form-select form-select-lg">
+        <select id="cellSelectList" class="form-select form-select-lg ">
         </select>
     </div>
 </div>

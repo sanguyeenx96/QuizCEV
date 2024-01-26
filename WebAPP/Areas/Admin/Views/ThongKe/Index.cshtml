@@ -7,27 +7,27 @@
 }
 
 <h1 class="display-6 mb-3" style="text-align:center">
-    LỌC DỮ LIỆU BÀI THI
+    DỮ LIỆU KẾT QUẢ BÀI THI
 </h1>
-<div class="card mb-3 text-bg-dark">
+<div class="card mb-3 text-bg-white">
     <div class="card-body">
         <div class="row gx-3 gy-2 align-items-center">
             <div class="col-sm-12">
                 <label for="formGroupExampleInput" class="form-label">Theo bài thi</label>
-                <select id="PhongThi" asp-items="selectListPhongThi" class="form-select">
+                <select id="PhongThi" asp-items="selectListPhongThi" class="form-select text-bg-light ">
                     <option value="" disabled selected>Nhấn để chọn</option>
                 </select>
             </div>
             <div class="col-sm-3">
                 <label for="formGroupExampleInput" class="form-label">Theo ngày thi</label>
-                <input type="text" id="datepicker" class="form-select " autocomplete="off" placeholder="Nhấn để chọn">
+                <input type="text" id="datepicker" class="form-select text-bg-light " autocomplete="off" placeholder="Nhấn để chọn">
             </div>
             <div class="col-sm-3">
                 <label for="formGroupExampleInput" class="form-label">
                     <i class="bi-1-circle-fill"></i>
                     Theo bộ phận
                 </label>
-                <select id="deptSelectList" class="form-select">
+                <select id="deptSelectList" class="form-select text-bg-light ">
                     <option value="" disabled selected>Nhấn để chọn</option>
                 </select>
             </div>
@@ -36,7 +36,7 @@
                     <i class="bi-2-circle-fill"></i>
                     Theo Model
                 </label>
-                <select id="modelSelectList" class="form-select">
+                <select id="modelSelectList" class="form-select text-bg-light ">
                     <option value="" disabled selected>Nhấn để chọn</option>
                 </select>
             </div>
@@ -45,17 +45,17 @@
                     <i class="bi-3-circle-fill"></i>
                     Theo Cell
                 </label>
-                <select id="cellSelectList" class="form-select">
+                <select id="cellSelectList" class="form-select text-bg-light ">
                     <option value="" disabled selected>Nhấn để chọn</option>
                 </select>
             </div>
             <div class="col-sm-6">
                 <label for="formGroupExampleInput" class="form-label">Theo mã nhân viên</label>
-                <input type="text" id="txtuserName" class="form-control " autocomplete="off" placeholder="Nhập mã nhân viên">
+                <input type="text" id="txtuserName" class="form-control  text-bg-light " autocomplete="off" placeholder="Nhập mã nhân viên">
             </div>
             <div class="col-sm-6">
                 <label for="formGroupExampleInput" class="form-label">Theo tên nhân viên</label>
-                <input type="text" id="txtName" class="form-control " autocomplete="off" placeholder="Nhập mã nhân viên">
+                <input type="text" id="txtName" class="form-control  text-bg-light " autocomplete="off" placeholder="Nhập mã nhân viên">
             </div>
         </div>
     </div>
@@ -152,6 +152,7 @@
                 }
             });
         })
+
         $('#cellSelectList').on("change", function () {
             loadDataTheoChuDe();
         })
@@ -159,9 +160,11 @@
         $('#txtuserName').on("keyup", function () {
             loadDataTheoChuDe();
         });
+
         $('#txtName').on("keyup", function () {
             loadDataTheoChuDe();
         });
+
         function loadDataTheoChuDe() {
             var selectphongThiValue = $('#PhongThi').val();
             var selectDate = $('#datepicker').val();

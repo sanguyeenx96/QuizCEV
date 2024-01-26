@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using ViewModels.ExamResult.Request;
+using ViewModels.ExamResult.Response;
 using ViewModels.PostCategory.Request;
 using ViewModels.PostPosts.Request;
 using ViewModels.Read.ReadCategory;
 using ViewModels.Read.ReadPost;
+using ViewModels.Read.ReadResult;
 using WebAPP.Services;
 
 namespace WebAPP.Areas.Admin.Controllers
@@ -15,12 +18,15 @@ namespace WebAPP.Areas.Admin.Controllers
     {
         private readonly IReadCategoryApiClient _readCategoryApiClient;
         private readonly IReadPostApiClient _readPostApiClient;
+        private readonly IReadResultApiClient _readResultApiClient;
         private readonly IDeptApiClient _deptApiClient;
-        public TaiLieuDaoTaoController(IReadCategoryApiClient readCategoryApiClient, IReadPostApiClient readPostApiClient, IDeptApiClient deptApiClient)
+        public TaiLieuDaoTaoController(IReadCategoryApiClient readCategoryApiClient, IReadPostApiClient readPostApiClient,
+            IDeptApiClient deptApiClient, IReadResultApiClient readResultApiClient)
         {
             _readCategoryApiClient = readCategoryApiClient;
             _readPostApiClient = readPostApiClient;
             _deptApiClient = deptApiClient;
+            _readResultApiClient = readResultApiClient;
         }
 
         //Category
@@ -208,6 +214,26 @@ namespace WebAPP.Areas.Admin.Controllers
             });
             return Json(result);
         }
+
+
+        [HttpPost]
+        public async Task<IActionResult> Search(int? PostId, DateTime? Date, int? boPhanId, string? name, string? userName, int? modelId, int? cellId)
+        {
+            var request = new ReadResultSearchRequest()
+            {
+                UserId = null,
+                readPostId = PostId,
+                Date = Date,
+                boPhanId = boPhanId,
+                name = name,
+                userName = userName,
+                modelId = modelId,
+                cellId = cellId
+            };
+            var result = await _readResultApiClient.Search(request);
+            return PartialView("PageAdmin/_listLogReadResult", result.ResultObj);
+        }
+
 
     }
 }

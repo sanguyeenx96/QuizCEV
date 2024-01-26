@@ -1,4 +1,5 @@
-﻿using Data.Entities;
+﻿using Data.EF;
+using Data.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -18,6 +19,7 @@ using Utilities.Constants;
 using ViewModels.Category.Response;
 using ViewModels.Common;
 using ViewModels.Question.Request;
+using ViewModels.Users;
 using ViewModels.Users.Request;
 using ViewModels.Users.Response;
 
@@ -28,12 +30,15 @@ namespace Application.Users
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly IConfiguration _config;
+        private readonly TracNghiemCEVDbContext _context;
 
-        public UsersService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IConfiguration configuration)
+
+        public UsersService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IConfiguration configuration,TracNghiemCEVDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _config = configuration;
+            _context = context;
         }
 
         public async Task<ApiResult<string>> Authenticate(LoginRequest request)
@@ -369,5 +374,6 @@ namespace Application.Users
                 throw new Exception("Error while processing insert to SQL: " + ex.Message);
             }
         }
+
     }
 }

@@ -10,7 +10,9 @@ using ViewModels.Dept.Request;
 using ViewModels.Dept.Response;
 using ViewModels.Model.Request;
 using ViewModels.Model.Response;
+using ViewModels.Users;
 using ViewModels.Users.Request;
+using ViewModels.Users.Response;
 
 namespace Application.Dept
 {
@@ -33,5 +35,6 @@ namespace Application.Dept
         Task<ApiResult<bool>> CreateCell(int ModelId, CellCreateRequest request);
         Task<ApiResult<bool>> UpdateCell(int id, CellUpdateRequest request);
         Task<ApiResult<bool>> DeleteCell(int id);
+
     }
 }
