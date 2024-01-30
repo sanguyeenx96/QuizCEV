@@ -129,5 +129,14 @@ namespace WebAPP.Areas.Admin.Controllers
                 }
             }
         }
+
+        //Trang xuất báo cáo kết quả đào tạo
+        [HttpGet]
+        public async Task<IActionResult> Xuatbaocao()
+        {
+            return View();
+        }
+
+
     }
 }

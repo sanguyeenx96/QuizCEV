@@ -15,7 +15,6 @@
         double percentProcessbar = ((double)thisQ / totalQTracNghiem) * 100;
         pP = percentProcessbar.ToString() + "%";
     }
-
 }
 
 <div class="progress-group mb-0">
@@ -23,83 +22,176 @@
         <small class="text-muted ">
             Đã trả lời @thisQ / @totalQTracNghiem câu hỏi
         </small>
-@*        <div class="ms-auto font-weight-bold">Đã hoàn thành @thisQ/@totalQTracNghiem câu hỏi</div>
-*@    </div>
+    </div>
     <div class="progress-group-bars">
         <div class="progress rounded-0 ">
             <div class="progress-bar progress-bar-striped bg-success progress-bar-animated" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: @pP ;opacity:0.9"></div>
         </div>
     </div>
 </div>
-@*<div class="card bg-white border border-0" style="background-image: url('/paper.jpg'); background-size:cover; background-position: center;">
-*@
+
 <div class="card bg-white rounded-0 border border-0">
     <div class="card-body text-center">
-        <form id="formTraLoiCauHoiTracNghiem">
-            <div>
-                <span class="badge rounded-pill text-bg-light mb-2 ">
-                    <small>
-                        @Model.Score điểm
-                    </small>
-                </span>
-                <h1 class="display-6 mb-4">@Model.Text</h1>
-                @* <p>Tên linh kiện tại công đoạn?</p>*@
-                <div class="container-sm">
-                    @{
-                        if (!string.IsNullOrEmpty(Model.QA))
-                        {
-                                <div class="col-12">
-                                    <div class="btn-group mb-2 w-100 shadow-sm">
-                                    <button class="btn btn-dark disabled" style="min-width:40px">A</button>
-                                        <button style="text-align:start" class="btn w-100  btn-light" type="submit" name="answer" value="A">@Model.QA</button>
-                                    </div>
-                                </div>
-                        }
-                        if (!string.IsNullOrEmpty(Model.QB))
-                        {
-                                <div class="col-12">
-                                <div class="btn-group mb-2 w-100 shadow-sm">
-                                    <button class="btn btn-dark disabled" style="min-width:40px">B</button>
-                                    <button style="text-align:start" class="btn w-100 btn-light" type="submit" name="answer" value="B">@Model.QB</button>
-                                    </div>
-                                </div>
-                        }
-                        if (!string.IsNullOrEmpty(Model.QC))
-                        {
-                                <div class="col-12">
-                                <div class="btn-group mb-2 w-100 shadow-sm">
-                                    <button class="btn btn-dark disabled" style="min-width:40px">C</button>
-                                    <button style="text-align:start" class="btn w-100 btn-light" type="submit" name="answer" value="C">@Model.QC</button>
-                                    </div>
-                                </div>
-                        }
-                        if (!string.IsNullOrEmpty(Model.QD))
-                        {
-                                <div class="col-12">
-                                <div class="btn-group mb-2 w-100 shadow-sm">
-                                    <button class="btn btn-dark disabled" style="min-width:40px">D</button>
-                                    <button style="text-align:start" class="btn w-100 btn-light" type="submit" name="answer" value="D">@Model.QD</button>
-                                    </div>
-                                </div>
-                        }
+        <div>
+            <span class="badge rounded-pill text-bg-light mb-2 ">
+                <small>
+                    @Model.Score điểm
+                </small>
+            </span>
+            <h1 class="display-6 mb-4">@Model.Text</h1>
+            <div class="container-sm">
+                @{
+                    if (!string.IsNullOrEmpty(Model.QA))
+                    {
+                        <div class="col-12">
+                            <div class="btn-group mb-2 w-100 shadow-sm">
+                                <button class="btn btn-dark disabled" style="min-width:40px">A</button>
+                                <button style="text-align:start" class="btn w-100  btn-light btnSubmit" data-value="A">@Model.QA</button>
+                            </div>
+                        </div>
                     }
-                </div>
+                    if (!string.IsNullOrEmpty(Model.QB))
+                    {
+                        <div class="col-12">
+                            <div class="btn-group mb-2 w-100 shadow-sm">
+                                <button class="btn btn-dark disabled" style="min-width:40px">B</button>
+                                <button style="text-align:start" class="btn w-100  btn-light btnSubmit" data-value="B">@Model.QB</button>
+                            </div>
+                        </div>
+                    }
+                    if (!string.IsNullOrEmpty(Model.QC))
+                    {
+                        <div class="col-12">
+                            <div class="btn-group mb-2 w-100 shadow-sm">
+                                <button class="btn btn-dark disabled" style="min-width:40px">C</button>
+                                <button style="text-align:start" class="btn w-100  btn-light btnSubmit" data-value="C">@Model.QC</button>
+                            </div>
+                        </div>
+                    }
+                    if (!string.IsNullOrEmpty(Model.QD))
+                    {
+                        <div class="col-12">
+                            <div class="btn-group mb-2 w-100 shadow-sm">
+                                <button class="btn btn-dark disabled" style="min-width:40px">D</button>
+                                <button style="text-align:start" class="btn w-100  btn-light btnSubmit" data-value="D">@Model.QD</button>
+                            </div>
+                        </div>
+                    }
+                }
             </div>
-            <input id="Id" value="@Model.Id" hidden />
-            <input id="Text" value="@Model.Text" hidden />
-            <input id="QA" value="@Model.QA" hidden />
-            <input id="QB" value="@Model.QB" hidden />
-            <input id="QC" value="@Model.QC" hidden />
-            <input id="QD" value="@Model.QD" hidden />
-            <input id="QCorrectAns" value="@Model.QCorrectAns" hidden />
-            <input id="Score" value="@Model.Score" hidden />
-            <input id="CategoryId" value="@Model.CategoryId" hidden />
-        </form>
+        </div>
+        <input id="Id" value="@Model.Id" hidden />
+        <input id="Text" value="@Model.Text" hidden />
+        <input id="QA" value="@Model.QA" hidden />
+        <input id="QB" value="@Model.QB" hidden />
+        <input id="QC" value="@Model.QC" hidden />
+        <input id="QD" value="@Model.QD" hidden />
+        <input id="QCorrectAns" value="@Model.QCorrectAns" hidden />
+        <input id="Score" value="@Model.Score" hidden />
+        <input id="CategoryId" value="@Model.CategoryId" hidden />
     </div>
 </div>
 
 <script>
     $(document).ready(function () {
+        let canClick = true;
+
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top",
+            showConfirmButton: false,
+            timer: 1000,
+            timerProgressBar: true,
+        });
+
+        // Xử lý sự kiện khi người dùng click vào nút "answer"
+        $('.btnSubmit').click(function () {
+            if (!canClick) {
+                return;
+            }
+            if (canClick) {
+                canClick = false;
+                const answer = $(this).attr('data-value');
+                var Id = $("#Id").val();
+                var Text = $("#Text").val();
+                var QA = $("#QA").val();
+                var QB = $("#QB").val();
+                var QC = $("#QC").val();
+                var QD = $("#QD").val();
+                var QCorrectAns = $("#QCorrectAns").val();
+                var Score = $("#Score").val();
+                var CategoryId = $("#CategoryId").val();
+
+                var intId = parseInt(Id);
+                var floatScore = parseFloat(Score);
+                var intCategoryId = parseInt(CategoryId);
+
+                var data = {
+                    Id: intId,
+                    Text: Text,
+                    QA: QA,
+                    QB: QB,
+                    QC: QC,
+                    QD: QD,
+                    QCorrectAns: QCorrectAns,
+                    Score: floatScore,
+                    CategoryId: intCategoryId,
+                };
+
+                $.ajax({
+                    type: "POST",
+                    url: "TraloiTracNghiem",
+                    data: {
+                        q: data,
+                        answer: answer
+                    },
+                    success: function (result) {
+                        if (result.success) {
+                            $.ajax({
+                                url: 'TestingTracNghiem',
+                                type: 'GET',
+                                success: function (response) {
+                                    Toast.fire({
+                                        icon: "success",
+                                        title: "Đang trả lời câu hỏi...",
+                                        allowEscapeKey: false
+                                    }).then(function () {
+                                        $("#examTracNghiem").html(response);
+
+                                        // Sau khi toast chạy xong, chuyển trạng thái có thể ấn
+                                        canClick = true;
+                                    })
+                                },
+                                error: function (error) {
+                                    console.log(error);
+                                }
+                            });
+                        }
+                        else {
+                            Swal.fire({
+                                icon: "error",
+                                width: 300,
+                                text: result.message,
+                                showConfirmButton: false,
+                                timer: 2000,
+                            });
+                            // Nếu có lỗi, chuyển trạng thái có thể ấn
+                            canClick = true;
+                        }
+                    }
+                });
+
+            }
+        });
+    });
+</script>
+
+
+
+
+
+
+@*$(document).ready(function () {
         var canClick = true;
 
         const Toast = Swal.mixin({
@@ -129,6 +221,7 @@
             var QCorrectAns = $("#QCorrectAns").val();
             var Score = $("#Score").val();
             var CategoryId = $("#CategoryId").val();
+
             var answer = $("button[name='answer']:focus").val();
 
             var intId = parseInt(Id);
@@ -189,5 +282,4 @@
                 }
             });
         });
-    });
-</script>
+    });*@

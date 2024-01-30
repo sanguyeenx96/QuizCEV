@@ -139,7 +139,7 @@ namespace Application.Dept
             var result = await _context.Depts
                 .Include(x => x.Models)
                 .ThenInclude(x => x.Cells)
-                .ThenInclude(x=>x.AppUsers)
+                //.ThenInclude(x=>x.AppUsers)
                 .Select(x => new DeptVm()
                 {
                     Id = x.Id,
@@ -156,19 +156,19 @@ namespace Application.Dept
                                     Id = z.Id,
                                     ModelId = z.ModelId,
                                     Name = z.Name,
-                                    Users = z.AppUsers != null 
-                                    ? z.AppUsers.Select(u=>new ViewModels.Users.Response.UserVm
-                                    {
-                                        Name = u.Name,
-                                        Id =u.Id
-                                    }).ToList()
-                                    :new List<ViewModels.Users.Response.UserVm>()
+                                    //Users = z.AppUsers != null 
+                                    //? z.AppUsers.Select(u=>new ViewModels.Users.Response.UserVm
+                                    //{
+                                    //    Name = u.Name,
+                                    //    Id =u.Id
+                                    //}).ToList()
+                                    //:new List<ViewModels.Users.Response.UserVm>()
                                 }).ToList()
                                 : new List<ViewModels.Cell.Response.CellVm>()
                             }).ToList()
                             : new List<ModelVm>()
                 }).ToListAsync();
-            foreach (var item in result)
+           foreach (var item in result)
             {
                 int soluongtaikhoan = await _context.Users.Where(x => x.Cell.Model.Dept.Id == item.Id).CountAsync();
                 item.Soluongtaikhoan = soluongtaikhoan;
@@ -193,13 +193,13 @@ namespace Application.Dept
                                     Id = z.Id,
                                     ModelId = z.ModelId,
                                     Name = z.Name,
-                                    Users = z.AppUsers != null
-                                    ? z.AppUsers.Select(u => new ViewModels.Users.Response.UserVm
-                                    {
-                                        Name = u.Name,
-                                        Id = u.Id
-                                    }).ToList()
-                                    : new List<ViewModels.Users.Response.UserVm>()
+                                    //Users = z.AppUsers != null
+                                    //? z.AppUsers.Select(u => new ViewModels.Users.Response.UserVm
+                                    //{
+                                    //    Name = u.Name,
+                                    //    Id = u.Id
+                                    //}).ToList()
+                                    //: new List<ViewModels.Users.Response.UserVm>()
                                 }).ToList()
                                 : new List<ViewModels.Cell.Response.CellVm>()
                 }).ToListAsync();
@@ -221,13 +221,13 @@ namespace Application.Dept
                    Id = z.Id,
                    ModelId = z.ModelId,
                    Name = z.Name,
-                   Users = z.AppUsers != null
-                                   ? z.AppUsers.Select(u => new ViewModels.Users.Response.UserVm
-                                   {
-                                       Name = u.Name,
-                                       Id = u.Id
-                                   }).ToList()
-                                   : new List<ViewModels.Users.Response.UserVm>()
+                  // Users = z.AppUsers != null
+                  //                 ? z.AppUsers.Select(u => new ViewModels.Users.Response.UserVm
+                  //                 {
+                  //                     Name = u.Name,
+                  //                     Id = u.Id
+                  //                 }).ToList()
+                  //                 : new List<ViewModels.Users.Response.UserVm>()
                }).ToListAsync();
             foreach (var item in result)
             {

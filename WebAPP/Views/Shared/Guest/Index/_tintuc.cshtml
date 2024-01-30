@@ -29,17 +29,7 @@
     .card {
         flex: 1;
     }
-
 </style>
-<section>
-    <div class="container">
-        <div class="row">
-            <div class="col-12 ">
-                <h2 class="display-5 mb-3">Tin tức nội bộ</h2>
-                <a type="button" class="btn btn-lg btn-primary mb-3 mb-md-4 " asp-action="listpost">Xem tất cả</a>
-            </div>
-        </div>
-    </div>
     <div class="container overflow-hidden">
         <div class="row gy-0 equal-height-row">            
             @foreach (var item in Model)
@@ -59,6 +49,7 @@
                                     <h4 class="h6 text-white bsb-hover-fadeInRight mt-2">Xem chi tiết</h4>
                                 </figcaption>
                             </figure>
+
                             <div class="card-body border bg-white p-4">
                                 <div class="entry-header mb-3">
                                     <ul class="entry-meta list-unstyled d-flex mb-2">
@@ -74,8 +65,7 @@
                                             @item.Title
                                         </a>
                                     </h2>
-                                </div>
-                               
+                                </div>                               
 
                                 <p class="card-text entry-summary text-secondary mb-3">
                                     @item.Description
@@ -112,7 +102,6 @@
             }
         </div>
     </div>
-</section>
 
 
 

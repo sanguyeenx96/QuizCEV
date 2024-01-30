@@ -8,7 +8,6 @@
 @if (Model.Count > 0)
 {
     <h1 class="display-6 mb-3">
-        <i class="bi-list-nested"></i>
         Trắc nghiệm
     </h1>
     foreach (var item in Model)
@@ -25,85 +24,28 @@
                 <div class="accordion-body border border-0">
                     <div class="container-sm">
                         @{
-                            if (!string.IsNullOrEmpty(item.QA))
+                            var questions = new List<(string Question, string Answer)>
                             {
-                                <div class="col-12">
-                                    <div class="btn-group mb-2 w-100 shadow-sm">
-                                        <button class="btn btn-dark disabled" style="min-width:40px">A</button>
-                                        <button style="text-align:start" class=" btn w-100 btnDoicautraloi
-                                    @if(item.Answer == "A")
-                                {
-                                                <text>btn-primary disabled</text>
-                                }
-                                else
-                                {
-                                            <text>btn-light</text>
-                                }
-                                              " data-id="@item.Id" data-newAs="A">@item.QA
-                                                                      </button>
-                                    </div>
-                                </div>
-                            }
-                            if (!string.IsNullOrEmpty(item.QB))
-                            {
-                                <div class="col-12">
-                                    <div class="btn-group mb-2 w-100 shadow-sm">
-                                        <button class="btn btn-dark disabled" style="min-width:40px">B</button>
-                                        <button style="text-align:start" class=" btn w-100 btnDoicautraloi
-                                    @if(item.Answer == "B")
-                                {
-                                                <text>btn-primary disabled</text>
-                                }
-                                else
-                                {
-                                                <text>btn-light</text>
-                                }
-                                              " data-id="@item.Id" data-newAs="B">@item.QB
-                                                                      </button>
-                                    </div>
-                                </div>
+                                (item.QA, "A"),
+                                (item.QB, "B"),
+                                (item.QC, "C"),
+                                (item.QD, "D")
+                            };
+                        }
 
-                            }
-                            if (!string.IsNullOrEmpty(item.QC))
+                        @foreach (var question in questions)
+                        {
+                            if (!string.IsNullOrEmpty(question.Question))
                             {
                                 <div class="col-12">
                                     <div class="btn-group mb-2 w-100 shadow-sm">
-                                        <button class="btn btn-dark disabled" style="min-width:40px">C</button>
-                                        <button style="text-align:start" class=" btn w-100 btnDoicautraloi
-                                    @if(item.Answer == "C")
-                                {
-                                                        <text>btn-primary disabled</text>
-                                    }
-                                    else
-                                    {
-                                                        <text>btn-light</text>
-                                    }
-                                                " data-id="@item.Id" data-newAs="B">@item.QC
-                                                                                    </button>
-                                    </div>
-                                </div>
-                            }
-                            if (!string.IsNullOrEmpty(item.QD))
-                            {
-                                <div class="col-12">
-                                    <div class="btn-group mb-2 w-100 shadow-sm">
-                                        <button class="btn btn-dark disabled" style="min-width:40px">D</button>
-                                        <button style="text-align:start" class=" btn w-100 btnDoicautraloi
-                                    @if(item.Answer == "D")
-                                {
-                                                    <text>btn-primary disabled</text>
-                                }
-                                else
-                                {
-                                                        <text>btn-light</text>
-                                }
-                                                      " data-id="@item.Id" data-newAs="D">@item.QD
-                                                            </button>
+                                        <button class="btn btn-dark disabled" style="min-width:40px">@question.Answer</button>
+                                        <button style="text-align:start" class="btn w-100 btnDoicautraloi @(item.Answer == question.Answer ? "btn-primary" : "btn-light")" data-id="@item.Id" data-newAs="@question.Answer">@question.Question</button>
                                     </div>
                                 </div>
                             }
                         }
-                    </div>
+                    </div>                   
                 </div>
             </div>
         </div>
@@ -117,7 +59,6 @@
         if (lichsuTuluan.Count > 0)
         {
             <h1 class="display-6 my-3">
-                <i class="bi-list-nested"></i>
                 Tự luận
             </h1>
             var groupDataTuluan = lichsuTuluan.GroupBy(x => x.CauHoiTuLuanId);
