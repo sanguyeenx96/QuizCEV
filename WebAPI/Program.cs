@@ -92,8 +92,6 @@ builder.Services.AddTransient<IReadPostService, ReadPostService>();
 builder.Services.AddTransient<IReadResultService, ReadResultService>();
 
 
-
-
 builder.Services.AddControllers();
 
 //Swagger
@@ -192,7 +190,7 @@ app.UseSwaggerUI(c =>
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Swagger eExam V1");
 });
 
-app.UseHttpsRedirection(); //Middleware này chuyển hướng các yêu cầu HTTP sang HTTPS, đảm bảo rằng các yêu cầu được thực hiện qua kênh an toàn.
+//app.UseHttpsRedirection(); //Middleware này chuyển hướng các yêu cầu HTTP sang HTTPS, đảm bảo rằng các yêu cầu được thực hiện qua kênh an toàn.
 
 //Middleware xác thực (UseAuthentication()) và xác định quyền (UseAuthorization()).
 //Điều này cần thiết khi bạn sử dụng xác thực JWT trong ứng dụng của mình.

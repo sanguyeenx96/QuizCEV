@@ -27,14 +27,15 @@
                     @foreach (var item in Model)
                     {
                         <li class="nav-item" role="presentation">
-                            <button class="btncategory nav-link @if(item.Id == Model.First().Id) {<text>active</text>}"
+                            <button class="btncategory nav-link  @if(item.Id == Model.First().Id) {<text>active</text>}"
                                         data-id="@item.Id"
                                         data-coreui-toggle="pill"
                                         data-coreui-target="@($"#pills-{item.Id}")"
                                         type="button"
                                         role="tab"
                                         aria-controls="@($"pills-{item.Id}")"
-                                        aria-selected="@(item.Id == Model.First().Id)">
+                                        aria-selected="@(item.Id == Model.First().Id)"
+                                        >
                                     @item.Title
                             </button>
                         </li>

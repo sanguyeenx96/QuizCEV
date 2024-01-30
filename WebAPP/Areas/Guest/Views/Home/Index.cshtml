@@ -7,17 +7,33 @@
 <div class="container-fluid">
     <div class="row g-3">
         <div class="col-12 mt-4">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 ">
+                        <h2 class="display-5 mb-2">Tin tức nội bộ</h2>
+                        <a type="button" class="btn mb-3 mb-md-4 btm-md btn-primary" asp-action="listpost">Xem tất cả</a>
+                    </div>
+                </div>
+            </div>
             <div id="News"></div>
         </div>
         @*
         <div class="col-lg-6 mt-3">
-            <div class="container-fluid">
-                <div id="calendar">
-                </div>
-            </div>
+        <div class="container-fluid">
+        <div id="calendar">
+        </div>
+        </div>
         </div>
         *@
         <div class="col-12 mt-3">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 ">
+                        <h2 class="display-5 mb-2">Thông báo nội bộ</h2>
+                        <a type="button" class="btn mb-2 btn-md btn-primary" asp-action="listthongbao">Xem tất cả</a>
+                    </div>
+                </div>
+            </div>
             <div id="Thongbao"></div>
         </div>
     </div>
@@ -30,30 +46,30 @@
     $.get("/guest/home/Get6ThongBao", function (result) {
         $("#Thongbao").html(result);
     });
-    //$(document).ready(function () {
-    //    $('#calendar').evoCalendar({
-    //        eventDisplayDefault: false,
-    //        eventListToggler: false,
-    //        sidebarDisplayDefault: false,
-    //        todayHighlight: true,
-    //        sidebarToggler: true,
-    //        canAddEvent: true,
+        //$(document).ready(function () {
+        //    $('#calendar').evoCalendar({
+        //        eventDisplayDefault: false,
+        //        eventListToggler: false,
+        //        sidebarDisplayDefault: false,
+        //        todayHighlight: true,
+        //        sidebarToggler: true,
+        //        canAddEvent: true,
 
-    //        calendarEvents: [
-    //            { id: 1, name: "Off", date: "January/6/2024", type: "event" },
-    //            { id: 2, name: "Off", date: "January/12/2024", type: "event" },
-    //            { id: 3, name: "Off", date: "January/13/2024", type: "event" },
+        //        calendarEvents: [
+        //            { id: 1, name: "Off", date: "January/6/2024", type: "event" },
+        //            { id: 2, name: "Off", date: "January/12/2024", type: "event" },
+        //            { id: 3, name: "Off", date: "January/13/2024", type: "event" },
 
-    //            { id: 4, name: "Off", date: "January/20/2024", type: "event" },
-    //            { id: 5, name: "Off", date: "January/26/2024", type: "event" },
-    //            { id: 6, name: "Off", date: "January/27/2024", type: "event" },
-    //        ],
-    //        onSelectDate: function () {
-    //            // console.log('onSelectDate!')
-    //        },
-    //        onAddEvent: function () {
-    //            console.log('onAddEvent!')
-    //        }
-    //    });
-    //})
+        //            { id: 4, name: "Off", date: "January/20/2024", type: "event" },
+        //            { id: 5, name: "Off", date: "January/26/2024", type: "event" },
+        //            { id: 6, name: "Off", date: "January/27/2024", type: "event" },
+        //        ],
+        //        onSelectDate: function () {
+        //            // console.log('onSelectDate!')
+        //        },
+        //        onAddEvent: function () {
+        //            console.log('onAddEvent!')
+        //        }
+        //    });
+        //})
 </script>

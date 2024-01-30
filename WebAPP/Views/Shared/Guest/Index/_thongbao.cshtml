@@ -6,15 +6,7 @@
         padding-right: 0;
     }
 </style>
-<section>
-    <div class="container">
-        <div class="row">
-            <div class="col-12 ">
-                <h2 class="display-5 mb-3">Thông báo nội bộ</h2>
-                <a type="button" class="btn btn-lg btn-primary mb-3 mb-md-4 " asp-action="listthongbao">Xem tất cả</a>
-            </div>
-        </div>
-    </div>
+    
     <div class="container overflow-hidden">
         <div class="list-group list-group-flush my-1 animate__animated animate__fadeIn">
             @foreach (var item in Model)
@@ -49,7 +41,6 @@
             }
         </div>
     </div>
-</section>
 
 @* <p class="text-secondary" style="text-align:center">
     <small>

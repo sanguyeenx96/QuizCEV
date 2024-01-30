@@ -23,6 +23,7 @@ builder.Services.AddAuthorization(options => {
 builder.Services.AddMvc().AddSessionStateTempDataProvider();
 
 builder.Services.AddControllersWithViews();
+
 builder.Services.AddSession();
 
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -65,7 +66,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 //Khi request /contents/1.jpg => Mo file tu Uploads/1.jpg

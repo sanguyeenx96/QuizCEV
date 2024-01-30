@@ -332,6 +332,12 @@ namespace WebAPP.Areas.User.Controllers
         {
             string jsonlistQuestionAndAnswerTracNghiem = TempData["QuestionAndAnswerTracNghiem"].ToString();
             List<QuestionAndAnswerVm> listQuestionAndAnswerTracNghiem = JsonConvert.DeserializeObject<List<QuestionAndAnswerVm>>(jsonlistQuestionAndAnswerTracNghiem);
+            string traloi = "";
+            if(answer != null)
+            {
+                traloi = answer.ToUpper();
+            }
+
             var cauhoivacautraloiTracNghiem = new QuestionAndAnswerVm()
             {
                 Id = q.Id,
@@ -343,16 +349,15 @@ namespace WebAPP.Areas.User.Controllers
                 QCorrectAns = q.QCorrectAns,
                 CategoryId = q.CategoryId,
                 Score = q.Score,
-                Answer = answer
+                Answer = traloi
             };
             listQuestionAndAnswerTracNghiem.Add(cauhoivacautraloiTracNghiem);
             TempData["QuestionAndAnswerTracNghiem"] = JsonConvert.SerializeObject(listQuestionAndAnswerTracNghiem);
 
             string jsonQuestionsTracNghiem = TempData["questionsTracNghiem"].ToString();
             Queue<QuestionVm> qlistTracNghiem = JsonConvert.DeserializeObject<Queue<QuestionVm>>(jsonQuestionsTracNghiem);
-            qlistTracNghiem.Dequeue(); // Loại bỏ phần tử ở đầu ( Cần sửa thành khi submit mới bỏ phần tử đầu đi)                                       
+            qlistTracNghiem.Dequeue();                                    
             TempData["questionsTracNghiem"] = JsonConvert.SerializeObject(qlistTracNghiem);
-
 
             int count = Convert.ToInt32(TempData["numQuestionTracnghiem"].ToString()) + 1;
             TempData["numQuestionTracnghiem"] = count;
