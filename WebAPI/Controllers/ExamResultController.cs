@@ -1,9 +1,11 @@
 ﻿using Application.ExamResult;
+using Application.ExamResult.ExportExcel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ViewModels.Common;
 using ViewModels.ExamResult.Request;
+using ViewModels.ExportExcel;
 
 namespace WebAPI.Controllers
 {
@@ -14,9 +16,11 @@ namespace WebAPI.Controllers
     public class ExamResultController : ControllerBase
     {
         private readonly IExamResultService _examResultService;
-        public ExamResultController(IExamResultService examResultService)
+        private readonly IExportExcelService _exportExcelService;
+        public ExamResultController(IExamResultService examResultService,IExportExcelService exportExcelService)
         {
             _examResultService = examResultService;
+            _exportExcelService = exportExcelService;
         }
 
         [HttpPost("Search")]
@@ -26,7 +30,7 @@ namespace WebAPI.Controllers
             return Ok(result);
         }
 
-        [HttpGet("GetAll")]
+        [HttpGet("GetAll")] 
         public async Task<IActionResult> Getall()
         {
             var result = await _examResultService.Getall();
@@ -60,6 +64,34 @@ namespace WebAPI.Controllers
         //    var result = await _examResultService.Delete(id);
         //    return Ok(result);
         //}
+
+        [HttpPost("SearchForExport")]
+        public async Task<IActionResult> SearchForExport(ExamResultSearchRequest request)
+        {
+            var result = await _exportExcelService.Searchdata(request);
+            return Ok(result);
+        }
+
+        [HttpPost("ExportExcelFile")]
+        public async Task<IActionResult> Export([FromForm] IFormFile file, List<ExportExcelBaoCaoKetQuaDaoTaoCreateRequest> request)
+        {
+            if (file == null || file.Length == 0)
+            {
+                return BadRequest("Tệp Excel không được gửi.");
+            }
+            using (var fileStream = file.OpenReadStream())
+            {
+                var result = await _exportExcelService.ExportExcelFile(fileStream, request);
+                if (result.IsSuccessed)
+                {
+                    return Ok(result);
+                }
+                else
+                {
+                    return BadRequest(result.Message);
+                }
+            }
+        }
 
     }
 }

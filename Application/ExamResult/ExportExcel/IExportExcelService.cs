@@ -12,7 +12,7 @@ namespace Application.ExamResult.ExportExcel
 {
     public interface IExportExcelService
     {
-        Task<ApiResult<List<ExportExcelBaoCaoKetQuaDaoTaoCreateRequest>>> Getdata(ExamResultSearchRequest request);
-        Task<ApiResult<bool>> ExportExcelFile(string filePath, List<ExportExcelBaoCaoKetQuaDaoTaoCreateRequest> request);
+        Task<ApiResult<List<ExamResultVm>>> Searchdata(ExamResultSearchRequest request);
+        Task<ApiResult<bool>> ExportExcelFile(Stream fileStream, List<ExportExcelBaoCaoKetQuaDaoTaoCreateRequest> request);
     }
 }

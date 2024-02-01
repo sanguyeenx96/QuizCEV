@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.SymbolStore;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
 using ViewModels.CauHoiTrinhTuThaoTac.Request;
@@ -14,22 +15,23 @@ using ViewModels.ExamResult.Response;
 using ViewModels.ExportExcel;
 using ViewModels.LogExam.Response;
 using ViewModels.LogExamTrinhtuthaotac.Response;
+using Microsoft.AspNetCore.Hosting;
 
 namespace Application.ExamResult.ExportExcel
 {
     public class ExportExcelService : IExportExcelService
     {
         private readonly TracNghiemCEVDbContext _context;
+
         public ExportExcelService(TracNghiemCEVDbContext context)
         {
             _context = context;
         }
 
-        public async Task<ApiResult<bool>> ExportExcelFile(string filePath, List<ExportExcelBaoCaoKetQuaDaoTaoCreateRequest> request)
+        public async Task<ApiResult<bool>> ExportExcelFile(Stream fileStream, List<ExportExcelBaoCaoKetQuaDaoTaoCreateRequest> request)
         {
-            // Mở file Excel
-            FileInfo fileInfo = new FileInfo(filePath);
-            using (ExcelPackage excelPackage = new ExcelPackage(fileInfo))
+           
+            using (ExcelPackage excelPackage = new ExcelPackage(fileStream))
             {
                 // Chọn worksheet cần thêm dữ liệu
                 ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets["Sheet1"];
@@ -61,21 +63,13 @@ namespace Application.ExamResult.ExportExcel
             return new ApiSuccessResult<bool>();
         }
 
-        public async Task<ApiResult<List<ExportExcelBaoCaoKetQuaDaoTaoCreateRequest>>> Getdata(ExamResultSearchRequest request)
+        public async Task<ApiResult<List<ExamResultVm>>> Searchdata(ExamResultSearchRequest request)
         {
-            if (request.UserId != null || request.examResultId != null || request.CategoryId != null || request.Date != null || request.boPhanId != null
-                || request.userName != null || request.name != null)
+            if (request.UserId != null || request.examResultId != null || request.CategoryId != null || request.Date != null 
+                || request.boPhanId != null || request.userName != null || request.name != null)
             {
                 // Sử dụng IQueryable để tận dụng deferred execution
-                IQueryable<Data.Entities.ExamResult> resultQuery = _context.ExamResults
-                                                .Include(x => x.LogExams)
-                                                    .ThenInclude(x => x.LogExamTrinhtuthaotacs)
-                                                .Include(x => x.LogExams)
-                                                    .ThenInclude(x => x.logExamDiemChuYs)
-                                                .Include(x => x.LogExams)
-                                                    .ThenInclude(x => x.logExamLoiTaiCongDoans)
-                                                .Include(x => x.LogExams)
-                                                    .ThenInclude(x => x.logExamDoiSaches)
+                IQueryable<Data.Entities.ExamResult> resultQuery = _context.ExamResults                                                
                                                 .Include(x => x.AppUser)
                                                     .ThenInclude(x => x.Cell)
                                                                 .ThenInclude(x => x.Model)

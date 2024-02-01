@@ -3,52 +3,6 @@
     var dataTen = Json.Serialize(ViewBag.dataTen);
     var dataDiem = Json.Serialize(ViewBag.dataDiem);
 }
-<div class="row mb-2">
-    <div class="col-sm-5 col-lg-5">
-        <div class="card ">
-            <div class="card-body pb-0 d-flex justify-content-between align-items-start">
-                <div>
-                    <div class="fs-5 fw-semibold">
-                        <span id="countDiemTren6"></span>
-                    </div>
-                    <div class="small text-medium-emphasis">Biểu đồ điểm số trên 60</div>
-                </div>
-            </div>
-            <div class="c-chart-wrapper mt-3 mx-3" style="height:70px;">
-                <canvas class="chart" id="card-chart-tren6" height="73" style="display: block; box-sizing: border-box; height: 69.5238px; width: 100%;"></canvas>
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-5 col-lg-5">
-        <div class="card ">
-            <div class="card-body pb-0 d-flex justify-content-between align-items-start">
-                <div>
-                    <div class="fs-5 fw-semibold">
-                        <span id="countDiemDuoi6"></span>
-                    </div>
-                    <div class="small text-medium-emphasis">Biểu đồ điểm số dưới 60</div>
-                </div>
-            </div>
-            <div class="c-chart-wrapper mt-3 mx-3" style="height:70px;">
-                <canvas class="chart" id="card-chart-duoi6" height="73" style="display: block; box-sizing: border-box; height: 69.5238px; width: 100%;"></canvas>
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-2 col-lg-2">
-        <div class="card ">
-            <div class="card-body pb-0 d-flex justify-content-between align-items-start">
-                <div>
-                    <div class="fs-5 fw-semibold">
-                        <span id="txtcountTotal"></span>
-                    </div>
-                    <div class="small text-medium-emphasis">Tổng số bài thi</div>
-                </div>
-            </div>
-            <div class="c-chart-wrapper mt-3 mx-3" style="height:70px;width:100%">
-            </div>
-        </div>
-    </div>
-</div>
 <div class="card mb-1">
     <div class="card-body">
         <div class="d-flex justify-content-between">
@@ -56,7 +10,7 @@
                 @{
                     if (Model != null && Model.Any() && Model.DistinctBy(x => x.CategoryName).Count() == 1)
                     {
-                        <h4 class="card-title mb-0" hidden>@Model.FirstOrDefault()?.CategoryName</h4>
+                        <h4 class="card-title mb-0">@Model.FirstOrDefault()?.CategoryName</h4>
                     }
                     else if (Model != null && Model.Any() && Model.DistinctBy(x => x.CategoryName).Count() > 1)
                     {
@@ -76,12 +30,12 @@
         </div>
     </div>
     <div class="card-footer">
-        <div class="row row-cols-1 row-cols-md-12 text-center">
+        <div class="row row-cols-1 row-cols-md-12 text-center">                       
             <div class="col-4 mb-sm-2 mb-0">
-                <div class="text-medium-emphasis">Điểm cao (Trên 80 điểm)</div>
-                <div class="fw-semibold" id="txtDiemsocao"></div>
+                <div class="text-medium-emphasis">Điểm thấp (Dưới 60 điểm)</div>
+                <div class="fw-semibold" id="txtDiemsothap"></div>
                 <div class="progress progress-thin mt-2">
-                    <div id="barDiemcao" class="progress-bar bg-success" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
+                    <div id="barDiemthap" class="progress-bar bg-danger" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
                 </div>
             </div>
             <div class="col-4 mb-sm-2 mb-0">
@@ -92,10 +46,10 @@
                 </div>
             </div>
             <div class="col-4 mb-sm-2 mb-0">
-                <div class="text-medium-emphasis">Điểm thấp (Dưới 60 điểm)</div>
-                <div class="fw-semibold" id="txtDiemsothap"></div>
+                <div class="text-medium-emphasis">Điểm cao (Trên 80 điểm)</div>
+                <div class="fw-semibold" id="txtDiemsocao"></div>
                 <div class="progress progress-thin mt-2">
-                    <div id="barDiemthap" class="progress-bar bg-danger" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
+                    <div id="barDiemcao" class="progress-bar bg-success" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
                 </div>
             </div>
         </div>
@@ -106,7 +60,6 @@
         <table id="tblDanhsachdulieu" class="table table-hover" style="vertical-align:middle;width:100%">
             <thead style="font-size:small">
                 <tr>
-                    <th></th>
                     <th style="font-weight: 350;">
                         Ngày giờ
                     </th>
@@ -137,20 +90,9 @@
                 </tr>
             </thead>
             <tbody style="font-size:smaller">
-                @foreach (var item in Model.OrderByDescending(x=>x.Date))
+                @foreach (var item in Model.OrderByDescending(x => x.Date))
                 {
                     <tr>
-                        <td style="text-align:end;white-space:nowrap">
-                            <div class="btn-group">
-                                <button class="btn btn-light btn-sm w-100 btnXemChiTietBaithi" data-idbaithi="@item.Id">
-                                    <i class="bi-eye-fill"></i>
-                                    Chi tiết
-                                </button>
-                                <button class="btn btn-outline-dark btn-sm btnDanhGia" data-thisid="@item.Id">
-                                    Đánh giá
-                                </button>
-                            </div>
-                        </td>
                         <td>
                             @item.Date
                         </td>
@@ -195,11 +137,15 @@
                                 }
                             }
                         </td>
+
                     </tr>
                 }
             </tbody>
         </table>
     </div>
+</div>
+<div class="col-12">
+    <a class="btn btn-success" id="btnXuatbaocao" asp-action="confirmexport" asp-controller="thongke" asp-area="admin">Xuất báo cáo kết quả đào tạo</a>
 </div>
 
 <div class="modal fade" id="staticBackdrop2" data-coreui-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -436,6 +382,7 @@
                         borderColor: 'rgba(75, 192, 192, 1)',
                         borderWidth: 1,
                         tension: 0.4 // Độ căng của đường
+
                     },
                     {
                         label: 'Ngưỡng điểm đạt',
@@ -445,6 +392,7 @@
                         borderWidth: 1,
                         borderDash: [5, 5], // Điểm đứt để phân biệt đường trung bình
                         pointRadius: 0 // Đặt kích thước của điểm trung bình là 0
+
                     }
                 ]
             },
@@ -452,7 +400,7 @@
                 responsive: true,
                 scales: {
                     x: {
-                        display: false // Ẩn trục x 
+                        display: false // Ẩn trục x
                     },
                     yAxes: [{
                         ticks: {
@@ -479,6 +427,7 @@
 
                         borderWidth: 1,
                         tension: 0.4 // Độ căng của đường
+
                     }
                 ]
             },

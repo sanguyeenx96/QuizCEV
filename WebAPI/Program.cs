@@ -6,6 +6,7 @@ using Application.CauHoiTrinhTuThaoTac.LoiTaiCongDoan.DoiSach;
 using Application.CauHoiTuLuan;
 using Application.Dept;
 using Application.ExamResult;
+using Application.ExamResult.ExportExcel;
 using Application.LogExam;
 using Application.LogExamDiemChuY;
 using Application.LogExamDoiSach;
@@ -90,6 +91,9 @@ builder.Services.AddTransient<IThongBaoCategoryService, ThongBaoCategoryService>
 builder.Services.AddTransient<IReadCategoryService, ReadCategoryService>();
 builder.Services.AddTransient<IReadPostService, ReadPostService>();
 builder.Services.AddTransient<IReadResultService, ReadResultService>();
+
+builder.Services.AddTransient<IExportExcelService, ExportExcelService>();
+
 
 
 builder.Services.AddControllers();

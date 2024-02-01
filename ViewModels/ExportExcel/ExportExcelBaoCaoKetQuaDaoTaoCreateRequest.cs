@@ -13,7 +13,7 @@ namespace ViewModels.ExportExcel
         public string? benthuchiendaotao { get; set; }
         public string? noidungdaotao { get; set; }
         public string? diadiemdaotao { get; set; }
-        public int? thoigian { get; set; }
+        public string? thoigian { get; set; }
         public int? thangdiem { get; set; }
         public int? sodiemdat { get; set; }
 
