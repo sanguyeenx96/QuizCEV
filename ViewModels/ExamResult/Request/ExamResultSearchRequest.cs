@@ -18,7 +18,6 @@ namespace ViewModels.ExamResult.Request
 
         public string? userName { get; set; }
         public string? name { get; set; }
-
-
+        public int? mode { get; set; }
     }
 }

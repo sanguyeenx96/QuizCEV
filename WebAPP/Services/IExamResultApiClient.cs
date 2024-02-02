@@ -1,6 +1,7 @@
 ﻿using ViewModels.Common;
 using ViewModels.ExamResult.Request;
 using ViewModels.ExamResult.Response;
+using ViewModels.ExportExcel;
 
 namespace WebAPP.Services
 {
@@ -13,7 +14,13 @@ namespace WebAPP.Services
         Task<ApiResult<int>> Create(ExamResultCreateRequest request);
 
         Task<ApiResult<bool>> CheckRetest(ExamResultCheckRetestRequest request);
+
         Task<ApiResult<bool>> DanhGia(int id, ExamResultDanhGiaRequest request);
+
+        Task<ApiResult<List<ExamResultVm>>> Searchdata(ExamResultSearchRequest request);
+
+        Task<ApiResult<bool>> ExportExcelFile(Stream file, List<ExportExcelBaoCaoKetQuaDaoTaoCreateRequest> request);
+
 
     }
 }

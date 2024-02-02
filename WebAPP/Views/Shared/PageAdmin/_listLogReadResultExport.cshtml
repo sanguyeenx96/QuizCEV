@@ -1,0 +1,103 @@
+﻿@model List<ViewModels.Read.ReadResult.ReadResultVm>
+
+@{
+    int totalPerson = Model.Count();
+    int totalPersonReaded = Model.Where(x => x.Date != null).Count();
+    int totalPersonUnread = Model.Where(x => x.Date == null).Count();
+}
+
+<div class="card mb-2">
+    <div class="card-body">
+        <table id="tblDanhsachdulieu" class="table table-hover" style="vertical-align:middle;width:100%">
+            <thead style="font-size:small">
+                <tr>
+                    <th style="font-weight: 350;">
+                        Chủ dề
+                    </th>
+                    <th style="font-weight: 350;">
+                        Tài liệu
+                    </th>
+                    <th style="font-weight: 350;">
+                        Ngày hoàn thành đọc
+                    </th>
+                    <th style="font-weight: 350;">
+                        Họ tên
+                    </th>
+                    <th style="font-weight: 350;">
+                        Mã nhân viên
+                    </th>
+                    <th style="font-weight: 350;">
+                        Cell
+                    </th>
+                    <th style="font-weight: 350;">
+                        Model
+                    </th>
+                    <th style="font-weight: 350;">
+                        Bộ phận
+                    </th>
+                </tr>
+            </thead>
+            <tbody style="font-size:smaller">
+                @foreach (var item in Model.OrderByDescending(x => x.Date))
+                {
+                    <tr>
+                        <td style="text-align:start">
+                            @item.CategoryTitle
+                        </td>
+                        <td>
+                            @item.PostTitle
+                        </td>
+                        <td>
+                            @{
+                                if (item.Date != null)
+                                {
+                                    @item.Date
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger">
+                                        Chưa hoàn thành
+                                    </span>
+                                }
+                            }
+                        </td>
+                        <td>
+                            @item.Hoten
+                        </td>
+                        <td>
+                            @item.Username
+                        </td>
+                        <td>
+                            @item.Cell
+                        </td>
+                        <td>
+                            @item.Model
+                        </td>
+                        <td>
+                            @item.Bophan
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="col-12">
+    <a class="btn btn-success" asp-action="confirmexport" asp-controller="tailieudaotao" asp-area="admin">
+        <i class="bi-printer"></i>
+        Xuất báo cáo kết quả đọc tài liệu đào tạo
+    </a>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#tblDanhsachdulieu").DataTable({
+            "paging": true,
+            "searching": true,
+            "info": true,
+            "responsive": true,
+            "ordering": true,
+            "pageLength": 50 // Thiết lập mặc định hiển thị 50 dòng
+        });        
+    })
+</script>

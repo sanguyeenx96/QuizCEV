@@ -1,0 +1,111 @@
+﻿@model List<ViewModels.ExportExcel.ExportExcelBaoCaoKetQuaDaoTaoCreateRequest>
+
+
+<h1 class="display-6 mb-3" style="text-align:center">
+    XUẤT BÁO CÁO KẾT QUẢ ĐÀO TẠO
+</h1>
+<div class="card my-2 ">
+    <div class="card-body">
+        <form action="Export" method="post">
+            <div class="row">
+                <div class="col-6 mb-2">
+                    <label class="form-label mb-1">
+                        Bên yêu cầu đào tạo/教育依頼側
+                    </label>
+                    <input class="form-control" name="benyeucaudaotao" required>
+                </div>
+                <div class="col-6 mb-2">
+                    <label class="form-label mb-1">
+                        Bên thực hiện đào tạo/教育実施側
+                    </label>
+                    <input class="form-control" name="benthuchiendaotao" required>
+                </div>
+                <div class="mb-2">
+                    <label class="form-label mb-1">
+                        Nội dung đào tạo/教育の内容
+                    </label>
+                    <input class="form-control" name="noidungdaotao" value="@Model.FirstOrDefault()?.noidungdaotao" required>
+                </div>
+                <div class="col-6 mb-2">
+                    <label class="form-label mb-1">
+                        Địa điểm đào tạo/教育の場所
+                    </label>
+                    <input class="form-control" name="diadiemdaotao" required>
+                </div>
+                <div class="col-6 mb-2">
+                    <label class="form-label mb-1">
+                        Thời gian/時間
+                    </label>
+                    <input class="form-control" name="thoigian" value="@Model.FirstOrDefault()?.thoigian" required>
+                </div>
+                <div class="col-6 mb-2">
+                    <label class="form-label mb-1">
+                        Số điểm đạt/合格点数
+                    </label>
+                    <input type="number" min="1" class="form-control" name="sodiemdat" value="60" required>
+                </div>
+                <div class="col-6 mb-2">
+                    <label class="form-label mb-1">
+                        Thang điểm/ポイントラダー
+                    </label>
+                    <input class="form-control" name="thangdiem" value="100" required>
+                </div>
+            </div>
+   
+            <button type="submit" class="btn btn-success ">
+                <i class="bi-download"></i>
+                Xác nhận tải về
+            </button>
+        </form>
+    </div>
+</div>
+
+<div class="card my-2">
+    <div class="card-body">
+        <table id="tblDanhsachdulieu" class="table table-hover" style="vertical-align:middle;width:100%">
+            <thead style="font-size:small">
+                <tr>
+                    <th style="font-weight: 350;">
+                        STT/順
+                    </th>
+                    <th style="font-weight: 350;">
+                        Mã NV/社員コード
+                    </th>
+                    <th style="font-weight: 350;">
+                        Họ tên/教育受け者
+                    </th>
+                    <th style="font-weight: 350;">
+                        Bộ phận/部門
+                    </th>
+                    <th style="font-weight: 350;">
+                        Điểm/点数
+                    </th>
+                </tr>
+            </thead>
+            <tbody style="font-size:smaller">
+                @foreach (var item in Model.OrderBy(x => x.stt))
+                {
+                    <tr>
+                        <td>
+                            @item.stt
+                        </td>
+                        <td style="text-align:start">
+                            @item.manv
+                        </td>
+                        <td>
+                            @item.hoten
+                        </td>
+                        <td>
+                            @item.bophan
+                        </td>
+                        <td>
+                            @item.diem
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+

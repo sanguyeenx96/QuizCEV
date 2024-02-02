@@ -25,7 +25,7 @@
     {
     <partial name="PageUser/_header" />
     }
-@section SideBar
+    @section SideBar
     {
     <partial name="PageUser/_sideBar" />
     }
@@ -285,7 +285,7 @@
                                                         }
                                                     }
                                                 }
-                                            }                                            
+                                            }
                                         </div>
                                     </div>
                                 </div>
@@ -326,10 +326,10 @@
                                                             Nội dung thao tác
                                                         </th>
                                                         <th class="col-1" style="text-align:center;font-weight: 300">
-                                                            Trả lời
+                                                            Đáp án đúng
                                                         </th>
                                                         <th class="col-1" style="text-align:center;font-weight: 300">
-                                                            Đáp án đúng
+                                                            Trả lời
                                                         </th>
                                                         <th class="col-1" style="text-align:center;font-weight: 300">
                                                             Điểm số
@@ -373,8 +373,12 @@
 
                                                         <tr style="text-align:center;vertical-align:middle" class="@($"{bgColorClass} p-2 text-dark bg-opacity-10")">
                                                             <td style="text-align:start">@item.Text</td>
+                                                            <td>
+                                                                <strong>
+                                                                    @item.ThuTu
+                                                                </strong>
+                                                            </td>
                                                             <td>@item.Answer</td>
-                                                            <td>@item.ThuTu</td>
                                                             <td style="font-size:x-small">@item.Score điểm</td>
                                                             <td>
                                                                 <span class="badge @bgColorClass">
@@ -394,10 +398,10 @@
                                                             Điểm chú ý
                                                         </th>
                                                         <th class="col-1" style="text-align:center;font-weight: 300">
-                                                            Trả lời
+                                                            Đáp án đúng
                                                         </th>
                                                         <th class="col-1" style="text-align:center;font-weight: 300">
-                                                            Đáp án đúng
+                                                            Trả lời
                                                         </th>
                                                         <th class="col-1" style="text-align:center;font-weight: 300">
                                                             Kết quả
@@ -414,11 +418,14 @@
                                                                     @i.Text
                                                                 </td>
                                                                 <td>
-                                                                    @i.Answer
+                                                                    <strong>
+                                                                        @i.CorrectAnswer
+                                                                    </strong>
                                                                 </td>
                                                                 <td>
-                                                                    @i.CorrectAnswer
+                                                                    @i.Answer
                                                                 </td>
+
                                                                 <td>
                                                                     @{
                                                                         if (i.Answer == i.CorrectAnswer)
@@ -445,10 +452,10 @@
                                                             Lỗi tại công đoạn
                                                         </th>
                                                         <th class="col-1" style="text-align:center;font-weight: 300">
-                                                            Trả lời
+                                                            Đáp án đúng
                                                         </th>
                                                         <th class="col-1" style="text-align:center;font-weight: 300">
-                                                            Đáp án đúng
+                                                            Trả lời
                                                         </th>
                                                         <th class="col-1" style="text-align:center;font-weight: 300">
                                                             Kết quả
@@ -465,11 +472,14 @@
                                                                     @i.Text
                                                                 </td>
                                                                 <td>
-                                                                    @i.Answer
+                                                                    <strong>
+                                                                        @i.CorrectAnswer
+                                                                    </strong>
                                                                 </td>
                                                                 <td>
-                                                                    @i.CorrectAnswer
+                                                                    @i.Answer
                                                                 </td>
+
                                                                 <td>
                                                                     @{
                                                                         if (i.Answer == i.CorrectAnswer)
@@ -496,11 +506,12 @@
                                                             Đối sách
                                                         </th>
                                                         <th class="col-3" style="text-align:center;font-weight: 300">
-                                                            Trả lời
-                                                        </th>
-                                                        <th class="col-3" style="text-align:center;font-weight: 300">
                                                             Đáp án đúng
                                                         </th>
+                                                        <th class="col-3" style="text-align:center;font-weight: 300">
+                                                            Trả lời
+                                                        </th>
+
                                                         <th class="col-1" style="text-align:center;font-weight: 300">
                                                             Kết quả
                                                         </th>
@@ -516,11 +527,14 @@
                                                                     @i.Text
                                                                 </td>
                                                                 <td>
-                                                                    @i.Answer
+                                                                    <strong>
+                                                                        @i.CorrectAnswer
+                                                                    </strong>
                                                                 </td>
                                                                 <td>
-                                                                    @i.CorrectAnswer
+                                                                    @i.Answer
                                                                 </td>
+
                                                                 <td>
                                                                     @{
                                                                         if (i.Answer == i.CorrectAnswer)

@@ -149,7 +149,6 @@ namespace WebAPP.Areas.User.Controllers
                     }
                     TempData["questionsTracNghiem"] = JsonConvert.SerializeObject(queue);
 
-
                     //Tự luận:
                     List<QuestionAndAnswerTrinhTuThaoTacVm> listQuestionAndAnswerTrinhTuThaoTac = new List<QuestionAndAnswerTrinhTuThaoTacVm>();
                     TempData["QuestionAndAnswerTrinhTuThaoTac"] = JsonConvert.SerializeObject(listQuestionAndAnswerTrinhTuThaoTac);
@@ -162,8 +161,6 @@ namespace WebAPP.Areas.User.Controllers
 
                     List<QuestionAndAnswerDoiSachVm> listQuestionAndAnswerDoiSach = new List<QuestionAndAnswerDoiSachVm>();
                     TempData["QuestionAndAnswerDoiSach"] = JsonConvert.SerializeObject(listQuestionAndAnswerDoiSach);
-
-
 
                     var listTuLuan = await _cauHoiTuLuanApiClient.GetAllByCategory(idPhong);
                     var dsCauHoiTuLuan = listTuLuan.ResultObj;

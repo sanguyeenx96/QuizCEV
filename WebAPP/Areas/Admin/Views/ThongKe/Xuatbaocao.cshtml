@@ -1,1 +1,217 @@
-﻿
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    var selectListPhongThi = ViewBag.SelectListPhongThi as List<SelectListItem>;
+}
+@{
+    ViewData["Active"] = "pageDiemsoThongke";
+}
+
+<h1 class="display-6 mb-3" style="text-align:center">
+    XUẤT BÁO CÁO KẾT QUẢ KIỂM TRA
+</h1>
+<div class="card mb-3 text-bg-white">
+    <div class="card-body">
+        <div class="row gx-3 gy-2 align-items-center">
+            <div class="col-sm-12">
+                <label for="formGroupExampleInput" class="form-label">Theo bài thi</label>
+                <select id="PhongThi" asp-items="selectListPhongThi" class="form-select text-bg-light ">
+                    <option value="" disabled selected>Nhấn để chọn</option>
+                </select>
+            </div>
+            <div class="col-sm-3">
+                <label for="formGroupExampleInput" class="form-label">Theo ngày thi</label>
+                <input type="text" id="datepicker" class="form-select text-bg-light " autocomplete="off" placeholder="Nhấn để chọn">
+            </div>
+            <div class="col-sm-3">
+                <label for="formGroupExampleInput" class="form-label">
+                    <i class="bi-1-circle-fill"></i>
+                    Theo bộ phận
+                </label>
+                <select id="deptSelectList" class="form-select text-bg-light ">
+                    <option value="" disabled selected>Nhấn để chọn</option>
+                </select>
+            </div>
+            <div class="col-sm-3">
+                <label for="formGroupExampleInput" class="form-label">
+                    <i class="bi-2-circle-fill"></i>
+                    Theo Model
+                </label>
+                <select id="modelSelectList" class="form-select text-bg-light ">
+                    <option value="" disabled selected>Nhấn để chọn</option>
+                </select>
+            </div>
+            <div class="col-sm-3">
+                <label for="formGroupExampleInput" class="form-label">
+                    <i class="bi-3-circle-fill"></i>
+                    Theo Cell
+                </label>
+                <select id="cellSelectList" class="form-select text-bg-light ">
+                    <option value="" disabled selected>Nhấn để chọn</option>
+                </select>
+            </div>
+            @* <div class="col-sm-6">
+            <label for="formGroupExampleInput" class="form-label">Theo mã nhân viên</label>
+            <input type="text" id="txtuserName" class="form-control  text-bg-light " autocomplete="off" placeholder="Nhập mã nhân viên">
+            </div>
+            <div class="col-sm-6">
+            <label for="formGroupExampleInput" class="form-label">Theo tên nhân viên</label>
+            <input type="text" id="txtName" class="form-control  text-bg-light " autocomplete="off" placeholder="Nhập mã nhân viên">
+            </div>*@
+        </div>
+    </div>
+</div>
+<div class="card mb-3 text-bg-white">
+    <div class="card-body">
+        <label for="formGroupExampleInput" class="form-label">
+            Lọc bài thi trùng
+        </label>
+        <select id="DuplicateSelectList" class="form-select text-bg-light ">
+            <option value="" selected>Không lọc</option>
+            <option value="1">Lọc theo bài thi mới nhất</option>
+            <option value="2">Lọc theo bài thi điểm cao nhất</option>
+        </select>
+    </div>
+</div>
+
+<div id="ketquaTimkiem">
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            url: '/Admin/DeptUser/GetSelectListDept',
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                var selectList = $('#deptSelectList');
+                $.each(data, function (index, item) {
+                    selectList.append($('<option>', {
+                        value: item.value,
+                        text: item.text
+                    }));
+                });
+            },
+            error: function () {
+                console.error('Failed to retrieve department options.');
+            }
+        });
+
+        var picker = new Pikaday({
+            field: document.getElementById('datepicker'),
+            format: 'YYYY-MM-DD',
+            defaultDate: null,  // Đặt mặc định là ngày hiện tại
+            onSelect: function () {
+                loadDataTheoChuDe();
+            }
+        });
+
+        $('#PhongThi').on("change", function () {
+            loadDataTheoChuDe();
+        });
+        $('#deptSelectList').on("change", function () {
+            loadDataTheoChuDe();
+            var deptId = $(this).val();
+            deptId = parseInt(deptId);
+            $.ajax({
+                url: '/Admin/DeptUser/GetSelectListModel',
+                type: 'POST',
+                data: { deptId: deptId },
+                dataType: 'json',
+                success: function (data) {
+                    var selectList = $('#modelSelectList');
+                    selectList.empty()
+                    selectList.append($('<option>', {
+                        value: null,
+                        text: "Nhấn để chọn"
+                    }))
+                    $.each(data, function (index, item) {
+                        selectList.append($('<option>', {
+                            value: item.value,
+                            text: item.text
+                        }));
+                    });
+                },
+                error: function () {
+                    console.error('Failed to retrieve department options.');
+                }
+            });
+        });
+
+        $('#modelSelectList').on("change", function () {
+            loadDataTheoChuDe();
+            var modelId = $(this).val();
+            modelId = parseInt(modelId);
+            $.ajax({
+                url: '/Admin/DeptUser/GetSelectListCelll',
+                type: 'POST',
+                data: { modelId: modelId },
+                dataType: 'json',
+                success: function (data) {
+                    var selectList = $('#cellSelectList');
+                    selectList.empty()
+                    selectList.append($('<option>', {
+                        value: null,
+                        text: "Nhấn để chọn"
+                    }))
+                    $.each(data, function (index, item) {
+                        selectList.append($('<option>', {
+                            value: item.value,
+                            text: item.text
+                        }));
+                    });
+                },
+                error: function () {
+                    console.error('Failed to retrieve department options.');
+                }
+            });
+        })
+
+        $('#cellSelectList').on("change", function () {
+            loadDataTheoChuDe();
+        })
+
+        $('#DuplicateSelectList').on("change", function () {
+            loadDataTheoChuDe();
+        })
+
+
+        function loadDataTheoChuDe() {
+            var selectphongThiValue = $('#PhongThi').val();
+            var selectDate = $('#datepicker').val();
+            var selectboPhanId = $('#deptSelectList').val();
+            var selectmodelId = $('#modelSelectList').val();
+            var selectcellId = $('#cellSelectList').val();
+            var mode = $('#DuplicateSelectList').val();
+
+            var name = $('#txtName').val();
+            var userName = $('#txtuserName').val();
+
+            var intCategoryId = parseInt(selectphongThiValue);
+            var intboPhanId = parseInt(selectboPhanId);
+            var intmodelId = parseInt(selectmodelId);
+            var intcellId = parseInt(selectcellId);
+
+            $.ajax({
+                url: '/admin/thongke/SearchForExport',
+                type: 'POST',
+                data: {
+                    CategoryId: intCategoryId,
+                    Date: selectDate,
+                    boPhanId: selectboPhanId,
+                    modelId: intmodelId,
+                    cellId: intcellId,
+                    name: name,
+                    userName: userName,
+                    mode:mode
+                },
+                success: function (data) {
+                    $('#ketquaTimkiem').html(data);
+                },
+                error: function (error) {
+                    console.error(error);
+                }
+            });
+        }
+    });
+</script>

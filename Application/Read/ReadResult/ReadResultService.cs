@@ -182,6 +182,18 @@ namespace Application.Read.ReadResult
                             };
                         }
                     }).ToList();
+
+                    if(request.status != null)
+                    {
+                        if (request.status == 1) //Đã đọc
+                        {
+                            combinedList = combinedList.Where(x => x.Date != null).ToList();
+                        }
+                        if(request.status == 2)
+                        {
+                            combinedList = combinedList.Where(x => x.Date == null).ToList();
+                        }
+                    }                     
                     return new ApiSuccessResult<List<ReadResultVm>>(combinedList);
                 }                
             }

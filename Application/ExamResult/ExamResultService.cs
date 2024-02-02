@@ -115,7 +115,21 @@ namespace Application.ExamResult
                     resultQuery = resultQuery.Where(x => x.AppUser.UserName.Contains(request.userName));
                 if (request.name != null)
                     resultQuery = resultQuery.Where(x => x.AppUser.Name.Contains(request.name));
-
+                if (request.mode != null)
+                {
+                    if (request.mode == 1) // Lọc theo bài thi mới nhất
+                    {
+                        resultQuery = resultQuery.GroupBy(x => x.UserId)
+                                .Select(group => group.OrderByDescending(x => x.Date)
+                                                    .FirstOrDefault());
+                    }
+                    if (request.mode == 2) // Lọc theo bài thi điểm cao nhất
+                    {
+                        resultQuery = resultQuery.GroupBy(x => x.UserId)
+                                .Select(group => group.OrderByDescending(x => x.Score)
+                                                    .FirstOrDefault());
+                    }
+                }
                 // Sử dụng ToListAsync() để thực hiện truy vấn
                 var resultList = await resultQuery.ToListAsync();
                 // Chuyển đổi danh sách kết quả thành danh sách ExamResultVm
