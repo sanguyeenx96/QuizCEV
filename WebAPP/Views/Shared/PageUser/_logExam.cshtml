@@ -326,207 +326,222 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            @foreach (var itemNoiDung in item.LogExamTrinhtuthaotacs as List<ViewModels.LogExamTrinhtuthaotac.Response.LogExamTrinhtuthaotacVm>)
-                                                            {
-                                                                if (itemNoiDung.FinalScore == itemNoiDung.Score)
+                                                                @foreach (var itemNoiDung in item.LogExamTrinhtuthaotacs.OrderBy(x => x.ThuTu))
                                                                 {
-                                                                    <tr style="text-align:center;vertical-align:middle" class="bg-success p-2 text-dark bg-opacity-10">
-                                                                        <td style="text-align:start">
-                                                                            @itemNoiDung.Text
-                                                                        </td>
-                                                                        <td>
-                                                                            @itemNoiDung.Answer
-                                                                        </td>
-                                                                        <td>
-                                                                            @itemNoiDung.ThuTu
-                                                                        </td>
-                                                                        <td>
-                                                                            @itemNoiDung.Score
-                                                                        </td>
-                                                                        <td>
-                                                                            <span class="badge bg-success">OK</span>
-                                                                        </td>
-                                                                    </tr>
-                                                                }
-                                                                else
-                                                                {
-                                                                    <tr style="text-align:center;vertical-align:middle" class="bg-danger p-2 text-dark bg-opacity-10">
-                                                                        <td style="text-align:start">
-                                                                            @itemNoiDung.Text
-                                                                        </td>
-                                                                        <td>
-                                                                            @itemNoiDung.Answer
-                                                                        </td>
-                                                                        <td>
-                                                                            @itemNoiDung.ThuTu
-                                                                        </td>
-                                                                        <td>
-                                                                            @itemNoiDung.Score
-                                                                        </td>
-                                                                        <td>
-                                                                            <span class="badge bg-danger">NG</span>
-                                                                        </td>
-                                                                    </tr>
-                                                                }
-                                                            }
-                                                        </tbody>
-                                                    </table>
+                                                                    if (itemNoiDung.FinalScore == itemNoiDung.Score)
+                                                                    {
+                                                                        <tr style="text-align:center;vertical-align:middle" class="bg-success p-2 text-dark bg-opacity-10">
+                                                                            <td style="text-align:start">
+                                                                                @itemNoiDung.Text
+                                                                            </td>
+                                                                            <td>
+                                                                                <strong>
+                                                                                    @itemNoiDung.ThuTu
+                                                                                </strong>
+                                                                            </td>
+                                                                            <td>
+                                                                                @itemNoiDung.Answer
+                                                                            </td>
 
-                                                    <p class="mb-1" style="text-align:start;font-weight:500;"> II. Điểm chú ý tại công đoạn / Spec tại công đoạn (Nếu có):</p>
-                                                    <table class="table table-bordered table-hover table-reponsive" style="width:100%">
-                                                        <thead style="vertical-align:middle;font-size:small">
-                                                            <tr>
-                                                                <th class="col-9" style="font-weight: 300;text-align:start">
-                                                                    Điểm chú ý
-                                                                </th>
-                                                                <th class="col-1" style="text-align:center;font-weight: 300">
-                                                                    Trả lời
-                                                                </th>
-                                                                <th class="col-1" style="text-align:center;font-weight: 300">
-                                                                    Đáp án đúng
-                                                                </th>
-                                                                <th class="col-1" style="text-align:center;font-weight: 300">
-                                                                    Kết quả
-                                                                </th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            @{
-                                                                foreach (var i in item.logExamDiemChuYs as List<ViewModels.LogExamDiemChuY.Response.LogExamDiemChuYVm>)
-                                                                {
-                                                                    <tr style="text-align:center;vertical-align:middle" class=" p-2 text-dark bg-opacity-10">
-                                                                        <td style="text-align:start">
-                                                                            @i.Text
-                                                                        </td>
-                                                                        <td>
-                                                                            @i.Answer
-                                                                        </td>
-                                                                        <td>
-                                                                            @i.CorrectAnswer
-                                                                        </td>
-                                                                        <td>
-                                                                            @{
-                                                                                if (i.Answer == i.CorrectAnswer)
-                                                                                {
-                                                                                    <i style="color:green" class="bi-check"></i>
-                                                                                }
-                                                                                else
-                                                                                {
-                                                                                    <i style="color:red" class="bi-x"></i>
-                                                                                }
-                                                                            }
-                                                                        </td>
-                                                                    </tr>
+                                                                            <td>
+                                                                                @itemNoiDung.Score
+                                                                            </td>
+                                                                            <td>
+                                                                                <span class="badge bg-success">OK</span>
+                                                                            </td>
+                                                                        </tr>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <tr style="text-align:center;vertical-align:middle" class="bg-danger p-2 text-dark bg-opacity-10">
+                                                                            <td style="text-align:start">
+                                                                                @itemNoiDung.Text
+                                                                            </td>
+                                                                            <td>
+                                                                                <strong>
+                                                                                    @itemNoiDung.ThuTu
+                                                                                </strong>
+                                                                            </td>
+                                                                            <td>
+                                                                                @itemNoiDung.Answer
+                                                                            </td>
+
+                                                                            <td>
+                                                                                @itemNoiDung.Score
+                                                                            </td>
+                                                                            <td>
+                                                                                <span class="badge bg-danger">NG</span>
+                                                                            </td>
+                                                                        </tr>
+                                                                    }
                                                                 }
-                                                            }
-                                                        </tbody>
-                                                    </table>
+                                                            </tbody>
+                                                        </table>
+
+                                                        <p class="mb-1" style="text-align:start;font-weight:500;"> II. Điểm chú ý tại công đoạn / Spec tại công đoạn (Nếu có):</p>
+                                                        <table class="table table-bordered table-hover " style="width:100%">
+                                                            <thead style="vertical-align:middle;font-size:small">
+                                                                <tr>
+                                                                    <th class="col-9" style="font-weight: 300;text-align:start">
+                                                                        Điểm chú ý
+                                                                    </th>
+                                                                    <th class="col-1" style="text-align:center;font-weight: 300">
+                                                                        Đáp án đúng
+                                                                    </th>
+                                                                    <th class="col-1" style="text-align:center;font-weight: 300">
+                                                                        Trả lời
+                                                                    </th>
+                                                                    <th class="col-1" style="text-align:center;font-weight: 300">
+                                                                        Kết quả
+                                                                    </th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @{
+                                                                    foreach (var i in item.logExamDiemChuYs.OrderBy(x => x.CorrectAnswer).ToList())
+                                                                    {
+                                                                        <tr style="text-align:center;vertical-align:middle" class=" p-2 text-dark bg-opacity-10">
+                                                                            <td style="text-align:start">
+                                                                                @i.Text
+                                                                            </td>
+                                                                            <td>
+                                                                                <strong>
+                                                                                    @i.CorrectAnswer
+                                                                                </strong>
+                                                                            </td>
+                                                                            <td>
+                                                                                @i.Answer
+                                                                            </td>
+
+                                                                            <td>
+                                                                                @{
+                                                                                    if (i.Answer == i.CorrectAnswer)
+                                                                                    {
+                                                                                        <i style="color:green" class="bi-check"></i>
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        <i style="color:red" class="bi-x"></i>
+                                                                                    }
+                                                                                }
+                                                                            </td>
+                                                                        </tr>
+                                                                    }
+                                                                }
+                                                            </tbody>
+                                                        </table>
 
 
-                                                    <p class="mb-1" style="text-align:start;font-weight:600;"> III. Lỗi tại công đoạn:</p>
-                                                    <table class="table table-bordered table-hover table-reponsive" style="width:100%">
-                                                        <thead style="vertical-align:middle;font-size:small">
-                                                            <tr>
-                                                                <th class="col-9" style="font-weight: 300;text-align:start">
-                                                                    Lỗi tại công đoạn
-                                                                </th>
-                                                                <th class="col-1" style="text-align:center;font-weight: 300">
-                                                                    Trả lời
-                                                                </th>
-                                                                <th class="col-1" style="text-align:center;font-weight: 300">
-                                                                    Đáp án đúng
-                                                                </th>
-                                                                <th class="col-1" style="text-align:center;font-weight: 300">
-                                                                    Kết quả
-                                                                </th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            @{
-                                                                foreach (var i in item.logExamLoiTaiCongDoans as List<ViewModels.LogExamLoiTaiCongDoan.Response.LogExamLoiTaiCongDoanVm>)
-                                                                {
-                                                                    <tr style="text-align:center;vertical-align:middle" class=" p-2 text-dark bg-opacity-10">
-                                                                        <td style="text-align:start">
-                                                                            @i.Text
-                                                                        </td>
-                                                                        <td>
-                                                                            @i.Answer
-                                                                        </td>
-                                                                        <td>
-                                                                            @i.CorrectAnswer
-                                                                        </td>
-                                                                        <td>
-                                                                            @{
-                                                                                if (i.Answer == i.CorrectAnswer)
-                                                                                {
-                                                                                    <i style="color:green" class="bi-check"></i>
+                                                        <p class="mb-1" style="text-align:start;font-weight:600;"> III. Lỗi tại công đoạn:</p>
+                                                        <table class="table table-bordered table-hover " style="width:100%">
+                                                            <thead style="vertical-align:middle;font-size:small">
+                                                                <tr>
+                                                                    <th class="col-9" style="font-weight: 300;text-align:start">
+                                                                        Lỗi tại công đoạn
+                                                                    </th>
+                                                                    <th class="col-1" style="text-align:center;font-weight: 300">
+                                                                        Đáp án đúng
+                                                                    </th>
+                                                                    <th class="col-1" style="text-align:center;font-weight: 300">
+                                                                        Trả lời
+                                                                    </th>
+                                                                    <th class="col-1" style="text-align:center;font-weight: 300">
+                                                                        Kết quả
+                                                                    </th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @{
+                                                                    foreach (var i in item.logExamLoiTaiCongDoans.OrderBy(x => x.CorrectAnswer).ToList())
+                                                                    {
+                                                                        <tr style="text-align:center;vertical-align:middle" class=" p-2 text-dark bg-opacity-10">
+                                                                            <td style="text-align:start">
+                                                                                @i.Text
+                                                                            </td>
+                                                                            <td>
+                                                                                <strong>
+                                                                                    @i.CorrectAnswer
+                                                                                </strong>
+                                                                            </td>
+                                                                            <td>
+                                                                                @i.Answer
+                                                                            </td>
+                                                                            <td>
+                                                                                @{
+                                                                                    if (i.Answer == i.CorrectAnswer)
+                                                                                    {
+                                                                                        <i style="color:green" class="bi-check"></i>
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        <i style="color:red" class="bi-x"></i>
+                                                                                    }
                                                                                 }
-                                                                                else
-                                                                                {
-                                                                                    <i style="color:red" class="bi-x"></i>
-                                                                                }
-                                                                            }
-                                                                        </td>
-                                                                    </tr>
+                                                                            </td>
+                                                                        </tr>
+                                                                    }
                                                                 }
-                                                            }
-                                                        </tbody>
-                                                    </table>
+                                                            </tbody>
+                                                        </table>
 
-                                                    <p class="mb-1" style="text-align:start;font-weight:600;"> IV. Đối sách:</p>
-                                                    <table class="table table-bordered table-hover table-reponsive" style="width:100%">
-                                                        <thead style="vertical-align:middle;font-size:small">
-                                                            <tr>
-                                                                <th class="col-5" style="font-weight: 300;text-align:start">
-                                                                    Đối sách
-                                                                </th>
-                                                                <th class="col-3" style="text-align:center;font-weight: 300">
-                                                                    Trả lời
-                                                                </th>
-                                                                <th class="col-3" style="text-align:center;font-weight: 300">
-                                                                    Đáp án đúng
-                                                                </th>
-                                                                <th class="col-1" style="text-align:center;font-weight: 300">
-                                                                    Kết quả
-                                                                </th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            @{
-                                                                foreach (var i in item.logExamDoiSaches as List<ViewModels.LogExamDoiSach.Response.LogExamDoiSachVm>)
-                                                                {
-                                                                    <tr style="text-align:center;vertical-align:middle" class="p-2 text-dark bg-opacity-10">
-                                                                        <td style="text-align:start">
-                                                                            @i.Text
-                                                                        </td>
-                                                                        <td>
-                                                                            @i.Answer
-                                                                        </td>
-                                                                        <td>
-                                                                            @i.CorrectAnswer
-                                                                        </td>
-                                                                        <td>
-                                                                            @{
-                                                                                if (i.Answer == i.CorrectAnswer)
-                                                                                {
-                                                                                    <i style="color:green" class="bi-check"></i>
+                                                        <p class="mb-1" style="text-align:start;font-weight:600;"> IV. Đối sách:</p>
+                                                        <table class="table table-bordered table-hover " style="width:100%">
+                                                            <thead style="vertical-align:middle;font-size:small">
+                                                                <tr>
+                                                                    <th class="col-5" style="font-weight: 300;text-align:start">
+                                                                        Đối sách
+                                                                    </th>
+                                                                    <th class="col-3" style="text-align:center;font-weight: 300">
+                                                                        Đáp án đúng
+                                                                    </th>
+                                                                    <th class="col-3" style="text-align:center;font-weight: 300">
+                                                                        Trả lời
+                                                                    </th>
+
+                                                                    <th class="col-1" style="text-align:center;font-weight: 300">
+                                                                        Kết quả
+                                                                    </th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @{
+                                                                    foreach (var i in item.logExamDoiSaches.OrderBy(x => x.CorrectAnswer).ToList())
+                                                                    {
+                                                                        <tr style="text-align:center;vertical-align:middle" class="p-2 text-dark bg-opacity-10">
+                                                                            <td style="text-align:start">
+                                                                                @i.Text
+                                                                            </td>
+                                                                            <td>
+                                                                                <strong>
+                                                                                    @i.CorrectAnswer
+                                                                                </strong>
+                                                                            </td>
+                                                                            <td>
+                                                                                @i.Answer
+                                                                            </td>
+
+                                                                            <td>
+                                                                                @{
+                                                                                    if (i.Answer == i.CorrectAnswer)
+                                                                                    {
+                                                                                        <i style="color:green" class="bi-check"></i>
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        <i style="color:red" class="bi-x"></i>
+                                                                                    }
                                                                                 }
-                                                                                else
-                                                                                {
-                                                                                    <i style="color:red" class="bi-x"></i>
-                                                                                }
-                                                                            }
-                                                                        </td>
-                                                                    </tr>
+                                                                            </td>
+                                                                        </tr>
+                                                                    }
                                                                 }
-                                                            }
-                                                        </tbody>
-                                                    </table>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        }
                                     }
-                                }
                                 </div>
                             </div>
                         </div>

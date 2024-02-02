@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Newtonsoft.Json;
 using ViewModels.ExamResult.Request;
 using ViewModels.ExamResult.Response;
+using ViewModels.ExportExcel;
 using ViewModels.PostCategory.Request;
 using ViewModels.PostPosts.Request;
 using ViewModels.Read.ReadCategory;
@@ -217,7 +219,7 @@ namespace WebAPP.Areas.Admin.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Search(int? PostId, DateTime? Date, int? boPhanId, string? name, string? userName, int? modelId, int? cellId)
+        public async Task<IActionResult> Search(int? PostId, DateTime? Date, int? boPhanId, string? name, string? userName, int? modelId, int? cellId, int? status)
         {
             var request = new ReadResultSearchRequest()
             {
@@ -228,12 +230,94 @@ namespace WebAPP.Areas.Admin.Controllers
                 name = name,
                 userName = userName,
                 modelId = modelId,
-                cellId = cellId
+                cellId = cellId,
+                status = status
             };
             var result = await _readResultApiClient.Search(request);
             return PartialView("PageAdmin/_listLogReadResult", result.ResultObj);
         }
 
+        //Xuất báo cáo
+
+        [HttpGet]
+        public async Task<IActionResult> Xuatbaocao()
+        {
+            ViewBag.thisPage = "Xuất báo cáo kết quả đọc tài liệu đào tạo";
+            var result = await _readCategoryApiClient.GetAll();
+            var listChude = result.ResultObj;
+            var selectListChude = listChude.Select(item => new SelectListItem
+            {
+                Value = item.Id.ToString(),
+                Text = item.Title
+            }).ToList();
+            ViewBag.SelectListChude = selectListChude;
+
+            var resultlistDept = await _deptApiClient.GetAll();
+            var listDept = resultlistDept.ResultObj.Select(x => new SelectListItem()
+            {
+                Text = x.Name,
+                Value = x.Id.ToString()
+            });
+            ViewBag.listDept = listDept;
+
+            return View(result.ResultObj);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SearchForExport(int? PostId, DateTime? Date, int? boPhanId, string? name, string? userName, int? modelId, int? cellId, int? status)
+        {
+            var request = new ReadResultSearchRequest()
+            {
+                UserId = null,
+                readPostId = PostId,
+                Date = Date,
+                boPhanId = boPhanId,
+                name = name,
+                userName = userName,
+                modelId = modelId,
+                cellId = cellId,
+                status = status
+            };
+            var result = await _readResultApiClient.Search(request);
+            if (result != null)
+            {
+                List<ExportExcelBaoCaoKetQuaDocTaiLieuCreateRequest> listExport = new List<ExportExcelBaoCaoKetQuaDocTaiLieuCreateRequest>();
+                TempData["listExport"] = JsonConvert.SerializeObject(listExport);
+
+                List<ReadResultVm> listSearchResult = result.ResultObj;
+                int sothutu = 0;
+                foreach (var item in listSearchResult.OrderBy(x => x.Username))
+                {
+                    var itemListExport = new ExportExcelBaoCaoKetQuaDocTaiLieuCreateRequest()
+                    {
+                        noidungdaotao = item.CategoryTitle,
+                        stt = sothutu++,
+                        manv = item.Username,
+                        hoten = item.Hoten,
+                        bophan = item.Bophan,
+                        thoigian = item.Date?.ToString("dd/MM/yyyy"),
+
+                    };
+                    listExport.Add(itemListExport);
+                }
+                TempData["listExport"] = JsonConvert.SerializeObject(listExport);
+                TempData.Keep();                
+                return PartialView("PageAdmin/_listLogReadResultExport", result.ResultObj);
+            }
+            else
+            {
+                return View();
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ConfirmExport()
+        {
+            string jsonlistExport = TempData["listExport"].ToString();
+            List<ExportExcelBaoCaoKetQuaDocTaiLieuCreateRequest> listExport = JsonConvert.DeserializeObject<List<ExportExcelBaoCaoKetQuaDocTaiLieuCreateRequest>>(jsonlistExport);
+            TempData.Keep();
+            return View(listExport);
+        }
 
     }
 }

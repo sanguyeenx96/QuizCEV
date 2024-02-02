@@ -6,41 +6,39 @@
         padding-right: 0;
     }
 </style>
-    
-    <div class="container overflow-hidden">
-        <div class="list-group list-group-flush my-1 animate__animated animate__fadeIn">
-            @foreach (var item in Model)
-            {
-                <a asp-action="viewthongbao" asp-route-id="@item.Id" class="list-group-item">
-                    <figure>
-                        <blockquote class="blockquote">
-                            <div class="d-flex w-100 justify-content-between">
-                                <h6 class="mb-0 me-1">
-                                    @item.Title
-                                </h6>
-                                <small class="text-muted" >
-                                    <small class="text-muted pe-2" style="white-space:nowrap">
-                                        <i class="bi-calendar3"></i>
-                                        @item.DateUpdated.ToShortDateString()
-                                    </small>
-                                    <small class="text-muted d-inline-block" style="width:60px;">
-                                        <i class="bi-eye"></i>
-                                        @item.ViewCount
-                                    </small>
-                                </small>
-                            </div>
-                        </blockquote>
-                        @if (item.FilePath != null && item.FilePath.Length > 3)
-                        {
-                            <figcaption class="blockquote-footer">
-                                <cite>@item.FilePath.Substring(18)</cite>
-                            </figcaption>
-                        }
-                    </figure>
-                </a>
-            }
-        </div>
+
+<div class="container overflow-hidden">
+    <div class="list-group list-group-flush my-2 animate__animated animate__fadeIn">
+        @foreach (var item in Model)
+        {
+            <a asp-action="viewthongbao" asp-route-id="@item.Id" class="list-group-item">
+                <figure class="mb-0">
+                    <blockquote class="blockquote">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-0 me-1">
+                                @item.Title
+                            </h6>
+                        </div>
+                    </blockquote>
+                    @if (item.FilePath != null && item.FilePath.Length > 3)
+                    {
+                        <figcaption class="blockquote-footer mb-1">
+                            <cite>@item.FilePath.Substring(18)</cite>
+                        </figcaption>
+                        <small class="text-muted pe-2" style="white-space:nowrap">
+                            <i class="bi-calendar3"></i>
+                            @item.DateUpdated.ToShortDateString()
+                        </small>
+                        <small class="text-muted d-inline-block" style="width:60px;">
+                            <i class="bi-eye"></i>
+                            @item.ViewCount
+                        </small>
+                    }
+                </figure>
+            </a>
+        }
     </div>
+</div>
 
 @* <p class="text-secondary" style="text-align:center">
     <small>

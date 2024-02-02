@@ -30,7 +30,7 @@
         </div>
     </div>
     <div class="card-footer">
-        <div class="row row-cols-1 row-cols-md-12 text-center">                       
+        <div class="row row-cols-1 row-cols-md-12 text-center">
             <div class="col-4 mb-sm-2 mb-0">
                 <div class="text-medium-emphasis">Điểm thấp (Dưới 60 điểm)</div>
                 <div class="fw-semibold" id="txtDiemsothap"></div>
@@ -84,9 +84,6 @@
                     <th style="font-weight: 350;">
                         Điểm số
                     </th>
-                    <th style="font-weight: 350;">
-                        Đánh giá
-                    </th>
                 </tr>
             </thead>
             <tbody style="font-size:smaller">
@@ -117,27 +114,6 @@
                         <td>
                             @item.Score điểm
                         </td>
-                        <td style="white-space:nowrap">
-                            @{
-                                if (item.Result == null)
-                                {
-                                    <i class="bi-question-circle-fill"></i>
-                                }
-                                else
-                                {
-                                    if (item.Result == true)
-                                    {
-                                        <span class="badge bg-success">OK</span>
-                                    }
-                                    else
-                                    {
-                                        <span class="badge bg-danger">NG</span>
-                                    }
-
-                                }
-                            }
-                        </td>
-
                     </tr>
                 }
             </tbody>
@@ -145,14 +121,13 @@
     </div>
 </div>
 <div class="col-12">
-    <a class="btn btn-success" id="btnXuatbaocao" asp-action="confirmexport" asp-controller="thongke" asp-area="admin">Xuất báo cáo kết quả đào tạo</a>
+    <a class="btn btn-success " id="btnXuatbaocao" asp-action="confirmexport" asp-controller="thongke" asp-area="admin">
+        <i class="bi-printer"></i>
+        Xuất báo cáo kết quả đào tạo
+    </a>
 </div>
 
-<div class="modal fade" id="staticBackdrop2" data-coreui-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-xl">
-        <div id="noidungbaithi2" style="width:100%"></div>
-    </div>
-</div>
+
 
 
 <script>
@@ -171,7 +146,6 @@
             var intboPhanId = parseInt(selectboPhanId);
             var intmodelId = parseInt(selectmodelId);
             var intcellId = parseInt(selectcellId);
-
 
             $.ajax({
                 url: '/admin/thongke/Search',
@@ -193,90 +167,6 @@
                 }
             });
         }
-
-        $(".btnDanhGia").click(async function () {
-            let id = $(this).attr("data-thisid");
-            const inputOptions = new Promise((resolve) => {
-                setTimeout(() => {
-                    resolve({
-                        "ok": "OK",
-                        "ng": "NG",
-                    });
-                }, 0);
-            });
-            const { value: rs } = await Swal.fire({
-                icon: "warning",
-                title: "Đánh giá kết quả bài thi",
-                input: "radio",
-                inputOptions,
-                inputValidator: (value) => {
-                    if (!value) {
-                        return "Bạn cần chọn đánh giá cho bài thi!";
-                    }
-                }
-            });
-            if (rs) {
-                $.ajax({
-                    url: '/admin/thongke/danhgia',
-                    type: 'POST',
-                    data: {
-                        id: id,
-                        result: rs
-                    },
-                    success: function (result) {
-                        if (result.success) {
-                            Swal.fire({
-                                icon: "success",
-                                title: "Đánh giá bài thi thành công",
-                                showConfirmButton: false,
-                                timer: 1000,
-                            }).then(function () {
-                                loadDataTheoChuDe();
-                            })
-                        } else {
-                            Swal.fire(
-                                "Lỗi máy chủ",
-                                "Thao tác đã được huỷ bỏ!",
-                                "error"
-                            );
-                        }
-                    },
-                    error: function (error) {
-                        Swal.fire(
-                            "Lỗi máy chủ",
-                            "Thao tác đã được huỷ bỏ!",
-                            "error"
-                        );
-                    }
-                });
-            }
-
-        });
-
-        $(".btnXemChiTietBaithi").click(function () {
-            var id = $(this).attr("data-idbaithi");
-            $.ajax({
-                url: '/admin/thongke/Search',
-                type: 'POST',
-                data: {
-                    examResultId: id
-                },
-                success: function (data) {
-                    $('#noidungbaithi2').html(data);
-                    $('#staticBackdrop2').modal("show")
-                },
-                error: function (error) {
-                    console.log(error)
-                    Swal.fire({
-                        icon: "error",
-                        width: 300,
-                        text: "Không tải được dữ liệu bài thi",
-                        showConfirmButton: false,
-                        timer: 1000,
-                    })
-                }
-            });
-        })
 
         $("#tblDanhsachdulieu").DataTable({
             "paging": true,

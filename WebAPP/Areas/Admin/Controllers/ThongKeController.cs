@@ -71,7 +71,7 @@ namespace WebAPP.Areas.Admin.Controllers
 
         //Trang xem lịch sử
         [HttpPost]
-        public async Task<IActionResult> Search(int? CategoryId, DateTime? Date, int? examResultId , int? boPhanId, string name, string? userName , int? modelId, int? cellId)
+        public async Task<IActionResult> Search(int? CategoryId, DateTime? Date, int? examResultId , int? boPhanId, string name, string? userName , int? modelId, int? cellId, int? mode)
         {
             var request = new ExamResultSearchRequest()
             {
@@ -83,7 +83,8 @@ namespace WebAPP.Areas.Admin.Controllers
                 name = name,
                 userName = userName,
                 modelId = modelId,
-                cellId = cellId
+                cellId = cellId,
+                mode = mode
             };
 
             var result = await _examResultApiClient.Search(request);
@@ -164,7 +165,7 @@ namespace WebAPP.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> SearchForExport(int? CategoryId, DateTime? Date, int? examResultId, int? boPhanId, string name, string? userName, int? modelId, int? cellId)
+        public async Task<IActionResult> SearchForExport(int? CategoryId, DateTime? Date, int? examResultId, int? boPhanId, string name, string? userName, int? modelId, int? cellId,int? mode)
         {
             var request = new ExamResultSearchRequest()
             {
@@ -176,7 +177,8 @@ namespace WebAPP.Areas.Admin.Controllers
                 name = name,
                 userName = userName,
                 modelId = modelId,
-                cellId = cellId
+                cellId = cellId,
+                mode = mode
             };
             var result = await _examResultApiClient.Searchdata(request);
             if (result != null)
@@ -184,9 +186,9 @@ namespace WebAPP.Areas.Admin.Controllers
                 List<ExportExcelBaoCaoKetQuaDaoTaoCreateRequest> listExport = new List<ExportExcelBaoCaoKetQuaDaoTaoCreateRequest>();
                 TempData["listExport"] = JsonConvert.SerializeObject(listExport);
 
-                List<ExamResultVm> listQuestionTracNghiem = result.ResultObj;
+                List<ExamResultVm> listSearchResullt = result.ResultObj;
                 int sothutu = 0;
-                foreach (var item in listQuestionTracNghiem.OrderBy(x => x.Date))
+                foreach (var item in listSearchResullt.OrderBy(x => x.Username))
                 {
                     var itemListExport = new ExportExcelBaoCaoKetQuaDaoTaoCreateRequest()
                     {

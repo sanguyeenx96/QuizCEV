@@ -58,8 +58,6 @@ builder.Services.AddTransient<IReadPostApiClient, ReadPostApiClient>();
 builder.Services.AddTransient<IReadResultApiClient, ReadResultApiClient>();
 
 
-
-
 var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
